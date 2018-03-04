@@ -6,11 +6,11 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 23:06:07 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/03/04 17:13:48 by kernel_pa        ###   ########.fr       */
+/*   Updated: 2018/03/04 18:06:26 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Libft.h"
+#include "libft.h"
 
 int		ft_strcmp(const char *str1, const char *str2)
 {
