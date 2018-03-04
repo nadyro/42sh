@@ -6,11 +6,11 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/24 21:42:41 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/04 15:32:59 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/04 18:46:01 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "42sh.h"
 
 void	cursor_word_left(t_prompt *prompt)
 {

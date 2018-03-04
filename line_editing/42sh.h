@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/04 18:07:29 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/04 23:12:05 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,13 @@
 # include <signal.h>
 # include <unistd.h>
 
-# define BUFFER 4000
+# define BUFFER 4
+
+typedef struct	s_coord
+{
+	size_t	x;
+	size_t	y;
+}				t_coord;
 
 typedef struct	s_prompt
 {

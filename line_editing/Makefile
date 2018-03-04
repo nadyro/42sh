@@ -6,12 +6,12 @@
 #    By: azybert <azybert@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/04 19:24:34 by azybert           #+#    #+#              #
-#    Updated: 2018/03/04 18:04:50 by azybert          ###   ########.fr        #
+#    Updated: 2018/03/04 18:37:36 by azybert          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = 21sh
-FILES = 21sh.c ft_prompt.c term.c prompt_manage_data.c cursor_motion.c \
+NAME = 42sh
+FILES = 42sh.c ft_prompt.c term.c prompt_manage_data.c cursor_motion.c \
 		advanced_cursor_motion.c
 OBJ = $(FILES:.c=.o)
 LIB = ../Libft/libft.a
