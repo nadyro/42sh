@@ -6,11 +6,11 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 23:36:42 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/04 17:36:42 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/04 22:41:41 by kernel_pa        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "../../includes/21sh.h"
 
 void	ft_prompt_backdel(t_prompt *prompt)
 {

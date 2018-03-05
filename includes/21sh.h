@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/04 18:07:29 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/05 11:17:13 by kernel_pa        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,6 @@ void    ft_cursor_start(t_prompt *prompt);
 void    ft_cursor_end(t_prompt *prompt);
 void    cursor_word_left(t_prompt *prompt);
 void    cursor_word_right(t_prompt *prompt);
+void	print_t(void);
 
 #endif

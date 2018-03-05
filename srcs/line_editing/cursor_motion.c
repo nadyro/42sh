@@ -6,11 +6,11 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/22 02:23:25 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/04 15:33:25 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/04 22:41:15 by kernel_pa        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "21sh.h"
+#include "../../includes/21sh.h"
 
 int			ft_putshit(int c)
 {
