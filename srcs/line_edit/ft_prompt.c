@@ -6,40 +6,51 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-<<<<<<< HEAD:line_editing/ft_prompt.c
 /*   Updated: 2018/03/04 23:12:07 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "42sh.h"
-=======
-/*   Updated: 2018/03/04 22:41:25 by kernel_pa        ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "../../includes/21sh.h"
->>>>>>> a2e53d1e55ba2763625a0d94c0adc5e4cb0e80a7:srcs/line_editing/ft_prompt.c
+#include "../../includes/42sh_line_edit.h"
 
 //#define malloc(x) (rand() % 10 ? malloc(x) : 0)
 
+void get_cursor_pos(t_coord *actualize)
+{
+	char    buf[100];
+	int     loop;
+
+	write(1, "\033[6n", 4);
+	ft_bzero(buf, 100);
+	read(1, buf, 100);
+	actualize->y = ft_atol(&buf[2]);
+	loop = 2;
+	while (buf[loop] != ';')
+		loop++;
+	actualize->x = ft_atol(&buf[5]);
+}
+
 static t_prompt	*malloc_prompt()
 {
-	t_prompt	*prompt;
-	struct winsize w;
+	t_prompt		*prompt;
+	struct winsize	w;
 
 	if (!(prompt = malloc(sizeof(*prompt))))
 		exit(1);
+	if (!(prompt->basic = malloc(sizeof(t_coord))))
+		exit(1);
+	if (!(prompt->present = malloc(sizeof(t_coord))))
+		exit(1);
+	if (!(prompt->size = malloc(sizeof(t_coord))))
+		exit(1);
 	ioctl(0, TIOCGWINSZ, &w);
 	prompt->line = NULL;
-	prompt->modx = w.ws_col;
-	prompt->mody = w.ws_row;
-	prompt->posx = 0;
-	prompt->posy = 0;
-	prompt->line_pos = 0;
-	prompt->total = 0;
 	prompt->nb_read = 0;
-	prompt->quote = 0;
-	prompt->dquote = 0;
+	get_cursor_pos(prompt->basic);
+	get_cursor_pos(prompt->present);
+	prompt->size->x = w.ws_col;
+	prompt->size->y = w.ws_row;
+	prompt->pos = 0;
+	prompt->total = 0;
 	return (prompt);
 }
 
@@ -47,19 +58,19 @@ static int		ft_analyze(t_prompt *prompt)
 {
 	if (prompt->nb_read == 1 && ft_isprint(prompt->c[0]))
 		ft_prompt_stock(prompt);
-	else if (prompt->nb_read == 1 && prompt->c[0] == 127 && prompt->line_pos > 0)
+	else if (prompt->nb_read == 1 && prompt->c[0] == 127 && prompt->pos > 0)
 		ft_prompt_delete(prompt);
 	else if (prompt->nb_read == 4 && prompt->c[3] == 126 &&
-			prompt->line_pos < prompt->total)
+			prompt->pos < prompt->total)
 		ft_prompt_backdel(prompt);
 	/*else if (prompt->nb_read == 3 && prompt->c[2] == 65)
-		// historique up;
+	// historique up;
 	else if (prompt->nb_read == 3 && prompt->c[2] == 66)
-		//historique down;*/
-	else if (prompt->nb_read == 3 && prompt->c[2] == 68 && prompt->line_pos > 0)
+	//historique down;*/
+	else if (prompt->nb_read == 3 && prompt->c[2] == 68 && prompt->pos > 0)
 		ft_cursor_left(prompt);
 	else if (prompt->nb_read == 3 && prompt->c[2] == 67 &&
-			prompt->line_pos < prompt->total)
+			prompt->pos < prompt->total)
 		ft_cursor_right(prompt);
 	else if (prompt->nb_read == 3 && prompt->c[2] == 72)
 		ft_cursor_start(prompt);
@@ -80,9 +91,9 @@ char			*ft_prompt()
 	char		*to_return;
 	int			k;
 	t_prompt	*prompt;
-//
+	//
 	int fd = open("debug", O_CREAT | O_WRONLY | O_TRUNC, 0666);
-//
+	//
 	prompt = malloc_prompt();
 	//call signal functions
 	k = 1;
@@ -100,7 +111,6 @@ char			*ft_prompt()
 		to_return = ft_strdup(prompt->line);
 	else
 		to_return = NULL;
-	free(prompt->line);
-	free(prompt);
+	//free function
 	return (to_return);
 }

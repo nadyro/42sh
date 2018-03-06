@@ -11,26 +11,26 @@
 # **************************************************************************** #
 
 NAME = 42sh
-FILES = 42sh.c ft_prompt.c term.c prompt_manage_data.c cursor_motion.c \
-		advanced_cursor_motion.c
+FILES = 42sh.c ft_prompt.c term.c prompt_manage_data.c \
+		cursor_motion.c advanced_cursor_motion.c
 OBJ = $(FILES:.c=.o)
-LIB = ../Libft/libft.a
+LIB = ../../libft/libft.a
 CC = gcc
 FLAG = -Werror -Wall -Wextra
 
 all: $(NAME)
 
 $(NAME):
-	cd ../Libft && make
-	$(CC) -c $(FLAG) $(FILES) -g3
-	$(CC) -o $(NAME) -ltermcap $(OBJ) $(LIB) -g3
+	cd ../../libft && make
+	$(CC) -c $(FLAG) $(FILES)
+	$(CC) -o $(NAME) $(OBJ) $(LIB) -lncurses
 
 clean:
-	cd ../Libft && make clean
+	cd ../../libft && make clean
 	rm -f $(OBJ)
 
 fclean: clean
-	cd ../Libft && make fclean
+	cd ../../libft && make fclean
 	rm -f $(NAME)
 
 re: fclean all

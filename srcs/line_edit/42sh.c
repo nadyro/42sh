@@ -10,11 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "42sh.h"
+#include "../../includes/42sh_line_edit.h"
 
 int	main()
 {
-	char	*line;
+	//char	*line;
 	char	*name_term;
 
 	if ((name_term = getenv("TERM")) == NULL)
@@ -25,8 +25,8 @@ int	main()
 	if (tgetent(NULL, name_term) == ERR)
 		return (-1);
 	termanip(0);
-	signal(SIGINT, termanip);
-	line = ft_prompt();
+	signal(SIGINT, termanip); //call signal functions later
+	ft_prompt(); //line = ft_prompt();
 	termanip(1);
 	return (0);
 }

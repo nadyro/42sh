@@ -6,19 +6,11 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/22 02:23:25 by azybert           #+#    #+#             */
-<<<<<<< HEAD:line_editing/cursor_motion.c
 /*   Updated: 2018/03/04 18:46:09 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "42sh.h"
-=======
-/*   Updated: 2018/03/04 22:41:15 by kernel_pa        ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "../../includes/21sh.h"
->>>>>>> a2e53d1e55ba2763625a0d94c0adc5e4cb0e80a7:srcs/line_editing/cursor_motion.c
+#include "../../includes/42sh_line_edit.h"
 
 int			ft_putshit(int c)
 {
@@ -27,13 +19,13 @@ int			ft_putshit(int c)
 
 void	ft_cursor_start(t_prompt *prompt)
 {
-	while (prompt->line_pos > 0)
+	while (prompt->pos > 0)
 		ft_cursor_left(prompt);
 }
 
 void	ft_cursor_end(t_prompt *prompt)
 {
-	while (prompt->line_pos < prompt->total)
+	while (prompt->pos < prompt->total)
 		ft_cursor_right(prompt);
 }
 
@@ -41,14 +33,15 @@ void	ft_cursor_left(t_prompt *prompt)
 {
 	tputs(tgetstr("le", NULL), 1, ft_putshit);
 	if (prompt != NULL)
-		prompt->line_pos--;
+		prompt->pos--;
 }
 
 void	ft_cursor_right(t_prompt *prompt)
 {
+	//tgetflag("am", NULL);
 	tputs(tgetstr("nd", NULL), 1, ft_putshit);
 	if (prompt != NULL)
-		prompt->line_pos++;
+		prompt->pos++;
 }
 
 /*void	ft_cursor_left(t_prompt *prompt)
@@ -60,7 +53,7 @@ void	ft_cursor_right(t_prompt *prompt)
 	c[2] = 68;
 	write(1, c, 3);
 	if (prompt != NULL)
-		prompt->line_pos--;
+		prompt->pos--;
 }
 
 void	ft_cursor_right(t_prompt *prompt)
@@ -72,5 +65,5 @@ void	ft_cursor_right(t_prompt *prompt)
 	c[2] = 67;
 	write(1, c, 3);
 	if (prompt != NULL)
-		prompt->line_pos++ ;
+		prompt->pos++ ;
 }*/
