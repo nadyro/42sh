@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/04 23:12:07 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/07 16:42:07 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,14 @@ char			*ft_prompt()
 {
 	char		*to_return;
 	int			k;
+	char		*BC;
+	char		*UP;
 	t_prompt	*prompt;
 	//
 	int fd = open("debug", O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	//
+	BC = tgetstr ("le", NULL);
+	UP = tgetstr ("up", NULL);
 	prompt = malloc_prompt();
 	//call signal functions
 	k = 1;
@@ -101,8 +105,12 @@ char			*ft_prompt()
 	{
 		prompt->nb_read = read(1, prompt->c, 6);
 		k = ft_analyze(prompt);
+		get_cursor_pos(prompt->present);
 		//
-		write(fd, prompt->line, prompt->total);
+		//write(fd, prompt->line, prompt->total);
+		ft_putnbr_fd(prompt->present->x, fd);
+		write(fd, ";", 1);
+		ft_putnbr_fd(prompt->present->y, fd);
 		write(fd, "\n", 1);
 		//
 	}

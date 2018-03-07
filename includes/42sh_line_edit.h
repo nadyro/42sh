@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/04 23:12:05 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/07 16:29:08 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,19 @@ typedef struct	s_coord
 {
 	size_t	x;
 	size_t	y;
-}		t_coord;
+}				t_coord;
 
 typedef struct	s_prompt
 {
 	char		*line;
 	char		c[6];
-	int		nb_read;
-	t_coord		*basic;
-	t_coord		*present;
+	int			nb_read;
+	t_coord		*basic;//??
+	t_coord		*present;//??
 	t_coord		*size;
 	size_t		pos;
 	size_t		total;
-}		t_prompt;
+}				t_prompt;
 
 
 
@@ -54,12 +54,13 @@ char	*ft_prompt();
 char	*ft_prompt_stock(t_prompt *prompt);
 void	ft_prompt_delete(t_prompt *prompt);
 void    ft_prompt_backdel(t_prompt *prompt);
-int	ft_putshit(int c);
+int		ft_putshit(int c);
 void    ft_cursor_left(t_prompt *prompt);
 void    ft_cursor_right(t_prompt *prompt);
 void    ft_cursor_start(t_prompt *prompt);
 void    ft_cursor_end(t_prompt *prompt);
 void    cursor_word_left(t_prompt *prompt);
 void    cursor_word_right(t_prompt *prompt);
+void    move_cursor(t_prompt *prompt, size_t x, size_t y);
 
 #endif

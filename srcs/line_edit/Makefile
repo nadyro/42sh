@@ -6,7 +6,7 @@
 #    By: azybert <azybert@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/04 19:24:34 by azybert           #+#    #+#              #
-#    Updated: 2018/03/04 18:37:36 by azybert          ###   ########.fr        #
+#    Updated: 2018/03/07 14:35:22 by azybert          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ all: $(NAME)
 $(NAME):
 	cd ../../libft && make
 	$(CC) -c $(FLAG) $(FILES)
-	$(CC) -o $(NAME) $(OBJ) $(LIB) -lncurses
+	$(CC) -o $(NAME) $(OBJ) $(LIB) -ltermcap
 
 clean:
 	cd ../../libft && make clean

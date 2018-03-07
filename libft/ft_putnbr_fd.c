@@ -6,11 +6,12 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/17 20:39:20 by azybert           #+#    #+#             */
-/*   Updated: 2017/12/04 03:02:17 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/07 17:13:26 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "stdio.h"
 
 void		ft_putnbr_fd(int n, int fd)
 {
@@ -24,11 +25,13 @@ void		ft_putnbr_fd(int n, int fd)
 	else
 		mem[i++] = '-';
 	tmp = -1;
-	while (n / 10 < tmp)
+	while (n / 10 <= tmp)
 		tmp *= 10;
+	printf("t=%d\n", tmp);
 	while (tmp < 0)
 	{
 		mem[i++] = n / tmp + '0';
+		printf("ok=%s\n", mem);
 		n = n - n / tmp * tmp;
 		tmp = tmp / 10;
 	}
