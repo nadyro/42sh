@@ -12,7 +12,7 @@
 
 #include "../../includes/42sh_line_edit.h"
 
-void	ft_prompt_backdel(t_prompt *prompt)
+/*void	ft_prompt_backdel(t_prompt *prompt)
 {
 	size_t	mem;
 
@@ -26,7 +26,7 @@ void	ft_prompt_backdel(t_prompt *prompt)
 	mem++;
 	while (mem-- > 0)
 		ft_cursor_left(NULL);
-}
+}*/
 
 void	ft_prompt_delete(t_prompt *prompt)
 {
@@ -38,10 +38,12 @@ void	ft_prompt_delete(t_prompt *prompt)
 			ft_strlen(&(prompt->line[prompt->pos - 1])) + 1);
 	prompt->pos--;
 	ft_cursor_left(NULL);
+	strcat(prompt->line, " ");
 	write(1, &(prompt->line[prompt->pos]),
 			mem = ft_strlen(&(prompt->line[prompt->pos])));
-	write(1, " ", 1);
-	mem++;
+	*(ft_strrchr(prompt->line, 32)) = '\0';
+	//write(1, " ", 1);
+	//mem++a;
 	while (mem-- > 0)
 		ft_cursor_left(NULL);
 }
@@ -69,18 +71,6 @@ char	*ft_prompt_stock(t_prompt *prompt)
 	prompt->line[prompt->pos] = prompt->c[0];
 	write(1, &(prompt->line[prompt->pos]),
 			mem = ft_strlen(&(prompt->line[prompt->pos])));
-	/*mem = prompt->pos;
-	while (mem-- > 0)
-		ft_cursor_left(NULL);
-	tputs(tgetstr("cd", NULL), 1, ft_putshit);
-	write(1, prompt->line, prompt->total);
-	prompt->pos++;
-	mem = prompt->total - prompt->pos;
-	while (mem-- > 0)
-		ft_cursor_left(NULL);*/
-	/*mem = ++prompt->pos;
-	while (mem-- > 0)
-		ft_cursor_right(NULL);*/
 	prompt->pos++;
 	while (--mem > 0)
 		ft_cursor_left(NULL);

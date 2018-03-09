@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "stdio.h"
 
 void		ft_putnbr_fd(int n, int fd)
 {
@@ -27,11 +26,9 @@ void		ft_putnbr_fd(int n, int fd)
 	tmp = -1;
 	while (n / 10 <= tmp)
 		tmp *= 10;
-	printf("t=%d\n", tmp);
 	while (tmp < 0)
 	{
 		mem[i++] = n / tmp + '0';
-		printf("ok=%s\n", mem);
 		n = n - n / tmp * tmp;
 		tmp = tmp / 10;
 	}

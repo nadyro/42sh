@@ -39,8 +39,7 @@ typedef struct	s_prompt
 	char		*line;
 	char		c[6];
 	int			nb_read;
-	t_coord		*basic;//??
-	t_coord		*present;//??
+	t_coord		*origin;
 	t_coord		*size;
 	size_t		pos;
 	size_t		total;
