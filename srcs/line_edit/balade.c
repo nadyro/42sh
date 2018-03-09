@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/07 22:39:02 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/04 18:45:40 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/09 16:00:50 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void    termanip(int sig)
 
 void	boucle()
 {
-	char buf[6];/*
+	char buf[6];
 	buf[5] = '\0';
 	buf[2] = ';';
 	int k = 0;
@@ -61,16 +61,14 @@ void	boucle()
 		k += read(0, &buf[k], 2);
 	int x = atoi(&buf[0]);
 	int y = atoi(&buf[3]);
-	tputs(tgoto(tgetstr("cm", NULL), x, y), 1, ft_putshit);
-	//printf("%d;%d\n", x, y);
-	//sleep(5);
-	write(1, "ok", 2);
-	read(0, buf, 1);*/
 	char *res;
 	 
 	res = tgetstr("cm", NULL);
-	tputs(tgoto(res, 0, 1), 1, ft_putshit);
-	read(0, buf, 1);
+	tputs(tgoto(res, x, y), 1, ft_putshit);
+	printf("\033[6n");
+	//read(1, buf, 6);
+	//write(1, buf, 6);
+	//read(0, buf, 1);
 }
 
 int	main()

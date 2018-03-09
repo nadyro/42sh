@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/07 16:42:07 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/09 18:22:04 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ void get_cursor_pos(t_coord *actualize)
 	write(1, "\033[6n", 4);
 	ft_bzero(buf, 100);
 	read(1, buf, 100);
-	actualize->y = ft_atol(&buf[2]);
+	actualize->y = ft_atol(&buf[2]) - 1;
 	loop = 2;
 	while (buf[loop] != ';')
 		loop++;
-	actualize->x = ft_atol(&buf[loop + 1]);
+	actualize->x = ft_atol(&buf[loop + 1]) - 1;
 }
 
 static t_prompt	*malloc_prompt()
@@ -91,7 +91,7 @@ char			*ft_prompt()
 	//char		*UP;
 	t_prompt	*prompt;
 	//
-	//int fd = open("debug", O_CREAT | O_WRONLY | O_TRUNC, 0666);
+	int fd = open("debug", O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	//
 	//BC = tgetstr ("le", NULL);
 	//UP = tgetstr ("up", NULL);
@@ -104,11 +104,11 @@ char			*ft_prompt()
 		k = ft_analyze(prompt);
 		//get_cursor_pos(prompt->present); //buggé
 		//
-		//write(fd, prompt->line, prompt->total);
-		//ft_putnbr_fd(prompt->present->x, fd);
+		write(fd, prompt->line, prompt->total);
+		//ft_putnbr_fd(prompt->origin->x, fd);
 		//write(fd, ";", 1);
-		//ft_putnbr_fd(prompt->present->y, fd);
-		//write(fd, "\n", 1);
+		//ft_putnbr_fd(prompt->origin->y, fd);
+		write(fd, "\n", 1);
 		//
 	}
 	//ft_cursor_end(prompt);

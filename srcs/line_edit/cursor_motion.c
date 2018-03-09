@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/22 02:23:25 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/07 16:32:23 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/09 18:01:58 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,38 +31,30 @@ void	ft_cursor_end(t_prompt *prompt)
 
 void	ft_cursor_left(t_prompt *prompt)
 {
-	if (prompt == NULL)
-		tputs(tgetstr("le", NULL), 1, ft_putshit);
-	else
-	{
+	if (prompt != NULL)
 		prompt->pos--;
-		move_cursor(prompt, -1, 0);
-	}
+	tputs(tgetstr("le", NULL), 1, ft_putshit);
+	//	move_cursor(prompt, --prompt->pos,
+	//			prompt->origin->y + prompt->pos / prompt->size->x);
 }
 
 void	ft_cursor_right(t_prompt *prompt)
 {
-	if (prompt == NULL)
-		tputs(tgetstr("nd", NULL), 1, ft_putshit);
-	else
-	{
+	if (prompt != NULL)
 		prompt->pos++;
-		move_cursor(prompt, 1, 0);
-	}
+	if (prompt->pos % prompt->size->x == 0)
+		move_cursor(prompt, 0,
+				prompt->origin->y + prompt->pos / prompt->size->x);
+	else
+		move_cursor(prompt, prompt->pos % prompt->size->x,
+				prompt->origin->y + prompt->pos / prompt->size->x);
 }
 
 void	move_cursor(t_prompt *prompt, size_t x, size_t y)
 {
-	char	*res;
-
-	res = tgetstr("cm", NULL);
-	//prompt->present->x += x;
-	//prompt->present->y += y;
-	y = 0;
-	x = y;
-	y = x;
-	tputs(tgoto(res, prompt->pos, prompt->origin->y),
-			1, ft_putshit);
+	if (prompt == NULL)
+		;
+	tputs(tgoto(tgetstr("cm", NULL), x, y), 1, ft_putshit);
 }
 
 /*void	ft_cursor_left(t_prompt *prompt)
