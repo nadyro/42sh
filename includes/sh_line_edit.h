@@ -6,12 +6,12 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/09 17:12:27 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/09 22:38:25 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef H_42SH_line_edit
-# define H_42SH_line_edit
+#ifndef SH_LINE_EDIT_H
+# define SH_LINE_EDIT_H
 
 # include "../libft/libft.h"
 
@@ -45,21 +45,21 @@ typedef struct	s_prompt
 	size_t		total;
 }				t_prompt;
 
-
-
-void	termanip(int sig);
-void	get_cursor_pos(t_coord *actualize);
-char	*ft_prompt();
-char	*ft_prompt_stock(t_prompt *prompt);
-void	ft_prompt_delete(t_prompt *prompt);
-void    ft_prompt_backdel(t_prompt *prompt);
-int		ft_putshit(int c);
-void    ft_cursor_left(t_prompt *prompt);
-void    ft_cursor_right(t_prompt *prompt);
-void    ft_cursor_start(t_prompt *prompt);
-void    ft_cursor_end(t_prompt *prompt);
-void    cursor_word_left(t_prompt *prompt);
-void    cursor_word_right(t_prompt *prompt);
-void    move_cursor(t_prompt *prompt, size_t x, size_t y);
+void			termanip(int sig);
+void			get_cursor_pos(t_coord *actualize);
+char			*ft_prompt();
+char			*ft_prompt_stock(t_prompt *prompt);
+void			ft_prompt_delete(t_prompt *prompt);
+void			ft_prompt_backdel(t_prompt *prompt);
+int				ft_putshit(int c);
+void			ft_cursor_left(t_prompt *prompt);
+void			ft_cursor_right(t_prompt *prompt);
+void			ft_cursor_start(t_prompt *prompt);
+void			ft_cursor_end(t_prompt *prompt);
+void			cursor_word_left(t_prompt *prompt);
+void			cursor_word_right(t_prompt *prompt);
+void			move_cursor(size_t x, size_t y);
+void			ft_cursor_up(t_prompt *prompt);
+void			ft_cursor_down(t_prompt *prompt);
 
 #endif

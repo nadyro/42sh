@@ -6,11 +6,11 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/14 22:21:10 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/04 22:58:42 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/09 22:44:46 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/42sh_line_edit.h"
+#include "../../includes/sh_line_edit.h"
 
 void    termanip(int sig)
 {

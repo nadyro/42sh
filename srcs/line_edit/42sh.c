@@ -6,11 +6,11 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/07 22:39:02 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/04 18:45:40 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/09 22:43:44 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/42sh_line_edit.h"
+#include "../../includes/sh_line_edit.h"
 
 int	main()
 {
