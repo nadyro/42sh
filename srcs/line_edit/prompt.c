@@ -6,11 +6,29 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/10 18:49:27 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/11 00:31:00 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/sh_line_edit.h"
+
+static int		check_quotes(t_prompt *prompt)
+{
+	size_t	k;
+	char	*quotes;
+	char	*dquotes;
+	char	priority;
+
+	quotes = ft_strchr(prompt->line, '"');
+	dquotes = ft_strchr(prompt->line, '\'');
+	loop = prompt->line;
+	k = 0;
+	while (loop != NULL)
+	{
+		loop = ft_strchr(loop, '"');
+	}
+
+}
 
 static t_prompt	*malloc_prompt(void)
 {
@@ -36,9 +54,9 @@ static t_prompt	*malloc_prompt(void)
 	return (prompt);
 }
 
-static int		ft_analyze(t_prompt *prompt)
+static void		react(t_prompt *prompt)
 {
-	if (prompt->nb_read == 1 && ft_isprint(prompt->c[0]))
+	if (prompt->nb_read == 1 && (ft_isprint(prompt->c[0]) || prompt->c[0] == '\n')
 		prompt_stock(prompt);
 	else if (prompt->nb_read == 1 && prompt->c[0] == 127 && prompt->pos > 0)
 		prompt_delete(prompt);
@@ -66,9 +84,6 @@ static int		ft_analyze(t_prompt *prompt)
 		ft_cursor_up(prompt);
 	else if (prompt->nb_read == 6 && prompt->c[5] == 66)
 		ft_cursor_down(prompt);
-	else if (prompt->nb_read == 1 && prompt->c[0] == 10)
-		return (0);
-	return (1);
 }
 
 char			*prompt()
@@ -81,13 +96,16 @@ char			*prompt()
 	//BC = tgetstr ("le", NULL);
 	//UP = tgetstr ("up", NULL);
 
+	//print the prompt;
 	prompt = malloc_prompt();
 	//call signal functions;
 	k = 1;
-	while (k == 1)
+	while (k > 0)
 	{
 		prompt->nb_read = read(1, prompt->c, 6);
-		k = ft_analyze(prompt);
+		react(prompt);
+		if (prompt->total > 0 && prompt->line[prompt->total - 1] == '\n')
+			k = check_quotes(prompt);
 	}
 	ft_cursor_end(prompt);
 	if (prompt->line != NULL)
