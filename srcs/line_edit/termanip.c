@@ -6,16 +6,16 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/14 22:21:10 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/09 22:44:46 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/10 18:49:56 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/sh_line_edit.h"
 
-void    termanip(int sig)
+void	termanip(int sig)
 {
-	static struct termios   shell;
-	static struct termios   old;
+	static struct termios	shell;
+	static struct termios	old;
 
 	if (sig == 0)
 	{

@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 23:36:42 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/10 17:36:53 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/10 18:52:37 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void	write_data(t_prompt *prompt, char *display, size_t size)
 	{
 		displayed = prompt->total - ft_strlen(display);
 		if (displayed % prompt->size->x == 0)
-			move_cursor(0, prompt->origin->y + displayed / prompt->size->x);
+			move_cursor(prompt, displayed, false);
 		tmp = prompt->size->x - displayed % prompt->size->x;
 		tmp = ((tmp > size) ? size : tmp);
 		write(1, display, tmp);
@@ -32,7 +32,7 @@ static void	write_data(t_prompt *prompt, char *display, size_t size)
 	}
 }
 
-void	prompt_backdel(t_prompt *prompt)
+void		prompt_backdel(t_prompt *prompt)
 {
 	ft_memmove(&(prompt->line[prompt->pos]),
 			&(prompt->line[prompt->pos + 1]),
@@ -42,11 +42,10 @@ void	prompt_backdel(t_prompt *prompt)
 			ft_strlen(&(prompt->line[prompt->pos])));
 	*(ft_strrchr(prompt->line, 32)) = '\0';
 	prompt->total--;
-	move_cursor(prompt->pos % prompt->size->x,
-			prompt->origin->y + prompt->pos / prompt->size->x);
+	move_cursor(prompt, prompt->pos, true);
 }
 
-void	prompt_delete(t_prompt *prompt)
+void		prompt_delete(t_prompt *prompt)
 {
 	ft_memmove(&(prompt->line[prompt->pos - 1]),
 			&(prompt->line[prompt->pos]),
@@ -57,11 +56,10 @@ void	prompt_delete(t_prompt *prompt)
 			ft_strlen(&(prompt->line[prompt->pos])));
 	*(ft_strrchr(prompt->line, 32)) = '\0';
 	prompt->total--;
-	move_cursor(prompt->pos % prompt->size->x,
-			prompt->origin->y + prompt->pos / prompt->size->x);
+	move_cursor(prompt, prompt->pos, true);
 }
 
-char	*prompt_stock(t_prompt *prompt)
+char		*prompt_stock(t_prompt *prompt)
 {
 	char	*line;
 
@@ -83,8 +81,6 @@ char	*prompt_stock(t_prompt *prompt)
 	prompt->line[prompt->pos] = prompt->c[0];
 	write_data(prompt, &(prompt->line[prompt->pos]),
 			ft_strlen(&(prompt->line[prompt->pos])));
-	prompt->pos++;
-	move_cursor(prompt->pos % prompt->size->x,
-			prompt->origin->y + prompt->pos / prompt->size->x);
+	move_cursor(prompt, prompt->pos + 1, true);
 	return (prompt->line);
 }

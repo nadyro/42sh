@@ -6,15 +6,13 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/10 17:42:18 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/10 18:49:27 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/sh_line_edit.h"
 
-//#define malloc(x) (rand() % 10 ? malloc(x) : 0)
-
-static t_prompt	*malloc_prompt()
+static t_prompt	*malloc_prompt(void)
 {
 	t_prompt		*prompt;
 	struct winsize	w;
@@ -48,9 +46,9 @@ static int		ft_analyze(t_prompt *prompt)
 			prompt->pos < prompt->total)
 		prompt_backdel(prompt);
 	/*else if (prompt->nb_read == 3 && prompt->c[2] == 65)
-	// historique up;
+	 historique up;
 	else if (prompt->nb_read == 3 && prompt->c[2] == 66)
-	//historique down;*/
+	historique down;*/
 	else if (prompt->nb_read == 3 && prompt->c[2] == 68 && prompt->pos > 0)
 		ft_cursor_left(prompt);
 	else if (prompt->nb_read == 3 && prompt->c[2] == 67 &&
@@ -82,9 +80,9 @@ char			*prompt()
 	t_prompt	*prompt;
 	//BC = tgetstr ("le", NULL);
 	//UP = tgetstr ("up", NULL);
-	
+
 	prompt = malloc_prompt();
-	//call signal functions
+	//call signal functions;
 	k = 1;
 	while (k == 1)
 	{
@@ -96,6 +94,6 @@ char			*prompt()
 		to_return = ft_strdup(prompt->line);
 	else
 		to_return = NULL;
-	//free function
+	//free function;
 	return (to_return);
 }
