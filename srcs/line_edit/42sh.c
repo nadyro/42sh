@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/07 22:39:02 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/09 22:43:44 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/10 17:41:09 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	main()
 		return (-1);
 	termanip(0);
 	signal(SIGINT, termanip); //call signal functions later
-	ft_prompt(); //line = ft_prompt();
+	prompt(); //line = prompt();
 	termanip(1);
 	return (0);
 }
