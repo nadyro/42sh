@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/11 22:23:20 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/11 22:25:12 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static void		react(t_prompt *prompt)
 		ft_cursor_up(prompt);
 	else if (prompt->nb_read == 6 && prompt->c[5] == 66)
 		ft_cursor_down(prompt);
-	else if (prompt->nb_read == 1 && prompt->c[1] == '\n')
+	else if (prompt->nb_read == 1 && prompt->c[0] == '\n')
 	{
 		ft_cursor_end(prompt);
 		prompt_stock(prompt);
