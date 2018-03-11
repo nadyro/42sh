@@ -6,29 +6,11 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/11 00:31:00 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/11 22:23:20 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/sh_line_edit.h"
-
-static int		check_quotes(t_prompt *prompt)
-{
-	size_t	k;
-	char	*quotes;
-	char	*dquotes;
-	char	priority;
-
-	quotes = ft_strchr(prompt->line, '"');
-	dquotes = ft_strchr(prompt->line, '\'');
-	loop = prompt->line;
-	k = 0;
-	while (loop != NULL)
-	{
-		loop = ft_strchr(loop, '"');
-	}
-
-}
 
 static t_prompt	*malloc_prompt(void)
 {
@@ -43,20 +25,18 @@ static t_prompt	*malloc_prompt(void)
 		exit(1);
 	ioctl(0, TIOCGWINSZ, &w);
 	prompt->line = NULL;
-	prompt->nb_read = 0;
 	prompt->pos = 0;
 	prompt->total = 0;
 	get_cursor_pos(prompt->origin);
 	prompt->size->x = w.ws_col;
 	prompt->size->y = w.ws_row;
-	prompt->quotes = false;
-	prompt->dquotes = false;
+	prompt->quotes = none;
 	return (prompt);
 }
 
 static void		react(t_prompt *prompt)
 {
-	if (prompt->nb_read == 1 && (ft_isprint(prompt->c[0]) || prompt->c[0] == '\n')
+	if (prompt->nb_read == 1 && ft_isprint(prompt->c[0]))
 		prompt_stock(prompt);
 	else if (prompt->nb_read == 1 && prompt->c[0] == 127 && prompt->pos > 0)
 		prompt_delete(prompt);
@@ -84,6 +64,11 @@ static void		react(t_prompt *prompt)
 		ft_cursor_up(prompt);
 	else if (prompt->nb_read == 6 && prompt->c[5] == 66)
 		ft_cursor_down(prompt);
+	else if (prompt->nb_read == 1 && prompt->c[1] == '\n')
+	{
+		ft_cursor_end(prompt);
+		prompt_stock(prompt);
+	}
 }
 
 char			*prompt()
@@ -98,20 +83,16 @@ char			*prompt()
 
 	//print the prompt;
 	prompt = malloc_prompt();
+	to_return = NULL;
 	//call signal functions;
 	k = 1;
-	while (k > 0)
+	while (to_return == NULL || prompt->quotes != none)
 	{
 		prompt->nb_read = read(1, prompt->c, 6);
 		react(prompt);
 		if (prompt->total > 0 && prompt->line[prompt->total - 1] == '\n')
-			k = check_quotes(prompt);
+			to_return = check_quotes(prompt, to_return);
 	}
-	ft_cursor_end(prompt);
-	if (prompt->line != NULL)
-		to_return = ft_strdup(prompt->line);
-	else
-		to_return = NULL;
 	//free function;
 	return (to_return);
 }
