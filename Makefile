@@ -6,7 +6,7 @@
 #    By: azybert <azybert@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/04 19:24:34 by azybert           #+#    #+#              #
-#    Updated: 2018/03/05 13:03:58 by kernel_pa        ###   ########.fr        #
+#    Updated: 2018/03/12 14:52:30 by kernel_pa        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,16 +17,18 @@
 
 # Add the source file path without "srcs/" down here.
 
-SRCS = 	line_editing/21sh.c \
-	line_editing/ft_prompt.c \
-	line_editing/term.c \
-	line_editing/prompt_manage_data.c \
-	line_editing/cursor_motion.c \
-	line_editing/advanced_cursor_motion.c \
+SRCS = 	line_edit/advanced_cursor_motion.c \
+	line_edit/basic_cursor_motion.c \
+	line_edit/manage_data.c \
+	line_edit/prompt.c \
+	line_edit/quotes.c \
+	line_edit/sh.c \
+	line_edit/termanip.c \
+	line_edit/utility_cursor_motion.c \
 
 SRC_DIR = srcs
 OBJ_DIR = objs
-NAME = 21sh
+NAME = 42sh
 
 LIB = -Llibft -lft
 
@@ -34,7 +36,7 @@ LIB = -Llibft -lft
 # (It is encouraged to create a header file for each big modules or group mate.
 # We might need to discuss this when everybody will gather).
 
-HEADERS = includes/21sh.h
+HEADERS = includes/sh_line_edit.h
 
 # Creation of the object files in dynamically created folder "objs"
 
@@ -54,7 +56,7 @@ $(NAME): $(OBJ_DIR) $(OBJS)
 
 $(OBJ_DIR):
 	@/bin/mkdir -p $(OBJ_DIR)
-	@/bin/mkdir -p $(OBJ_DIR)/line_editing
+	@/bin/mkdir -p $(OBJ_DIR)/line_edit
 clean:
 	@/bin/rm -rf $(OBJ_DIR)
 	@make -C libft clean
