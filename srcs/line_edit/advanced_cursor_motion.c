@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/24 21:42:41 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/13 20:12:19 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/13 20:58:11 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,23 +36,23 @@ void	ft_cursor_word_left(t_prompt *prompt)
 			ft_isspace(prompt->line[prompt->pos - 1]))
 		while (prompt->pos > 0 &&
 				!(ft_isspace(prompt->line[prompt->pos])))
-			ft_cursor_left(prompt);
+			move_cursor(prompt, prompt->pos - 1, true);
 	while (prompt->pos > 0 &&
 			ft_isspace(prompt->line[prompt->pos]))
-		ft_cursor_left(prompt);
+		move_cursor(prompt, prompt->pos - 1, true);
 	while (prompt->pos > 0 &&
 			!(ft_isspace(prompt->line[prompt->pos])))
-		ft_cursor_left(prompt);
+		move_cursor(prompt, prompt->pos - 1, true);
 	if (prompt->pos != 0)
-		ft_cursor_right(prompt);
+		move_cursor(prompt, prompt->pos + 1, true);
 }
 
 void	ft_cursor_word_right(t_prompt *prompt)
 {
 	while (prompt->pos < prompt->total &&
 			!(ft_isspace(prompt->line[prompt->pos])))
-		ft_cursor_right(prompt);
+		move_cursor(prompt, prompt->pos + 1, true);
 	while (prompt->pos < prompt->total &&
 			ft_isspace(prompt->line[prompt->pos]))
-		ft_cursor_right(prompt);
+		move_cursor(prompt, prompt->pos + 1, true);
 }

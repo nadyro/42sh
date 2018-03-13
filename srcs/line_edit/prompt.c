@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/13 20:12:26 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/13 20:50:45 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,14 @@ static void		react(t_prompt *prompt)
 	else if (prompt->nb_read == 3 && prompt->c[2] == 66)
 	historique down;*/
 	else if (prompt->nb_read == 3 && prompt->c[2] == 68 && prompt->pos > 0)
-		ft_cursor_left(prompt);
+		move_cursor(prompt, prompt->pos - 1, true);
 	else if (prompt->nb_read == 3 && prompt->c[2] == 67 &&
 			prompt->pos < prompt->total)
-		ft_cursor_right(prompt);
+		move_cursor(prompt, prompt->pos + 1, true);
 	else if (prompt->nb_read == 3 && prompt->c[2] == 72)
-		ft_cursor_start(prompt);
+		move_cursor(prompt, 0, true);
 	else if (prompt->nb_read == 3 && prompt->c[2] == 70)
-		ft_cursor_end(prompt);
+		move_cursor(prompt, prompt->total, true);
 	else if (prompt->nb_read == 6 && prompt->c[5] == 68)
 		ft_cursor_word_left(prompt);
 	else if (prompt->nb_read == 6 && prompt->c[5] == 67)
@@ -66,7 +66,7 @@ static void		react(t_prompt *prompt)
 		ft_cursor_down(prompt);
 	else if (prompt->nb_read == 1 && prompt->c[0] == '\n')
 	{
-		ft_cursor_end(prompt);
+		move_cursor(prompt, prompt->total, true);
 		prompt_stock(prompt);
 	}
 }

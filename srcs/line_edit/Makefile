@@ -6,13 +6,13 @@
 #    By: azybert <azybert@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/04 19:24:34 by azybert           #+#    #+#              #
-#    Updated: 2018/03/11 16:46:28 by azybert          ###   ########.fr        #
+#    Updated: 2018/03/13 20:39:49 by azybert          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = 42sh
 FILES = sh.c prompt.c termanip.c manage_data.c quotes.c\
-		basic_cursor_motion.c advanced_cursor_motion.c utility_cursor_motion.c
+		advanced_cursor_motion.c utility_cursor_motion.c
 OBJ = $(FILES:.c=.o)
 LIB = ../../libft/libft.a
 CC = gcc

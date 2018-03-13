@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/11 15:43:54 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/13 20:12:11 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/13 20:30:31 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,24 +48,16 @@ static size_t	ft_is_quote(char c)
 	return (0);
 }
 
-char			*check_quotes(t_prompt *prompt, char *to_return)
+void			check_quotes2(t_prompt *prompt, char *c, char *loop)
 {
-	char	c[3];
-	char	*loop;
 	size_t	index;
 
-	c[1] = '\'';
-	c[2] = '"';
-	loop = prompt->line;
 	while (loop && *loop)
 	{
 		index = (prompt->quotes == quotes ? 1 : 0);
 		index = (prompt->quotes == dquotes ? 2 : index);
 		while (*loop && index == 0)
-		{
-			index = ft_is_quote(*loop);
-			loop++;
-		}
+			index = ft_is_quote(*(loop++));
 		if (index != 0)
 		{
 			prompt->quotes = (index == 1 ? quotes : dquotes);
@@ -78,6 +70,17 @@ char			*check_quotes(t_prompt *prompt, char *to_return)
 			}
 		}
 	}
+}
+
+char			*check_quotes(t_prompt *prompt, char *to_return)
+{
+	char	c[3];
+	char	*loop;
+
+	c[1] = '\'';
+	c[2] = '"';
+	loop = prompt->line;
+	check_quotes2(prompt, c, loop);
 	prompt->origin->y += 1 + prompt->total / prompt->size->x;
 	move_cursor(prompt, -(prompt->origin->x), true);
 	if (prompt->quotes == quotes)
@@ -85,5 +88,5 @@ char			*check_quotes(t_prompt *prompt, char *to_return)
 	else if (prompt->quotes == dquotes)
 		write(1, "dquotes> ", 9);
 	get_cursor_pos(prompt->origin);
-	return(stock_line(to_return, prompt));
+	return (stock_line(to_return, prompt));
 }

@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/11 22:23:23 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/13 20:40:04 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,6 @@ char			*prompt_stock(t_prompt *prompt);
 void			prompt_delete(t_prompt *prompt);
 void			prompt_backdel(t_prompt *prompt);
 void			move_cursor(t_prompt *prompt, size_t new_pos, bool save);
-void			ft_cursor_left(t_prompt *prompt);
-void			ft_cursor_right(t_prompt *prompt);
-void			ft_cursor_start(t_prompt *prompt);
-void			ft_cursor_end(t_prompt *prompt);
 void			ft_cursor_word_left(t_prompt *prompt);
 void			ft_cursor_word_right(t_prompt *prompt);
 void			ft_cursor_up(t_prompt *prompt);
