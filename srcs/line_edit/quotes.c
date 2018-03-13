@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/11 15:43:54 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/13 17:31:47 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/13 20:12:11 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,8 @@ static char		*stock_line(char *to_return, t_prompt *prompt)
 	ioctl(0, TIOCGWINSZ, &w);
 	free(prompt->line);
 	prompt->line = NULL;
-	move_cursor(prompt, 0, true);
+	prompt->pos = 0;
 	prompt->total = 0;
-	get_cursor_pos(prompt->origin);
-	prompt->size->x = w.ws_col;
-	prompt->size->y = w.ws_row;
 	return (to_return);
 }
 
@@ -81,8 +78,12 @@ char			*check_quotes(t_prompt *prompt, char *to_return)
 			}
 		}
 	}
-	//if quotes, disply prompt;
-	//if (prompt->quotes != none)
-	prompt->origin->y += 1;
+	prompt->origin->y += 1 + prompt->total / prompt->size->x;
+	move_cursor(prompt, -(prompt->origin->x), true);
+	if (prompt->quotes == quotes)
+		write(1, "quotes> ", 8);
+	else if (prompt->quotes == dquotes)
+		write(1, "dquotes> ", 9);
+	get_cursor_pos(prompt->origin);
 	return(stock_line(to_return, prompt));
 }

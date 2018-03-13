@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/22 02:23:25 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/10 18:40:07 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/13 19:50:21 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_cursor_start(t_prompt *prompt)
 {
-	move_cursor(prompt, prompt->origin->x, true);
+	move_cursor(prompt, 0, true);
 }
 
 void	ft_cursor_end(t_prompt *prompt)

@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/10 17:23:30 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/10 18:45:15 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/13 20:12:14 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ void	move_cursor(t_prompt *prompt, size_t new_pos, bool save)
 	size_t	x;
 	size_t	y;
 
-	x = new_pos % prompt->size->x;
-	y = prompt->origin->y + new_pos / prompt->size->x;
+	x = (prompt->origin->x + new_pos) % prompt->size->x;
+	y = prompt->origin->y + (prompt->origin->x + new_pos) / prompt->size->x;
 	tputs(tgoto(tgetstr("cm", NULL), x, y), 1, ft_putshit);
 	if (save == true)
 		prompt->pos = new_pos;
