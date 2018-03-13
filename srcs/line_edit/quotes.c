@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/11 15:43:54 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/11 22:23:21 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/13 17:31:47 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,16 @@ char			*check_quotes(t_prompt *prompt, char *to_return)
 			index = ft_is_quote(*loop);
 			loop++;
 		}
-		if (index > 0)
+		if (index != 0)
 		{
+			prompt->quotes = (index == 1 ? quotes : dquotes);
 			loop = ft_strchr(loop, c[index]);
-			if (loop == NULL)
-				prompt->quotes = (prompt->quotes == none ? index : none);
-			else
+			if (loop != NULL)
+			{
+				prompt->quotes = none;
 				loop++;
+				index = 0;
+			}
 		}
 	}
 	//if quotes, disply prompt;
