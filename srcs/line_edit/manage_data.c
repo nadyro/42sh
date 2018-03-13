@@ -6,13 +6,13 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 23:36:42 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/13 20:54:22 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/13 23:31:33 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/sh_line_edit.h"
 
-static void	write_data(t_prompt *prompt, char *display, size_t size)
+void		write_data(t_prompt *prompt, char *display, size_t size)
 {
 	size_t	mem;
 	size_t	tmp;
@@ -79,6 +79,7 @@ char		*prompt_stock(t_prompt *prompt)
 	ft_memmove(&(prompt->line[prompt->pos]) + 1, &(prompt->line[prompt->pos]),
 			ft_strlen(&(prompt->line[prompt->pos])));
 	prompt->line[prompt->pos] = prompt->c[0];
+	//check if need to scroll??
 	write_data(prompt, &(prompt->line[prompt->pos]),
 			ft_strlen(&(prompt->line[prompt->pos])));
 	move_cursor(prompt, prompt->pos + 1, true);

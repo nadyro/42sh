@@ -6,13 +6,38 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/13 21:29:40 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/13 23:31:28 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/sh_line_edit.h"
 
 t_prompt		*prompt;
+
+void			handle_resize(int sig)
+{
+	struct winsize  w;
+
+	//clear and rewrite
+	tputs(tgetstr("cl", NULL), 0, ft_putshit);
+	get_cursor_pos(prompt->origin);
+	ioctl(0, TIOCGWINSZ, &w);
+	prompt->size->x = w.ws_col;
+	prompt->size->y = w.ws_row;
+	write(1, "prompt> ", 8);
+	get_cursor_pos(prompt->origin);
+	write_data(prompt, prompt->line, prompt->total);
+	move_cursor(prompt, prompt->pos, true);
+	signal(sig, handle_resize);
+}
+
+static void		free_prompt(t_prompt* prompt)
+{
+	free(prompt->line);
+	free(prompt->origin);
+	free(prompt->size);
+	free(prompt);
+}
 
 static t_prompt	*malloc_prompt(void)
 {
@@ -86,7 +111,7 @@ char			*line_edit_main_loop()
 	write(1, "prompt> ", 8);
 	prompt = malloc_prompt();
 	to_return = NULL;
-	//call signal functions;
+	signal(SIGWINCH, handle_resize);
 	k = 1;
 	while (to_return == NULL || prompt->quotes != none)
 	{
@@ -95,6 +120,6 @@ char			*line_edit_main_loop()
 		if (prompt->total > 0 && prompt->line[prompt->total - 1] == '\n')
 			to_return = check_quotes(prompt, to_return);
 	}
-	//free function;
+	free_prompt(prompt);
 	return (to_return);
 }
