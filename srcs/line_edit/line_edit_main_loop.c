@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/13 23:31:28 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/15 19:49:57 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_prompt		*prompt;
 
 void			handle_resize(int sig)
 {
-	struct winsize  w;
+	struct winsize	w;
 
 	//clear and rewrite
 	tputs(tgetstr("cl", NULL), 0, ft_putshit);
@@ -31,7 +31,7 @@ void			handle_resize(int sig)
 	signal(sig, handle_resize);
 }
 
-static void		free_prompt(t_prompt* prompt)
+static void		free_prompt(t_prompt *prompt)
 {
 	free(prompt->line);
 	free(prompt->origin);
@@ -41,7 +41,6 @@ static void		free_prompt(t_prompt* prompt)
 
 static t_prompt	*malloc_prompt(void)
 {
-	//t_prompt		*prompt;
 	struct winsize	w;
 
 	if (!(prompt = malloc(sizeof(*prompt))))
@@ -61,63 +60,71 @@ static t_prompt	*malloc_prompt(void)
 	return (prompt);
 }
 
-static void		react(t_prompt *prompt)
+static int		react(t_prompt *prompt, int nb_user_entry, char *user_entry)
 {
-	if (prompt->nb_read == 1 && ft_isprint(prompt->c[0]))
-		prompt_stock(prompt);
-	else if (prompt->nb_read == 1 && prompt->c[0] == 127 && prompt->pos > 0)
+	int	mem;
+
+	if (ft_isprint(user_entry[0]))
+	{
+		mem = 0;
+		while (mem < nb_user_entry && ft_isprint(user_entry))
+			prompt_stock(prompt, &user_entry[mem++]);
+		return (0);
+	}
+	else if (nb_user_entry == 1 && user_entry[0] == 127 && prompt->pos > 0)
 		prompt_delete(prompt);
-	else if (prompt->nb_read == 4 && prompt->c[3] == 126 &&
+	else if (nb_user_entry == 4 && user_entry[3] == 126 &&
 			prompt->pos < prompt->total)
 		prompt_backdel(prompt);
-	/*else if (prompt->nb_read == 3 && prompt->c[2] == 65)
+	/*else if (nb_user_entry == 3 && user_entry[2] == 65)
 	 historique up;
-	else if (prompt->nb_read == 3 && prompt->c[2] == 66)
+	else if (nb_user_entry == 3 && user_entry[2] == 66)
 	historique down;*/
-	else if (prompt->nb_read == 3 && prompt->c[2] == 68 && prompt->pos > 0)
+	else if (nb_user_entry == 3 && user_entry[2] == 68 && prompt->pos > 0)
 		move_cursor(prompt, prompt->pos - 1, true);
-	else if (prompt->nb_read == 3 && prompt->c[2] == 67 &&
+	else if (nb_user_entry == 3 && user_entry[2] == 67 &&
 			prompt->pos < prompt->total)
 		move_cursor(prompt, prompt->pos + 1, true);
-	else if (prompt->nb_read == 3 && prompt->c[2] == 72)
+	else if (nb_user_entry == 3 && user_entry[2] == 72)
 		move_cursor(prompt, 0, true);
-	else if (prompt->nb_read == 3 && prompt->c[2] == 70)
+	else if (nb_user_entry == 3 && user_entry[2] == 70)
 		move_cursor(prompt, prompt->total, true);
-	else if (prompt->nb_read == 6 && prompt->c[5] == 68)
+	else if (nb_user_entry == 6 && user_entry[5] == 68)
 		ft_cursor_word_left(prompt);
-	else if (prompt->nb_read == 6 && prompt->c[5] == 67)
+	else if (nb_user_entry == 6 && user_entry[5] == 67)
 		ft_cursor_word_right(prompt);
-	else if (prompt->nb_read == 6 && prompt->c[5] == 65)
+	else if (nb_user_entry == 6 && user_entry[5] == 65)
 		ft_cursor_up(prompt);
-	else if (prompt->nb_read == 6 && prompt->c[5] == 66)
+	else if (nb_user_entry == 6 && user_entry[5] == 66)
 		ft_cursor_down(prompt);
-	else if (prompt->nb_read == 1 && prompt->c[0] == '\n')
+	else if (nb_user_entry == 1 && user_entry[0] == '\n')
 	{
 		move_cursor(prompt, prompt->total, true);
-		prompt_stock(prompt);
+		prompt_stock(prompt, user_entry);
+		return (1);
 	}
+	return (0);
 }
 
-char			*line_edit_main_loop()
+char			*line_edit_main_loop(void)
 {
+	char		user_entry[6];
 	char		*to_return;
-	int			k;
+	int			nb_user_entry;
+
 	//char		*BC;
 	//char		*UP;
 	//t_prompt	*prompt;
 	//BC = tgetstr ("le", NULL);
 	//UP = tgetstr ("up", NULL);
-
 	write(1, "prompt> ", 8);
-	prompt = malloc_prompt();
+	prompt = malloc_prompt(); //real main loop begins after it
 	to_return = NULL;
 	signal(SIGWINCH, handle_resize);
-	k = 1;
 	while (to_return == NULL || prompt->quotes != none)
 	{
-		prompt->nb_read = read(1, prompt->c, 6);
-		react(prompt);
-		if (prompt->total > 0 && prompt->line[prompt->total - 1] == '\n')
+		nb_user_entry = read(1, user_entry, 6);
+		if (react(prompt, nb_user_entry, user_entry))
 			to_return = check_quotes(prompt, to_return);
 	}
 	free_prompt(prompt);
