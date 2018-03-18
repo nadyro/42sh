@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 23:36:42 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/18 22:56:48 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/18 23:39:47 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void		write_data(t_prompt *prompt, char *display, size_t size)
 		write(1, display, tmp);
 		if (prompt->size->y - 1 == prompt->origin->y +
 				(prompt->origin->x + displayed) / prompt->size->x &&
-				(displayed +  prompt->origin->x + tmp) % prompt->size->x == 0)
+				(displayed + prompt->origin->x + tmp) % prompt->size->x == 0)
 		{
 			tputs(tgetstr("sf", NULL), 1, ft_putshit);
 			prompt->origin->y--;

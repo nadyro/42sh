@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/07 22:39:02 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/18 21:09:22 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/18 23:37:00 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	main(void)
 	if (tgetent(NULL, name_term) == ERR)
 		return (-1);
 	termanip(0);
-	signal(SIGINT, termanip); //call signal functions later
+	signal(SIGINT, termanip);
 	while (1)
 		line = line_edit_main_loop();
 	termanip(1);

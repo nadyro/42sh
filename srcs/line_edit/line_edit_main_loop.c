@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/18 21:08:15 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/18 23:39:44 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void			handle_resize(int sig)
 {
 	struct winsize	w;
 
-	//clear and rewrite
 	tputs(tgetstr("cl", NULL), 0, ft_putshit);
 	get_cursor_pos(prompt->origin);
 	ioctl(0, TIOCGWINSZ, &w);
@@ -112,13 +111,13 @@ char			*line_edit_main_loop(void)
 	char		*to_return;
 	int			nb_user_entry;
 
-	//char		*BC;
-	//char		*UP;
-	//t_prompt	*prompt;
-	//BC = tgetstr ("le", NULL);
-	//UP = tgetstr ("up", NULL);
+	/*char		*BC;
+	char		*UP;
+	t_prompt	*prompt;
+	BC = tgetstr ("le", NULL);
+	UP = tgetstr ("up", NULL);*/
 	write(1, "prompt> ", 8);
-	prompt = malloc_prompt(); //real main loop begins after it
+	prompt = malloc_prompt();
 	to_return = NULL;
 	signal(SIGWINCH, handle_resize);
 	while (to_return == NULL || prompt->quotes != none)
