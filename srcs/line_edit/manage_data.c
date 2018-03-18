@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 23:36:42 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/15 15:43:09 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/18 22:56:48 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,13 @@ void		write_data(t_prompt *prompt, char *display, size_t size)
 		tmp = prompt->size->x - displayed % prompt->size->x;
 		tmp = ((tmp > size) ? size : tmp);
 		write(1, display, tmp);
+		if (prompt->size->y - 1 == prompt->origin->y +
+				(prompt->origin->x + displayed) / prompt->size->x &&
+				(displayed +  prompt->origin->x + tmp) % prompt->size->x == 0)
+		{
+			tputs(tgetstr("sf", NULL), 1, ft_putshit);
+			prompt->origin->y--;
+		}
 		display += tmp;
 		size -= tmp;
 	}
@@ -79,7 +86,6 @@ char		*prompt_stock(t_prompt *prompt, char *user_entry)
 	ft_memmove(&(prompt->line[prompt->pos]) + 1, &(prompt->line[prompt->pos]),
 			ft_strlen(&(prompt->line[prompt->pos])));
 	prompt->line[prompt->pos] = user_entry[0];
-	//check if need to scroll??;
 	write_data(prompt, &(prompt->line[prompt->pos]),
 			ft_strlen(&(prompt->line[prompt->pos])));
 	move_cursor(prompt, prompt->pos + 1, true);

@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/15 19:49:57 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/18 21:08:15 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static int		react(t_prompt *prompt, int nb_user_entry, char *user_entry)
 	if (ft_isprint(user_entry[0]))
 	{
 		mem = 0;
-		while (mem < nb_user_entry && ft_isprint(user_entry))
+		while (mem < nb_user_entry && ft_isprint(user_entry[0]))
 			prompt_stock(prompt, &user_entry[mem++]);
 		return (0);
 	}
