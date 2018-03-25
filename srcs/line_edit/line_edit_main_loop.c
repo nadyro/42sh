@@ -6,13 +6,11 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/18 23:39:44 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/25 23:36:56 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/sh_line_edit.h"
-
-t_prompt		*prompt;
 
 void			handle_resize(int sig)
 {
@@ -33,6 +31,7 @@ void			handle_resize(int sig)
 static void		free_prompt(t_prompt *prompt)
 {
 	free(prompt->line);
+	free(prompt->buf);
 	free(prompt->origin);
 	free(prompt->size);
 	free(prompt);
@@ -50,6 +49,7 @@ static t_prompt	*malloc_prompt(void)
 		exit(1);
 	ioctl(0, TIOCGWINSZ, &w);
 	prompt->line = NULL;
+	prompt->buf = NULL;
 	prompt->pos = 0;
 	prompt->total = 0;
 	get_cursor_pos(prompt->origin);
@@ -59,73 +59,47 @@ static t_prompt	*malloc_prompt(void)
 	return (prompt);
 }
 
-static int		react(t_prompt *prompt, int nb_user_entry, char *user_entry)
-{
-	int	mem;
-
-	if (ft_isprint(user_entry[0]))
-	{
-		mem = 0;
-		while (mem < nb_user_entry && ft_isprint(user_entry[0]))
-			prompt_stock(prompt, &user_entry[mem++]);
-		return (0);
-	}
-	else if (nb_user_entry == 1 && user_entry[0] == 127 && prompt->pos > 0)
-		prompt_delete(prompt);
-	else if (nb_user_entry == 4 && user_entry[3] == 126 &&
-			prompt->pos < prompt->total)
-		prompt_backdel(prompt);
-	/*else if (nb_user_entry == 3 && user_entry[2] == 65)
-	 historique up;
-	else if (nb_user_entry == 3 && user_entry[2] == 66)
-	historique down;*/
-	else if (nb_user_entry == 3 && user_entry[2] == 68 && prompt->pos > 0)
-		move_cursor(prompt, prompt->pos - 1, true);
-	else if (nb_user_entry == 3 && user_entry[2] == 67 &&
-			prompt->pos < prompt->total)
-		move_cursor(prompt, prompt->pos + 1, true);
-	else if (nb_user_entry == 3 && user_entry[2] == 72)
-		move_cursor(prompt, 0, true);
-	else if (nb_user_entry == 3 && user_entry[2] == 70)
-		move_cursor(prompt, prompt->total, true);
-	else if (nb_user_entry == 6 && user_entry[5] == 68)
-		ft_cursor_word_left(prompt);
-	else if (nb_user_entry == 6 && user_entry[5] == 67)
-		ft_cursor_word_right(prompt);
-	else if (nb_user_entry == 6 && user_entry[5] == 65)
-		ft_cursor_up(prompt);
-	else if (nb_user_entry == 6 && user_entry[5] == 66)
-		ft_cursor_down(prompt);
-	else if (nb_user_entry == 1 && user_entry[0] == '\n')
-	{
-		move_cursor(prompt, prompt->total, true);
-		prompt_stock(prompt, user_entry);
-		return (1);
-	}
-	return (0);
-}
-
 char			*line_edit_main_loop(void)
 {
-	char		user_entry[6];
+	char		user_entry[7];
 	char		*to_return;
 	int			nb_user_entry;
+	static char	*overload = NULL;
 
-	/*char		*BC;
-	char		*UP;
-	t_prompt	*prompt;
-	BC = tgetstr ("le", NULL);
-	UP = tgetstr ("up", NULL);*/
-	write(1, "prompt> ", 8);
+	write(1, "prompt> ", 7);
 	prompt = malloc_prompt();
+	prompt->buf = overload ? ft_strdup(overload) : NULL;
 	to_return = NULL;
 	signal(SIGWINCH, handle_resize);
 	while (to_return == NULL || prompt->quotes != none)
 	{
-		nb_user_entry = read(1, user_entry, 6);
-		if (react(prompt, nb_user_entry, user_entry))
-			to_return = check_quotes(prompt, to_return);
+		if (prompt->buf != NULL)
+		{
+			if (data_react(prompt))
+				to_return = check_quotes(prompt, to_return);
+		}else{
+			ft_bzero(user_entry, 7);
+			nb_user_entry = read(1, user_entry, 6);
+			if (user_entry[0] == 27 || user_entry[0] == 127)
+				esc_react(prompt, nb_user_entry, user_entry);
+			else{
+				prompt->buf = ft_strdup(user_entry);
+				if (nb_user_entry == 6)
+				{
+					termanip(1);
+					while (read(1, user_entry, 6))
+					{
+						prompt->buf = ft_strjoin(prompt->buf, user_entry);
+						ft_bzero(user_entry, 6);
+					}
+					termanip(1);
+				}
+				if (data_react(prompt))
+					to_return = check_quotes(prompt, to_return);
+			}
+		}
 	}
+	overload = (ft_strlen(prompt->buf) > 0 ? ft_strdup(prompt->buf) : NULL);
 	free_prompt(prompt);
 	return (to_return);
 }
