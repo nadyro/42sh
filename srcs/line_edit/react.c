@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/24 13:39:16 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/28 21:39:20 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/28 22:46:24 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	data_react(t_prompt *prompt)
 		free(to_free);
 		return (1);
 	}
-	if (prompt->buf[mem] == 4 && prompt->total == 0) ///
+	if (prompt->buf[mem] == 4 && prompt->total == 0 && prompt->quotes == none)
 		exit(0);
 	free(prompt->buf);
 	prompt->buf = NULL;

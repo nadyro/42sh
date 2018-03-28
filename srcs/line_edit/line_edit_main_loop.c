@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/28 21:39:23 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/28 22:52:57 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,15 @@
 void		free_prompt(t_prompt *prompt)
 {
 	free(prompt->line);
+	prompt->line = NULL;
 	free(prompt->buf);
+	prompt->buf = NULL;
 	free(prompt->origin);
+	prompt->origin = NULL;
 	free(prompt->size);
+	prompt->size = NULL;
 	free(prompt);
+	prompt = NULL;
 }
 
 t_prompt	*malloc_prompt(t_prompt *prompt)
