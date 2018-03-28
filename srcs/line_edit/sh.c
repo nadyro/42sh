@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/07 22:39:02 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/25 18:15:35 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/28 21:36:28 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	main(void)
 		return (-1);
 	termanip(0);
 	signal(SIGINT, termanip);
+	//handle_sig();
 	while (1)
 		line = line_edit_main_loop();
 	termanip(2);

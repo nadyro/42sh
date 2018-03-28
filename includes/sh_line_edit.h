@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/24 17:31:52 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/28 19:49:37 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <unistd.h>
 
 # define BUFFER 4
+# define UNUSED(x) (void)(x)
 
 extern struct s_prompt	*prompt;
 
@@ -70,6 +71,10 @@ void			ft_cursor_word_right(t_prompt *prompt);
 void			ft_cursor_up(t_prompt *prompt);
 void			ft_cursor_down(t_prompt *prompt);
 char			*check_quotes(t_prompt *prompt, char *to_return);
+void			handle_sig(void);
+void			handle_int(int sig);
 void            handle_resize(int sig);
+t_prompt		*malloc_prompt(t_prompt *prompt);
+void			free_prompt(t_prompt *prompt);
 
 #endif

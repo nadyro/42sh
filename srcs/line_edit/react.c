@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/24 13:39:16 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/25 23:20:17 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/28 21:39:20 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 int	data_react(t_prompt *prompt)
 {
-	int 	mem;
+	int		mem;
 	char	*to_free;
 
 	mem = 0;
-	while (prompt->buf[mem] != '\0' && prompt->buf[mem] != '\n')
+	while (ft_isprint(prompt->buf[mem]))
 		prompt_stock(prompt, &prompt->buf[mem++]);
 	if (prompt->buf[mem] == '\n')
 	{
@@ -29,6 +29,8 @@ int	data_react(t_prompt *prompt)
 		free(to_free);
 		return (1);
 	}
+	if (prompt->buf[mem] == 4 && prompt->total == 0) ///
+		exit(0);
 	free(prompt->buf);
 	prompt->buf = NULL;
 	return (0);

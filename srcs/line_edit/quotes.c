@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/11 15:43:54 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/13 20:30:31 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/27 18:28:59 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static size_t	ft_is_quote(char c)
 	return (0);
 }
 
-void			check_quotes2(t_prompt *prompt, char *c, char *loop)
+static void		check_quotes2(t_prompt *prompt, char *c, char *loop)
 {
 	size_t	index;
 
