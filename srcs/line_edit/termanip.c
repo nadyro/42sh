@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/14 22:21:10 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/28 23:07:15 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/30 23:50:18 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	handle_resize(int sig)
 	struct winsize	w;
 	
 	tputs(tgetstr("cl", NULL), 0, ft_putshit);
-	get_cursor_pos(prompt->origin);
 	ioctl(0, TIOCGWINSZ, &w);
 	prompt->size->x = w.ws_col;
 	prompt->size->y = w.ws_row;
@@ -30,12 +29,12 @@ void	handle_resize(int sig)
 
 void	handle_int(int sig)
 {
-	UNUSED(sig);
 	move_cursor(prompt, prompt->total + prompt->size->x -
 			((prompt->total + prompt->origin->x) % prompt->size->x), false);
 	write(1, "prompt> ", 8);
 	free_prompt(prompt);
 	malloc_prompt(prompt);
+	signal(sig, handle_int);
 }
 
 void	handle_sig(void)

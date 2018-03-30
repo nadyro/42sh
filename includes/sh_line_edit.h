@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/28 19:49:37 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/30 22:17:53 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,6 @@ void			handle_int(int sig);
 void            handle_resize(int sig);
 t_prompt		*malloc_prompt(t_prompt *prompt);
 void			free_prompt(t_prompt *prompt);
+void			ft_flush(t_prompt *prompt);
 
 #endif
