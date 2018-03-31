@@ -6,13 +6,13 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/14 22:21:10 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/30 23:50:18 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/31 18:47:48 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/sh_line_edit.h"
 
-void	handle_resize(int sig)
+/*void	handle_resize(int sig)
 {
 	struct winsize	w;
 	
@@ -41,7 +41,7 @@ void	handle_sig(void)
 {
 	signal(SIGINT, handle_int);
 	signal(SIGWINCH, handle_resize);
-}
+}*/
 
 void	termanip(int sig)
 {
@@ -67,7 +67,7 @@ void	termanip(int sig)
 	else if (sig == 1)
 	{
 		shell.c_cc[VMIN] = (shell.c_cc[VMIN] == 1 ? 0 : 1);
-		shell.c_cc[VTIME] = (shell.c_cc[VTIME] == 0 ? 1 : 0);
+		shell.c_cc[VTIME] = (shell.c_cc[VTIME] == 0 ? 200 : 0);
 		tcsetattr(0, TCSADRAIN, &shell);
 	}
 }

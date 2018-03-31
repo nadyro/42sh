@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/30 22:17:53 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/31 18:49:44 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ typedef struct	s_prompt
 
 void			termanip(int sig);
 char			*line_edit_main_loop();
-void			get_cursor_pos(t_coord *actualize);
+void			get_cursor_pos(t_coord *actualize, t_prompt *prompt);
 int				ft_putshit(int c);
 int				esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry);
 int				data_react(t_prompt *prompt);
@@ -71,9 +71,9 @@ void			ft_cursor_word_right(t_prompt *prompt);
 void			ft_cursor_up(t_prompt *prompt);
 void			ft_cursor_down(t_prompt *prompt);
 char			*check_quotes(t_prompt *prompt, char *to_return);
-void			handle_sig(void);
-void			handle_int(int sig);
-void            handle_resize(int sig);
+//void			handle_sig(void);
+//void			handle_int(int sig);
+//void			handle_resize(int sig);
 t_prompt		*malloc_prompt(t_prompt *prompt);
 void			free_prompt(t_prompt *prompt);
 void			ft_flush(t_prompt *prompt);

@@ -3,6 +3,7 @@
 #include <termios.h>
 #include <stdlib.h>
 #include <string.h>
+#include <fcntl.h>
 
 void    termanip(int sig)
 {
@@ -31,11 +32,12 @@ int main()
 {
 	char buffer[2051];
 	signal(SIGINT, termanip);
+	int fd = open("debug", O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	termanip(0);
 	while (1)
 	{
 		buffer[read(1, buffer, 2050)] = '\0';
-		printf("%zu\n", strlen(buffer));
+		dprintf(fd, "MOTHAFUCKER=%zu\n", strlen(buffer));
 		printf("%s", buffer);
 		//for (int i = 0; i < 2050; i++)
 		//	printf("%d=%d=%c::\n", i, (int)buffer[i], buffer[i]);

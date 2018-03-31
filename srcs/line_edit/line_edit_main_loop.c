@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/30 23:39:52 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/31 18:48:09 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_prompt	*malloc_prompt(t_prompt *prompt)
 	prompt->buf = NULL;
 	prompt->pos = 0;
 	prompt->total = 0;
-	get_cursor_pos(prompt->origin);
+	get_cursor_pos(prompt->origin, prompt);
 	prompt->size->x = w.ws_col;
 	prompt->size->y = w.ws_row;
 	prompt->quotes = none;
@@ -45,14 +45,14 @@ t_prompt	*malloc_prompt(t_prompt *prompt)
 
 void			ft_flush(t_prompt *prompt)
 {
-	char	user_entry[7];
+	char	user_entry[512];
 
 	termanip(1);
-	ft_bzero(user_entry, 6);
-	while (read(1, user_entry, 6) > 0)
+	ft_bzero(user_entry, 512);
+	while (read(1, user_entry, 511) > 0)
 	{
 		prompt->buf = ft_strjoin(prompt->buf, user_entry);
-		ft_bzero(user_entry, 6);
+		ft_bzero(user_entry, 511);
 	}
 	termanip(1);
 }

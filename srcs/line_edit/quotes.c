@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/11 15:43:54 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/27 18:28:59 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/31 18:48:57 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,6 @@ char			*check_quotes(t_prompt *prompt, char *to_return)
 		write(1, "quotes> ", 8);
 	else if (prompt->quotes == dquotes)
 		write(1, "dquotes> ", 9);
-	get_cursor_pos(prompt->origin);
+	get_cursor_pos(prompt->origin, prompt);
 	return (stock_line(to_return, prompt));
 }
