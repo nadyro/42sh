@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/10 17:23:30 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/31 20:20:19 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/31 23:17:22 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,7 @@ void	get_cursor_pos(t_coord *actualize, t_prompt *prompt)
 	char	buf[100];
 	int		loop;
 
-	prompt->buf = prompt->buf;
-	//ft_flush(prompt);
-	termanip(4);
-	while (read(1, buf, 100) > 0)
-		;
-	termanip(4);
+	ft_flush(prompt);
 	write(1, "\033[6n", 4);
 	ft_bzero(buf, 100);
 	read(1, buf, 100);

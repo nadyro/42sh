@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/14 22:21:10 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/31 20:20:34 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/31 22:38:54 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,12 @@ void	termanip(int sig)
 	else if (sig == 3)
 	{
 		shell.c_cc[VMIN] = (shell.c_cc[VMIN] == 1 ? 0 : 1);
-		shell.c_cc[VTIME] = (shell.c_cc[VTIME] == 0 ? 2 : 0);
+		shell.c_cc[VTIME] = 0;
 		tcsetattr(0, TCSADRAIN, &shell);
 	}
 	else if (sig == 4)
 	{
-		shell.c_cc[VMIN] = (shell.c_cc[VMIN] == 1 ? 0 : 1);
+		shell.c_cc[VTIME] += 1;
 		tcsetattr(0, TCSADRAIN, &shell);
 	}
 }

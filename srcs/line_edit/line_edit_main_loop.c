@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/31 20:20:11 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/31 22:37:11 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void		ft_flush(t_prompt *prompt)
 	{
 		prompt->buf = ft_strjoin(prompt->buf, user_entry);
 		ft_bzero(user_entry, 511);
+		termanip(4);
 	}
 	termanip(3);
 }
