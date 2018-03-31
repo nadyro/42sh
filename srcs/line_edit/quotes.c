@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/11 15:43:54 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/31 18:48:57 by azybert          ###   ########.fr       */
+/*   Updated: 2018/03/31 19:46:54 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ char			*check_quotes(t_prompt *prompt, char *to_return)
 	c[2] = '"';
 	loop = prompt->line;
 	check_quotes2(prompt, c, loop);
-	prompt->origin->y += 1 + prompt->total / prompt->size->x;
+	prompt->origin->y += 1 + (prompt->total + prompt->origin->x) / prompt->size->x;
 	move_cursor(prompt, -(prompt->origin->x), true);
 	if (prompt->quotes == quotes)
 		write(1, "quotes> ", 8);
