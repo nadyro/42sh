@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/04/03 20:58:16 by azybert          ###   ########.fr       */
+/*   Updated: 2018/04/03 23:44:39 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,17 @@ t_prompt	*malloc_prompt(t_prompt *prompt)
 	return (prompt);
 }
 
+t_stat_data	*malloc_stat()
+{
+	t_stat_data *stat_data;
+
+	if (!(stat_data = malloc(sizeof(stat_data))))
+		exit(1);
+	stat_data->overage = NULL;
+	stat_data->history = NULL;
+	return (stat_data);
+}
+
 void		ft_flush(t_prompt *prompt)
 {
 	char	user_entry[512];
@@ -63,14 +74,15 @@ void		ft_flush(t_prompt *prompt)
 
 char		*line_edit_main_loop(void)
 {
-	char		user_entry[7];
-	char		*to_return;
-	int			nb_user_entry;
-	static char	*overload = NULL;
+	char				user_entry[7];
+	char				*to_return;
+	int					nb_user_entry;
+	static t_stat_data	*stat_data = NULL;
 
 	write(1, "prompt> ", 8);
 	prompt = malloc_prompt(prompt);
-	prompt->buf = overload;
+	stat_data = (stat_data ? stat_data : malloc_stat());
+	prompt->buf = stat_data->overage;
 	to_return = NULL;
 	while (to_return == NULL || prompt->quotes != none)
 	{
@@ -95,7 +107,7 @@ char		*line_edit_main_loop(void)
 			}
 		}
 	}
-	overload = (prompt->buf ? ft_strdup(prompt->buf) : NULL);
+	stat_data->overage = (prompt->buf ? ft_strdup(prompt->buf) : NULL);
 	free_prompt(prompt);
 	return (to_return);
 }

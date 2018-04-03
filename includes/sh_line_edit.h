@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/04/03 20:01:56 by azybert          ###   ########.fr       */
+/*   Updated: 2018/04/03 22:50:05 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,12 @@ typedef struct	s_prompt
 	t_coord		*size;
 	t_quotes	quotes;
 }				t_prompt;
+
+typedef struct	s_stat_data
+{
+	char		*overage;
+	char		**history;
+}				t_stat_data;
 
 void			termanip(int sig);
 char			*line_edit_main_loop();
