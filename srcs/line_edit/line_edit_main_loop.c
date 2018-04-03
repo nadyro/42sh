@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/31 22:37:11 by azybert          ###   ########.fr       */
+/*   Updated: 2018/04/03 20:58:16 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,15 @@ t_prompt	*malloc_prompt(t_prompt *prompt)
 void		ft_flush(t_prompt *prompt)
 {
 	char	user_entry[512];
+	char	*to_free;
 
 	termanip(3);
 	ft_bzero(user_entry, 512);
 	while (read(1, user_entry, 511) > 0)
 	{
+		to_free = prompt->buf;
 		prompt->buf = ft_strjoin(prompt->buf, user_entry);
+		free(to_free);
 		ft_bzero(user_entry, 511);
 		termanip(4);
 	}
@@ -67,14 +70,14 @@ char		*line_edit_main_loop(void)
 
 	write(1, "prompt> ", 8);
 	prompt = malloc_prompt(prompt);
-	prompt->buf = overload ? ft_strdup(overload) : NULL;
+	prompt->buf = overload;
 	to_return = NULL;
 	while (to_return == NULL || prompt->quotes != none)
 	{
 		if (prompt->buf != NULL)
 		{
 			if (data_react(prompt))
-				to_return = check_quotes(prompt, to_return);
+				to_return = quotes_managing(prompt, to_return);
 		}
 		else
 		{
@@ -88,7 +91,7 @@ char		*line_edit_main_loop(void)
 				if (nb_user_entry == 6)
 					ft_flush(prompt);
 				if (data_react(prompt))
-					to_return = check_quotes(prompt, to_return);
+					to_return = quotes_managing(prompt, to_return);
 			}
 		}
 	}

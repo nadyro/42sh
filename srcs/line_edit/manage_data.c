@@ -6,13 +6,13 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 23:36:42 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/25 23:36:59 by azybert          ###   ########.fr       */
+/*   Updated: 2018/04/03 16:30:48 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/sh_line_edit.h"
 
-void		write_data(t_prompt *prompt, char *display, size_t size)
+void		write_data(t_prompt *prompt, char *to_display, size_t size)
 {
 	size_t	mem;
 	size_t	tmp;
@@ -21,12 +21,12 @@ void		write_data(t_prompt *prompt, char *display, size_t size)
 	mem = size;
 	while (size != 0)
 	{
-		displayed = prompt->total - ft_strlen(display);
+		displayed = prompt->total - ft_strlen(to_display);
 		if (displayed % prompt->size->x == 0)
 			move_cursor(prompt, displayed, false);
 		tmp = prompt->size->x - displayed % prompt->size->x;
 		tmp = ((tmp > size) ? size : tmp);
-		write(1, display, tmp);
+		write(1, to_display, tmp);
 		if (prompt->size->y - 1 == prompt->origin->y +
 				(prompt->origin->x + displayed) / prompt->size->x &&
 				(displayed + prompt->origin->x + tmp) % prompt->size->x == 0)
@@ -34,7 +34,7 @@ void		write_data(t_prompt *prompt, char *display, size_t size)
 			tputs(tgetstr("sf", NULL), 1, ft_putshit);
 			prompt->origin->y--;
 		}
-		display += tmp;
+		to_display += tmp;
 		size -= tmp;
 	}
 }

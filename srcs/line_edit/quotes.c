@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/11 15:43:54 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/31 19:46:54 by azybert          ###   ########.fr       */
+/*   Updated: 2018/04/03 21:21:20 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ static char		*stock_line(char *to_return, t_prompt *prompt)
 		to_free = to_return;
 		to_return = ft_strmerge(merge);
 		free(to_free);
+		free(merge);
 	}
 	ioctl(0, TIOCGWINSZ, &w);
 	free(prompt->line);
@@ -48,10 +49,13 @@ static size_t	ft_is_quote(char c)
 	return (0);
 }
 
-static void		check_quotes2(t_prompt *prompt, char *c, char *loop)
+static void		pair_quotes(t_prompt *prompt, char *loop)
 {
 	size_t	index;
+	char	c[3];
 
+	c[1] = '\'';
+	c[2] = '"';
 	while (loop && *loop)
 	{
 		index = (prompt->quotes == quotes ? 1 : 0);
@@ -72,16 +76,14 @@ static void		check_quotes2(t_prompt *prompt, char *c, char *loop)
 	}
 }
 
-char			*check_quotes(t_prompt *prompt, char *to_return)
+char			*quotes_managing(t_prompt *prompt, char *to_return)
 {
-	char	c[3];
 	char	*loop;
 
-	c[1] = '\'';
-	c[2] = '"';
 	loop = prompt->line;
-	check_quotes2(prompt, c, loop);
-	prompt->origin->y += 1 + (prompt->total + prompt->origin->x) / prompt->size->x;
+	pair_quotes(prompt, loop);
+	prompt->origin->y += 1 +
+		(prompt->total + prompt->origin->x) / prompt->size->x;
 	move_cursor(prompt, -(prompt->origin->x), true);
 	if (prompt->quotes == quotes)
 		write(1, "quotes> ", 8);

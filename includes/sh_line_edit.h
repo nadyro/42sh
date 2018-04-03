@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/31 18:49:44 by azybert          ###   ########.fr       */
+/*   Updated: 2018/04/03 20:01:56 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,13 @@ int				data_react(t_prompt *prompt);
 char			*prompt_stock(t_prompt *prompt, char *user_entry);
 void			prompt_delete(t_prompt *prompt);
 void			prompt_backdel(t_prompt *prompt);
-void			write_data(t_prompt *prompt, char *display, size_t size);
+void			write_data(t_prompt *prompt, char *to_display, size_t size);
 void			move_cursor(t_prompt *prompt, size_t new_pos, bool save);
 void			ft_cursor_word_left(t_prompt *prompt);
 void			ft_cursor_word_right(t_prompt *prompt);
 void			ft_cursor_up(t_prompt *prompt);
 void			ft_cursor_down(t_prompt *prompt);
-char			*check_quotes(t_prompt *prompt, char *to_return);
+char			*quotes_managing(t_prompt *prompt, char *to_return);
 //void			handle_sig(void);
 //void			handle_int(int sig);
 //void			handle_resize(int sig);
