@@ -1,16 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   array.c                                            :+:      :+:    :+:   */
+/*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: antoipom <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/04/02 15:07:00 by antoipom          #+#    #+#             */
-/*   Updated: 2018/04/02 17:24:49 by antoipom         ###   ########.fr       */
+/*   Created: 2018/04/04 13:13:10 by antoipom          #+#    #+#             */
+/*   Updated: 2018/04/04 16:59:46 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int		 g_states_array[2][25][15] = {
+#include "../../libft/libft.h"
+#include "../../includes/token.h"
+#include <stdlib.h>
+
+int			g_states_array[2][25][15] = {
 	{
 		{3, 23, 23, 8, 4, 6, 11, 12, 14, 17, 20, 21, 22, 3, 2},
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -68,19 +72,83 @@ int		 g_states_array[2][25][15] = {
 };
 
 #include <stdio.h>
-int 		main(void)
+int			chartype(char c)
 {
-	char input[] = "Salut";
-	int i = 0;
-	int state = 1;
+	int		type;
 
-	while (input[i] != '\0')
+	type = -1;
+	(c == ' ') ? type = SPACE : 0;
+	(c == '\t') ? type = TAB : 0;
+	(c == '\\') ? type = ESCAPE : 0;
+	(c == '"') ? type = DQUOTE : 0;
+	(c == '\'') ? type = QUOTE : 0;
+	(c == '\n') ? type = NEWLINE : 0;
+	(c >= '0' && c <= '9') ? type = IO_NUMBER : 0;
+	(c == '>') ? type = GREAT : 0;
+	(c == '<') ? type = LESS : 0;
+	(c == '|') ? type = PIPE : 0;
+	(c == ';') ? type = SEMI : 0;
+	(c == '#') ? type = COMMENT : 0;
+	(c == '&') ? type = AND : 0;
+	(c == '\0') ? type = END : 0;
+	(type == -1) ? type = ANY : 0;
+	printf("--%d--\n", type);
+	return (type);
+}
+
+void		token_loop(int *tokens_tab, char *line)
+{
+	int i;
+	int prev;
+	int tokenstab_index;
+
+	i = 0;
+	prev = 0;
+	tokenstab_index = 0;
+	while (prev != 2)
 	{
-		printf("%d\n", state);
-		state = g_states_array[0][state - 1][0];
-		if (g_states_array[1][state][0] == 1)
+		if (tokens_tab[tokenstab_index] == -1)
+			tokens_tab[tokenstab_index] = 1;
+		(tokens_tab[tokenstab_index] == 1) ? tokens_tab[tokenstab_index + 1] = i : 0;
+		prev = tokens_tab[tokenstab_index];
+		tokens_tab[tokenstab_index] = \
+		g_states_array[0][(tokens_tab[tokenstab_index]) - 1][chartype(line[i])];
+		if (g_states_array[1][(tokens_tab[tokenstab_index]) - 1][chartype(line[i])] == 1)
 			i++;
+		if (tokens_tab[tokenstab_index] == 1)
+		{
+			tokens_tab[tokenstab_index] = prev;
+			tokens_tab[tokenstab_index + 2] = \
+				i - tokens_tab[tokenstab_index + 1];
+			tokenstab_index += 3;
+		}
 	}
-	printf("%d\n", state);
+}
+
+int			*get_tokens(char *line)
+{
+	int		*tokens_tab;
+
+	tokens_tab = (int*)malloc(sizeof(int) * TAB_SIZE);
+	(tokens_tab == NULL) ? exit(1) : 0;
+	ft_memset(tokens_tab, -1, TAB_SIZE);
+	token_loop(tokens_tab, line);
+	return (tokens_tab);
+}
+
+int main(int argc, char **argv)
+{
+	int *tab;
+	int i = 0;
+
+	if (argc == 2)
+	{
+		tab = get_tokens(argv[1]);
+		while (tab[i] != -1)
+		{
+			printf("%d\n--> %d\n--> %d\n\n", tab[i], tab[i + 1], tab[i + 2]);
+			i += 3;
+		}
+	}
 	return (0);
 }
