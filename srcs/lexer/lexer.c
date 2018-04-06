@@ -6,15 +6,17 @@
 /*   By: antoipom <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/04 13:13:10 by antoipom          #+#    #+#             */
-/*   Updated: 2018/04/04 16:59:46 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/04/06 17:00:31 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../libft/libft.h"
-#include "../../includes/token.h"
+#include "libft.h"
+#include "token.h"
 #include <stdlib.h>
 
-int			g_states_array[2][25][15] = {
+#include <stdio.h> 				//tmp!!!
+
+/*int			g_tk_states[2][25][15] = {
 	{
 		{3, 23, 23, 8, 4, 6, 11, 12, 14, 17, 20, 21, 22, 3, 2},
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -70,8 +72,65 @@ int			g_states_array[2][25][15] = {
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
 	}
 };
+*/
 
-#include <stdio.h>
+int			g_tk_states[2][25][15] = {
+	{
+		{3, 23, 23, 8, 4, 6, 11, 12, 14, 17, 20, 21, 22, 3, 2},
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+		{3, 1, 1, 8, 4, 6, 1, 3, 1, 1, 1, 1, 1, 3, 1},
+		{4, 4, 4, 24, 5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0},
+		{3, 1, 1, 8, 4, 6, 1, 3, 1, 1, 1, 1, 1, 3, 1},
+		{6, 6, 6, 25, 6, 7, 6, 6, 6, 6, 6, 6, 6, 6, 0},
+		{3, 1, 1, 8, 4, 6, 1, 3, 1, 1, 1, 1, 1, 3, 1},
+		{9, 9, 9, 9, 9, 9, 10, 9, 9, 9, 9, 9, 9, 9, 0},
+		{3, 1, 1, 8, 4, 6, 1, 3, 1, 1, 1, 1, 1, 3, 1},
+		{9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0},
+		{1, 1, 1, 1, 1, 1, 11, 1, 1, 1, 1, 1, 1, 1, 1},
+		{3, 13, 13, 8, 4, 6, 13, 12, 1, 1, 13, 13, 13, 3, 13},
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+		{1, 1, 1, 1, 1, 1, 1, 1, 15, 1, 1, 1, 1, 16, 1},
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 18, 1, 1, 1, 19, 1},
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+		{22, 22, 22, 22, 22, 22, 1, 22, 22, 22, 22, 22, 22, 22, 1},
+		{1, 23, 23, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+		{4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0},
+		{6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 0},
+	},
+	{
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0},
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+		{1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0},
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+		{1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0},
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+		{1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0},
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+		{0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+		{1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0},
+		{0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+	}
+};
+
 int			chartype(char c)
 {
 	int		type;
@@ -92,51 +151,59 @@ int			chartype(char c)
 	(c == '&') ? type = AND : 0;
 	(c == '\0') ? type = END : 0;
 	(type == -1) ? type = ANY : 0;
-	printf("--%d--\n", type);
 	return (type);
 }
 
-void		token_loop(int *tokens_tab, char *line)
+#include <unistd.h>
+void		zero(void)			//tmp!!
+{
+	write(1, "\n0!\n", 4);
+	exit(1);
+}
+
+
+void		token_loop(int *tk_tab, char *line)
 {
 	int i;
 	int prev;
-	int tokenstab_index;
+	int tk_index;
 
 	i = 0;
 	prev = 0;
-	tokenstab_index = 0;
+	tk_index = 0;
+	printf("states | chartype  | ++?  | i\n");		//tmp!!
 	while (prev != 2)
 	{
-		if (tokens_tab[tokenstab_index] == -1)
-			tokens_tab[tokenstab_index] = 1;
-		(tokens_tab[tokenstab_index] == 1) ? tokens_tab[tokenstab_index + 1] = i : 0;
-		prev = tokens_tab[tokenstab_index];
-		tokens_tab[tokenstab_index] = \
-		g_states_array[0][(tokens_tab[tokenstab_index]) - 1][chartype(line[i])];
-		if (g_states_array[1][(tokens_tab[tokenstab_index]) - 1][chartype(line[i])] == 1)
-			i++;
-		if (tokens_tab[tokenstab_index] == 1)
+		(tk_tab[tk_index] == -1) ? tk_tab[tk_index] = 1 : 0;
+		(tk_tab[tk_index] == 1) ? tk_tab[tk_index + 1] = i : 0;
+		prev = tk_tab[tk_index];
+		printf("%d      | %d         | %d    | %d\n", prev, chartype(line[i]), g_tk_states[1][tk_tab[tk_index] - 1][chartype(line[i])], i);			//tmp
+		tk_tab[tk_index] = \
+			g_tk_states[0][tk_tab[tk_index] - 1][chartype(line[i])];
+		(g_tk_states[1][prev - 1][chartype(line[i])] == 1) ? i++ : 0;
+		(tk_tab[tk_index] == 0) ? zero() : 0;		//tmp!!
+		if (tk_tab[tk_index] == 1)			//i prob
 		{
-			tokens_tab[tokenstab_index] = prev;
-			tokens_tab[tokenstab_index + 2] = \
-				i - tokens_tab[tokenstab_index + 1];
-			tokenstab_index += 3;
+			tk_tab[tk_index] = prev;
+			tk_tab[tk_index + 2] = i - tk_tab[tk_index + 1];
+			tk_index += 3;
 		}
 	}
+	printf("\n");		//tmp!!
 }
 
 int			*get_tokens(char *line)
 {
-	int		*tokens_tab;
+	int		*tk_tab;
 
-	tokens_tab = (int*)malloc(sizeof(int) * TAB_SIZE);
-	(tokens_tab == NULL) ? exit(1) : 0;
-	ft_memset(tokens_tab, -1, TAB_SIZE);
-	token_loop(tokens_tab, line);
-	return (tokens_tab);
+	tk_tab = (int*)malloc(sizeof(int) * TAB_SIZE); //realloc needed?
+	(tk_tab == NULL) ? exit(1) : 0; //error handling?
+	ft_memset(tk_tab, -1, TAB_SIZE);
+	token_loop(tk_tab, line);
+	return (tk_tab);
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)				//tmp!!
 {
 	int *tab;
 	int i = 0;
