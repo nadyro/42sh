@@ -6,7 +6,7 @@
 /*   By: antoipom <antoipom@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/05 13:34:52 by antoipom          #+#    #+#             */
-/*   Updated: 2018/04/04 15:53:50 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/04/09 13:54:22 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,22 +36,22 @@ enum
 
 enum
 {
-	TK_WORD = 2,
+	TK_WORD,
 	TK_NEWLINE,
 	TK_IO_NUMBER,
-	TK_LESS,
 	TK_GREAT,
-	TK_SEMI,
-	TK_PIPE,
-	TK_AND,
-	TK_AND_IF,
-	TK_OR_IF,
-	TK_DSEMI,
-	TK_DLESS,
 	TK_DGREAT,
-	TK_LESSAND,
 	TK_GREATAND,
+	TK_LESS,
+	TK_DLESS,
+	TK_LESSAND,
+	TK_PIPE,
+	TK_SEMI,
+	TK_COMMENT,
+	TK_SPACE,
 	TK_END
 };
+
+int						*get_tokens(char *line);
 
 #endif
