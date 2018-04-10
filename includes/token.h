@@ -6,14 +6,14 @@
 /*   By: antoipom <antoipom@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/05 13:34:52 by antoipom          #+#    #+#             */
-/*   Updated: 2018/04/09 13:54:22 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/04/10 14:00:36 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKEN_H
 # define TOKEN_H
 
-# define TAB_SIZE	1024
+# include <stddef.h>
 
 enum
 {
@@ -53,5 +53,6 @@ enum
 };
 
 int						*get_tokens(char *line);
+int						*lexer_alloc(int *tk_tab, int *tab_size);
 
 #endif

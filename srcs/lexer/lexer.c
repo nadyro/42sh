@@ -6,7 +6,7 @@
 /*   By: antoipom <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/04 13:13:10 by antoipom          #+#    #+#             */
-/*   Updated: 2018/04/09 15:55:27 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/04/10 16:58:34 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,31 +94,33 @@ static int		chartype(char c)
 	return (type);
 }
 
-static void		token_loop(int *tk_tab, char *line)
+static int		*token_loop(int *tk_tab, char *line, int tab_size)
 {
 	int i;
 	int prev;
-	int tk_index;
+	int tk_i;
 
 	i = 0;
 	prev = 0;
-	tk_index = 0;
+	tk_i = 0;
 	while (prev != 2)
 	{
-		(tk_tab[tk_index] == -1) ? tk_tab[tk_index] = 1 : 0;
-		(tk_tab[tk_index] == 1) ? tk_tab[tk_index + 1] = i : 0;
-		prev = tk_tab[tk_index];
-		tk_tab[tk_index] = \
-			g_tk_states[0][tk_tab[tk_index] - 1][chartype(line[i])];
+		while (tk_i >= tab_size - 3)
+			tk_tab = lexer_alloc(tk_tab, &tab_size);
+		(tk_tab[tk_i] == -1) ? tk_tab[tk_i] = 1 : 0;
+		(tk_tab[tk_i] == 1) ? tk_tab[tk_i + 1] = i : 0;
+		prev = tk_tab[tk_i];
+		tk_tab[tk_i] = g_tk_states[0][tk_tab[tk_i] - 1][chartype(line[i])];
 		(g_tk_states[1][prev - 1][chartype(line[i])] == 1) ? i++ : 0;
-		(tk_tab[tk_index] == 0) ? exit(1) : 0;//zero?
-		if (tk_tab[tk_index] == 1)//i prob?
+		(tk_tab[tk_i] == 0) ? exit(1) : 0;//zero?reopen line_editing
+		if (tk_tab[tk_i] == 1)//i prob?
 		{
-			tk_tab[tk_index] = prev;
-			tk_tab[tk_index + 2] = i - tk_tab[tk_index + 1];
-			tk_index += 3;
+			tk_tab[tk_i] = prev;
+			tk_tab[tk_i + 2] = i - tk_tab[tk_i + 1];
+			tk_i += 3;
 		}
 	}
+	return (tk_tab);
 }
 
 static int		apply_tokens_next(int token)
@@ -161,14 +163,16 @@ static int		apply_tokens(int token)
 
 int				*get_tokens(char *line)
 {
+	int		tab_size;
 	int		*tk_tab;
 	int		i;
 
 	i = 0;
-	tk_tab = (int*)malloc(sizeof(int) * TAB_SIZE); //realloc needed?
+	tab_size = 1024;
+	tk_tab = (int*)malloc(sizeof(int) * tab_size);
 	(tk_tab == NULL) ? exit(1) : 0; //error handling?
-	ft_memset(tk_tab, -1, TAB_SIZE);
-	token_loop(tk_tab, line);
+	memset(tk_tab, -1, tab_size * sizeof(int));
+	tk_tab = token_loop(tk_tab, line, tab_size);
 	while (tk_tab[i] != -1)
 	{
 		tk_tab[i] = apply_tokens(tk_tab[i]);
@@ -227,9 +231,9 @@ int				main(int argc, char **argv)
 				case TK_COMMENT:
 					printf("COMMENT ");
 					break;
-				/*case TK_SPACE:
-					printf("SPACE ");
-					break;*/
+				//case TK_SPACE:
+				//	printf("SPACE ");
+				//	break;
 				case TK_END:
 					printf("END ");
 					break;
