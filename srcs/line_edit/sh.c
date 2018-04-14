@@ -6,11 +6,13 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/07 22:39:02 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/10 18:52:04 by azybert          ###   ########.fr       */
+/*   Updated: 2018/04/03 21:06:23 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/sh_line_edit.h"
+
+t_prompt	*prompt;
 
 int	main(void)
 {
@@ -25,8 +27,13 @@ int	main(void)
 	if (tgetent(NULL, name_term) == ERR)
 		return (-1);
 	termanip(0);
-	signal(SIGINT, termanip); //call signal functions later
-	line = prompt();
-	termanip(1);
+	signal(SIGINT, termanip);
+	//handle_sig();
+	while (1)
+	{
+		line = line_edit_main_loop();
+		free(line);
+	}
+	termanip(2);
 	return (0);
 }
