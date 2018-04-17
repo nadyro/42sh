@@ -6,7 +6,7 @@
 /*   By: antoipom <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/04 13:13:10 by antoipom          #+#    #+#             */
-/*   Updated: 2018/04/10 16:58:34 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/04/17 14:15:05 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ static int		*token_loop(int *tk_tab, char *line, int tab_size)
 		tk_tab[tk_i] = g_tk_states[0][tk_tab[tk_i] - 1][chartype(line[i])];
 		(g_tk_states[1][prev - 1][chartype(line[i])] == 1) ? i++ : 0;
 		(tk_tab[tk_i] == 0) ? exit(1) : 0;//zero?reopen line_editing
-		if (tk_tab[tk_i] == 1)//i prob?
+		if (tk_tab[tk_i] == 1)
 		{
 			tk_tab[tk_i] = prev;
 			tk_tab[tk_i + 2] = i - tk_tab[tk_i + 1];
@@ -135,7 +135,7 @@ static int		apply_tokens_next(int token)
 
 static int		apply_tokens(int token)
 {
-	if (token == 3 || token == 5 || token == 7 || token == 13)
+	if (token == 3 || token == 5 || token == 7 || token == 9 || token == 13)
 		return (TK_WORD);
 	else if (token == 11)
 		return (TK_NEWLINE);
@@ -190,6 +190,7 @@ int				main(int argc, char **argv)
 
 	if (argc == 2)
 	{
+		printf("%s\n", argv[1]);
 		tab = get_tokens(argv[1]);
 		while (tab[i] != -1)
 		{
