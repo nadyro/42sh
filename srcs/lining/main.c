@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
+/*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/04/18 17:45:11 by kernel_pani       #+#    #+#             */
-/*   Updated: 2018/04/21 23:00:03 by kernel_pa        ###   ########.fr       */
+/*   Created: 2018/04/23 13:19:24 by nsehnoun          #+#    #+#             */
+/*   Updated: 2018/04/23 15:40:52 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lining.h"
 
-int	fprint_char(int c)
+int		fprint_char(int c)
 {
 	ft_putchar_fd(c, 2);
 	return (0);
 }
 
-void	manage_movement(char *t, struct line_data *ld, int *index)
+void	manage_movement(char *t, struct s_line_data *ld, int *index)
 {
 	if (t[1] == 91)
 	{
@@ -29,7 +29,7 @@ void	manage_movement(char *t, struct line_data *ld, int *index)
 	}
 }
 
-void	manage_validation(char *t, int *s, struct line_data *ld)
+void	manage_validation(char *t, int *s, struct s_line_data *ld)
 {
 	char	*tmp_join;
 
@@ -47,19 +47,20 @@ void	manage_validation(char *t, int *s, struct line_data *ld)
 	print_line_data(ld);
 }
 
-int	main(void)
+int		main(void)
 {
-	char	t[4];
-	int	f;
-	int	index;
-	int	s;
-	struct	line_data *ld;
+	char				t[4];
+	int					f;
+	int					index;
+	int					s;
+	struct s_line_data	*ld;
 
 	s = 0;
 	index = 0;
 	get_infoterm();
-	ld = init_linedata(); 
+	ld = init_linedata();
 	ft_putstr("$>");
+	tputs(tgetstr("cl", NULL), 1, fprint_char);
 	while (1)
 	{
 		if ((f = read(1, t, 3)) != -1)
@@ -79,6 +80,7 @@ int	main(void)
 				}
 				ld->buffer[s - 1] = t[0];
 				index = ft_strlen(ld->buffer);
+				++ld->cd->col;
 				ft_putchar(t[0]);
 			}
 		}

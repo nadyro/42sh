@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   linedata.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
+/*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/04/19 15:17:13 by kernel_pani       #+#    #+#             */
-/*   Updated: 2018/04/21 22:05:22 by kernel_pa        ###   ########.fr       */
+/*   Created: 2018/04/23 13:20:32 by nsehnoun          #+#    #+#             */
+/*   Updated: 2018/04/23 15:40:55 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lining.h"
 
-struct line_data *init_linedata(void)
+struct s_line_data	*init_linedata(void)
 {
-	struct line_data	*ld;
-	int			s;
+	struct s_line_data	*ld;
+	int					s;
 
 	s = 0;
-	if (!(ld = malloc(sizeof(struct line_data))))
+	if (!(ld = malloc(sizeof(struct s_line_data))))
 		return (NULL);
 	ld->nb_resize = 0;
 	ld->content = NULL;
@@ -28,12 +28,13 @@ struct line_data *init_linedata(void)
 	while (s < 512)
 		ld->resize_history[s++] = -1;
 	ld->nb_resize = 0;
+	ld->cd = init_cursordata();
 	return (ld);
 }
 
-void	reallocate_mem_line(int *s, struct line_data *ld)
+void				reallocate_mem_line(int *s, struct s_line_data *ld)
 {
-	int	i;
+	int		i;
 	char	*join_tmp;
 
 	i = 0;
@@ -43,15 +44,15 @@ void	reallocate_mem_line(int *s, struct line_data *ld)
 		join_tmp = ft_strdup(ld->buffer);
 	ld->old_content = ft_strdup(join_tmp);
 	ft_strdel(&join_tmp);
-	ld->resize_history[ld->nb_resize] = ft_strlen(ld->buffer); 
+	ld->resize_history[ld->nb_resize] = ft_strlen(ld->buffer);
 	ld->nb_resize++;
 	ft_bzero(ld->buffer, ft_strlen(ld->buffer));
 	*s = 1;
 }
 
-void	print_line_data(struct line_data *ld)
+void				print_line_data(struct s_line_data *ld)
 {
-	int	i;
+	int		i;
 
 	i = 0;
 	ft_putstr("Content : ");

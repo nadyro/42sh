@@ -3,62 +3,45 @@
 /*                                                        :::      ::::::::   */
 /*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
+/*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/04/21 22:18:35 by kernel_pani       #+#    #+#             */
-/*   Updated: 2018/04/21 22:43:38 by kernel_pa        ###   ########.fr       */
+/*   Created: 2018/04/23 13:22:04 by nsehnoun          #+#    #+#             */
+/*   Updated: 2018/04/23 15:40:57 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lining.h"
 
-void	move_left(int *index, struct line_data *ld)
+struct s_cursor_data	*init_cursordata(void)
 {
-	int	x;
-	int	i;
+	struct s_cursor_data	*cd;
+	int						i;
 
-	x = 0;
-	i = *index;
-	tputs(tgetstr("cl", NULL), 1, fprint_char);
-	if (i - 1 >= 0)
-		i--;
-	while (ld->buffer[x] != '\0')
-	{
-		if (x == i)
-		{
-			tputs(tgetstr("mr", NULL), 1, fprint_char);
-			ft_putchar(ld->buffer[x]);
-			tputs(tgetstr("me", NULL), 1, fprint_char);
-		}
-		else
-			ft_putchar(ld->buffer[x]);
-		x++;
-	}
-	*index = i;
-
+	i = 0;
+	if (!(cd = malloc(sizeof(struct s_cursor_data))))
+		return (NULL);
+	cd->pos = 0;
+	cd->col = 0;
+	cd->row = 0;
+	ft_bzero(cd->buffer, BUFFER);
+	return (cd);
 }
 
-void	move_right(int *index, struct line_data *ld)
+void	move_left(int *index, struct s_line_data *ld)
 {
-	int	i;
-	int	x;
+	int		i;
 
 	i = *index;
-	x = 0;
-	tputs(tgetstr("cl", NULL), 1, fprint_char);
-	if ((unsigned long)(i + 1) <= ft_strlen(ld->buffer))
-		i++;
-	while (ld->buffer[x] != '\0')
-	{
-		if (x == i)
-		{
-			tputs(tgetstr("mr", NULL), 1, fprint_char);
-			ft_putchar(ld->buffer[x]);
-			tputs(tgetstr("me", NULL), 1, fprint_char);
-		}
-		else
-			ft_putchar(ld->buffer[x]);
-		x++;
-	}
+	if (ld->cd->col - 1 >= 0)
+		tputs(tgoto(tgetstr("cm", NULL), --ld->cd->col, ld->cd->row), 1, fprint_char);
+	*index = i;
+}
+
+void	move_right(int *index, struct s_line_data *ld)
+{
+	int						i;
+
+	i = *index;
+	tputs(tgoto(tgetstr("cm", NULL), ++ld->cd->col, ld->cd->row), 1, fprint_char);
 	*index = i;
 }
