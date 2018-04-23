@@ -6,7 +6,7 @@
 /*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/18 17:45:11 by kernel_pani       #+#    #+#             */
-/*   Updated: 2018/04/21 22:45:03 by kernel_pa        ###   ########.fr       */
+/*   Updated: 2018/04/21 23:00:03 by kernel_pa        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,6 @@ int	main(void)
 	index = 0;
 	get_infoterm();
 	ld = init_linedata(); 
-	tputs(tgetstr("cl", NULL), 1, fprint_char);
-	tputs(tgetstr("vi", NULL), 1, fprint_char);
 	ft_putstr("$>");
 	while (1)
 	{
