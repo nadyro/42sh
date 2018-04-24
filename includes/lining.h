@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:12:46 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/04/23 15:40:54 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/04/23 23:23:16 by kernel_pa        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@
 
 struct					s_cursor_data
 {
-	int		pos;
+	int		pos_x;
+	int		pos_y;
 	int		col;
 	int		row;
 	char	buffer[BUFFER];
@@ -39,10 +40,12 @@ struct					s_line_data
 	void	*content;
 	void	*old_content;
 	char	buffer[BUFFER];
+	int		current_size;
 	int		length;
 	int		resize_history[512];
 	int		*extended_index_history;
 	int		nb_resize;
+	int		edit_mode;
 	struct s_cursor_data	*cd;
 };
 int						fprint_char(int c);
@@ -55,4 +58,8 @@ void					reallocate_mem_line(int *s, struct s_line_data *ld);
 void					print_line_data(struct s_line_data *ld);
 void					move_left(int *index, struct s_line_data *ld);
 void					move_right(int *index, struct s_line_data *ld);
+void					move_up(int *index, struct s_line_data *ld);
+void					move_down(int *index, struct s_line_data *ld);
+void					update_linedata(char t, struct s_line_data *ld);
+void			cursor_pos(struct s_line_data *ld);
 #endif
