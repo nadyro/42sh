@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:20:32 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/04/26 11:41:50 by kernel_pa        ###   ########.fr       */
+/*   Updated: 2018/04/27 22:50:17 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,35 @@ struct s_line_data	*init_linedata(void)
 	s = 0;
 	ld->length = 0;
 	ld->current_size = 0;
-	ld->edit_mode = 0;
 	while (s < 512)
 		ld->resize_history[s++] = -1;
 	ld->nb_resize = 0;
 	ld->cd = init_cursordata();
+	ft_putscolors("$> 42sh", BCYAN);
+	ft_putscolors(" ~> ", MAGENTA);
 	return (ld);
 }
 
-void			clean_linedata(struct s_line_data *ld)
+void				manage_buffer(struct s_line_data *ld, char t, int *index)
+{
+	char	*gt;
+	int		i;
+
+	i = *index;
+	cursor_pos(ld);
+	gt = tgoto(tgetstr("cm", NULL), ld->cd->x, ld->cd->pos_y);
+	tputs(gt, 1, fprint_char);
+	ld->buffer[*index] = t;
+	ld->current_size = ft_strlen(ld->buffer);
+	if ((ld->cd->pos_x + 1) < ld->current_size)
+		update_linedata(t, ld);
+	else
+		ft_putscolors(&t, GREEN);
+	i++;
+	*index = i;
+}
+
+void				clean_linedata(struct s_line_data *ld)
 {
 	int		s;
 
@@ -46,7 +66,6 @@ void			clean_linedata(struct s_line_data *ld)
 	ft_bzero(ld->buffer, BUFFER);
 	ld->length = 0;
 	ld->current_size = 0;
-	ld->edit_mode = 0;
 	while (s < 512)
 		ld->resize_history[s++] = -1;
 }
@@ -75,11 +94,11 @@ void				update_linedata(char t, struct s_line_data *ld)
 {
 	int		i;
 	int		y;
-	char		tmp_buffer[BUFFER];
+	char	tmp_buffer[BUFFER];
 
+	y = 0;
 	cursor_pos(ld);
 	i = ld->cd->pos_x;
-	y = 0;
 	ft_bzero(tmp_buffer, BUFFER);
 	while (ld->buffer[i] != '\0')
 	{
@@ -96,17 +115,7 @@ void				update_linedata(char t, struct s_line_data *ld)
 		i++;
 		y++;
 	}
-	ld->current_size = ft_strlen(ld->buffer);
-	if (ld->cd->pos_x < ld->current_size)
-		y = ld->cd->pos_x;
-	tputs(tgetstr("ce", NULL), 1, fprint_char);
-	ft_putstr("\x1B[31m");
-	while (ld->buffer[y])
-		ft_putchar(ld->buffer[y++]);
-	ft_putstr("\x1B[0m");
-	tputs(tgoto(tgetstr("cm", NULL), ++ld->cd->x, ld->cd->pos_y), 1, fprint_char);
-	ld->cd->col = ld->cd->pos_x;
-	ld->cd->row = ld->cd->pos_y;
+	write_change(ld);
 }
 
 void				print_line_data(struct s_line_data *ld)

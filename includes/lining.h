@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:12:46 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/04/26 21:35:51 by kernel_pa        ###   ########.fr       */
+/*   Updated: 2018/04/27 22:49:11 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,16 @@
 # include <signal.h>
 # include <unistd.h>
 
-# define BUFFER 6
-# define COLSTART 10
+# define BUFFER 4096
+# define COLSTART 11
+# define RED "\x1b[31m"
+# define GREEN "\x1b[32m"
+# define YELLOW "\x1b[33m"
+# define BLUE "\x1b[34m"
+# define MAGENTA "\x1b[35m"
+# define CYAN "\x1b[36m"
+# define BCYAN "\x1B[96m"
+# define NORMAL "\x1b[0m"
 
 struct					s_cursor_data
 {
@@ -38,30 +46,31 @@ struct					s_cursor_data
 };
 struct					s_line_data
 {
-	void	*content;
-	void	*old_content;
-	char	buffer[BUFFER];
-	int		current_size;
-	int		length;
-	int		resize_history[512];
-	int		*extended_index_history;
-	int		nb_resize;
-	int		edit_mode;
+	void					*content;
+	void					*old_content;
+	char					buffer[BUFFER];
+	int						current_size;
+	int						length;
+	int						resize_history[512];
+	int						nb_resize;
 	struct s_cursor_data	*cd;
 };
 int						fprint_char(int c);
 void					get_infoterm(void);
 struct s_line_data		*init_linedata(void);
-void			clean_linedata(struct s_line_data *ld);
+void					clean_linedata(struct s_line_data *ld);
 struct s_cursor_data	*init_cursordata(void);
-void					manage_movement(char *t, struct s_line_data *ld, int *i);
-void					manage_validation(char *t, int *s, struct s_line_data *ld);
+void					manage_movement(char *t, struct s_line_data *ld);
+void					manage_validation(struct s_line_data *ld);
 void					reallocate_mem_line(int *s, struct s_line_data *ld);
 void					print_line_data(struct s_line_data *ld);
-void					move_left(int *index, struct s_line_data *ld);
-void					move_right(int *index, struct s_line_data *ld);
-void					move_up(int *index, struct s_line_data *ld);
-void					move_down(int *index, struct s_line_data *ld);
+void					move_left(struct s_line_data *ld);
+void					move_right(struct s_line_data *ld);
+void					move_up(struct s_line_data *ld);
+void					move_down(struct s_line_data *ld);
 void					update_linedata(char t, struct s_line_data *ld);
-void			cursor_pos(struct s_line_data *ld);
+void					cursor_pos(struct s_line_data *ld);
+void					ft_putscolors(char *str, char *color);
+void					write_change(struct s_line_data *ld);
+void					manage_buffer(struct s_line_data *ld, char t, int *i);
 #endif

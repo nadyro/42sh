@@ -6,55 +6,44 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:19:24 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/04/26 11:55:27 by kernel_pa        ###   ########.fr       */
+/*   Updated: 2018/04/27 22:52:46 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lining.h"
 
-int		fprint_char(int c)
-{
-	ft_putchar_fd(c, 2);
-	return (0);
-}
-
-void	manage_movement(char *t, struct s_line_data *ld, int *index)
+void	manage_movement(char *t, struct s_line_data *ld)
 {
 	if (t[1] == 91)
 	{
 		if (t[2] == 68)
-			move_left(index, ld);
+			move_left(ld);
 		if (t[2] == 67)
-			move_right(index, ld);
+			move_right(ld);
 		if (t[2] == 65)
-			move_up(index, ld);
+			move_up(ld);
 		if (t[2] == 66)
-			move_down(index, ld);
+			move_down(ld);
 	}
 }
 
-void	manage_validation(char *t, int *s, struct s_line_data *ld)
+void	manage_validation(struct s_line_data *ld)
 {
 	char	*tmp_join;
 
-	(void)t;
 	if (ld->old_content == NULL)
 		ld->old_content = "";
-	ld->buffer[*s] = '\0';
-	*s = 0;
 	tmp_join = ft_strjoin(ld->old_content, ld->buffer);
 	ld->content = ft_strdup(tmp_join);
 	ft_strdel(&tmp_join);
 	ld->length = ft_strlen(ld->content);
-	++ld->cd->row;
 	ft_putchar('\n');
 	ft_putendl("Final Result : ");
 	ft_putchar('\n');
 	print_line_data(ld);
 	clean_linedata(ld);
-	ft_putstr("\x1B[96m");
-	ft_putstr("$> 42sh ~ ");
-	ft_putstr("\x1B[0m");
+	ft_putscolors("$> 42sh", BCYAN);
+	ft_putscolors(" ~> ", MAGENTA);
 }
 
 void	cursor_pos(struct s_line_data *ld)
@@ -79,17 +68,12 @@ int		main(void)
 {
 	char				t[4];
 	int					f;
-	int					index;
-	int					s;
 	struct s_line_data	*ld;
+	int					index;
 
-	s = 0;
 	index = 0;
 	get_infoterm();
 	ld = init_linedata();
-	ft_putstr("\x1B[96m");
-	ft_putstr("$> 42sh ~ ");
-	ft_putstr("\x1B[0m");
 	while (1)
 	{
 		if ((f = read(1, t, 3)) != -1)
@@ -97,34 +81,11 @@ int		main(void)
 			cursor_pos(ld);
 			t[f] = '\0';
 			if (t[0] == 27)
-				manage_movement(t, ld, &index);
+				manage_movement(t, ld);
+			else if (t[0] == 10)
+				manage_validation(ld);
 			else
-			{
-				if (t[0] == 10)
-					manage_validation(t, &s, ld);
-				else
-				{
-					cursor_pos(ld);
-					tputs(tgoto(tgetstr("cm", NULL), ld->cd->x, ld->cd->pos_y), 1, fprint_char);
-					if (s == BUFFER - 1)
-					{
-						ld->buffer[s] = '\0';
-						reallocate_mem_line(&s, ld);
-					}
-					ld->buffer[s] = t[0];
-					ld->current_size = ft_strlen(ld->buffer);
-					index = ft_strlen(ld->buffer);
-					if ((ld->cd->pos_x + 1) < ld->current_size)
-						update_linedata(t[0], ld);
-					else
-					{
-						ft_putstr("\x1B[32m");
-						ft_putchar(t[0]);
-						ft_putstr("\x1B[0m");
-					}
-					s++;
-				}
-			}
+				manage_buffer(ld, t[0], &index);
 		}
 	}
 	return (0);

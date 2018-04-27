@@ -6,7 +6,7 @@
 #    By: azybert <azybert@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/04 19:24:34 by azybert           #+#    #+#              #
-#    Updated: 2018/04/21 22:25:03 by kernel_pa        ###   ########.fr        #
+#    Updated: 2018/04/27 15:31:56 by nsehnoun         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ SRCS = 	lining/main.c \
 	lining/termcare.c \
 	lining/linedata.c \
 	lining/movement.c \
+	lining/printing.c \
 
 SRC_DIR = srcs
 OBJ_DIR = objs

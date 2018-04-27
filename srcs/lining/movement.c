@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:22:04 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/04/26 11:37:05 by kernel_pa        ###   ########.fr       */
+/*   Updated: 2018/04/27 22:31:05 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,7 @@
 struct s_cursor_data	*init_cursordata(void)
 {
 	struct s_cursor_data	*cd;
-	int						i;
 
-	i = 0;
 	if (!(cd = malloc(sizeof(struct s_cursor_data))))
 		return (NULL);
 	cd->pos_x = 0;
@@ -27,63 +25,59 @@ struct s_cursor_data	*init_cursordata(void)
 	return (cd);
 }
 
-void	move_left(int *index, struct s_line_data *ld)
+void					move_left(struct s_line_data *ld)
 {
-	int		i;
+	char	*go_to;
 
-	i = *index;
+	go_to = NULL;
 	cursor_pos(ld);
 	if (ld->cd->pos_x - 1 >= 0)
 	{
-		ld->edit_mode = 1;
-		tputs(tgoto(tgetstr("cm", NULL), --ld->cd->x, ld->cd->pos_y), 1, fprint_char);
+		go_to = tgoto(tgetstr("cm", NULL), --ld->cd->x, ld->cd->pos_y);
+		tputs(go_to, 1, fprint_char);
 	}
-	else
-		ld->edit_mode = 0;
 	ld->cd->col = ld->cd->pos_x;
 	ld->cd->row = ld->cd->pos_y;
-	*index = i;
 }
 
-void	move_right(int *index, struct s_line_data *ld)
+void					move_right(struct s_line_data *ld)
 {
-	int						i;
+	char	*go_to;
 
-	i = *index;
+	go_to = NULL;
 	cursor_pos(ld);
 	if (ld->cd->pos_x < ld->current_size)
 	{
-		ld->edit_mode = 1;
-		tputs(tgoto(tgetstr("cm", NULL), ++ld->cd->x, ld->cd->pos_y), 1, fprint_char);
+		go_to = tgoto(tgetstr("cm", NULL), ++ld->cd->x, ld->cd->pos_y);
+		tputs(go_to, 1, fprint_char);
 	}
-	else
-		ld->edit_mode = 0;
 	ld->cd->col = ld->cd->pos_x;
 	ld->cd->row = ld->cd->pos_y;
-	*index = i;
 }
 
-void	move_up(int *index, struct s_line_data *ld)
+void					move_up(struct s_line_data *ld)
 {
-	int		i;
+	char	*go_to;
 
-	i = *index;
+	go_to = NULL;
 	cursor_pos(ld);
 	if (ld->cd->row - 1 >= 0)
-		tputs(tgoto(tgetstr("cm", NULL), ld->cd->x, --ld->cd->pos_y), 1, fprint_char);
+	{
+		go_to = tgoto(tgetstr("cm", NULL), ld->cd->x, --ld->cd->pos_y);
+		tputs(go_to, 1, fprint_char);
+	}
 	ld->cd->col = ld->cd->pos_x;
 	ld->cd->row = ld->cd->pos_y;
-	*index = i;
 }
 
-void	move_down(int *index, struct s_line_data *ld)
+void					move_down(struct s_line_data *ld)
 {
-	int		i;
+	char	*go_to;
 
-	i = *index;
+	go_to = NULL;
+	go_to = tgoto(tgetstr("cm", NULL), ld->cd->x, ++ld->cd->pos_y);
 	cursor_pos(ld);
-	tputs(tgoto(tgetstr("cm", NULL), ld->cd->x, ++ld->cd->pos_y), 1, fprint_char);
+	tputs(go_to, 1, fprint_char);
 	ld->cd->col = ld->cd->pos_x;
 	ld->cd->row = ld->cd->pos_y;
-	*index = i;
 }
