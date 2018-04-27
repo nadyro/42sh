@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:12:46 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/04/23 23:23:16 by kernel_pa        ###   ########.fr       */
+/*   Updated: 2018/04/26 21:35:51 by kernel_pa        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,16 @@
 # include <signal.h>
 # include <unistd.h>
 
-# define BUFFER 1024
+# define BUFFER 6
+# define COLSTART 10
 
 struct					s_cursor_data
 {
 	int		pos_x;
 	int		pos_y;
+	int		x;
 	int		col;
 	int		row;
-	char	buffer[BUFFER];
 };
 struct					s_line_data
 {
@@ -51,6 +52,7 @@ struct					s_line_data
 int						fprint_char(int c);
 void					get_infoterm(void);
 struct s_line_data		*init_linedata(void);
+void			clean_linedata(struct s_line_data *ld);
 struct s_cursor_data	*init_cursordata(void);
 void					manage_movement(char *t, struct s_line_data *ld, int *i);
 void					manage_validation(char *t, int *s, struct s_line_data *ld);

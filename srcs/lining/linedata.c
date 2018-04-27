@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:20:32 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/04/24 16:41:00 by kernel_pa        ###   ########.fr       */
+/*   Updated: 2018/04/26 11:41:50 by kernel_pa        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ struct s_line_data	*init_linedata(void)
 	s = 0;
 	if (!(ld = malloc(sizeof(struct s_line_data))))
 		return (NULL);
-	ld->nb_resize = 0;
 	ld->content = NULL;
 	ld->old_content = NULL;
 	while (s < BUFFER)
@@ -34,6 +33,22 @@ struct s_line_data	*init_linedata(void)
 	ld->nb_resize = 0;
 	ld->cd = init_cursordata();
 	return (ld);
+}
+
+void			clean_linedata(struct s_line_data *ld)
+{
+	int		s;
+
+	s = 0;
+	ld->nb_resize = 0;
+	ft_bzero(ld->content, ft_strlen(ld->content));
+	ft_bzero(ld->old_content, ft_strlen(ld->old_content));
+	ft_bzero(ld->buffer, BUFFER);
+	ld->length = 0;
+	ld->current_size = 0;
+	ld->edit_mode = 0;
+	while (s < 512)
+		ld->resize_history[s++] = -1;
 }
 
 void				reallocate_mem_line(int *s, struct s_line_data *ld)
@@ -89,7 +104,7 @@ void				update_linedata(char t, struct s_line_data *ld)
 	while (ld->buffer[y])
 		ft_putchar(ld->buffer[y++]);
 	ft_putstr("\x1B[0m");
-	tputs(tgoto(tgetstr("cm", NULL), ++ld->cd->pos_x, ld->cd->pos_y), 1, fprint_char);
+	tputs(tgoto(tgetstr("cm", NULL), ++ld->cd->x, ld->cd->pos_y), 1, fprint_char);
 	ld->cd->col = ld->cd->pos_x;
 	ld->cd->row = ld->cd->pos_y;
 }
@@ -136,9 +151,12 @@ void				print_line_data(struct s_line_data *ld)
 	ft_putchar('\n');
 	ft_putchar('\n');
 	ft_putstr("Columns : ");
-	ft_putnbr(ld->cd->col);
+	ft_putnbr(ld->cd->x);
 	ft_putchar('\n');
 	ft_putstr("Rows : ");
-	ft_putnbr(ld->cd->row);
+	ft_putnbr(ld->cd->pos_y);
+	ft_putchar('\n');
+	ft_putstr("Line length : ");
+	ft_putnbr(ld->cd->pos_x);
 	ft_putchar('\n');
 }

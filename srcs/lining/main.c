@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:19:24 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/04/24 16:46:28 by kernel_pa        ###   ########.fr       */
+/*   Updated: 2018/04/26 11:55:27 by kernel_pa        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,10 @@ void	manage_validation(char *t, int *s, struct s_line_data *ld)
 	ft_putendl("Final Result : ");
 	ft_putchar('\n');
 	print_line_data(ld);
-	ft_bzero(ld->buffer, BUFFER);
+	clean_linedata(ld);
+	ft_putstr("\x1B[96m");
+	ft_putstr("$> 42sh ~ ");
+	ft_putstr("\x1B[0m");
 }
 
 void	cursor_pos(struct s_line_data *ld)
@@ -68,7 +71,8 @@ void	cursor_pos(struct s_line_data *ld)
 	i = 0;
 	while (str_pos[i] != ';')
 		i++;
-	ld->cd->pos_x = ft_atoi(&str_pos[i + 1]) - 1;
+	ld->cd->x = ft_atoi(&str_pos[i + 1]) - 1;
+	ld->cd->pos_x = ld->cd->x - COLSTART;
 }
 
 int		main(void)
@@ -83,12 +87,14 @@ int		main(void)
 	index = 0;
 	get_infoterm();
 	ld = init_linedata();
-	tputs(tgetstr("cl", NULL), 1, fprint_char);
-	//ft_putstr("$>");
+	ft_putstr("\x1B[96m");
+	ft_putstr("$> 42sh ~ ");
+	ft_putstr("\x1B[0m");
 	while (1)
 	{
 		if ((f = read(1, t, 3)) != -1)
 		{
+			cursor_pos(ld);
 			t[f] = '\0';
 			if (t[0] == 27)
 				manage_movement(t, ld, &index);
@@ -99,7 +105,7 @@ int		main(void)
 				else
 				{
 					cursor_pos(ld);
-					tputs(tgoto(tgetstr("cm", NULL), ld->cd->pos_x, ld->cd->pos_y), 1, fprint_char);
+					tputs(tgoto(tgetstr("cm", NULL), ld->cd->x, ld->cd->pos_y), 1, fprint_char);
 					if (s == BUFFER - 1)
 					{
 						ld->buffer[s] = '\0';
@@ -108,7 +114,7 @@ int		main(void)
 					ld->buffer[s] = t[0];
 					ld->current_size = ft_strlen(ld->buffer);
 					index = ft_strlen(ld->buffer);
-					if (ld->cd->pos_x + 1 < ld->current_size)
+					if ((ld->cd->pos_x + 1) < ld->current_size)
 						update_linedata(t[0], ld);
 					else
 					{
@@ -116,10 +122,6 @@ int		main(void)
 						ft_putchar(t[0]);
 						ft_putstr("\x1B[0m");
 					}
-					/*ft_putstr("X : ");
-					ft_putnbr(ld->cd->pos_x);
-					ft_putstr("Y : ");
-					ft_putnbr(ld->cd->pos_y);*/
 					s++;
 				}
 			}
