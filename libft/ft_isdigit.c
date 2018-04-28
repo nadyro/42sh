@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isdigit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/17 11:32:02 by azybert           #+#    #+#             */
-/*   Updated: 2017/11/25 00:51:26 by azybert          ###   ########.fr       */
+/*   Created: 2017/04/14 15:24:37 by nsehnoun          #+#    #+#             */
+/*   Updated: 2017/04/14 15:25:38 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isdigit(int c)
+int		ft_isdigit(int c)
 {
 	if (c >= '0' && c <= '9')
 		return (1);
-	return (0);
+	else
+		return (0);
 }

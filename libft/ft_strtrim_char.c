@@ -1,34 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_strtrim_char.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/04/20 20:40:45 by nsehnoun          #+#    #+#             */
-/*   Updated: 2017/05/01 15:28:13 by nsehnoun         ###   ########.fr       */
+/*   Created: 2017/04/20 11:17:06 by nsehnoun          #+#    #+#             */
+/*   Updated: 2017/05/01 15:24:45 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <unistd.h>
+#include <stdlib.h>
 
-void	ft_putnbr_fd(int n, int fd)
+char	*ft_strtrim_char(char const *s, char c)
 {
-	unsigned int n_2;
+	size_t	i;
+	size_t	y;
+	char	*str_s;
 
-	if (n < 0)
+	if (s != NULL && c)
 	{
-		n_2 = -n;
-		ft_putchar_fd('-', fd);
+		i = 0;
+		y = 0;
+		while (s[i] == c && s[i])
+			i++;
+		y = i;
+		i = ft_strlen(s) - 1;
+		while ((s[i] == c))
+			i--;
+		if (!(str_s = ft_strsub(s, y, (i - y) + 1)))
+			return (NULL);
+		return (str_s);
 	}
-	else
-		n_2 = n;
-	if (n_2 >= 10)
-	{
-		ft_putnbr_fd((n_2 / 10), fd);
-		ft_putnbr_fd((n_2 % 10), fd);
-	}
-	else
-		ft_putchar_fd((48 + n_2), fd);
+	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:12:46 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/04/27 22:49:11 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/04/28 22:34:02 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # include <signal.h>
 # include <unistd.h>
 
-# define BUFFER 4096
+# define BUFFER 1024
 # define COLSTART 11
 # define RED "\x1b[31m"
 # define GREEN "\x1b[32m"
@@ -48,7 +48,8 @@ struct					s_line_data
 {
 	void					*content;
 	void					*old_content;
-	char					buffer[BUFFER];
+	char					*buff;
+	char					*buffer;
 	int						current_size;
 	int						length;
 	int						resize_history[512];
@@ -62,7 +63,7 @@ void					clean_linedata(struct s_line_data *ld);
 struct s_cursor_data	*init_cursordata(void);
 void					manage_movement(char *t, struct s_line_data *ld);
 void					manage_validation(struct s_line_data *ld);
-void					reallocate_mem_line(int *s, struct s_line_data *ld);
+void					reallocate_mem_line(struct s_line_data *ld);
 void					print_line_data(struct s_line_data *ld);
 void					move_left(struct s_line_data *ld);
 void					move_right(struct s_line_data *ld);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/15 12:54:25 by azybert           #+#    #+#             */
-/*   Updated: 2017/12/04 04:41:58 by azybert          ###   ########.fr       */
+/*   Created: 2017/04/14 18:08:22 by nsehnoun          #+#    #+#             */
+/*   Updated: 2017/04/24 08:33:07 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,23 @@
 
 char	*ft_strstr(const char *big, const char *little)
 {
-	char	*mem;
-	char	*mem2;
+	int		i;
+	size_t	y;
 
-	if (*little == '\0')
+	i = 0;
+	y = 0;
+	if (little[y] == '\0')
 		return ((char *)big);
-	while (*big)
+	while (big[i])
 	{
-		if (*little == *big)
+		y = 0;
+		while (big[i + y] == little[y])
 		{
-			mem = (char *)big;
-			mem2 = (char *)little;
-			while (*mem2 && *mem2 == *mem)
-			{
-				mem2++;
-				mem++;
-			}
-			if (*mem2 == '\0')
-				return ((char *)big);
+			y++;
+			if (little[y] == '\0')
+				return ((char *)big + i);
 		}
-		big++;
+		i++;
 	}
 	return (NULL);
 }

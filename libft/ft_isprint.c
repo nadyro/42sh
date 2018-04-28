@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isprint.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/17 11:54:41 by azybert           #+#    #+#             */
-/*   Updated: 2017/11/25 00:51:48 by azybert          ###   ########.fr       */
+/*   Created: 2017/04/14 17:30:45 by nsehnoun          #+#    #+#             */
+/*   Updated: 2017/04/24 05:06:09 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isprint(int c)
+int		ft_isprint(int c)
 {
-	if (c >= ' ' && c <= '~')
+	if (c >= 32 && c <= 126)
 		return (1);
-	return (0);
+	else
+		return (0);
 }

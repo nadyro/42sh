@@ -3,40 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/15 12:54:25 by azybert           #+#    #+#             */
-/*   Updated: 2017/12/04 04:38:55 by azybert          ###   ########.fr       */
+/*   Created: 2017/04/14 18:46:57 by nsehnoun          #+#    #+#             */
+/*   Updated: 2017/05/01 14:04:55 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char		*ft_strnstr(const char *big, const char *little, size_t len)
+char	*ft_strnstr(const char *big, const char *little, size_t len)
 {
-	char	*mem;
-	char	*mem2;
-	int		mem3;
+	size_t i;
+	size_t y;
 
-	if (*little == '\0')
+	i = 0;
+	y = 0;
+	if (little[y] == '\0')
 		return ((char *)big);
-	while (*big && len)
+	while (i < len && big[i])
 	{
-		if (*little == *big)
+		y = 0;
+		while (big[i + y] == little[y] && (i + y) <= len)
 		{
-			mem = (char *)big;
-			mem2 = (char *)little;
-			mem3 = len;
-			while (*mem2 != '\0' && *mem2 == *mem && mem3--)
-			{
-				mem2++;
-				mem++;
-			}
-			if (*mem2 == '\0')
-				return ((char *)big);
+			y++;
+			if (little[y] == '\0')
+				return ((char *)big + i);
 		}
-		big++;
-		len--;
+		i++;
 	}
 	return (NULL);
 }

@@ -3,22 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/17 20:32:48 by azybert           #+#    #+#             */
-/*   Updated: 2018/01/27 23:00:38 by azybert          ###   ########.fr       */
+/*   Created: 2017/04/20 20:38:15 by nsehnoun          #+#    #+#             */
+/*   Updated: 2017/05/01 15:27:27 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <unistd.h>
 
 void	ft_putendl_fd(char const *s, int fd)
 {
-	if (s == NULL)
+	if (s != NULL)
 	{
-		write(1, "\n", 1);
-		return ;
+		ft_putstr_fd(s, fd);
+		ft_putchar_fd('\n', fd);
 	}
-	write(fd, s, ft_strlen(s));
-	write(fd, "\n", 1);
 }

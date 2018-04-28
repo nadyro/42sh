@@ -3,26 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/15 13:54:15 by azybert           #+#    #+#             */
-/*   Updated: 2018/01/27 20:21:22 by azybert          ###   ########.fr       */
+/*   Created: 2017/04/16 05:07:13 by nsehnoun          #+#    #+#             */
+/*   Updated: 2017/04/28 12:23:58 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_atoi(const char *str)
+int		ft_atoi(const char *str)
 {
-	int num;
-	int neg;
+	int i;
+	int to_int;
+	int is_n;
 
-	num = 0;
-	while (ft_isspace(*str))
-		str++;
-	neg = (*str == '-' ? 1 : 0);
-	str = (*str == '+' || *str == '-' ? str + 1 : str);
-	while (*str && *str >= '0' && *str <= '9')
-		num = num * 10 - (*(str++) - '0');
-	return (num = (neg ? num : -num));
+	i = 0;
+	is_n = 1;
+	to_int = 0;
+	while ((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
+		i++;
+	if (str[i] == '-')
+	{
+		is_n = -1;
+		i++;
+	}
+	(str[i] == '+' && is_n == 1) ? i++ : i;
+	if (str[i] == '\0')
+		return (0);
+	while (ft_isdigit(str[i]))
+	{
+		to_int *= 10;
+		to_int += ((str[i] - '0') % 10);
+		i++;
+	}
+	return (to_int * is_n);
 }

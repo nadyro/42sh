@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:20:32 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/04/27 22:50:17 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/04/28 22:20:48 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,15 @@ struct s_line_data	*init_linedata(void)
 		return (NULL);
 	ld->content = NULL;
 	ld->old_content = NULL;
-	while (s < BUFFER)
-		ld->buffer[s++] = '\0';
+	if (!(ld->buffer = ft_strnew(BUFFER)))
+		return (NULL);
+	ld->buff = NULL;
 	s = 0;
 	ld->length = 0;
 	ld->current_size = 0;
 	while (s < 512)
 		ld->resize_history[s++] = -1;
-	ld->nb_resize = 0;
+	ld->nb_resize = 1;
 	ld->cd = init_cursordata();
 	ft_putscolors("$> 42sh", BCYAN);
 	ft_putscolors(" ~> ", MAGENTA);
@@ -42,15 +43,23 @@ void				manage_buffer(struct s_line_data *ld, char t, int *index)
 	int		i;
 
 	i = *index;
+	if (!(i < BUFFER * ld->nb_resize))
+		reallocate_mem_line(ld);
 	cursor_pos(ld);
 	gt = tgoto(tgetstr("cm", NULL), ld->cd->x, ld->cd->pos_y);
 	tputs(gt, 1, fprint_char);
 	ld->buffer[*index] = t;
 	ld->current_size = ft_strlen(ld->buffer);
 	if ((ld->cd->pos_x + 1) < ld->current_size)
+	{
 		update_linedata(t, ld);
+	}
 	else
-		ft_putscolors(&t, GREEN);
+	{
+		ft_putstr("\x1b[32m");
+		ft_putchar(t);
+		ft_putstr("\x1b[0m");
+	}
 	i++;
 	*index = i;
 }
@@ -60,61 +69,61 @@ void				clean_linedata(struct s_line_data *ld)
 	int		s;
 
 	s = 0;
-	ld->nb_resize = 0;
-	ft_bzero(ld->content, ft_strlen(ld->content));
-	ft_bzero(ld->old_content, ft_strlen(ld->old_content));
-	ft_bzero(ld->buffer, BUFFER);
-	ld->length = 0;
+	if (ld->content != NULL)
+		ft_bzero(ld->content, ft_strlen(ld->content));
+	if (ld->old_content != NULL)
+		ft_bzero(ld->old_content, ft_strlen(ld->old_content));
+	if (ld->buffer != NULL)
+		ft_bzero(ld->buffer, ft_strlen(ld->buffer));
+	if (ld->buff != NULL)
+		ft_bzero(ld->buff, ft_strlen(ld->buff));
 	ld->current_size = 0;
+	ld->length = 0;
 	while (s < 512)
 		ld->resize_history[s++] = -1;
+	ld->nb_resize = 1;
 }
 
-void				reallocate_mem_line(int *s, struct s_line_data *ld)
+void				reallocate_mem_line(struct s_line_data *ld)
 {
-	int		i;
 	char	*join_tmp;
 
-	i = 0;
-	if (ld->nb_resize > 0)
-		join_tmp = ft_strjoin(ld->old_content, ld->buffer);
+	ld->nb_resize++;
+	ld->buff = ft_strdup(ld->buffer);
+	if (ld->old_content == NULL)
+		join_tmp = ft_strdup(ld->buff);
 	else
-		join_tmp = ft_strdup(ld->buffer);
+		join_tmp = ft_strjoin(ld->old_content, ld->buff);
 	ld->old_content = ft_strdup(join_tmp);
+	ft_strdel(&ld->buffer);
+	if (!(ld->buffer = ft_strnew(BUFFER * ld->nb_resize)))
+		return ;
+	ft_strncpy(ld->buffer, ld->buff, ft_strlen(ld->buff));
 	ft_strdel(&join_tmp);
 	ld->length = ft_strlen(ld->old_content);
-	ld->resize_history[ld->nb_resize] = ft_strlen(ld->buffer);
-	ld->nb_resize++;
-	while (i < BUFFER)
-		ld->buffer[i++] = '\0';
-	*s = 0;
+	ld->resize_history[ld->nb_resize - 1] = ft_strlen(ld->buff);
+	ft_strdel(&ld->buff);
 }
 
 void				update_linedata(char t, struct s_line_data *ld)
 {
 	int		i;
 	int		y;
-	char	tmp_buffer[BUFFER];
+	char	*tmp_buffer;
 
 	y = 0;
 	cursor_pos(ld);
 	i = ld->cd->pos_x;
-	ft_bzero(tmp_buffer, BUFFER);
+	if (!(tmp_buffer = ft_strnew(ft_strlen(ld->buffer))))
+		return ;
 	while (ld->buffer[i] != '\0')
-	{
-		tmp_buffer[y] = ld->buffer[i];
-		i++;
-		y++;
-	}
+		tmp_buffer[y++] = ld->buffer[i++];
 	ld->buffer[ld->cd->pos_x] = t;
 	i = ld->cd->pos_x + 1;
 	y = 0;
 	while (ld->buffer[i] != '\0')
-	{
-		ld->buffer[i] = tmp_buffer[y];
-		i++;
-		y++;
-	}
+		ld->buffer[i++] = tmp_buffer[y++];
+	ft_strdel(&tmp_buffer);
 	write_change(ld);
 }
 

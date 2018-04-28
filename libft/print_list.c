@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_power.c                                         :+:      :+:    :+:   */
+/*   print_list.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/25 01:55:26 by azybert           #+#    #+#             */
-/*   Updated: 2017/12/03 22:22:37 by azybert          ###   ########.fr       */
+/*   Created: 2018/01/31 20:10:22 by nsehnoun          #+#    #+#             */
+/*   Updated: 2018/01/31 20:10:52 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_power(int nbr, int power)
-{
-	int	new_nbr;
+#include "libft.h"
 
-	if (power == 0)
-		return (1);
-	if (power < 0)
-		return (0);
-	new_nbr = nbr;
-	while (power-- > 1)
-		new_nbr = new_nbr * nbr;
-	return (new_nbr);
+void	print_list(t_list *lst, int fd)
+{
+	t_list *l;
+
+	l = lst;
+	while (l)
+	{
+		ft_putendl_fd(l->content, fd);
+		l = l->next;
+	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/30 13:52:51 by azybert           #+#    #+#             */
-/*   Updated: 2017/01/30 18:35:46 by azybert          ###   ########.fr       */
+/*   Created: 2017/04/28 23:06:22 by nsehnoun          #+#    #+#             */
+/*   Updated: 2017/05/01 16:06:48 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,24 @@
 
 t_list	*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
 {
-	t_list	*result;
-	t_list	*first_node;
-	t_list	*current_node;
+	t_list *node_lst;
+	t_list *container_nl;
 
-	first_node = NULL;
-	current_node = NULL;
-	if (lst)
+	if (lst != NULL)
 	{
-		result = f(lst);
-		if ((first_node = ft_lstnew(result->content, result->content_size)))
+		if (!(node_lst = (t_list *)malloc(sizeof(t_list))))
+			return (NULL);
+		node_lst = f(lst);
+		container_nl = node_lst;
+		while (lst->next)
 		{
-			current_node = first_node;
-			while ((lst = lst->next))
-			{
-				result = f(lst);
-				if (!(current_node->next =
-						ft_lstnew(result->content, result->content_size)))
-					return (NULL);
-				current_node = current_node->next;
-			}
+			if (!(node_lst->next = (t_list *)malloc(sizeof(t_list))))
+				return (NULL);
+			lst = lst->next;
+			node_lst->next = f(lst);
+			node_lst = node_lst->next;
 		}
+		return (container_nl);
 	}
-	return (first_node);
+	return (NULL);
 }

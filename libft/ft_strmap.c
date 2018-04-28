@@ -3,24 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/17 14:35:10 by azybert           #+#    #+#             */
-/*   Updated: 2017/12/04 03:55:51 by azybert          ###   ########.fr       */
+/*   Created: 2017/04/18 07:13:47 by nsehnoun          #+#    #+#             */
+/*   Updated: 2017/05/01 15:21:18 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdlib.h>
 
 char	*ft_strmap(char const *s, char (*f)(char))
 {
-	int		i;
-	char	*mem;
+	size_t	i;
+	size_t	y;
+	char	*str_s;
 
-	if (f == NULL || !(mem = ft_strdup(s)))
-		return (NULL);
-	i = -1;
-	while (s[++i])
-		mem[i] = f(s[i]);
-	return (mem);
+	if (s != NULL)
+	{
+		i = 0;
+		y = ft_strlen(s);
+		if (!(str_s = ft_strnew(y)))
+			return (NULL);
+		while (i < y)
+		{
+			str_s[i] = f(s[i]);
+			i++;
+		}
+		return (str_s);
+	}
+	return (NULL);
 }

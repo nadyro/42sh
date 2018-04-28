@@ -1,27 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_realloc.c                                       :+:      :+:    :+:   */
+/*   ft_iswhitespaces.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/08/17 21:46:31 by azybert           #+#    #+#             */
-/*   Updated: 2017/08/20 21:18:06 by azybert          ###   ########.fr       */
+/*   Created: 2017/11/25 22:27:26 by nsehnoun          #+#    #+#             */
+/*   Updated: 2017/11/25 22:47:56 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_realloc(void *to_realloc, size_t old_size, size_t new_size)
+int		ft_iswhitespaces(char *s)
 {
-	void	*new;
+	int		i;
 
-	if (!(new = malloc(new_size)))
-		return (NULL);
-	if (to_realloc != NULL)
+	i = 0;
+	while (s[i] != '\0')
 	{
-		ft_memcpy(new, to_realloc, old_size);
-		free(to_realloc);
+		if (s[i] == ' ' && s[i] == '\t' && s[i] == '\n')
+			return (0);
+		i++;
 	}
-	return (new);
+	return (1);
 }

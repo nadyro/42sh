@@ -3,16 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/17 11:59:21 by azybert           #+#    #+#             */
-/*   Updated: 2017/01/20 14:38:45 by azybert          ###   ########.fr       */
+/*   Created: 2017/04/14 17:44:14 by nsehnoun          #+#    #+#             */
+/*   Updated: 2017/04/14 17:49:19 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_toupper(int c)
+#include "libft.h"
+
+int		ft_toupper(int c)
 {
-	if (c >= 97 && c <= 122)
+	if (ft_isalpha(c) && c >= 'a' && c <= 'z')
 		return (c - 32);
-	return (c);
+	else
+		return (c);
 }
