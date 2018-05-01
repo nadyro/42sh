@@ -6,7 +6,7 @@
 /*   By: antoipom <antoipom@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/05 13:34:52 by antoipom          #+#    #+#             */
-/*   Updated: 2018/04/10 14:00:36 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/05/01 16:38:29 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ enum
 	TK_SEMI,
 	TK_COMMENT,
 	TK_SPACE,
+	TK_AND,
+	TK_OR,
 	TK_END
 };
 

@@ -6,7 +6,7 @@
 /*   By: antoipom <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/04 13:13:10 by antoipom          #+#    #+#             */
-/*   Updated: 2018/04/17 14:15:05 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/05/01 17:05:42 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,26 @@ int			g_tk_states[2][25][15] = {
 	}
 };
 
+int				g_ascii[128] = {
+	END, 0, 0, 0, 0, 0, 0, 0, 0, TAB, NEWLINE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,\
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, SPACE, ANY, DQUOTE, COMMENT, ANY, ANY, AND,\
+	QUOTE, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, IO_NUMBER, IO_NUMBER,\
+	IO_NUMBER, IO_NUMBER, IO_NUMBER, IO_NUMBER, IO_NUMBER, IO_NUMBER,\
+	IO_NUMBER, IO_NUMBER, ANY, SEMI, LESS, ANY, GREAT, ANY, ANY, ANY, ANY, ANY,\
+	ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY,\
+	ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ESCAPE, ANY, ANY, ANY, ANY,\
+	ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY,\
+	ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, PIPE, ANY, ANY,\
+	ANY
+};
+
+int				g_state_to_token[24] = {
+	0, 0, TK_END, TK_WORD, 0, TK_WORD, 0, TK_WORD, 0, TK_WORD, 0, TK_NEWLINE,\
+	TK_IO_NUMBER, TK_WORD, TK_GREAT, TK_DGREAT, TK_GREATAND, TK_LESS, TK_DLESS,\
+	TK_LESSAND, TK_PIPE, TK_SEMI, TK_COMMENT, TK_SPACE
+};
+
+/*
 static int		chartype(char c)
 {
 	int		type;
@@ -92,35 +112,6 @@ static int		chartype(char c)
 	(c == '\0') ? type = END : 0;
 	(type == -1) ? type = ANY : 0;
 	return (type);
-}
-
-static int		*token_loop(int *tk_tab, char *line, int tab_size)
-{
-	int i;
-	int prev;
-	int tk_i;
-
-	i = 0;
-	prev = 0;
-	tk_i = 0;
-	while (prev != 2)
-	{
-		while (tk_i >= tab_size - 3)
-			tk_tab = lexer_alloc(tk_tab, &tab_size);
-		(tk_tab[tk_i] == -1) ? tk_tab[tk_i] = 1 : 0;
-		(tk_tab[tk_i] == 1) ? tk_tab[tk_i + 1] = i : 0;
-		prev = tk_tab[tk_i];
-		tk_tab[tk_i] = g_tk_states[0][tk_tab[tk_i] - 1][chartype(line[i])];
-		(g_tk_states[1][prev - 1][chartype(line[i])] == 1) ? i++ : 0;
-		(tk_tab[tk_i] == 0) ? exit(1) : 0;//zero?reopen line_editing
-		if (tk_tab[tk_i] == 1)
-		{
-			tk_tab[tk_i] = prev;
-			tk_tab[tk_i + 2] = i - tk_tab[tk_i + 1];
-			tk_i += 3;
-		}
-	}
-	return (tk_tab);
 }
 
 static int		apply_tokens_next(int token)
@@ -160,25 +151,58 @@ static int		apply_tokens(int token)
 	else
 		return (apply_tokens_next(token));
 }
+*/
+
+static int		*token_loop(int *tk_arr, char *line, int arr_size)
+{
+	int i;
+	int prev;
+	int tk_i;
+
+	i = 0;
+	prev = 0;
+	tk_i = 0;
+	while (prev != 2)
+	{
+		while (tk_i >= arr_size - 3)
+			tk_arr = lexer_alloc(tk_arr, &arr_size);
+		(tk_arr[tk_i] == -1) ? tk_arr[tk_i] = 1 : 0;
+		(tk_arr[tk_i] == 1) ? tk_arr[tk_i + 1] = i : 0;
+		prev = tk_arr[tk_i];
+		//tk_arr[tk_i] = g_tk_states[0][tk_arr[tk_i] - 1][chartype(line[i])];
+		tk_arr[tk_i] = g_tk_states[0][tk_arr[tk_i] - 1][g_ascii[(int)line[i]]];
+		//(g_tk_states[1][prev - 1][chartype(line[i])] == 1) ? i++ : 0;
+		(g_tk_states[1][prev - 1][g_ascii[(int)line[i]]] == 1) ? i++ : 0;
+		(tk_arr[tk_i] == 0) ? exit(1) : 0;//zero?reopen line_editing
+		if (tk_arr[tk_i] == 1)
+		{
+			tk_arr[tk_i] = prev;
+			tk_arr[tk_i + 2] = i - tk_arr[tk_i + 1];
+			tk_i += 3;
+		}
+	}
+	return (tk_arr);
+}
 
 int				*get_tokens(char *line)
 {
-	int		tab_size;
-	int		*tk_tab;
+	int		arr_size;
+	int		*tk_arr;
 	int		i;
 
 	i = 0;
-	tab_size = 1024;
-	tk_tab = (int*)malloc(sizeof(int) * tab_size);
-	(tk_tab == NULL) ? exit(1) : 0; //error handling?
-	memset(tk_tab, -1, tab_size * sizeof(int));
-	tk_tab = token_loop(tk_tab, line, tab_size);
-	while (tk_tab[i] != -1)
+	arr_size = 1024;
+	tk_arr = (int*)malloc(sizeof(int) * arr_size);
+	(tk_arr == NULL) ? exit(1) : 0; //error handling?
+	memset(tk_arr, -1, arr_size * sizeof(int));
+	tk_arr = token_loop(tk_arr, line, arr_size);
+	while (tk_arr[i] != -1)
 	{
-		tk_tab[i] = apply_tokens(tk_tab[i]);
+		//tk_arr[i] = apply_tokens(tk_arr[i]);
+		tk_arr[i] = g_state_to_token[tk_arr[i]];
 		i += 3;
 	}
-	return (tk_tab);
+	return (tk_arr);
 }
 
 //main test
