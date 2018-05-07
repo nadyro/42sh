@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token.h                                            :+:      :+:    :+:   */
+/*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antoipom <antoipom@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antoipom <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/02/05 13:34:52 by antoipom          #+#    #+#             */
-/*   Updated: 2018/05/01 16:38:29 by antoipom         ###   ########.fr       */
+/*   Created: 2018/05/07 14:13:58 by antoipom          #+#    #+#             */
+/*   Updated: 2018/05/07 14:14:40 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TOKEN_H
-# define TOKEN_H
+#ifndef LEXER_H
+# define LEXER_H
 
 # include <stddef.h>
 
@@ -55,6 +55,5 @@ enum
 };
 
 int						*get_tokens(char *line);
-int						*lexer_alloc(int *tk_tab, int *tab_size);
 
 #endif

@@ -6,12 +6,12 @@
 /*   By: antoipom <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/04 13:13:10 by antoipom          #+#    #+#             */
-/*   Updated: 2018/05/01 17:05:42 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/05/07 14:15:14 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "token.h"
+#include "lexer.h"
 #include <stdlib.h>
 
 int			g_tk_states[2][25][15] = {
@@ -90,68 +90,24 @@ int				g_state_to_token[24] = {
 	TK_LESSAND, TK_PIPE, TK_SEMI, TK_COMMENT, TK_SPACE
 };
 
-/*
-static int		chartype(char c)
+int			*lexer_alloc(int *tk_arr, int *arr_size)
 {
-	int		type;
+	int		*new;
+	int		i;
 
-	type = -1;
-	(c == ' ') ? type = SPACE : 0;
-	(c == '\t') ? type = TAB : 0;
-	(c == '\\') ? type = ESCAPE : 0;
-	(c == '"') ? type = DQUOTE : 0;
-	(c == '\'') ? type = QUOTE : 0;
-	(c == '\n') ? type = NEWLINE : 0;
-	(c >= '0' && c <= '9') ? type = IO_NUMBER : 0;
-	(c == '>') ? type = GREAT : 0;
-	(c == '<') ? type = LESS : 0;
-	(c == '|') ? type = PIPE : 0;
-	(c == ';') ? type = SEMI : 0;
-	(c == '#') ? type = COMMENT : 0;
-	(c == '&') ? type = AND : 0;
-	(c == '\0') ? type = END : 0;
-	(type == -1) ? type = ANY : 0;
-	return (type);
+	i = 0;
+	*arr_size = *arr_size * 2;
+	new = (int*)malloc(sizeof(int) * (*arr_size));
+	(new == NULL) ? exit(1) : 0; //error handling?
+	ft_memset(new, -1, *arr_size * sizeof(int));
+	while (tk_arr[i] != -1)
+	{
+		new[i] = tk_arr[i];
+		i++;
+	}
+	free(tk_arr);
+	return (new);
 }
-
-static int		apply_tokens_next(int token)
-{
-	if (token == 22)
-		return (TK_COMMENT);
-	else if (token == 23)
-		return (TK_SPACE);
-	else
-		return (TK_END);
-}
-
-static int		apply_tokens(int token)
-{
-	if (token == 3 || token == 5 || token == 7 || token == 9 || token == 13)
-		return (TK_WORD);
-	else if (token == 11)
-		return (TK_NEWLINE);
-	else if (token == 12)
-		return (TK_IO_NUMBER);
-	else if (token == 14)
-		return (TK_GREAT);
-	else if (token == 15)
-		return (TK_DGREAT);
-	else if (token == 16)
-		return (TK_GREATAND);
-	else if (token == 17)
-		return (TK_LESS);
-	else if (token == 18)
-		return (TK_DLESS);
-	else if (token == 19)
-		return (TK_LESSAND);
-	else if (token == 20)
-		return (TK_PIPE);
-	else if (token == 21)
-		return (TK_SEMI);
-	else
-		return (apply_tokens_next(token));
-}
-*/
 
 static int		*token_loop(int *tk_arr, char *line, int arr_size)
 {
@@ -203,69 +159,4 @@ int				*get_tokens(char *line)
 		i += 3;
 	}
 	return (tk_arr);
-}
-
-//main test
-#include <stdio.h>
-int				main(int argc, char **argv)
-{
-	int *tab;
-	int i = 0;
-
-	if (argc == 2)
-	{
-		printf("%s\n", argv[1]);
-		tab = get_tokens(argv[1]);
-		while (tab[i] != -1)
-		{
-			switch(tab[i])
-			{
-				case TK_WORD:
-					printf("WORD ");
-					break;
-				case TK_NEWLINE:
-					printf("NEWLINE ");
-					break;
-				case TK_IO_NUMBER:
-					printf("IO_NUMBER ");
-					break;
-				case TK_GREAT:
-					printf("GREAT ");
-					break;
-				case TK_DGREAT:
-					printf("DGREAT ");
-					break;
-				case TK_GREATAND:
-					printf("GREATAND ");
-					break;
-				case TK_LESS:
-					printf("LESS ");
-					break;
-				case TK_DLESS:
-					printf("DLESS ");
-					break;
-				case TK_LESSAND:
-					printf("LESSAND ");
-					break;
-				case TK_PIPE:
-					printf("PIPE ");
-					break;
-				case TK_SEMI:
-					printf("SEMI ");
-					break;
-				case TK_COMMENT:
-					printf("COMMENT ");
-					break;
-				//case TK_SPACE:
-				//	printf("SPACE ");
-				//	break;
-				case TK_END:
-					printf("END ");
-					break;
-			}
-			i += 3;
-		}
-		printf("\n");
-	}
-	return (0);
 }
