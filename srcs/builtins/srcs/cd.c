@@ -25,8 +25,8 @@ static int	cd_no_arg(t_shell *shell)
 		{
 			if (tmp->val)
 			{
-				update_old_pwd(shell, tmp->val);
 				chdir(tmp->val);
+				update_old_pwd(shell, tmp->val);
 				return (1);
 			}
 		}
@@ -34,103 +34,6 @@ static int	cd_no_arg(t_shell *shell)
 	}
 	ft_putstr_fd("cd: No home directory.\n", 2);
 	return (0);
-}
-
-static int	cd_dash(t_shell *shell)
-{
-	t_env		*tmp;
-	struct stat	buf;
-
-	tmp = (shell->list) ? shell->list : NULL;
-	while (tmp)
-	{
-		if (ft_strcmp(tmp->var, "OLDPWD") == 0)
-		{
-			if (lstat(tmp->val, &buf) >= 0)
-			{
-				printf("in cd dash, OLDPWD value is %s\n", tmp->val);
-				if (chdir(tmp->val) != 0)
-				{
-					ft_putstr_fd("cd: not a directory: ", 2);
-					ft_putendl_fd(tmp->val, 2);
-				}
-				else
-					ft_putendl(tmp->val);
-				update_old_pwd(shell, tmp->val);
-				return (1);
-			}
-		}
-		tmp = tmp->next;
-	}
-	ft_putstr_fd("cd: OLDPWD not set\n", 2);
-	return (1);
-}
-
-static int	cd_relative(t_shell *shell)
-{
-	t_env	*tmp;
-	char	cwd[256];
-
-	printf("entered cd_relative with %s\n", ARG);
-	tmp = (shell->list) ? shell->list : NULL;
-	if (chdir(ARG) != 0)
-	{
-		ft_putstr_fd("cd: ", 2);
-		ft_putstr_fd(ARG, 2);
-		ft_putstr_fd(": No such file or directory\n", 2);		
-	}
-	else
-	{
-		if (getcwd(cwd, sizeof(cwd)) == NULL)
-			ft_putstr_fd("error retrieving cwd\n", 2);
-		else
-			update_old_pwd(shell, cwd);
-	}
-	return (1);
-}
-
-int			regular_cd(t_shell *shell)
-{
-	struct stat	buf;
-
-	if (lstat(ARG, &buf) >= 0)
-	{
-		if ((S_ISDIR(buf.st_mode)))
-		{
-		//	printf("%s is a directory\n", ARG);
-			update_old_pwd(shell, ARG);
-		}
-		else if (!(S_ISLNK(buf.st_mode)))
-		{
-			ft_putstr_fd("cd: ", 2);
-			ft_putstr_fd(ARG, 2);
-			ft_putstr_fd(": Not a directory\n", 2);
-			return (1);
-		}
-	}
-	if (chdir(ARG) != 0)
-	{
-	//	printf("first tried changing directory without concat of cdpath\nhas_paths(shell) = %d\n", has_paths(shell, 1));
-		//include clause to check for CDPATH and concat, similar to execution of binaries searched via PATH
-		if (has_paths(shell, 1) == 2 && cd_path(shell))
-			return (1);
-		else
-		{
-			if (lstat(ARG, &buf) >= 0 && S_ISLNK(buf.st_mode))
-			{
-				ft_putstr_fd("cd: ", 2);
-				ft_putstr_fd(ARG, 2);
-				ft_putstr_fd(": Too many levels of symbolic links\n", 2);
-			}
-			else
-			{
-				ft_putstr_fd("cd: ", 2);
-				ft_putstr_fd(ARG, 2);
-				ft_putstr_fd(": No such file or directory\n", 2);
-			}
-		}
-	}
-	return (1);
 }
 
 static void	grab_pwd(t_shell *shell, char **clean)
@@ -246,7 +149,86 @@ static void	cd_canon(t_shell *shell)
 	ft_strdel(&(ARG));
 	ARG = ft_strdup(clean);
 	ft_strdel(&clean);
-	handle_dot_dots(shell);
+	if (ft_strstr(ARG, ".."))
+		handle_dot_dots(shell);
+}
+
+static int	cd_dash(t_shell *shell)
+{
+	t_env		*tmp;
+
+
+	tmp = (shell->list) ? shell->list : NULL;
+	while (tmp)
+	{
+		if (ft_strcmp(tmp->var, "OLDPWD") == 0)
+		{
+			if (chdir(tmp->val) != 0)
+			{
+				ft_putstr_fd("cd: not a directory: ", 2);
+				ft_putendl_fd(tmp->val, 2);
+			}
+			else
+			{
+				ft_putendl(tmp->val);
+				update_old_pwd(shell, tmp->val);
+				return (1);
+			}
+		}
+		tmp = tmp->next;
+	}
+	ft_putstr_fd("cd: OLDPWD not set\n", 2);
+	return (1);
+}
+
+static int	cd_relative(t_shell *shell)
+{
+	t_env	*tmp;
+	char	cwd[256];
+
+	printf("entered cd_relative with %s\n", ARG);
+	tmp = (shell->list) ? shell->list : NULL;
+	if (chdir(ARG) != 0)
+	{
+		ft_putstr_fd("cd: ", 2);
+		ft_putstr_fd(ARG, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);		
+	}
+	else
+	{
+		if (getcwd(cwd, sizeof(cwd)) == NULL)
+			ft_putstr_fd("error retrieving cwd\n", 2);
+		else
+			(shell->p == 1 && shell->l == 0) ? update_old_pwd(shell, cwd) : update_old_pwd(shell, ARG);
+	}
+	return (1);
+}
+
+int			regular_cd(t_shell *shell)
+{
+	char	cwd[256];	
+
+	cd_canon(shell);
+	if (chdir(ARG) != 0)
+	{
+	//	printf("first tried changing directory without concat of cdpath\nhas_paths(shell) = %d\n", has_paths(shell, 1));
+		//include clause to check for CDPATH and concat, similar to execution of binaries searched via PATH
+		if (has_paths(shell, 1) == 2 && cd_path(shell))
+			return (1);
+		else
+		{
+			ft_putstr_fd("cd: ", 2);
+			ft_putstr_fd(ARG, 2);
+			ft_putstr_fd(": No such file or directory\n", 2);
+		}
+	}
+	else{
+		if (getcwd(cwd, sizeof(cwd)) == NULL)
+			ft_putstr_fd("error retrieving cwd\n", 2);
+		else
+			(shell->p == 1 && shell->l == 0) ? update_old_pwd(shell, cwd) : update_old_pwd(shell, ARG);
+	}
+	return (1);
 }
 
 int			ash_cd(t_shell *shell)
@@ -267,9 +249,6 @@ int			ash_cd(t_shell *shell)
 		cd_relative(shell);
 	}
 	else
-	{
-		cd_canon(shell);
 		regular_cd(shell);
-	}
 	return (1);
 }

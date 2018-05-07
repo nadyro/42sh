@@ -66,15 +66,21 @@ static int	cmd_d(int ret, t_shell *shell)
 
 static void	display_prompt(char **line, int *status, t_shell *shell)
 {
-	char		cwd[256];
 	int			ret;
+	t_env		*tmp;
 
 	*status = 1;
-	if (getcwd(cwd, sizeof(cwd)) == NULL)
-		ft_putstr_fd("error retrieving cwd\n", 2);
+	tmp = shell->list;
 	ft_putstr(C01);
-	if (cwd[0])
-		ft_putstr(cwd);
+	while (tmp)
+	{
+		if (ft_strcmp(tmp->var, "PWD") == 0)
+		{
+			ft_putstr(tmp->val);
+			break ;
+		}
+		tmp = tmp->next;
+	}
 	ft_putstr(RESET);
 	ft_putstr(C05);
 	ft_putstr(" @$h >");
