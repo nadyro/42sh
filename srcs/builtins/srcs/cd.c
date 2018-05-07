@@ -48,6 +48,7 @@ static int	cd_dash(t_shell *shell)
 		{
 			if (lstat(tmp->val, &buf) >= 0)
 			{
+				printf("in cd dash, OLDPWD value is %s\n", tmp->val);
 				if (chdir(tmp->val) != 0)
 				{
 					ft_putstr_fd("cd: not a directory: ", 2);
@@ -70,6 +71,7 @@ static int	cd_relative(t_shell *shell)
 	t_env	*tmp;
 	char	cwd[256];
 
+	printf("entered cd_relative with %s\n", ARG);
 	tmp = (shell->list) ? shell->list : NULL;
 	if (chdir(ARG) != 0)
 	{
@@ -203,6 +205,8 @@ static void handle_dot_dots(t_shell *shell)
 		i++;
 	}
 	free(tab);
+	if (clean[ft_strlen(clean) - 1] == '/')
+		clean[ft_strlen(clean) - 1] = '\0';
 	ft_strdel(&ARG);
 	ARG = ft_strdup(clean);
 	ft_strdel(&clean);
@@ -232,7 +236,7 @@ static void	cd_canon(t_shell *shell)
 			{
 				tmp = ft_strjoin(clean, tab[i]);
 				ft_strdel(&clean);
-				clean = ft_strjoin(tmp, "/");
+				clean = (tab[i+1]) ? ft_strjoin(tmp, "/") : ft_strdup(tmp);
 				ft_strdel(&tmp);
 			}
 		}
@@ -248,17 +252,24 @@ static void	cd_canon(t_shell *shell)
 int			ash_cd(t_shell *shell)
 {
 	shell->st = opt_check(shell);
-	cd_canon(shell);
 	printf("shell->st = %d\nshell->l = %d\nshell->p = %d\n", shell->st, shell->l, shell->p);
 	if (shell->st == -1)
 		return (1);
-	if (ARG == NULL)
+	if (ARG == NULL && ft_strcmp(shell->args[shell->st - 1], "-") != 0)
 		cd_no_arg(shell);
-	else if (shell->args && (ft_strcmp(ARG, "-") == 0))
+	else if (shell->args && (ft_strcmp(shell->args[shell->st - 1], "-") == 0))
 		cd_dash(shell);
 	else if (shell->args && ARG[0] == '.')
+	{
+		printf("before feeding cd args to cd_canon then cd_relative, ARG = %s\n", ARG);
+		cd_canon(shell);
+		printf("after cd_canon and before cd_relative, ARG = %s\n", ARG);
 		cd_relative(shell);
+	}
 	else
+	{
+		cd_canon(shell);
 		regular_cd(shell);
+	}
 	return (1);
 }
