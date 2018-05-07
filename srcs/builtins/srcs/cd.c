@@ -95,7 +95,7 @@ int			regular_cd(t_shell *shell)
 	{
 		if ((S_ISDIR(buf.st_mode)))
 		{
-			printf("%s is a directory\n", ARG);
+		//	printf("%s is a directory\n", ARG);
 			update_old_pwd(shell, ARG);
 		}
 		else if (!(S_ISLNK(buf.st_mode)))
@@ -135,22 +135,78 @@ static void	grab_pwd(t_shell *shell, char **clean)
 {
 	t_env	*tmp = shell->list;
 
-	printf("entered grab_pwd\n");
+	//printf("entered grab_pwd\n");
 	while (tmp)
 	{
-		printf("DEBUG 1\n");
 		if (ft_strcmp(tmp->var, "PWD") == 0 && tmp->val)
 		{
-			printf("DEBUG 2\n");
 			*clean = (tmp->val[ft_strlen(tmp->val) - 1] == '/') ?
 				ft_strdup(tmp->val) : ft_strjoin(tmp->val, "/");
-			printf("DEBUG 3 in grab_pwd\nWAS: %s\nNOW: %s\n", shell->args[shell->st], *clean);
 			return ;		
 		}
-		printf("DEBUG 4\n");
 		tmp = tmp->next;
 	}
-	printf("DEBUG 5\n");
+}
+
+static void handle_dot_dots(t_shell *shell)
+{
+	char	**tab;
+	int		i = 0;
+	int		last = 0;
+	int		deleted_match = 0;
+	char	*clean = NULL;
+	char	*tmp = NULL;
+
+	//printf("entering handle_dot_dots\n");
+	tab = (shell->st > -1) ? ft_strsplit(ARG, '/') : NULL;
+	clean = ft_strdup("/");
+	while (tab && tab[i]) // to get end-of-table so that we can later work with table despite removing elements before end
+		i++;
+	last = i;
+	i = 0;
+	while (tab && i < last && i >= 0)
+	{
+		if (tab[i] && ft_strcmp(tab[i], "..") == 0)
+		{
+			deleted_match = 0;
+			ft_strdel(&tab[i--]);
+			while (i >= 0 && deleted_match == 0)
+			{
+				if (!(tab[i]) && i == 0)
+				{
+					ft_strdel(&ARG);
+					cd_no_arg(shell);
+					return ;
+				}
+				else if (tab[i])
+				{
+					ft_strdel(&tab[i]);
+					deleted_match = 1;
+				}
+				else
+					i--;
+			}
+		}
+		i++;
+	}
+	i = 0;
+	while (i < last)
+	{
+		if (tab[i])
+		{
+			tmp = ft_strjoin(clean, tab[i]);
+			ft_strdel(&clean);
+			ft_strdel(&tab[i]);
+			clean = ft_strjoin(tmp, "/");
+			ft_strdel(&tmp);
+		}
+		i++;
+	}
+	free(tab);
+	ft_strdel(&ARG);
+	ARG = ft_strdup(clean);
+	ft_strdel(&clean);
+	//printf("exiting dot dot handler, fully-processed path = %s\n", ARG);
 }
 
 static void	cd_canon(t_shell *shell)
@@ -161,42 +217,32 @@ static void	cd_canon(t_shell *shell)
 	int		i = 0;
 	char	**tab;
 
-	tab = (shell->st > -1) ? ft_strsplit(shell->args[shell->st], '/') : NULL;
-	printf("table after ft_strsplit is :\n");
-	ft_print_table(tab);
-	if (shell->args[shell->st][0] != '/') //to concat with PWD if curpath doesnt start from root
+	tab = (shell->st > -1) ? ft_strsplit(ARG, '/') : NULL;
+	if (ARG[0] != '/') //to concat with PWD if curpath doesnt start from root
 		grab_pwd(shell, &clean);
 	else
 		clean = ft_strdup("/");	//to account for curpath starting from root
-	printf("DEBUG a\n");
 	while (tab && tab[i])
 	{
 		if (tab[i] && ft_strcmp(tab[i], "."))
 		{
-			printf("DEBUG d, tab[i] = %s\n", tab[i]);
 			if (!clean)
 				clean = ft_strjoin(tab[i], "/");
 			else if (clean && tab[i])
 			{
-				printf("DEBUG e\n");
 				tmp = ft_strjoin(clean, tab[i]);
-				printf("DEBUG f\n");
 				ft_strdel(&clean);
-				printf("DEBUG g\n");
 				clean = ft_strjoin(tmp, "/");
-				printf("DEBUG h\n");
 				ft_strdel(&tmp);
-				printf("DEBUG i\n");
 			}
-			printf("DEBUG j\n");
 		}
 		i++;
 	}
-	printf("DEBUG k\n");
 	free_table(tab);
-	printf("WAS: %s\nNOW: %s\n", shell->args[shell->st], clean);
+	ft_strdel(&(ARG));
+	ARG = ft_strdup(clean);
 	ft_strdel(&clean);
-	printf("DEBUG l\n");
+	handle_dot_dots(shell);
 }
 
 int			ash_cd(t_shell *shell)
