@@ -53,6 +53,15 @@ int				main(int argc, char **argv)
 				//case TK_SPACE:
 				//	printf("SPACE ");
 				//	break;
+				case TK_AND:
+					printf("AND ");
+					break;
+				case TK_AND_IF:
+					printf("AND_IF ");
+					break;
+				case TK_OR_IF:
+					printf("OR_IF ");
+					break;
 				case TK_END:
 					printf("END ");
 					break;
