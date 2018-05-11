@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:19:24 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/09 21:40:46 by kernel_pa        ###   ########.fr       */
+/*   Updated: 2018/05/11 18:16:03 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,9 @@ void	cursor_pos(struct s_line_data *ld)
 		i++;
 	ld->cd->x = ft_atoi(&str_pos[i + 1]) - 1;
 	ld->cd->pos_x = ld->cd->x - COLSTART;
-	ft_bzero(str_pos, 512);
+	i = 0;
+	while (i < 512)
+		str_pos[i++] = '\0';
 }
 
 int		main(void)
@@ -86,6 +88,8 @@ int		main(void)
 				manage_validation(ld);
 				index = 0;
 			}
+			else if (t[0] >= 1 && t[0] <= 31)
+				manage_controls(t[0], ld, &index);
 			else
 				manage_buffer(ld, t[0], &index);
 		}

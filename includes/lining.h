@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:12:46 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/09 21:02:14 by kernel_pa        ###   ########.fr       */
+/*   Updated: 2018/05/11 18:16:31 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ struct					s_line_data
 	void					*old_content;
 	char					*buff;
 	char					*buffer;
+	char					*tmp;
 	int						current_size;
 	int						length;
 	int						resize_history[512];
@@ -83,4 +84,5 @@ void					write_change(struct s_line_data *ld);
 void					manage_buffer(struct s_line_data *ld, char t, int *i);
 void					ft_exit(int nb);
 struct s_win			*init_windata(void);
+void					manage_controls(char t, struct s_line_data *ld, int *i);
 #endif

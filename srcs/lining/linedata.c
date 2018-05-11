@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:20:32 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/09 21:40:36 by kernel_pa        ###   ########.fr       */
+/*   Updated: 2018/05/11 18:20:09 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ struct s_line_data	*init_linedata(void)
 	s = 0;
 	if (!(ld = malloc(sizeof(struct s_line_data))))
 		ft_exit(3);
-	ld->content = NULL;
 	ld->old_content = NULL;
+	ld->tmp = NULL;
 	if (!(ld->buffer = ft_strnew(BUFFER)))
 		ft_exit(3);
 	ld->buff = NULL;
@@ -132,13 +132,6 @@ void				print_line_data(struct s_line_data *ld)
 	int		i;
 
 	i = 0;
-	ft_putstr("Content : ");
-	if (ld->content)
-		ft_putendl(ld->content);
-	ft_putstr("Length : ");
-	ft_putnbr(ld->length);
-	ft_putchar('\n');
-	ft_putchar('\n');
 	ft_putstr("Old Content : ");
 	if (ld->old_content)
 		ft_putendl(ld->old_content);
