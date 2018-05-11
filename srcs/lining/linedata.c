@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:20:32 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/04/28 22:20:48 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/09 21:40:36 by kernel_pa        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ struct s_line_data	*init_linedata(void)
 
 	s = 0;
 	if (!(ld = malloc(sizeof(struct s_line_data))))
-		return (NULL);
+		ft_exit(3);
 	ld->content = NULL;
 	ld->old_content = NULL;
 	if (!(ld->buffer = ft_strnew(BUFFER)))
-		return (NULL);
+		ft_exit(3);
 	ld->buff = NULL;
 	s = 0;
 	ld->length = 0;
@@ -32,6 +32,7 @@ struct s_line_data	*init_linedata(void)
 		ld->resize_history[s++] = -1;
 	ld->nb_resize = 1;
 	ld->cd = init_cursordata();
+	ld->sw = init_windata();
 	ft_putscolors("$> 42sh", BCYAN);
 	ft_putscolors(" ~> ", MAGENTA);
 	return (ld);
@@ -50,10 +51,9 @@ void				manage_buffer(struct s_line_data *ld, char t, int *index)
 	tputs(gt, 1, fprint_char);
 	ld->buffer[*index] = t;
 	ld->current_size = ft_strlen(ld->buffer);
+
 	if ((ld->cd->pos_x + 1) < ld->current_size)
-	{
 		update_linedata(t, ld);
-	}
 	else
 	{
 		ft_putstr("\x1b[32m");
@@ -97,7 +97,7 @@ void				reallocate_mem_line(struct s_line_data *ld)
 	ld->old_content = ft_strdup(join_tmp);
 	ft_strdel(&ld->buffer);
 	if (!(ld->buffer = ft_strnew(BUFFER * ld->nb_resize)))
-		return ;
+		ft_exit(3);
 	ft_strncpy(ld->buffer, ld->buff, ft_strlen(ld->buff));
 	ft_strdel(&join_tmp);
 	ld->length = ft_strlen(ld->old_content);
@@ -115,7 +115,7 @@ void				update_linedata(char t, struct s_line_data *ld)
 	cursor_pos(ld);
 	i = ld->cd->pos_x;
 	if (!(tmp_buffer = ft_strnew(ft_strlen(ld->buffer))))
-		return ;
+		ft_exit(3);
 	while (ld->buffer[i] != '\0')
 		tmp_buffer[y++] = ld->buffer[i++];
 	ld->buffer[ld->cd->pos_x] = t;

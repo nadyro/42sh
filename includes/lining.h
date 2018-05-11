@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:12:46 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/04/30 21:07:58 by kernel_pa        ###   ########.fr       */
+/*   Updated: 2018/05/09 21:02:14 by kernel_pa        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 # define CYAN "\x1b[36m"
 # define BCYAN "\x1B[96m"
 # define NORMAL "\x1b[0m"
+# define MALLOC NULL
 
 struct					s_cursor_data
 {
@@ -43,6 +44,11 @@ struct					s_cursor_data
 	int		x;
 	int		col;
 	int		row;
+};
+struct					s_win
+{
+	int		win_col;
+	int		win_row;
 };
 struct					s_line_data
 {
@@ -55,6 +61,7 @@ struct					s_line_data
 	int						resize_history[512];
 	int						nb_resize;
 	struct s_cursor_data	*cd;
+	struct s_win	*sw;
 };
 int						fprint_char(int c);
 void					get_infoterm(void);
@@ -74,4 +81,6 @@ void					cursor_pos(struct s_line_data *ld);
 void					ft_putscolors(char *str, char *color);
 void					write_change(struct s_line_data *ld);
 void					manage_buffer(struct s_line_data *ld, char t, int *i);
+void					ft_exit(int nb);
+struct s_win			*init_windata(void);
 #endif

@@ -6,11 +6,20 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/27 15:27:29 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/04/27 22:52:30 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/09 20:48:40 by kernel_pa        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lining.h"
+
+void		ft_exit(int nb)
+{
+	if (nb == 3)
+	{
+		ft_putstr("Allocation error");
+		exit(3);
+	}
+}
 
 int		fprint_char(int c)
 {

@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:19:24 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/04/28 22:37:07 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/09 21:40:46 by kernel_pa        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ void	manage_movement(char *t, struct s_line_data *ld)
 			move_left(ld);
 		if (t[2] == 67)
 			move_right(ld);
-		if (t[2] == 65)
-			move_up(ld);
 		if (t[2] == 66)
 			move_down(ld);
 	}

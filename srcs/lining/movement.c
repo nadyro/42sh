@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:22:04 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/04/28 19:24:30 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/09 20:43:30 by kernel_pa        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ struct s_cursor_data	*init_cursordata(void)
 	struct s_cursor_data	*cd;
 
 	if (!(cd = malloc(sizeof(struct s_cursor_data))))
-		return (NULL);
+		ft_exit(3);
 	cd->x = 0;
 	cd->col = 0;
 	cd->row = 0;
