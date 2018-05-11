@@ -85,6 +85,8 @@ void			free_env(t_env *list);
 int				has_paths(t_shell *shell, int cdpath);
 t_env			*env_init(void);
 void			update_old_pwd(t_shell *shell, char *new_pwd);
-int				opt_check(t_shell *shell);
+int				cd_opt_check(t_shell *shell);
+void      		cd_not_dir(char *str);
+void	   		cd_canon(t_shell *shell);
 
 #endif

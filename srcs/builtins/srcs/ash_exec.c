@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/16 14:24:51 by arohani           #+#    #+#             */
-/*   Updated: 2018/03/21 15:15:53 by arohani          ###   ########.fr       */
+/*   Updated: 2018/05/11 16:24:11 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,17 @@ static void	launch_exec(t_shell *shell, char *full_path)
 	}
 }
 
+/*
+**	Basically, to perform > or >>, first close stdout, then open file to the
+**	right of > or >>, then execute command to the left of > or >>, then close
+**	the fd used for file on the right of > or >>. To preform <, do same as >,
+**	except for 2 things: 1) close(0) instead of close(1) to obviously close
+**	stdin instead of stdout, and 2) when opening file based on argument that
+**	comes after "<", open as READONLY instead of writeonly
+*/
+
 static int	*redirect_check(t_shell *shell)
-{
-/* Basically, to perform > or >>, first close stdout, then open file to the right of > or >>, then execute command to the
-	left of > or >>, then close the fd used for file on the right of > or >> 
-
-	To preform <, do same as >, except for 2 things: 1) close(0) instead of close(1) to obviously close stdin instead of stdout, and
-	2) when opening file based on argument that comes after "<", open as READONLY instead of writeonly
-
-*/	
+{	
 	int		i;
 	int		fd = -1;
 	int		*result = (int *)malloc(sizeof(int) * 2);

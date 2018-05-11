@@ -28,6 +28,7 @@ SRC = srcs/shell.c \
 	  srcs/add_to_mod.c \
 	  srcs/pwd.c \
 	  srcs/cd.c \
+	  srcs/cd_canon.c \
 	  srcs/cd_options.c \
 	  srcs/free.c \
 
