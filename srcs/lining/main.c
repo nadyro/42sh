@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:19:24 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/11 18:16:03 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/15 20:04:11 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int		main(void)
 			else if (t[0] >= 1 && t[0] <= 31)
 				manage_controls(t[0], ld, &index);
 			else
-				manage_buffer(ld, t[0], &index);
+				manage_buffer(ld, t, &index);
 		}
 	}
 	return (0);

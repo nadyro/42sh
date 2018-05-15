@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/27 15:27:29 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/09 20:48:40 by kernel_pa        ###   ########.fr       */
+/*   Updated: 2018/05/15 20:30:42 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	ft_putscolors(char *str, char *color)
 	ft_putstr(NORMAL);
 }
 
-void	write_change(struct s_line_data *ld)
+void	write_change(struct s_line_data *ld, int is_cp_pst)
 {
 	int		y;
 	char	*go_to;
@@ -48,8 +48,15 @@ void	write_change(struct s_line_data *ld)
 	while (ld->buffer[y])
 		ft_putchar(ld->buffer[y++]);
 	ft_putstr("\x1B[0m");
-	go_to = tgoto(tgetstr("cm", NULL), ++ld->cd->x, ld->cd->pos_y);
-	tputs(go_to, 1, fprint_char);
-	ld->cd->col = ld->cd->pos_x;
-	ld->cd->row = ld->cd->pos_y;
+	if (is_cp_pst == 0)
+	{
+		go_to = tgoto(tgetstr("cm", NULL), ++ld->cd->x, ld->cd->pos_y);
+		tputs(go_to, 1, fprint_char);
+	}
+	else
+	{
+		ld->cd->x += ft_strlen(ld->tmp);
+		go_to = tgoto(tgetstr("cm", NULL), ld->cd->x, ld->cd->pos_y);
+		tputs(go_to, 1, fprint_char);
+	}
 }

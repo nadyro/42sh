@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:12:46 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/11 18:16:31 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/15 21:37:20 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,11 @@ struct					s_cursor_data
 	int		pos_x;
 	int		pos_y;
 	int		x;
+	int		cp_state;
+	int		cp_start;
+	int		cp_end;
+	int		cp_front;
+	int		cp_active;
 	int		col;
 	int		row;
 };
@@ -62,7 +67,7 @@ struct					s_line_data
 	int						resize_history[512];
 	int						nb_resize;
 	struct s_cursor_data	*cd;
-	struct s_win	*sw;
+	struct s_win			*sw;
 };
 int						fprint_char(int c);
 void					get_infoterm(void);
@@ -77,12 +82,13 @@ void					move_left(struct s_line_data *ld);
 void					move_right(struct s_line_data *ld);
 void					move_up(struct s_line_data *ld);
 void					move_down(struct s_line_data *ld);
-void					update_linedata(char t, struct s_line_data *ld);
+void					update_linedata(char *t, struct s_line_data *ld);
 void					cursor_pos(struct s_line_data *ld);
 void					ft_putscolors(char *str, char *color);
-void					write_change(struct s_line_data *ld);
-void					manage_buffer(struct s_line_data *ld, char t, int *i);
+void					write_change(struct s_line_data *ld, int is_cp_pst);
+void					manage_buffer(struct s_line_data *ld, char *t, int *i);
 void					ft_exit(int nb);
 struct s_win			*init_windata(void);
 void					manage_controls(char t, struct s_line_data *ld, int *i);
+void					manage_cp_pst(char *t, struct s_line_data *ld, char *tmp_buffer);
 #endif
