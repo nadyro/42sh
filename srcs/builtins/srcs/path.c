@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 11:50:10 by arohani           #+#    #+#             */
-/*   Updated: 2018/02/21 13:14:35 by arohani          ###   ########.fr       */
+/*   Updated: 2018/05/18 13:53:52 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,8 @@ int		cd_path(t_shell *shell)
 			ft_strdel(&(ARG));
 			ARG = ft_strdup(full_path);
 			ft_strdel(&full_path);
-			printf("cd_path located, ARG now = %s\n", ARG);
-			regular_cd(shell);
+			//printf("cd_path located, ARG now = %s\n", ARG);
+			//regular_cd(shell);
 			return (1);
 		}
 		else if (full_path && full_path[0])
