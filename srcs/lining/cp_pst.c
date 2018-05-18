@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 13:18:03 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/15 22:26:59 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/18 19:51:45 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,6 @@ void	manage_cp_pst(char *t, struct s_line_data *ld, char *tmp_buffer)
 	write_change(ld, 1);
 
 }
-
-/*void	manage_cp_selection(struct s_line_data *ld)
-{
-
-}*/
 
 void	manage_controls(char t, struct s_line_data *ld, int *index)
 {
@@ -117,12 +112,12 @@ void	manage_controls(char t, struct s_line_data *ld, int *index)
 		if (ld->cd->cp_end < ld->cd->cp_start)
 		{
 			i = ld->cd->cp_start - ld->cd->cp_end;
-			ld->tmp = ft_strsub(ld->buffer, ld->cd->cp_end, i);
+			ld->tmp = ft_strsub(ld->buffer, ld->cd->cp_end, ++i);
 		}
 		else
 		{
 			i = ld->cd->cp_end - ld->cd->cp_start;
-			ld->tmp = ft_strsub(ld->buffer, ld->cd->cp_start, i);
+			ld->tmp = ft_strsub(ld->buffer, ld->cd->cp_start, ++i);
 		}
 	}
 }

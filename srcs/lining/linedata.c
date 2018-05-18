@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:20:32 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/15 22:27:00 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/18 19:27:42 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ void				update_linedata(char *t, struct s_line_data *ld)
 		ft_strdel(&tmp_buffer);
 		write_change(ld, 0);
 	}
-	else
+	else if (x > 1)
 		manage_cp_pst(t, ld, tmp_buffer);
 }
 

@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:12:46 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/15 21:37:20 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/18 17:51:55 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ struct					s_cursor_data
 	int		cp_end;
 	int		cp_front;
 	int		cp_active;
+	int		avg_cp;
 	int		col;
 	int		row;
 };

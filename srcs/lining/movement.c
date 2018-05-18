@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:22:04 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/15 22:27:47 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/18 19:45:16 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ struct s_cursor_data	*init_cursordata(void)
 	cd->cp_end = 0;
 	cd->cp_front = 1;
 	cd->cp_active = 0;
+	cd->avg_cp = 0;
 	cd->col = 0;
 	cd->row = 0;
 	cd->pos_x = 0;
