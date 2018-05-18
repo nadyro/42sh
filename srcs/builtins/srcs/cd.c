@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 11:05:03 by arohani           #+#    #+#             */
-/*   Updated: 2018/05/18 13:41:29 by arohani          ###   ########.fr       */
+/*   Updated: 2018/05/18 14:13:59 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,9 +121,9 @@ int			ash_cd(t_shell *shell)
 		cd_dash(shell);
 	else if (shell->args && ARG[0] == '.')
 	{
-		printf("before feeding to cd_relative, BEFORE cd_canon, ARG = %s\n", ARG);
+		//printf("before feeding to cd_relative, BEFORE cd_canon, ARG = %s\n", ARG);
 		cd_canon(shell);
-		printf("before feeding to cd_relative, after cd_canon, ARG = %s\n", ARG);
+		//printf("before feeding to cd_relative, after cd_canon, ARG = %s\n", ARG);
 		cd_relative(shell);
 	}
 	else

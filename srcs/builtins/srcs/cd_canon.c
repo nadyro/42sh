@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_canon.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbie <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/09 15:16:39 by pbie              #+#    #+#             */
-/*   Updated: 2018/05/09 15:19:09 by pbie             ###   ########.fr       */
+/*   Updated: 2018/05/18 14:14:56 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,21 +39,21 @@ static int	cd_get_last(t_shell *shell, char ***split)
 	tab = *split;
 	while (tab && tab[i])
 	{
-		printf("in cd_get_last loop, tab[i] = %s\n", tab[i]);
+		//printf("in cd_get_last loop, tab[i] = %s\n", tab[i]);
 		if (ft_strcmp(tab[i], "..") == 0)
 			dotdots++;
 		i++;
 	}
-	printf("after looping through table in cd_get_last, i = %d\ndotdots = %d\n", i, dotdots);
+	//printf("after looping through table in cd_get_last, i = %d\ndotdots = %d\n", i, dotdots);
 	if (dotdots >= ((i - 1)/2))
 	{
-		printf("too many dotdots, resetting operand to / in cd_get_last\n");
+	//	printf("too many dotdots, resetting operand to / in cd_get_last\n");
 		ft_bzero(ARG, ft_strlen(ARG));
 		ft_strcpy(ARG, "/");
 		free_table(*split);
 		return (-1);
 	}
-	printf("about to return %d from cd_get_last", i);
+	//printf("about to return %d from cd_get_last", i);
 	return (i);
 }
 
@@ -66,20 +66,20 @@ static void handle_dot_dots(t_shell *shell)
 	char	*clean = NULL;
 	char	*tmp = NULL;
 
-    printf("at top of handle_dot_dots, ARG = %s\n", ARG);
+   // printf("at top of handle_dot_dots, ARG = %s\n", ARG);
 	tab = (shell->st > -1) ? ft_strsplit(ARG, '/') : NULL;
 	if ((last = cd_get_last(shell, &tab)) < 0)
 		return ;
 	clean = ft_strdup("/");
-    printf("cd canon 2 debug: i = %dlast = %d\n", i, last);
+    //printf("cd canon 2 debug: i = %dlast = %d\n", i, last);
 	while (tab && i < last && i >= 0)
 	{
-        printf("top of cd canon 2 debug: i = %d\n", i);
+      //  printf("top of cd canon 2 debug: i = %d\n", i);
 		if (tab[i] && ft_strcmp(tab[i], "..") == 0)
 		{
 			deleted_match = 0;
 			ft_strdel(&tab[i--]);
-            printf("cd_canon DEBUG : i = %d\n", i);
+        //    printf("cd_canon DEBUG : i = %d\n", i);
 			while (i >= 0 && deleted_match == 0)
 			{
                 if (tab[i])
