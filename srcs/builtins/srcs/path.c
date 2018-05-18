@@ -90,21 +90,24 @@ int		cd_path(t_shell *shell)
 
 	i = 0;
 	paths = fetch_cd_paths(shell);
+	printf("about to print path after fetching from fetch_cd_paths\n");
+	ft_print_table(paths);
 	while (paths && paths[i])
 	{
 		str = (paths[i][ft_strlen(paths[i]) - 1] != '/')
 		? ft_strjoin(paths[i++], "/") : ft_strdup(paths[i++]);
-		//will eventually need to know starting point i.e. cd argument (different if there are options,
-		//and depends on syntax) before concatenating str with cd argument
+		printf("about to join %s to %s\n", ARG, str);
 		full_path = ft_strjoin(str, ARG);
 		if (str && str[0])
 			ft_strdel(&str);	
+		printf("about to test full_path using access: full_path = %s\n", full_path);
 		if (!(ret = access(full_path, F_OK)))
 		{
 			free_table(paths);
 			ft_strdel(&(ARG));
 			ARG = ft_strdup(full_path);
 			ft_strdel(&full_path);
+			printf("cd_path located, ARG now = %s\n", ARG);
 			regular_cd(shell);
 			return (1);
 		}
@@ -129,6 +132,7 @@ int			has_paths(t_shell *shell, int cdpath)
 			return (1);
 		if (cdpath == 1 && ft_strcmp(tmp->var, "CDPATH") == 0)
 		{
+			printf("about to return 2 from has_paths\n");
 			return (2);
 		}
 		tmp = tmp->next;

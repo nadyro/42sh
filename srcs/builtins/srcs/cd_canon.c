@@ -30,6 +30,33 @@ static void	grab_pwd(t_shell *shell, char **clean)
 	}
 }
 
+static int	cd_get_last(t_shell *shell, char ***split)
+{
+	int		dotdots = 0;
+	int		i = 0;
+	char	**tab;
+	
+	tab = *split;
+	while (tab && tab[i])
+	{
+		printf("in cd_get_last loop, tab[i] = %s\n", tab[i]);
+		if (ft_strcmp(tab[i], "..") == 0)
+			dotdots++;
+		i++;
+	}
+	printf("after looping through table in cd_get_last, i = %d\ndotdots = %d\n", i, dotdots);
+	if (dotdots >= ((i - 1)/2))
+	{
+		printf("too many dotdots, resetting operand to / in cd_get_last\n");
+		ft_bzero(ARG, ft_strlen(ARG));
+		ft_strcpy(ARG, "/");
+		free_table(*split);
+		return (-1);
+	}
+	printf("about to return %d from cd_get_last", i);
+	return (i);
+}
+
 static void handle_dot_dots(t_shell *shell)
 {
 	char	**tab;
@@ -41,11 +68,9 @@ static void handle_dot_dots(t_shell *shell)
 
     printf("at top of handle_dot_dots, ARG = %s\n", ARG);
 	tab = (shell->st > -1) ? ft_strsplit(ARG, '/') : NULL;
+	if ((last = cd_get_last(shell, &tab)) < 0)
+		return ;
 	clean = ft_strdup("/");
-	while (tab && tab[i])
-		i++;
-	last = i;
-	i = 0;
     printf("cd canon 2 debug: i = %dlast = %d\n", i, last);
 	while (tab && i < last && i >= 0)
 	{
@@ -60,17 +85,9 @@ static void handle_dot_dots(t_shell *shell)
                 if (tab[i])
                 {
                     ft_strdel(&tab[i]);
-                    deleted_match = (i == 0) ? 0 : 1; //if we delete last match, set operand to '/' therefore dont set del_match to 1 and end loop
+                    deleted_match = 1;
                 }
-				if (i == 0)
-				{
-                    printf("before deleting ARG in cd_canon, ARG = %s\n", ARG);
-					ft_strdel(&ARG);
-                    ARG = ft_strdup("/");
-				//	cd_no_arg(shell); 
-					return ;
-				}
-				else
+				else if (deleted_match == 0)
 					i--;
 			}
 		}

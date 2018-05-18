@@ -13,7 +13,7 @@
 #include "minishell.h"
 #include <stdio.h>
 
-static int	cd_opt_validate(t_shell *shell, int i)
+static int	cd_fill_flags(t_shell *shell, int i)
 {
 	int			j;
 
@@ -46,7 +46,7 @@ int			cd_opt_check(t_shell *shell)
 			return (i + 1);
 		else if (shell->args[i][0] == '-')
 		{
-			if (cd_opt_validate(shell, i) != 0)
+			if (cd_fill_flags(shell, i) != 0)
 				return (i);
 		}
 		else

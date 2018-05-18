@@ -100,7 +100,8 @@ int			regular_cd(t_shell *shell)
 			ft_putstr_fd(": No such file or directory\n", 2);
 		}
 	}
-	else{
+	else
+	{
 		if (getcwd(cwd, sizeof(cwd)) == NULL)
 			ft_putstr_fd("error retrieving cwd\n", 2);
 		else
@@ -120,12 +121,15 @@ int			ash_cd(t_shell *shell)
 		cd_dash(shell);
 	else if (shell->args && ARG[0] == '.')
 	{
+		printf("before feeding to cd_relative, BEFORE cd_canon, ARG = %s\n", ARG);
 		cd_canon(shell);
+		printf("before feeding to cd_relative, after cd_canon, ARG = %s\n", ARG);
 		cd_relative(shell);
 	}
 	else
 	{
-		cd_canon(shell);
+		if (ARG[0] != '/')
+			cd_canon(shell);
 		regular_cd(shell);
 	}
 	return (1);
