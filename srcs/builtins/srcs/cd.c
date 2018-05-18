@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 11:05:03 by arohani           #+#    #+#             */
-/*   Updated: 2018/02/20 14:51:44 by arohani          ###   ########.fr       */
+/*   Updated: 2018/05/18 13:39:55 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,9 @@ int			regular_cd(t_shell *shell)
 
 	if (chdir(ARG) != 0)
 	{
-		if (has_paths(shell, 1) == 2 && cd_path(shell))
-			return (1);
-		else
+		//if (has_paths(shell, 1) == 2 && cd_path(shell))
+		//	return (1);
+		//else
 		{
 			ft_putstr_fd("cd: ", 2);
 			ft_putstr_fd(ARG, 2);
@@ -112,6 +112,8 @@ int			regular_cd(t_shell *shell)
 
 int			ash_cd(t_shell *shell)
 {
+	int		ret;
+	
 	shell->st = cd_opt_check(shell);
 	if (shell->st == -1)
 		return (1);
@@ -129,7 +131,14 @@ int			ash_cd(t_shell *shell)
 	else
 	{
 		if (ARG[0] != '/')
+		{
+			if ((ret = access(ARG, F_OK)) < 0) //i.e. if current operand doesnt exist
+			{
+				if (has_paths(shell, 1) == 2)
+					cd_path(shell);
+			}
 			cd_canon(shell);
+		}
 		regular_cd(shell);
 	}
 	return (1);
