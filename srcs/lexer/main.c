@@ -65,6 +65,15 @@ int				main(int argc, char **argv)
 				case TK_END:
 					printf("END ");
 					break;
+				case TK_PROGRAM:
+					printf("PROGRAM ");
+					break;
+				case TK_QUOTED_WORD:
+					printf("QUOTED_WORD ");
+					break;
+				case TK_DQUOTED_WORD:
+					printf("DQUOTED_WORD ");
+					break;
 			}
 			i += 3;
 		}
