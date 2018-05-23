@@ -1,16 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   termcare.c                                         :+:      :+:    :+:   */
+/*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/04/23 13:22:39 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/23 20:57:33 by nsehnoun         ###   ########.fr       */
+/*   Created: 2018/05/23 16:26:10 by nsehnoun          #+#    #+#             */
+/*   Updated: 2018/05/23 17:57:47 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/lining.h"
+#include "includes/lining.h"
+# include <termios.h>
+# include <term.h>
+# include <curses.h>
+# include <termios.h>
+# include <sys/ioctl.h>
+# include <fcntl.h>
+# include <stdlib.h>
+# include <string.h>
+# include <signal.h>
+# include <unistd.h>
+# include <stdio.h>
 
 struct termios t;
 
@@ -39,4 +50,20 @@ void	get_infoterm(void)
 	else
 		ft_putendl("<3");
 	return ;
+}
+
+int		main(void)
+{
+	size_t		f;
+	int			i;
+
+	i = 0;
+	f = 0;
+	get_infoterm();
+	while (read(0, &f, sizeof(f)))
+	{
+		printf("%zu\n", f);
+		f = 0;
+	}
+	return (0);
 }

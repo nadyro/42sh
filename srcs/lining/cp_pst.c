@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 13:18:03 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/18 19:51:45 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/23 15:28:42 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,13 @@ void	manage_controls(char t, struct s_line_data *ld, int *index)
 	{
 		go_to = tgoto(tgetstr("cm", NULL), COLSTART + ld->current_size, ld->cd->pos_y);
 		tputs(go_to, 1, fprint_char);
+	}
+	if (t == 127)
+	{
+		if (*index - 1 >= 0)
+			*index -= 1;
+		if (ld->buffer[0] != '\0')
+			manage_deletion(ld);
 	}
 	if (t == 11)
 	{

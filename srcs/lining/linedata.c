@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:20:32 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/18 19:27:42 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/23 21:34:11 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,31 +36,6 @@ struct s_line_data	*init_linedata(void)
 	ft_putscolors("$> 42sh", BCYAN);
 	ft_putscolors(" ~> ", MAGENTA);
 	return (ld);
-}
-
-void				manage_buffer(struct s_line_data *ld, char *t, int *index)
-{
-	char	*gt;
-	int		i;
-
-	i = *index;
-	if (!(i < BUFFER * ld->nb_resize))
-		reallocate_mem_line(ld);
-	cursor_pos(ld);
-	gt = tgoto(tgetstr("cm", NULL), ld->cd->x, ld->cd->pos_y);
-	tputs(gt, 1, fprint_char);
-	ld->buffer[*index] = t[0];
-	ld->current_size = ft_strlen(ld->buffer);
-	if ((ld->cd->pos_x + 1) < ld->current_size)
-		update_linedata(t, ld);
-	else
-	{
-		ft_putstr("\x1b[32m");
-		ft_putchar(t[0]);
-		ft_putstr("\x1b[0m");
-	}
-	i++;
-	*index = i;
 }
 
 void				clean_linedata(struct s_line_data *ld)
@@ -102,6 +77,31 @@ void				reallocate_mem_line(struct s_line_data *ld)
 	ld->length = ft_strlen(ld->old_content);
 	ld->resize_history[ld->nb_resize - 1] = ft_strlen(ld->buff);
 	ft_strdel(&ld->buff);
+}
+
+void				manage_buffer(struct s_line_data *ld, char *t, int *index)
+{
+	char	*gt;
+	int		i;
+
+	i = *index;
+	if (!(i < BUFFER * ld->nb_resize))
+		reallocate_mem_line(ld);
+	cursor_pos(ld);
+	gt = tgoto(tgetstr("cm", NULL), ld->cd->x, ld->cd->pos_y);
+	tputs(gt, 1, fprint_char);
+	ld->buffer[*index] = t[0];
+	ld->current_size = ft_strlen(ld->buffer);
+	if ((ld->cd->pos_x + 1) < ld->current_size)
+		update_linedata(t, ld);
+	else
+	{
+		ft_putstr("\x1b[32m");
+		ft_putchar(t[0]);
+		ft_putstr("\x1b[0m");
+	}
+	i++;
+	*index = i;
 }
 
 void				update_linedata(char *t, struct s_line_data *ld)

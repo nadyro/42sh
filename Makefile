@@ -6,7 +6,7 @@
 #    By: azybert <azybert@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/04 19:24:34 by azybert           #+#    #+#              #
-#    Updated: 2018/05/11 17:55:07 by nsehnoun         ###   ########.fr        #
+#    Updated: 2018/05/22 16:16:53 by nsehnoun         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ SRCS = 	lining/main.c \
 	lining/printing.c \
 	lining/windata.c \
 	lining/cp_pst.c \
+	lining/features.c \
 
 SRC_DIR = srcs
 OBJ_DIR = objs

@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:12:46 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/18 17:51:55 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/23 18:05:56 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 
 # define BUFFER 1024
 # define COLSTART 11
+# define K_SLEFT 74982532143899
+# define K_SRIGHT 73883020516123
 # define RED "\x1b[31m"
 # define GREEN "\x1b[32m"
 # define YELLOW "\x1b[33m"
@@ -86,10 +88,12 @@ void					move_down(struct s_line_data *ld);
 void					update_linedata(char *t, struct s_line_data *ld);
 void					cursor_pos(struct s_line_data *ld);
 void					ft_putscolors(char *str, char *color);
-void					write_change(struct s_line_data *ld, int is_cp_pst);
+void					write_change(struct s_line_data *ld, int is_rewrite);
 void					manage_buffer(struct s_line_data *ld, char *t, int *i);
 void					ft_exit(int nb);
 struct s_win			*init_windata(void);
 void					manage_controls(char t, struct s_line_data *ld, int *i);
 void					manage_cp_pst(char *t, struct s_line_data *ld, char *tmp_buffer);
+void					manage_deletion(struct s_line_data *ld);
+void					write_fromstart(struct s_line_data *ld, int is_todel);
 #endif
