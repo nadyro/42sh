@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:22:39 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/23 20:57:33 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/23 23:04:05 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	get_infoterm(void)
 	}
 	terminal = t;
 	terminal.c_lflag &= ~(ICANON);
+	terminal.c_cc[VMIN] = 1;
+	terminal.c_cc[VTIME] = 1;
 	terminal.c_lflag &= ~(ECHO);
 	if (tcsetattr(0, TCSADRAIN, &terminal) == -1)
 	{

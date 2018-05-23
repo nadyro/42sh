@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/22 16:15:59 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/23 21:34:13 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/24 00:08:41 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,22 +74,29 @@ void	cursor_pos(struct s_line_data *ld)
 {
 	char	*str_pos;
 	int		i;
+	int		r;
 
 	(void)ld;
-	str_pos = ft_strnew(512);
+	str_pos = ft_strnew(20);
 	i = 0;
 	write(1, "\033[6n", 4);
-	while (i < 512)
+	while (i < 20)
 		str_pos[i++] = '\0';
-	read(1, str_pos, 512);
-	ld->cd->pos_y = ft_atoi(&str_pos[2]) - 1;
-	i = 0;
-	while (str_pos[i] != ';')
-		i++;
-	ld->cd->x = ft_atoi(&str_pos[i + 1]) - 1;
-	ld->cd->pos_x = ld->cd->x - COLSTART;
-	i = 0;
-	while (i < 512)
-		str_pos[i++] = '\0';
+	if ((r = read(1, str_pos, 20)) != -1)
+	{
+		ld->cd->pos_y = ft_atoi(&str_pos[2]) - 1;
+		i = 0;
+		while (str_pos[i] != '\0')
+		{
+			if (str_pos[i] == ';')
+				break ;
+			i++;
+		}
+		ld->cd->x = ft_atoi(&str_pos[i + 1]) - 1;
+		ld->cd->pos_x = ld->cd->x - COLSTART;
+		i = 0;
+		while (i < 20)
+			str_pos[i++] = '\0';
+	}
 	free(str_pos);
 }

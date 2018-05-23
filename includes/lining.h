@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:12:46 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/23 18:05:56 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/23 23:53:08 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void					update_linedata(char *t, struct s_line_data *ld);
 void					cursor_pos(struct s_line_data *ld);
 void					ft_putscolors(char *str, char *color);
 void					write_change(struct s_line_data *ld, int is_rewrite);
-void					manage_buffer(struct s_line_data *ld, char *t, int *i);
+int						manage_buffer(struct s_line_data *ld, char *t, int *i);
 void					ft_exit(int nb);
 struct s_win			*init_windata(void);
 void					manage_controls(char t, struct s_line_data *ld, int *i);

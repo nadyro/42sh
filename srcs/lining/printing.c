@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/27 15:27:29 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/23 21:34:09 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/23 23:29:15 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	write_change(struct s_line_data *ld, int is_rewrite)
 		go_to = tgoto(tgetstr("cm", NULL), ++ld->cd->x, ld->cd->pos_y);
 		tputs(go_to, 1, fprint_char);
 	}
-	else
+	else if (ld->tmp != NULL)
 	{
 		ld->cd->x += ft_strlen(ld->tmp);
 		go_to = tgoto(tgetstr("cm", NULL), ld->cd->x, ld->cd->pos_y);

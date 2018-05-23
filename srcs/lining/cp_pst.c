@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 13:18:03 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/23 15:28:42 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/24 00:08:43 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ void	manage_cp_pst(char *t, struct s_line_data *ld, char *tmp_buffer)
 	i = ld->cd->pos_x + ft_strlen(t);
 	y = i;
 	x = ft_strlen(t) + ft_strlen(tmp_buffer) + ld->cd->pos_x;
-	while (i < x)
+	while (i < x && i < BUFFER * ld->nb_resize)
 		ld->buffer[i++] = '\0';
 	i = y;
 	y = 0;
-	while (i < x)
+	while (i < x && i < BUFFER * ld->nb_resize)
 		ld->buffer[i++] = tmp_buffer[y++];
 	ft_strdel(&tmp_buffer);
 	write_change(ld, 1);

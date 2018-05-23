@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 04:41:25 by nsehnoun          #+#    #+#             */
-/*   Updated: 2017/04/28 16:06:33 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/23 23:26:15 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,11 @@ void	ft_strdel(char **as)
 {
 	if (as != NULL)
 	{
-		ft_memset(*as, '\0', ft_strlen(*as));
-		free((void *)*as);
-		*as = NULL;
+		if (*as != NULL)
+		{
+			ft_memset(*as, '\0', ft_strlen(*as));
+			free((void *)*as);
+			*as = NULL;
+		}
 	}
 }
