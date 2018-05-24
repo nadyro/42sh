@@ -6,13 +6,13 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/27 15:27:29 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/23 23:29:15 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/24 16:55:58 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lining.h"
 
-void		ft_exit(int nb)
+void	ft_exit(int nb)
 {
 	if (nb == 3)
 	{

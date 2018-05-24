@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:20:32 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/24 00:08:40 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/24 18:01:48 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,17 +126,8 @@ void				update_linedata(char *t, struct s_line_data *ld)
 		i = ld->cd->pos_x;
 		while (ld->buffer[i] != '\0')
 			tmp_buffer[y++] = ld->buffer[i++];
-		y = 0;
-		i = ld->cd->pos_x;
 		if (x == 1)
-		{
-			ld->buffer[ld->cd->pos_x] = t[0];
-			i = ld->cd->pos_x + 1;
-			while (ld->buffer[i] != '\0')
-				ld->buffer[i++] = tmp_buffer[y++];
-			ft_strdel(&tmp_buffer);
-			write_change(ld, 0);
-		}
+			manage_key_insertion(t, ld, tmp_buffer);
 		else if (x > 1)
 			manage_cp_pst(t, ld, tmp_buffer);
 	}

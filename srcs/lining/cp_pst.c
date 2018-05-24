@@ -6,11 +6,25 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 13:18:03 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/24 00:08:43 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/24 17:59:28 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lining.h"
+
+void	manage_key_insertion(char *t, struct s_line_data *ld, char *tmp_buffer)
+{
+	int		i;
+	int		y;
+
+	y = 0;
+	ld->buffer[ld->cd->pos_x] = t[0];
+	i = ld->cd->pos_x + 1;
+	while (ld->buffer[i] != '\0')
+		ld->buffer[i++] = tmp_buffer[y++];
+	ft_strdel(&tmp_buffer);
+	write_change(ld, 0);
+}
 
 void	manage_cp_pst(char *t, struct s_line_data *ld, char *tmp_buffer)
 {
@@ -34,97 +48,76 @@ void	manage_cp_pst(char *t, struct s_line_data *ld, char *tmp_buffer)
 		ld->buffer[i++] = tmp_buffer[y++];
 	ft_strdel(&tmp_buffer);
 	write_change(ld, 1);
-
 }
 
 void	manage_controls(char t, struct s_line_data *ld, int *index)
 {
-	char	*go_to;
+	if (t == 1 || t == 5 || t == 127)
+		gt_start_end_del(ld, t, index);
+	if (t == 11)
+		cp_cut(ld, index, t);
+	if (t == 12)
+		cp_copy_select_cp(ld, t);
+	if (t == 20 && ld->cd->cp_active == 0)
+		cp_copy_select_cp(ld, t);
+	else if (t == 20 && ld->cd->cp_active == 1)
+		cp_end_select_cp(ld, t);
+	if (t == 16 && ld->tmp != NULL && ld->cd->cp_state == 1)
+		cp_paste(ld, t, index);
+}
+
+void	skip_word_right(struct s_line_data *ld)
+{
 	int		i;
 	int		y;
+	char	*go_to;
 
-	go_to = NULL;
-	i = 1024 * ld->nb_resize;
+	i = ld->cd->pos_x;
 	y = 0;
-	if (t == 1)
+	while (ld->buffer[i] != '\0')
 	{
-		go_to = tgoto(tgetstr("cm", NULL), COLSTART, ld->cd->pos_y);
-		tputs(go_to, 1, fprint_char);
+		while (ld->buffer[i] && (ld->buffer[i] == ' '
+					|| ld->buffer[i] == '\n' || ld->buffer[i] == '\t'))
+			i++;
+		while (ld->buffer[i] && ld->buffer[i] != ' '
+				&& ld->buffer[i] != '\n' && ld->buffer[i] != '\t')
+			i++;
+		y = 1;
+		break ;
+		i++;
 	}
-	if (t == 5)
+	if (y == 1)
 	{
-		go_to = tgoto(tgetstr("cm", NULL), COLSTART + ld->current_size, ld->cd->pos_y);
-		tputs(go_to, 1, fprint_char);
-	}
-	if (t == 127)
-	{
-		if (*index - 1 >= 0)
-			*index -= 1;
-		if (ld->buffer[0] != '\0')
-			manage_deletion(ld);
-	}
-	if (t == 11)
-	{
-		ld->cd->cp_state = 1;
-		go_to = tgoto(tgetstr("cm", NULL), COLSTART, ld->cd->pos_y);
+		go_to = tgoto(tgetstr("cm", NULL), COLSTART + i, ld->cd->pos_y);
 		tputs(go_to, 1, fprint_char);
 		cursor_pos(ld);
-		tputs(tgetstr("ce", NULL), 1, fprint_char);
-		if (ld->tmp == NULL)
-			ld->tmp = ft_strdup(ld->buffer);
-		else
-		{
-			ft_strdel(&ld->tmp);
-			ld->tmp = ft_strdup(ld->buffer);
-		}
-		*index = 0;
-		while (y < i)
-			ld->buffer[y++] = '\0';
 	}
-	if (t == 12)
+}
+
+void	skip_word_left(struct s_line_data *ld)
+{
+	int		i;
+	int		y;
+	char	*go_to;
+
+	i = ld->cd->pos_x;
+	y = 0;
+	while (i != 0)
 	{
-		ld->cd->cp_state = 1;
-		if (ld->tmp == NULL)
-			ld->tmp = ft_strdup(ld->buffer);
-		else
-		{
-			ft_strdel(&ld->tmp);
-			ld->tmp = ft_strdup(ld->buffer);
-		}
+		while (i > 0 && (ld->buffer[i] == ' '
+					|| ld->buffer[i] == '\n' || ld->buffer[i] == '\t'))
+			i--;
+		while (i > 0 && ld->buffer[i] != ' '
+				&& ld->buffer[i] != '\n' && ld->buffer[i] != '\t')
+			i--;
+		y = 1;
+		break ;
+		i--;
 	}
-	if (t == 16 && ld->tmp != NULL && ld->cd->cp_state == 1)
+	if (y == 1)
 	{
-		if (ld->tmp[0] == '\0')
-			ld->cd->cp_state = 0;
-		update_linedata(ld->tmp, ld);
-		*index += ft_strlen(ld->tmp);
-	}
-	if (t == 20 && ld->cd->cp_active == 0)
-	{
-		ld->cd->cp_state = 1;
-		ld->cd->cp_active = 1;
-		ld->cd->cp_start = ld->cd->pos_x;
-	}
-	else if(t == 20 && ld->cd->cp_active == 1)
-	{
-		ld->cd->cp_active = 0;
-		go_to = tgoto(tgetstr("cm", NULL), COLSTART, ld->cd->pos_y);
+		go_to = tgoto(tgetstr("cm", NULL), (COLSTART) + i, ld->cd->pos_y);
 		tputs(go_to, 1, fprint_char);
-		tputs(tgetstr("ce", NULL), 1, fprint_char);
-		tputs(tgetstr("me", NULL), 1, fprint_char);
-		ft_putscolors(ld->buffer, GREEN);
-		go_to = tgoto(tgetstr("cm", NULL), ld->cd->x, ld->cd->pos_y);
-		tputs(go_to, 1, fprint_char);
-		ld->cd->cp_end = ld->cd->pos_x;
-		if (ld->cd->cp_end < ld->cd->cp_start)
-		{
-			i = ld->cd->cp_start - ld->cd->cp_end;
-			ld->tmp = ft_strsub(ld->buffer, ld->cd->cp_end, ++i);
-		}
-		else
-		{
-			i = ld->cd->cp_end - ld->cd->cp_start;
-			ld->tmp = ft_strsub(ld->buffer, ld->cd->cp_start, ++i);
-		}
+		cursor_pos(ld);
 	}
 }

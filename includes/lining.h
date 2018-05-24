@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:12:46 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/23 23:53:08 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/24 17:57:49 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,16 @@ void					ft_exit(int nb);
 struct s_win			*init_windata(void);
 void					manage_controls(char t, struct s_line_data *ld, int *i);
 void					manage_cp_pst(char *t, struct s_line_data *ld, char *tmp_buffer);
+void					manage_key_insertion(char *t, struct s_line_data *ld, char *tmp_buffer);
 void					manage_deletion(struct s_line_data *ld);
 void					write_fromstart(struct s_line_data *ld, int is_todel);
+int						dispatch_tasks(struct s_line_data *ld, char *t, int *index);
+void					skip_word_left(struct s_line_data *ld);
+void					skip_word_right(struct s_line_data *ld);
+void					gt_start_end_del(struct s_line_data *ld, char t, int *index);
+void					cp_cut(struct s_line_data *ld, int *index, char t);
+void					cp_copy_select_cp(struct s_line_data *ld, char t);
+void					cp_paste(struct s_line_data *ld, char t, int *index);
+void					cp_end_select_cp(struct s_line_data *ld, char t);
+void					print_endslct(struct s_line_data *ld);
 #endif
