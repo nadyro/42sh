@@ -13,3 +13,7 @@ CTRL + T
 CTRL + T
 #Paste
 CTRL + P
+#Move a word on the left
+SHIFT + LEFT KEY
+#Move a word on the right
+SHIFT + RIGHT KEY
