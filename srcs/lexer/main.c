@@ -63,10 +63,10 @@ int				main(int argc, char **argv)
 					printf("OR_IF ");
 					break;
 				case TK_END:
-					printf("END ");
+					printf("END");
 					break;
-				case TK_PROGRAM:
-					printf("PROGRAM ");
+				case TK_CMD:
+					printf("CMD ");
 					break;
 				case TK_QUOTED_WORD:
 					printf("QUOTED_WORD ");

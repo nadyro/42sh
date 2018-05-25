@@ -157,7 +157,7 @@ static int		*check_program_token(int *tk_arr)
 	{
 		if (tk_arr[i] == TK_WORD && is_first_word == 1)
 		{
-			tk_arr[i] = TK_PROGRAM;
+			tk_arr[i] = TK_CMD;
 			is_first_word = 0;
 		}
 		else if (is_first_word == 0 && (tk_arr[i] == TK_PIPE || \
