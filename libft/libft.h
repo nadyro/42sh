@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 06:02:29 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/02/13 14:34:35 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/28 16:53:48 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,6 @@ typedef	struct	s_list
 {
 	void			*content;
 	size_t			content_size;
-	int				selected;
-	int				deleted;
-	int				underlined;
-	int				pad;
 	struct s_list	*previous;
 	struct s_list	*next;
 }				t_list;

@@ -6,7 +6,7 @@
 #    By: azybert <azybert@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/04 19:24:34 by azybert           #+#    #+#              #
-#    Updated: 2018/05/24 17:51:08 by nsehnoun         ###   ########.fr        #
+#    Updated: 2018/05/28 16:36:14 by nsehnoun         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ SRCS = 	lining/main.c \
 	lining/features.c \
 	lining/control_keys.c \
 	lining/miscellanious.c \
+	lining/history.c \
 
 SRC_DIR = srcs
 OBJ_DIR = objs

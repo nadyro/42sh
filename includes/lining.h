@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:12:46 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/24 17:57:49 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/28 19:22:37 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ struct					s_line_data
 	int						length;
 	int						resize_history[512];
 	int						nb_resize;
+	t_list					*history;
+	int						h_elem;
 	struct s_cursor_data	*cd;
 	struct s_win			*sw;
 };
@@ -77,10 +79,10 @@ void					get_infoterm(void);
 struct s_line_data		*init_linedata(void);
 void					clean_linedata(struct s_line_data *ld);
 struct s_cursor_data	*init_cursordata(void);
-void					manage_movement(char *t, struct s_line_data *ld);
-void					manage_validation(struct s_line_data *ld);
+void					manage_movement(char *t, struct s_line_data *ld, int *index);
+void					manage_validation(struct s_line_data *ld, t_list **history);
 void					reallocate_mem_line(struct s_line_data *ld);
-void					print_line_data(struct s_line_data *ld);
+void					print_line_data(struct s_line_data *ld, t_list *history);
 void					move_left(struct s_line_data *ld);
 void					move_right(struct s_line_data *ld);
 void					move_up(struct s_line_data *ld);
@@ -106,4 +108,7 @@ void					cp_copy_select_cp(struct s_line_data *ld, char t);
 void					cp_paste(struct s_line_data *ld, char t, int *index);
 void					cp_end_select_cp(struct s_line_data *ld, char t);
 void					print_endslct(struct s_line_data *ld);
+t_list					*write_history(struct s_line_data *ld, t_list **history);
+void					write_history_file(t_list *history);
+void					browse_history(struct s_line_data *ld, int *index);
 #endif

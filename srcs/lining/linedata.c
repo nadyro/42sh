@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:20:32 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/24 18:01:48 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/28 20:02:43 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ struct s_line_data	*init_linedata(void)
 	while (s < 512)
 		ld->resize_history[s++] = -1;
 	ld->nb_resize = 1;
+	ld->history = NULL;
+	ld->h_elem = 0;
 	ld->cd = init_cursordata();
 	ld->sw = init_windata();
 	ft_putscolors("$> 42sh", BCYAN);
@@ -135,19 +137,19 @@ void				update_linedata(char *t, struct s_line_data *ld)
 		write(1, "\a", 1);
 }
 
-void				print_line_data(struct s_line_data *ld)
+void				print_line_data(struct s_line_data *ld, t_list *history)
 {
 	int		i;
 
 	i = 0;
-	ft_putstr("Old Content : ");
-	if (ld->old_content)
-		ft_putendl(ld->old_content);
-	ft_putstr("Length : ");
-	if (ld->old_content)
-		ft_putnbr(ft_strlen(ld->old_content));
-	ft_putchar('\n');
-	ft_putchar('\n');
+	while (history->previous != NULL)
+		history = history->previous;
+	ft_putendl("History : ");
+	while (history != NULL)
+	{
+		ft_putendl(history->content);
+		history = history->next;
+	}
 	ft_putstr("Buffer : ");
 	if (ld->buffer[0])
 		ft_putendl(ld->buffer);

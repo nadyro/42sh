@@ -6,13 +6,13 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/22 16:15:59 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/24 16:52:11 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/28 19:26:15 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lining.h"
 
-void	manage_movement(char *t, struct s_line_data *ld)
+void	manage_movement(char *t, struct s_line_data *ld, int *index)
 {
 	if (t[1] == 91)
 	{
@@ -22,6 +22,8 @@ void	manage_movement(char *t, struct s_line_data *ld)
 			move_right(ld);
 		if (t[2] == 66)
 			move_down(ld);
+		if (t[2] == 65)
+			browse_history(ld, index);
 	}
 }
 
@@ -51,7 +53,7 @@ void	manage_deletion(struct s_line_data *ld)
 	cursor_pos(ld);
 }
 
-void	manage_validation(struct s_line_data *ld)
+void	manage_validation(struct s_line_data *ld, t_list **history)
 {
 	char	*tmp_join;
 
@@ -64,7 +66,11 @@ void	manage_validation(struct s_line_data *ld)
 	ft_putchar('\n');
 	ft_putendl("Final Result : ");
 	ft_putchar('\n');
-	print_line_data(ld);
+	write_history(ld, history);
+	while((*history)->next != NULL)
+		*history = (*history)->next;
+	ld->history = *history;
+	print_line_data(ld, *history);
 	clean_linedata(ld);
 	ft_putscolors("$> 42sh", BCYAN);
 	ft_putscolors(" ~> ", MAGENTA);
