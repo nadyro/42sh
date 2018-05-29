@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:19:24 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/29 22:43:17 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/29 23:46:00 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ int		dispatch_tasks(struct s_line_data *ld, char *t, int *index)
 		manage_movement(t, ld, index);
 	else if ((t[0] >= 1 && t[0] <= 31) || t[0] == 127)
 		manage_controls(t[0], ld, index);
-	else if (manage_buffer(ld, t, index) == 1)
-		write(1, "\a", 1);
+	else
+		manage_buffer(ld, t, index);
 	return (0);
 }
 
@@ -45,8 +45,6 @@ int		main(void)
 	ld = init_linedata();
 	history = NULL;
 	cursor_pos(ld);
-	ld->cd->o_pos_x = ld->cd->pos_x;
-	ld->cd->o_pos_y = ld->cd->pos_y;
 	while (1)
 	{
 		if ((f = read(1, t, 3)) != -1)
@@ -58,16 +56,6 @@ int		main(void)
 			{
 				manage_validation(ld, &history);
 				index = 0;
-			}
-			check_line_length(ld);
-			if (ld->cd->pos_x + COLSTART >= ld->sw->win_col)
-			{
-				ld->nb_lines++;
-				ld->cd->pos_y++;
-				ld->cd->pos_x = 0;
-				ld->cd->x = COLSTART;
-				ft_putnbr(ld->cd->pos_y);
-				sleep(1);
 			}
 			dispatch_tasks(ld, t, &index);
 		}

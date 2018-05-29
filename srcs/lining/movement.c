@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:22:04 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/29 21:59:06 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/29 23:46:34 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,10 @@ void					move_left(struct s_line_data *ld)
 	}
 	if (ld->c - 1 >= 0)
 	{
-		go_to = tgoto(tgetstr("cm", NULL), --ld->c + COLSTART, ld->cd->pos_y);
-		tputs(go_to, 1, fprint_char);
+		--ld->c;
+		ft_putstr(tgoto(tgetstr("le", NULL),0 , 0));
+		//go_to = tgoto(tgetstr("cm", NULL), --ld->c + COLSTART, ld->cd->pos_y);
+		//tputs(go_to, 1, fprint_char);
 	}
 	--ld->cd->x;
 	ld->cd->pos_x = ld->cd->x - COLSTART;
@@ -65,8 +67,10 @@ void					move_right(struct s_line_data *ld)
 	}
 	if (ld->c < ld->current_size)
 	{
-		go_to = tgoto(tgetstr("cm", NULL), ++ld->c + COLSTART, ld->cd->pos_y);
-		tputs(go_to, 1, fprint_char);
+		++ld->c;
+		ft_putstr(tgoto(tgetstr("nd", NULL),0 , 0));
+		//go_to = tgoto(tgetstr("cm", NULL), ++ld->c + COLSTART, ld->cd->pos_y);
+		//tputs(go_to, 1, fprint_char);
 	}
 	++ld->cd->x;
 	ld->cd->pos_x = ld->cd->x - COLSTART;

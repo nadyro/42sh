@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:20:32 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/29 21:37:27 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/29 23:46:27 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ struct s_line_data	*init_linedata(void)
 	ld->nb_lines = 0;
 	ld->last_line = 0;
 	ld->c = 0;
+	ld->d = 0;
 	ld->cd = init_cursordata();
 	ld->sw = init_windata();
 	ft_putscolors("$> 42sh", BCYAN);
@@ -85,12 +86,10 @@ int					manage_buffer(struct s_line_data *ld, char *t, int *index)
 	i = *index;
 	if (!(i < BUFFER * ld->nb_resize))
 		reallocate_mem_line(ld);
-	gt = tgoto(tgetstr("cm", NULL), ld->c + COLSTART, ld->cd->pos_y);
-	tputs(gt, 1, fprint_char);
+		gt = tgoto(tgetstr("cm", NULL), ld->c + COLSTART, ld->cd->pos_y);
+		tputs(gt, 1, fprint_char);
 	if (*index < BUFFER * ld->nb_resize && ft_strlen(ld->buffer) < 4096)
-	{
 		ld->buffer[*index] = t[0];
-	}
 	else
 		return (1);
 	ld->current_size = ft_strlen(ld->buffer);

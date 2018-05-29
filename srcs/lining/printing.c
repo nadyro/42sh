@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/27 15:27:29 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/29 22:44:23 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/29 23:49:02 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,13 +73,7 @@ void	write_fromstart(struct s_line_data *ld, int is_todel)
 {
 	char	*go_to;
 
-	/*ft_putnbr(ld->cd->o_pos_y);
-	ft_putchar('-');
-	ft_putnbr(ld->cd->pos_y);
-	ft_putchar('-');
-	ft_putnbr(ld->nb_lines);
-	sleep(2);*/
-	go_to = tgoto(tgetstr("cm", NULL), ld->cd->o_pos_x + COLSTART, ld->cd->o_pos_y - ld->nb_lines);
+	go_to = tgoto(tgetstr("cm", NULL), ld->cd->o_pos_x + COLSTART, ld->cd->pos_y);
 	tputs(go_to, 1, fprint_char);
 	tputs(tgetstr("ce", NULL), 1, fprint_char);
 	ft_putstr(ld->buffer);

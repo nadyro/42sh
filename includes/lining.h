@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:12:46 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/29 21:58:39 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/29 23:26:56 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ struct					s_line_data
 	int						nb_lines;
 	int						last_line;
 	int						c;
+	int						d;
 	t_list					*history;
 	struct s_cursor_data	*cd;
 	struct s_win			*sw;
