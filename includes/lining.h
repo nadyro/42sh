@@ -24,6 +24,7 @@
 # include <string.h>
 # include <signal.h>
 # include <unistd.h>
+# include "debug.h"
 
 # define BUFFER 1024
 # define COLSTART 11

@@ -144,40 +144,35 @@ void				print_line_data(struct s_line_data *ld, t_list *history)
 	i = 0;
 	while (history->previous != NULL)
 		history = history->previous;
-	ft_putendl("History : ");
+	debug("History : ", 1);
 	while (history != NULL)
 	{
-		ft_putendl(history->content);
+		debug(history->content, 1);
+		debug("\n", 1);
 		history = history->next;
 	}
-	ft_putstr("Buffer : ");
+	debug("Buffer : ", 1);
 	if (ld->buffer[0])
-		ft_putendl(ld->buffer);
-	ft_putstr("Current Size : ");
-	ft_putnbr(ld->current_size);
-	ft_putchar('\n');
-	ft_putchar('\n');
-	ft_putendl("Resize History : ");
+		debug(ld->buffer, 1);
+	debug("Current Size : ", 1);
+	debug_custom(&ld->current_size, sizeof(int), 1);
+	debug("\n\nResize History : \n", 1);
 	while (ld->resize_history[i] != -1)
 	{
-		ft_putnbr(i);
-		ft_putstr(" : ");
-		ft_putnbr(ld->resize_history[i]);
-		ft_putchar('\n');
+		debug_custom(&i, sizeof(int), 1);
+		debug(" : ", 1);
+		debug_custom(&ld->resize_history[i], sizeof(int), 1);
+		debug("\n", 1);
 		i++;
 	}
-	ft_putchar('\n');
-	ft_putstr("Nb Resize : ");
-	ft_putnbr(ld->nb_resize);
-	ft_putchar('\n');
-	ft_putchar('\n');
-	ft_putstr("Columns : ");
-	ft_putnbr(ld->cd->x);
-	ft_putchar('\n');
-	ft_putstr("Rows : ");
-	ft_putnbr(ld->cd->pos_y);
-	ft_putchar('\n');
-	ft_putstr("Line length : ");
-	ft_putnbr(ld->cd->pos_x);
+	debug("\nNb Resize : ", 1);
+	debug_custom(&ld->nb_resize, sizeof(int), 1);
+	debug("\n\nColumns : ", 1);
+	debug_custom(&ld->cd->x, sizeof(int), 1);
+	debug("\nRows : ", 1);
+	debug_custom(&ld->cd->pos_y, sizeof(int), 1);
+	debug("\nLine length : ", 1);
+	debug_custom(&ld->cd->pos_x, sizeof(int), 1);
+	debug("\n", 1);
 	ft_putchar('\n');
 }

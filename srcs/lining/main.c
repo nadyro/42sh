@@ -32,7 +32,7 @@ int		dispatch_tasks(struct s_line_data *ld, char *t, int *index)
 	return (0);
 }
 
-int		main(void)
+int		main(int argc, char **argv)
 {
 	char				t[4];
 	int					f;
@@ -40,6 +40,8 @@ int		main(void)
 	int					index;
 	t_list				*history;
 
+	if (argc == 2)
+		set_debug_tty(argv[1], -1);
 	index = 0;
 	get_infoterm();
 	ld = init_linedata();

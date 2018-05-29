@@ -63,9 +63,7 @@ void	manage_validation(struct s_line_data *ld, t_list **history)
 	ld->content = ft_strdup(tmp_join);
 	ft_strdel(&tmp_join);
 	ld->length = ft_strlen(ld->content);
-	ft_putchar('\n');
-	ft_putendl("Final Result : ");
-	ft_putchar('\n');
+	debug("\nFinal Result : \n", 1);
 	write_history(ld, history);
 	while((*history)->next != NULL)
 		*history = (*history)->next;

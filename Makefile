@@ -17,6 +17,8 @@
 
 # Add the source file path without "srcs/" down here.
 
+DBG := 0
+
 SRCS = 	lining/main.c \
 	lining/termcare.c \
 	lining/linedata.c \
@@ -28,6 +30,7 @@ SRCS = 	lining/main.c \
 	lining/control_keys.c \
 	lining/miscellanious.c \
 	lining/history.c \
+	debug/debug_log.c
 
 SRC_DIR = srcs
 OBJ_DIR = objs
@@ -39,7 +42,10 @@ LIB = -Llibft -lft
 # (It is encouraged to create a header file for each big modules or group mate.
 # We might need to discuss this when everybody will gather).
 
-HEADERS = includes/lining.h \
+INCLUDES := -I./includes -I./libft
+
+HEADERS =	includes/lining.h \
+			includes/debug.h
 
 # Creation of the object files in dynamically created folder "objs"
 
@@ -52,14 +58,15 @@ all: $(NAME)
 
 $(NAME): $(OBJ_DIR) $(OBJS)
 	@make -C libft
-	$(CC) $(FLAGS) -fsanitize=address -g3 -o $(NAME) $(OBJS) $(LIB) -I $(HEADERS) -ltermcap
+	$(CC) $(FLAGS) -fsanitize=address -g3 -o $(NAME) $(OBJS) $(LIB) $(INCLUDES) -ltermcap -DDEBUG_LEVEL=$(DBG)
 
 # Rule for object files creation
 # Insert at the end of the rule the new module folder you need to add, do as below		  
 
 $(OBJ_DIR):
 	@/bin/mkdir -p $(OBJ_DIR)
-	@/bin/mkdir -p $(OBJ_DIR)/lining  
+	@/bin/mkdir -p $(OBJ_DIR)/lining
+	@/bin/mkdir -p $(OBJ_DIR)/debug
 clean:
 	@/bin/rm -rf $(OBJ_DIR)
 	@make -C libft clean
@@ -71,4 +78,4 @@ fclean: clean
 re: fclean all
 
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
-	$(CC) $(FLAG) -g3 -c -o $@ $<
+	$(CC) $(INCLUDES) $(FLAG) -g3 -c -o $@ $< -DDEBUG_LEVEL=$(DBG)
