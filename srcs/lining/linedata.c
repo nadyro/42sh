@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:20:32 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/28 20:02:43 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/29 23:46:27 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,13 @@ struct s_line_data	*init_linedata(void)
 	s = 0;
 	ld->length = 0;
 	ld->current_size = 0;
-	while (s < 512)
-		ld->resize_history[s++] = -1;
 	ld->nb_resize = 1;
 	ld->history = NULL;
 	ld->h_elem = 0;
+	ld->nb_lines = 0;
+	ld->last_line = 0;
+	ld->c = 0;
+	ld->d = 0;
 	ld->cd = init_cursordata();
 	ld->sw = init_windata();
 	ft_putscolors("$> 42sh", BCYAN);
@@ -42,9 +44,6 @@ struct s_line_data	*init_linedata(void)
 
 void				clean_linedata(struct s_line_data *ld)
 {
-	int		s;
-
-	s = 0;
 	if (ld->content != NULL)
 		ft_bzero(ld->content, ft_strlen(ld->content));
 	if (ld->old_content != NULL)
@@ -55,8 +54,6 @@ void				clean_linedata(struct s_line_data *ld)
 		ft_bzero(ld->buff, ft_strlen(ld->buff));
 	ld->current_size = 0;
 	ld->length = 0;
-	while (s < 512)
-		ld->resize_history[s++] = -1;
 	ld->nb_resize = 1;
 }
 
@@ -78,7 +75,6 @@ void				reallocate_mem_line(struct s_line_data *ld)
 	ft_strncpy(ld->buffer, ld->buff, ft_strlen(ld->buff));
 	ft_strdel(&join_tmp);
 	ld->length = ft_strlen(ld->old_content);
-	ld->resize_history[ld->nb_resize - 1] = ft_strlen(ld->buff);
 	ft_strdel(&ld->buff);
 }
 
@@ -90,18 +86,20 @@ int					manage_buffer(struct s_line_data *ld, char *t, int *index)
 	i = *index;
 	if (!(i < BUFFER * ld->nb_resize))
 		reallocate_mem_line(ld);
-	cursor_pos(ld);
-	gt = tgoto(tgetstr("cm", NULL), ld->cd->x, ld->cd->pos_y);
-	tputs(gt, 1, fprint_char);
+		gt = tgoto(tgetstr("cm", NULL), ld->c + COLSTART, ld->cd->pos_y);
+		tputs(gt, 1, fprint_char);
 	if (*index < BUFFER * ld->nb_resize && ft_strlen(ld->buffer) < 4096)
 		ld->buffer[*index] = t[0];
 	else
 		return (1);
 	ld->current_size = ft_strlen(ld->buffer);
-	if ((ld->cd->pos_x + 1) < ld->current_size)
+	if ((ld->c + 1) < ld->current_size)
 		update_linedata(t, ld);
 	else
 	{
+		ld->c++;
+		ld->cd->x++;
+		ld->cd->pos_x = ld->cd->x - COLSTART;
 		ft_putstr("\x1b[32m");
 		ft_putchar(t[0]);
 		ft_putstr("\x1b[0m");
@@ -124,8 +122,7 @@ void				update_linedata(char *t, struct s_line_data *ld)
 			ft_exit(3);
 		y = 0;
 		x = ft_strlen(t);
-		cursor_pos(ld);
-		i = ld->cd->pos_x;
+		i = ld->c;
 		while (ld->buffer[i] != '\0')
 			tmp_buffer[y++] = ld->buffer[i++];
 		if (x == 1)
@@ -144,7 +141,10 @@ void				print_line_data(struct s_line_data *ld, t_list *history)
 	i = 0;
 	while (history->previous != NULL)
 		history = history->previous;
-	debug("History : ", 1);
+  
+	debug("ld->c : \n", 1);
+	debug_custom(&ld->c, sizeof(int), 1);
+  debug("\nHistory : ", 1);
 	while (history != NULL)
 	{
 		debug(history->content, 1);

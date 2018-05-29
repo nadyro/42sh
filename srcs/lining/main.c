@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:19:24 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/28 20:08:24 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/29 23:46:00 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int		dispatch_tasks(struct s_line_data *ld, char *t, int *index)
 	{
 		if (t[2] == 67)
 			skip_word_right(ld);
-		if (t[2] == 68 && ld->cd->pos_x - 1 >= 0)
+		if (t[2] == 68 && ld->c - 1 >= 0)
 			skip_word_left(ld);
 		if (t[2] == 66)
 			write_history_file(ld->history);
@@ -27,8 +27,8 @@ int		dispatch_tasks(struct s_line_data *ld, char *t, int *index)
 		manage_movement(t, ld, index);
 	else if ((t[0] >= 1 && t[0] <= 31) || t[0] == 127)
 		manage_controls(t[0], ld, index);
-	else if (manage_buffer(ld, t, index) == 1)
-		write(1, "\a", 1);
+	else
+		manage_buffer(ld, t, index);
 	return (0);
 }
 
@@ -46,6 +46,7 @@ int		main(int argc, char **argv)
 	get_infoterm();
 	ld = init_linedata();
 	history = NULL;
+	cursor_pos(ld);
 	while (1)
 	{
 		if ((f = read(1, t, 3)) != -1)
@@ -58,7 +59,6 @@ int		main(int argc, char **argv)
 				manage_validation(ld, &history);
 				index = 0;
 			}
-			cursor_pos(ld);
 			dispatch_tasks(ld, t, &index);
 		}
 	}

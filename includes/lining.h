@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:12:46 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/28 19:22:37 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/29 23:26:56 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@
 
 struct					s_cursor_data
 {
+	int		o_pos_x;
+	int		o_pos_y;
 	int		pos_x;
 	int		pos_y;
 	int		x;
@@ -68,10 +70,13 @@ struct					s_line_data
 	char					*tmp;
 	int						current_size;
 	int						length;
-	int						resize_history[512];
 	int						nb_resize;
-	t_list					*history;
 	int						h_elem;
+	int						nb_lines;
+	int						last_line;
+	int						c;
+	int						d;
+	t_list					*history;
 	struct s_cursor_data	*cd;
 	struct s_win			*sw;
 };
@@ -111,5 +116,7 @@ void					cp_end_select_cp(struct s_line_data *ld, char t);
 void					print_endslct(struct s_line_data *ld);
 t_list					*write_history(struct s_line_data *ld, t_list **history);
 void					write_history_file(t_list *history);
-void					browse_history(struct s_line_data *ld, int *index);
+void					browse_history_up(struct s_line_data *ld, int *index);
+void					browse_history_down(struct s_line_data *ld, int *index);
+int						check_line_length(struct s_line_data *ld);
 #endif

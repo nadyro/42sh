@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/22 16:15:59 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/28 19:26:15 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/29 20:58:15 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ void	manage_movement(char *t, struct s_line_data *ld, int *index)
 		if (t[2] == 67)
 			move_right(ld);
 		if (t[2] == 66)
-			move_down(ld);
+			browse_history_down(ld, index);
 		if (t[2] == 65)
-			browse_history(ld, index);
+			browse_history_up(ld, index);
 	}
 }
 
@@ -36,7 +36,7 @@ void	manage_deletion(struct s_line_data *ld)
 
 	i = 0;
 	y = 0;
-	to_del = ld->cd->pos_x - 1;
+	to_del = ld->c - 1;
 	if (!(tmp = ft_strnew(ft_strlen(ld->buffer) - 1)))
 		ft_exit(3);
 	while (ld->buffer[y] != '\0')
@@ -48,9 +48,11 @@ void	manage_deletion(struct s_line_data *ld)
 	ft_strncpy(ld->buffer, tmp, ft_strlen(tmp));
 	ld->current_size = ft_strlen(ld->buffer);
 	ft_strdel(&tmp);
-	if (ld->cd->pos_x - 1 >= 0)
+	if (ld->c - 1 >= 0)
 		write_fromstart(ld, 1);
-	cursor_pos(ld);
+	ld->c--;
+	ld->cd->x--;
+	ld->cd->pos_x = ld->cd->x - COLSTART;
 }
 
 void	manage_validation(struct s_line_data *ld, t_list **history)
@@ -65,11 +67,14 @@ void	manage_validation(struct s_line_data *ld, t_list **history)
 	ld->length = ft_strlen(ld->content);
 	debug("\nFinal Result : \n", 1);
 	write_history(ld, history);
-	while((*history)->next != NULL)
+	while ((*history)->next != NULL)
 		*history = (*history)->next;
 	ld->history = *history;
 	print_line_data(ld, *history);
 	clean_linedata(ld);
+	ld->cd->x = COLSTART;
+	ld->cd->pos_x = ld->cd->x - COLSTART;
+	ld->c = 0;
 	ft_putscolors("$> 42sh", BCYAN);
 	ft_putscolors(" ~> ", MAGENTA);
 }

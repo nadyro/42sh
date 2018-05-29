@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/24 17:01:52 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/24 17:52:45 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/29 21:29:26 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,20 @@ void	gt_start_end_del(struct s_line_data *ld, char t, int *index)
 	go_to = NULL;
 	if (t == 1)
 	{
-		go_to = tgoto(tgetstr("cm", NULL), COLSTART, ld->cd->pos_y);
+		ld->c = 0;
+		go_to = tgoto(tgetstr("cm", NULL), ld->c + COLSTART, ld->cd->pos_y);
 		tputs(go_to, 1, fprint_char);
+		ld->cd->x = COLSTART;
+		ld->cd->pos_x = ld->cd->x - COLSTART;
 	}
 	if (t == 5)
 	{
+		ld->c = ld->current_size;
 		go_to = tgoto(tgetstr("cm", NULL),
-				COLSTART + ld->current_size, ld->cd->pos_y);
+				COLSTART + ld->c, ld->cd->pos_y);
 		tputs(go_to, 1, fprint_char);
+		ld->cd->x = COLSTART + ld->current_size;
+		ld->cd->pos_x = ld->cd->x - COLSTART;
 	}
 	if (t == 127)
 	{
@@ -51,7 +57,8 @@ void	cp_cut(struct s_line_data *ld, int *index, char t)
 		ld->cd->cp_state = 1;
 		go_to = tgoto(tgetstr("cm", NULL), COLSTART, ld->cd->pos_y);
 		tputs(go_to, 1, fprint_char);
-		cursor_pos(ld);
+		ld->cd->x = COLSTART;
+		ld->cd->pos_x = ld->cd->x - COLSTART;
 		tputs(tgetstr("ce", NULL), 1, fprint_char);
 		if (ld->tmp == NULL)
 			ld->tmp = ft_strdup(ld->buffer);
@@ -61,6 +68,7 @@ void	cp_cut(struct s_line_data *ld, int *index, char t)
 			ld->tmp = ft_strdup(ld->buffer);
 		}
 		*index = 0;
+		ld->c = 0;
 		while (y < i)
 			ld->buffer[y++] = '\0';
 	}
@@ -83,7 +91,7 @@ void	cp_copy_select_cp(struct s_line_data *ld, char t)
 	{
 		ld->cd->cp_state = 1;
 		ld->cd->cp_active = 1;
-		ld->cd->cp_start = ld->cd->pos_x;
+		ld->cd->cp_start = ld->c;
 	}
 }
 
@@ -94,6 +102,7 @@ void	cp_paste(struct s_line_data *ld, char t, int *index)
 		if (ld->tmp[0] == '\0')
 			ld->cd->cp_state = 0;
 		update_linedata(ld->tmp, ld);
+		ld->c += ft_strlen(ld->tmp);
 		*index += ft_strlen(ld->tmp);
 	}
 }
@@ -109,7 +118,7 @@ void	cp_end_select_cp(struct s_line_data *ld, char t)
 	{
 		ld->cd->cp_active = 0;
 		print_endslct(ld);
-		ld->cd->cp_end = ld->cd->pos_x;
+		ld->cd->cp_end = ld->c;
 		if (ld->cd->cp_end < ld->cd->cp_start)
 		{
 			i = ld->cd->cp_start - ld->cd->cp_end;

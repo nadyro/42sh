@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/23 16:26:10 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/23 17:57:47 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/29 23:01:58 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int		main(void)
 	get_infoterm();
 	while (read(0, &f, sizeof(f)))
 	{
-		printf("%zu\n", f);
+		ft_putchar(f);
 		f = 0;
 	}
 	return (0);
