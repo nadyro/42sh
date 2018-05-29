@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:19:24 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/28 20:08:24 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/29 22:43:17 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int		dispatch_tasks(struct s_line_data *ld, char *t, int *index)
 	{
 		if (t[2] == 67)
 			skip_word_right(ld);
-		if (t[2] == 68 && ld->cd->pos_x - 1 >= 0)
+		if (t[2] == 68 && ld->c - 1 >= 0)
 			skip_word_left(ld);
 		if (t[2] == 66)
 			write_history_file(ld->history);
@@ -44,6 +44,9 @@ int		main(void)
 	get_infoterm();
 	ld = init_linedata();
 	history = NULL;
+	cursor_pos(ld);
+	ld->cd->o_pos_x = ld->cd->pos_x;
+	ld->cd->o_pos_y = ld->cd->pos_y;
 	while (1)
 	{
 		if ((f = read(1, t, 3)) != -1)
@@ -56,7 +59,16 @@ int		main(void)
 				manage_validation(ld, &history);
 				index = 0;
 			}
-			cursor_pos(ld);
+			check_line_length(ld);
+			if (ld->cd->pos_x + COLSTART >= ld->sw->win_col)
+			{
+				ld->nb_lines++;
+				ld->cd->pos_y++;
+				ld->cd->pos_x = 0;
+				ld->cd->x = COLSTART;
+				ft_putnbr(ld->cd->pos_y);
+				sleep(1);
+			}
 			dispatch_tasks(ld, t, &index);
 		}
 	}

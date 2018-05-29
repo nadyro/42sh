@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 13:18:03 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/24 17:59:28 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/05/29 21:33:46 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void	manage_key_insertion(char *t, struct s_line_data *ld, char *tmp_buffer)
 	int		y;
 
 	y = 0;
-	ld->buffer[ld->cd->pos_x] = t[0];
-	i = ld->cd->pos_x + 1;
+	ld->buffer[ld->c] = t[0];
+	i = ld->c + 1;
 	while (ld->buffer[i] != '\0')
 		ld->buffer[i++] = tmp_buffer[y++];
 	ft_strdel(&tmp_buffer);
@@ -32,14 +32,14 @@ void	manage_cp_pst(char *t, struct s_line_data *ld, char *tmp_buffer)
 	int		x;
 	int		i;
 
-	i = ld->cd->pos_x;
+	i = ld->c;
 	x = ft_strlen(t);
 	y = 0;
 	while (y < x)
 		ld->buffer[i++] = t[y++];
-	i = ld->cd->pos_x + ft_strlen(t);
+	i = ld->c + ft_strlen(t);
 	y = i;
-	x = ft_strlen(t) + ft_strlen(tmp_buffer) + ld->cd->pos_x;
+	x = ft_strlen(t) + ft_strlen(tmp_buffer) + ld->c;
 	while (i < x && i < BUFFER * ld->nb_resize)
 		ld->buffer[i++] = '\0';
 	i = y;
@@ -72,7 +72,7 @@ void	skip_word_right(struct s_line_data *ld)
 	int		y;
 	char	*go_to;
 
-	i = ld->cd->pos_x;
+	i = ld->c;
 	y = 0;
 	while (ld->buffer[i] != '\0')
 	{
@@ -88,9 +88,11 @@ void	skip_word_right(struct s_line_data *ld)
 	}
 	if (y == 1)
 	{
+		ld->c = i;
 		go_to = tgoto(tgetstr("cm", NULL), COLSTART + i, ld->cd->pos_y);
 		tputs(go_to, 1, fprint_char);
-		cursor_pos(ld);
+		ld->cd->x = COLSTART + i;
+		ld->cd->pos_x = ld->cd->x - COLSTART;
 	}
 }
 
@@ -100,7 +102,7 @@ void	skip_word_left(struct s_line_data *ld)
 	int		y;
 	char	*go_to;
 
-	i = ld->cd->pos_x;
+	i = ld->c;
 	y = 0;
 	while (i != 0)
 	{
@@ -116,8 +118,10 @@ void	skip_word_left(struct s_line_data *ld)
 	}
 	if (y == 1)
 	{
+		ld->c = i;
 		go_to = tgoto(tgetstr("cm", NULL), (COLSTART) + i, ld->cd->pos_y);
 		tputs(go_to, 1, fprint_char);
-		cursor_pos(ld);
+		ld->cd->x = COLSTART + i;
+		ld->cd->pos_x = ld->cd->x - COLSTART;
 	}
 }
