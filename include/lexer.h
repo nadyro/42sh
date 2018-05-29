@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: antoipom <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/07 14:13:58 by antoipom          #+#    #+#             */
-/*   Updated: 2018/05/29 17:59:20 by arohani          ###   ########.fr       */
+/*   Updated: 2018/05/23 16:11:49 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,10 @@ enum
 	TK_AND,
 	TK_AND_IF,
 	TK_OR_IF,
-	TK_END
+	TK_END,
+	TK_PROGRAM,
+	TK_QUOTED_WORD,
+	TK_DQUOTED_WORD
 };
 
 int						*get_tokens(char *line);
