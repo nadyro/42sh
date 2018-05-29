@@ -73,7 +73,7 @@ static t_ast	*fill_rightast(t_ast *parent, int start, int size, int depth)
 	printf("right->tok[0]=%d\nright->tok[1]=%d\nright->tok[2]=%d\n", right->tok[0], right->tok[1], right->tok[2]);
 	right->left = NULL;
 	right->right = NULL;
-	printf("in fill_rightast, right->arg = %s\nSENDING TO RECURSION", right->arg);
+	printf("in fill_rightast, right->arg = %s\nSENDING TO RECURSION\n", right->arg);
 	return (right);
 }
 
@@ -106,12 +106,20 @@ static void		ast_loop(t_ast *head)
 	char	*chr = NULL;
 	int		start = 0;
 
-	while (tmp->tok[i] && tmp->tok[i] != -1)
+/*	printf("\n printing token table \n");
+	while (tmp->tok[i] != -1)
 	{
-		printf("DEBUG 5\n");
+		printf("i = %d\ntmp->tok[i] = %d\n", i, tmp->tok[i]);
+		i++;
+	}
+	printf("\n\n");
+	i = 0;
+*/	while (tmp->tok[i] != -1)
+	{
+		printf("DEBUG 5, depth = %d\ni = %d\ntmp->tok[i] = %d\n", tmp->depth, i, tmp->tok[i]);
 		if (tmp->tok[i] == 10)
 		{
-			printf("DEBUG 6\n");
+			printf("DEBUG 6, i = %d\n", i);
 			tmp->left = fill_leftast(tmp, tmp->tok[i+1], 1);
 			printf("DEBUG 7, i = %d\ntmp->tok[i + 3] = %d\n", i, tmp->tok[i+3]);
 			i += 3;
@@ -122,6 +130,7 @@ static void		ast_loop(t_ast *head)
 				printf("BEFORE filling tmp->right, i = %d\ntoken values should be: 0 = %d\n1 = %d\n2 = %d\n", i, tmp->tok[i], tmp->tok[i+1], tmp->tok[i+2]);
 				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1], 1);
 				ast_loop(tmp->right);
+				break ;
 			}
 			else
 				tmp->right = NULL;
@@ -129,7 +138,9 @@ static void		ast_loop(t_ast *head)
 		}
 		else
 			i += 3;
-		printf("DEBUG 9\n");
+		while (tmp->tok[i] == 12)
+			i += 3;
+		printf("DEBUG 9, i = %d\n", i);
 		//recursion here? tmp = tmp->left or tmp=tmp->right w conditions?
 	}
 	printf("DEBUG 10\n");
@@ -162,7 +173,7 @@ int				main(int argc, char **argv)
 		tab = get_tokens(argv[1]);
 		printf("DEBUG 1\n");
 		head = get_ast(&tab, &argv);
-		while (tab[i] != -1)
+		/*while (tab[i] != -1)
 		{
 			printf("i = %d\n", i);
 			switch(tab[i])
@@ -229,7 +240,7 @@ int				main(int argc, char **argv)
 					break;
 			}
 			i += 3;
-		}
+		}*/
 		printf("\n");
 	} 
 	return (0);
