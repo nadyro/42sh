@@ -6,7 +6,7 @@
 /*   By: antoipom <antoipom@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/04 13:13:10 by antoipom          #+#    #+#             */
-/*   Updated: 2018/05/30 14:55:50 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/05/30 17:19:51 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,8 @@ static int		*check_cmd_token(int *tk_arr)
 		}
 		else if (is_first_word == 0 && (tk_arr[i] == TK_PIPE || \
 				tk_arr[i] == TK_SEMI || tk_arr[i] == TK_AND || \
-				tk_arr[i] == TK_AND_IF || tk_arr[i] == TK_OR_IF))
+				tk_arr[i] == TK_AND_IF || tk_arr[i] == TK_OR_IF || \
+				tk_arr[i] == TK_NEWLINE))
 			is_first_word = 1;
 		i += 3;
 	}
