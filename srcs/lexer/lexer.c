@@ -6,7 +6,7 @@
 /*   By: antoipom <antoipom@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/04 13:13:10 by antoipom          #+#    #+#             */
-/*   Updated: 2018/05/23 16:14:30 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/05/30 14:55:50 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ static int		*token_loop(int *tk_arr, char *line, int arr_size)
 		tk_arr[tk_i] = g_tk_states[0][tk_arr[tk_i] - 1][g_ascii[(int)line[i]]];
 		(g_tk_states[1][prev - 1][g_ascii[(int)line[i]]] == 1) ? i++ : 0;
 		(tk_arr[tk_i] == 0) ? exit(1) : 0;//zero?reopen line_editing
-		if (tk_arr[tk_i] == 1)
+		if (tk_arr[tk_i] == 1 && prev != 23)
 		{
 			tk_arr[tk_i] = prev;
 			tk_arr[tk_i + 2] = i - tk_arr[tk_i + 1];
@@ -146,7 +146,31 @@ static int		*token_loop(int *tk_arr, char *line, int arr_size)
 	return (tk_arr);
 }
 
-static int		*check_program_token(int *tk_arr)
+static int		*check_filename_token(int *tk_arr)
+{
+	int i;
+	int is_file;
+
+	i = 0;
+	is_file = 0;
+	while (tk_arr[i] != -1)
+	{
+		if (tk_arr[i] == TK_WORD && is_file == 1)
+		{
+			tk_arr[i] = TK_FILENAME;
+			is_file = 0;
+		}
+		else if (is_file == 0 && (tk_arr[i] == TK_GREAT || \
+					tk_arr[i] == TK_DGREAT || tk_arr[i] == TK_GREATAND || \
+					tk_arr[i] == TK_LESS || tk_arr[i] == TK_DLESS || \
+					tk_arr[i] == TK_LESSAND))
+			is_file = 1;
+		i += 3;
+	}
+	return (tk_arr);
+}
+
+static int		*check_cmd_token(int *tk_arr)
 {
 	int i;
 	int	is_first_word;
@@ -186,6 +210,7 @@ int				*get_tokens(char *line)
 		tk_arr[i] = g_state_to_token[tk_arr[i]];
 		i += 3;
 	}
-	tk_arr = check_program_token(tk_arr);
+	tk_arr = check_filename_token(tk_arr);
+	tk_arr = check_cmd_token(tk_arr);
 	return (tk_arr);
 }

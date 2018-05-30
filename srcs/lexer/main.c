@@ -50,9 +50,9 @@ int				main(int argc, char **argv)
 				case TK_COMMENT:
 					printf("COMMENT ");
 					break;
-				//case TK_SPACE:
-				//	printf("SPACE ");
-				//	break;
+				case TK_SPACE:
+					printf("SPACE ");
+					break;
 				case TK_AND:
 					printf("AND ");
 					break;
@@ -73,6 +73,9 @@ int				main(int argc, char **argv)
 					break;
 				case TK_DQUOTED_WORD:
 					printf("DQUOTED_WORD ");
+					break;
+				case TK_FILENAME:
+					printf("FILENAME ");
 					break;
 			}
 			i += 3;
