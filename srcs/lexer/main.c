@@ -6,7 +6,8 @@ typedef struct	s_ast
 {
 	int						*tok;
 	char					*arg;
-	int						depth;	//0 = original, 1 = split ;, 2 = split by && / ||, 3 = split by |, 4 = simple command
+	int						split_by;
+	//int						depth;	//0 = original, 1 = split ;, 2 = split by && / ||, 3 = split by |, 4 = simple command
 	struct s_ast			*parent;
 	struct s_ast			*left;
 	struct s_ast			*right;
@@ -42,7 +43,7 @@ size_t	ft_strlen(const char *s)
 	return (len);
 }
 
-static t_ast	*fill_leftast(t_ast *parent, int size, int depth)
+static t_ast	*fill_leftast(t_ast *parent, int size, int split_by)
 {
 	t_ast	*left = NULL;
 
@@ -50,7 +51,7 @@ static t_ast	*fill_leftast(t_ast *parent, int size, int depth)
 		return (NULL);
 	left->parent = parent;
 	left->arg = ft_strndup(parent->arg, size);
-	left->depth = depth;
+	left->split_by = split_by;
 	left->tok = get_tokens(left->arg);
 	left->left = NULL;
 	left->right = NULL;
@@ -58,7 +59,7 @@ static t_ast	*fill_leftast(t_ast *parent, int size, int depth)
 	return (left);
 }
 
-static t_ast	*fill_rightast(t_ast *parent, int start, int size, int depth)
+static t_ast	*fill_rightast(t_ast *parent, int start, int size, int split_by)
 {
 	t_ast	*right = NULL;
 	char	*str;
@@ -68,12 +69,11 @@ static t_ast	*fill_rightast(t_ast *parent, int start, int size, int depth)
 	right->parent = parent;
 	str = parent->arg + start;
 	right->arg = ft_strndup(str, size);
-	right->depth = depth;
+	right->split_by = split_by;
 	right->tok = get_tokens(right->arg);
-	printf("right->tok[0]=%d\nright->tok[1]=%d\nright->tok[2]=%d\n", right->tok[0], right->tok[1], right->tok[2]);
 	right->left = NULL;
 	right->right = NULL;
-	printf("in fill_rightast, right->arg = %s\nSENDING TO RECURSION\n", right->arg);
+	printf("in fill_rightast, right->arg = %s\n", right->arg);
 	return (right);
 }
 
@@ -81,30 +81,96 @@ static t_ast	*init_ast(char ***argv)
 {
 	t_ast	*head;
 	char	**tab = *argv;
-	printf("DEBUG init1\n");
 	if (!(head = (t_ast *)malloc(sizeof(t_ast))))
-			return (NULL);
-	printf("DEBUG init2\n");		
+			return (NULL);	
 	head->parent = NULL;
-	head->depth = 0;
-	printf("*argv[1] = %s\nstrlen av1 = %zu\n", tab[1], ft_strlen(tab[1]));
+	head->split_by = 0;
 	head->arg = (tab[1]) ? ft_strndup(tab[1], ft_strlen(tab[1])) : NULL;
-	printf("DEBUG init3\n");	
 	head->tok = get_tokens(head->arg);
-	printf("DEBUG init4\n");
 	head->left = NULL;
-	head->right = NULL;
-	printf("DEBUG init5\n");	
+	head->right = NULL;	
 	return (head);
 }
 
-static void		ast_loop(t_ast *head)
+static void		ast_loop_pipe(t_ast *head, int *depth)
 {
 	int		i = 0;
 	t_ast	*tmp = head;
 	char	*str = tmp->arg;
-	char	*chr = NULL;
-	int		start = 0;
+	int		split_by = 0;
+
+	printf("entering ast_loop_and_or\n");
+	while (tmp->tok[i] != -1)
+	{
+		printf("i = %d\n", i);
+		if (tmp->tok[i] == TK_PIPE)
+		{
+			split_by = tmp->tok[i];
+			tmp->left = fill_leftast(tmp, tmp->tok[i+1], split_by);
+			i += 3;
+			while (tmp->tok[i] == TK_SPACE)
+				i += 3;
+			if (tmp->tok[i] && tmp->tok[i] != 1 && tmp->tok[i] != TK_END)
+			{
+				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1], split_by);
+				printf("\nrecursively calling ast_loop_PIPE\n");
+				ast_loop_pipe(tmp->right, depth);
+				break ;
+			}
+			else
+				tmp->right = NULL;
+		}
+		else
+			i += 3;
+		while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
+			i += 3;
+		//recursion here? tmp = tmp->left or tmp=tmp->right w conditions?
+	}
+//	*depth = 3;
+}
+
+static void		ast_loop_and_or(t_ast *head, int *depth)
+{
+	int		i = 0;
+	t_ast	*tmp = head;
+	char	*str = tmp->arg;
+	int		split_by = 0;
+
+	printf("entering ast_loop_and_or\n");
+	while (tmp->tok[i] != -1)
+	{
+		printf("i = %d\n", i);
+		if (tmp->tok[i] == TK_AND_IF || tmp->tok[i] == TK_OR_IF)
+		{
+			split_by = tmp->tok[i];
+			tmp->left = fill_leftast(tmp, tmp->tok[i+1], split_by);
+			i += 3;
+			while (tmp->tok[i] == TK_SPACE)
+				i += 3;
+			if (tmp->tok[i] && tmp->tok[i] != 1 && tmp->tok[i] != TK_END)
+			{
+				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1], split_by);
+				printf("\nrecursively calling ast_loop_and_or\n");
+				ast_loop_and_or(tmp->right, depth);
+				break ;
+			}
+			else
+				tmp->right = NULL;
+		}
+		else
+			i += 3;
+		while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
+			i += 3;
+		//recursion here? tmp = tmp->left or tmp=tmp->right w conditions?
+	}
+//	*depth = 3;
+}
+
+static void		ast_loop_semi(t_ast *head, int *depth)
+{
+	int		i = 0;
+	t_ast	*tmp = head;
+	char	*str = tmp->arg;
 
 /*	printf("\n printing token table \n");
 	while (tmp->tok[i] != -1)
@@ -116,34 +182,73 @@ static void		ast_loop(t_ast *head)
 	i = 0;
 */	while (tmp->tok[i] != -1)
 	{
-		printf("DEBUG 5, depth = %d\ni = %d\ntmp->tok[i] = %d\n", tmp->depth, i, tmp->tok[i]);
-		if (tmp->tok[i] == 10)
+		if (tmp->tok[i] == TK_SEMI)
 		{
-			printf("DEBUG 6, i = %d\n", i);
-			tmp->left = fill_leftast(tmp, tmp->tok[i+1], 1);
-			printf("DEBUG 7, i = %d\ntmp->tok[i + 3] = %d\n", i, tmp->tok[i+3]);
+			tmp->left = fill_leftast(tmp, tmp->tok[i+1], TK_SEMI);
 			i += 3;
-			while (tmp->tok[i] == 12)
+			while (tmp->tok[i] == TK_SPACE)
 				i += 3;
 			if (tmp->tok[i] && tmp->tok[i] != 1 && tmp->tok[i] != 16)
 			{
-				printf("BEFORE filling tmp->right, i = %d\ntoken values should be: 0 = %d\n1 = %d\n2 = %d\n", i, tmp->tok[i], tmp->tok[i+1], tmp->tok[i+2]);
-				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1], 1);
-				ast_loop(tmp->right);
+				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1], TK_SEMI);
+				printf("\nrecursively calling ast_loop_semi\n");
+				if (tmp->right)
+					ast_loop_semi(tmp->right, depth);
 				break ;
 			}
 			else
 				tmp->right = NULL;
-			printf("DEBUG 8\n");
 		}
 		else
 			i += 3;
-		while (tmp->tok[i] == 12)
+		while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
 			i += 3;
-		printf("DEBUG 9, i = %d\n", i);
 		//recursion here? tmp = tmp->left or tmp=tmp->right w conditions?
 	}
-	printf("DEBUG 10\n");
+	*depth = 2;
+	printf("finished ast_loop_semi, depth = %d\n", *depth);
+}
+
+static void		traverse_ast(t_ast *head, int depth)
+{
+	t_ast	*tmp = NULL;
+
+	tmp = head;
+	while (tmp->left)
+		tmp = tmp->left;
+	printf("should be at left-most node in traverse ast, send to recursive funciton before recursively calling traverse_ast with parent->right\n");
+	if (depth == 1)
+		ast_loop_semi(tmp, &depth);
+	if (depth == 2)
+	{
+		printf("should enter depth 2 loop of traverse ast\n");
+		tmp = head;
+		while (tmp->left)
+			tmp = tmp->left;
+		printf("starting and_or loop from taverse ast with str = %s\nparent = %s\ndepth = %d\n", tmp->arg, tmp->parent->arg, depth);
+		ast_loop_and_or(tmp, &depth);
+	}
+	if (depth == 3)
+	{
+		printf("entering ast_loop_PIPE from traverse_ast\n");
+		ast_loop_pipe(tmp, &depth);
+	}
+	/*
+	else if (depth == 3)
+		ast_loop_pipe(tmp);
+	else if (depth == 4)
+		redirection recursions
+	else if (depth == 5)
+		execution
+	else if (depth = 6)
+		free list
+	*/	
+	if (tmp->parent && tmp->parent->right && tmp->parent->right->left)	//i.e. if we've added to an existing tree, call recursively to analyze all nodes of tree
+	{
+		printf("recursive call to traverse_ast with str = %s\ndepth = %d\n", tmp->parent->right->arg, depth);
+		traverse_ast(tmp->parent->right, depth);
+	}
+	printf("finished traverse ast\n");
 }
 
 static t_ast	*get_ast(int **tab, char ***argv)
@@ -152,12 +257,10 @@ static t_ast	*get_ast(int **tab, char ***argv)
 	t_ast	*head;
 	t_ast	*tmp;
 
-	printf("DEBUG 2\n");
 	head = (*tab[0] && *tab[0] != 16) ? init_ast(argv) : NULL;
 	tmp = head;
-	printf("DEBUG 3\n");
-	ast_loop(tmp);
-	printf("DEBUG 4\n");
+	//ast_loop(tmp);
+	traverse_ast(tmp, 1);
 	return (head);
 }
 
@@ -171,8 +274,9 @@ int				main(int argc, char **argv)
 	{
 		printf("%s\n", argv[1]);
 		tab = get_tokens(argv[1]);
-		printf("DEBUG 1\n");
 		head = get_ast(&tab, &argv);
+		printf("trying to call traverse_ast to analyze pipes\n");
+		traverse_ast(head, 3);
 		/*while (tab[i] != -1)
 		{
 			printf("i = %d\n", i);
