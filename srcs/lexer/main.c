@@ -7,7 +7,7 @@ typedef struct	s_ast
 	int						*tok;
 	char					*arg;
 	int						split_by;
-	//int						depth;	//0 = original, 1 = split ;, 2 = split by && / ||, 3 = split by |, 4 = simple command
+	int						depth;
 	struct s_ast			*parent;
 	struct s_ast			*left;
 	struct s_ast			*right;
@@ -85,6 +85,7 @@ static t_ast	*init_ast(char ***argv)
 			return (NULL);	
 	head->parent = NULL;
 	head->split_by = 0;
+	head->depth = 0;
 	head->arg = (tab[1]) ? ft_strndup(tab[1], ft_strlen(tab[1])) : NULL;
 	head->tok = get_tokens(head->arg);
 	head->left = NULL;
@@ -106,12 +107,14 @@ static void		ast_loop_pipe(t_ast *head, int *depth)
 		if (tmp->tok[i] == TK_PIPE)
 		{
 			split_by = tmp->tok[i];
+			printf("filling left from ast_loop_pipe\n");
 			tmp->left = fill_leftast(tmp, tmp->tok[i+1], split_by);
 			i += 3;
 			while (tmp->tok[i] == TK_SPACE)
 				i += 3;
 			if (tmp->tok[i] && tmp->tok[i] != 1 && tmp->tok[i] != TK_END)
 			{
+				printf("filling right from ast_loop_pipe with:\ntmp->arg = %s\n", tmp->arg);
 				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1], split_by);
 				printf("\nrecursively calling ast_loop_PIPE\n");
 				ast_loop_pipe(tmp->right, depth);
@@ -126,7 +129,8 @@ static void		ast_loop_pipe(t_ast *head, int *depth)
 			i += 3;
 		//recursion here? tmp = tmp->left or tmp=tmp->right w conditions?
 	}
-//	*depth = 3;
+	printf("at END of loop_pipe, tmp->arg = %s\n", tmp->arg);
+	*depth = 4;
 }
 
 static void		ast_loop_and_or(t_ast *head, int *depth)
@@ -143,12 +147,15 @@ static void		ast_loop_and_or(t_ast *head, int *depth)
 		if (tmp->tok[i] == TK_AND_IF || tmp->tok[i] == TK_OR_IF)
 		{
 			split_by = tmp->tok[i];
+			printf("filling left from ast_loop_and_or\n");
 			tmp->left = fill_leftast(tmp, tmp->tok[i+1], split_by);
+			ast_loop_pipe(tmp->left, depth);
 			i += 3;
 			while (tmp->tok[i] == TK_SPACE)
 				i += 3;
 			if (tmp->tok[i] && tmp->tok[i] != 1 && tmp->tok[i] != TK_END)
 			{
+				printf("filling right from ast_loop_and_or\n");
 				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1], split_by);
 				printf("\nrecursively calling ast_loop_and_or\n");
 				ast_loop_and_or(tmp->right, depth);
@@ -163,8 +170,17 @@ static void		ast_loop_and_or(t_ast *head, int *depth)
 			i += 3;
 		//recursion here? tmp = tmp->left or tmp=tmp->right w conditions?
 	}
-//	*depth = 3;
-}
+	if (!(tmp->left) && tmp->parent != NULL)
+		ast_loop_pipe(tmp, depth);
+	/*	if (tmp->right != NULL)
+		printf("tmp->right = %s\n", tmp->right->arg);
+		*depth = 3;	
+	if (((tmp->parent && tmp != tmp->parent->left) || !(tmp->parent)) && *depth != 4)
+	{
+		printf("SENDING TO AST LOOP PIPE AFTER FINISHING AND_OR\n\n");
+		ast_loop_pipe(tmp, depth);	
+	}
+*/}
 
 static void		ast_loop_semi(t_ast *head, int *depth)
 {
@@ -184,12 +200,15 @@ static void		ast_loop_semi(t_ast *head, int *depth)
 	{
 		if (tmp->tok[i] == TK_SEMI)
 		{
+			printf("filling left from ast_loop_semi\n");
 			tmp->left = fill_leftast(tmp, tmp->tok[i+1], TK_SEMI);
+			ast_loop_and_or(tmp->left, depth);
 			i += 3;
 			while (tmp->tok[i] == TK_SPACE)
 				i += 3;
 			if (tmp->tok[i] && tmp->tok[i] != 1 && tmp->tok[i] != 16)
 			{
+				printf("filling right from ast_loop_semi sending: %s to fill_right\n", tmp->arg);
 				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1], TK_SEMI);
 				printf("\nrecursively calling ast_loop_semi\n");
 				if (tmp->right)
@@ -205,8 +224,17 @@ static void		ast_loop_semi(t_ast *head, int *depth)
 			i += 3;
 		//recursion here? tmp = tmp->left or tmp=tmp->right w conditions?
 	}
+	if (tmp->right != NULL)
+		printf("tmp->right =%s\n", tmp->right->arg);
 	*depth = 2;
-	printf("finished ast_loop_semi, depth = %d\n", *depth);
+	if (!(tmp->left) && tmp->parent != NULL)	//so that first elements that were recursively filled don't add extra once branch is done
+		ast_loop_and_or(tmp, depth);
+/*	if (((tmp->parent && tmp != tmp->parent->left) || !(tmp->parent)) && *depth != 4)
+	{
+		printf("SENDING TO ast_loop_and_or FROM AST_SEMI \n\n");
+		ast_loop_and_or(tmp, depth);
+	}
+*/	printf("finished ast_loop_semi, depth = %d\n", *depth);
 }
 
 static void		traverse_ast(t_ast *head, int depth)
@@ -256,11 +284,12 @@ static t_ast	*get_ast(int **tab, char ***argv)
 	char	*str = NULL;
 	t_ast	*head;
 	t_ast	*tmp;
+	int		depth = 1;
 
 	head = (*tab[0] && *tab[0] != 16) ? init_ast(argv) : NULL;
 	tmp = head;
-	//ast_loop(tmp);
-	traverse_ast(tmp, 1);
+	ast_loop_semi(tmp, &depth);
+	//traverse_ast(tmp, 1);
 	return (head);
 }
 
@@ -275,8 +304,8 @@ int				main(int argc, char **argv)
 		printf("%s\n", argv[1]);
 		tab = get_tokens(argv[1]);
 		head = get_ast(&tab, &argv);
-		printf("trying to call traverse_ast to analyze pipes\n");
-		traverse_ast(head, 3);
+//		printf("trying to call traverse_ast to analyze pipes\n");
+//		traverse_ast(head, 3);
 		/*while (tab[i] != -1)
 		{
 			printf("i = %d\n", i);
