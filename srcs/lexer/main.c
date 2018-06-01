@@ -1,9 +1,13 @@
 #include "lexer.h"
+#include "parser.h"
+#include "libft.h"
 #include <stdio.h>
+#include <unistd.h>
 
 int				main(int argc, char **argv)
 {
 	int *tab;
+	int parser_val = -1;
 	int i = 0;
 
 	if (argc == 2)
@@ -79,6 +83,17 @@ int				main(int argc, char **argv)
 					break;
 			}
 			i += 3;
+		}
+		parser_val = parser_validation(tab);
+		printf("\n");
+		if (parser_val == -1)
+			printf("-> OK");
+		else
+		{
+			//printf("\n%d\n%d\n%d\n\n", parser_val, tab[parser_val+1], tab[parser_val+2]);
+			ft_putstr("-> KO : parse error near '");
+			write(1, argv[1] + tab[parser_val + 1], tab[parser_val + 2]);
+			ft_putstr("'");
 		}
 		printf("\n");
 	}
