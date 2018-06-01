@@ -55,7 +55,7 @@ static t_ast	*fill_leftast(t_ast *parent, int size, int split_by)
 	left->tok = get_tokens(left->arg);
 	left->left = NULL;
 	left->right = NULL;
-	printf("in fill_leftast, left->arg = %s\n", left->arg);
+//	printf("in fill_leftast, left->arg = %s\n", left->arg);
 	return (left);
 }
 
@@ -73,7 +73,7 @@ static t_ast	*fill_rightast(t_ast *parent, int start, int size, int split_by)
 	right->tok = get_tokens(right->arg);
 	right->left = NULL;
 	right->right = NULL;
-	printf("in fill_rightast, right->arg = %s\n", right->arg);
+//	printf("in fill_rightast, right->arg = %s\n", right->arg);
 	return (right);
 }
 
@@ -101,23 +101,21 @@ static void		ast_loop_pipe(t_ast *head, int *depth)
 	int		split_by = 0;
 	static int	order = 1;
 
-	printf("entering ast_loop_and_or\n");
 	while (tmp->tok[i] != -1)
 	{
-		printf("i = %d\n", i);
 		if (tmp->tok[i] == TK_PIPE)
 		{
 			split_by = tmp->tok[i];
-			printf("filling left from ast_loop_pipe\n");
+			//printf("filling left from ast_loop_pipe\n");
 			tmp->left = fill_leftast(tmp, tmp->tok[i+1], split_by);
 			i += 3;
 			while (tmp->tok[i] == TK_SPACE)
 				i += 3;
 			if (tmp->tok[i] && tmp->tok[i] != 1 && tmp->tok[i] != TK_END)
 			{
-				printf("filling right from ast_loop_pipe with:\ntmp->arg = %s\n", tmp->arg);
+				//printf("filling right from ast_loop_pipe with:\ntmp->arg = %s\n", tmp->arg);
 				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1], split_by);
-				printf("\nrecursively calling ast_loop_PIPE\n");
+				//printf("\nrecursively calling ast_loop_PIPE\n");
 				ast_loop_pipe(tmp->right, depth);
 				break ;
 			}
@@ -128,7 +126,6 @@ static void		ast_loop_pipe(t_ast *head, int *depth)
 			i += 3;
 		while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
 			i += 3;
-		//recursion here? tmp = tmp->left or tmp=tmp->right w conditions?
 	}
 	*depth = 4;
 }
@@ -140,14 +137,12 @@ static void		ast_loop_and_or(t_ast *head, int *depth)
 	char	*str = tmp->arg;
 	int		split_by = 0;
 
-	printf("entering ast_loop_and_or\n");
 	while (tmp->tok[i] != -1)
 	{
-		printf("i = %d\n", i);
 		if (tmp->tok[i] == TK_AND_IF || tmp->tok[i] == TK_OR_IF)
 		{
 			split_by = tmp->tok[i];
-			printf("filling left from ast_loop_and_or\n");
+			//printf("filling left from ast_loop_and_or\n");
 			tmp->left = fill_leftast(tmp, tmp->tok[i+1], split_by);
 			ast_loop_pipe(tmp->left, depth);
 			i += 3;
@@ -155,9 +150,9 @@ static void		ast_loop_and_or(t_ast *head, int *depth)
 				i += 3;
 			if (tmp->tok[i] && tmp->tok[i] != 1 && tmp->tok[i] != TK_END)
 			{
-				printf("filling right from ast_loop_and_or\n");
+				//printf("filling right from ast_loop_and_or\n");
 				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1], split_by);
-				printf("\nrecursively calling ast_loop_and_or\n");
+				//printf("\nrecursively calling ast_loop_and_or\n");
 				ast_loop_and_or(tmp->right, depth);
 				break ;
 			}
@@ -168,19 +163,10 @@ static void		ast_loop_and_or(t_ast *head, int *depth)
 			i += 3;
 		while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
 			i += 3;
-		//recursion here? tmp = tmp->left or tmp=tmp->right w conditions?
 	}
 	if (!(tmp->left) && tmp->parent != NULL)
 		ast_loop_pipe(tmp, depth);
-	/*	if (tmp->right != NULL)
-		printf("tmp->right = %s\n", tmp->right->arg);
-		*depth = 3;	
-	if (((tmp->parent && tmp != tmp->parent->left) || !(tmp->parent)) && *depth != 4)
-	{
-		printf("SENDING TO AST LOOP PIPE AFTER FINISHING AND_OR\n\n");
-		ast_loop_pipe(tmp, depth);	
-	}
-*/}
+}
 
 static void		ast_loop_semi(t_ast *head, int *depth)
 {
@@ -188,19 +174,11 @@ static void		ast_loop_semi(t_ast *head, int *depth)
 	t_ast	*tmp = head;
 	char	*str = tmp->arg;
 
-/*	printf("\n printing token table \n");
 	while (tmp->tok[i] != -1)
-	{
-		printf("i = %d\ntmp->tok[i] = %d\n", i, tmp->tok[i]);
-		i++;
-	}
-	printf("\n\n");
-	i = 0;
-*/	while (tmp->tok[i] != -1)
 	{
 		if (tmp->tok[i] == TK_SEMI)
 		{
-			printf("filling left from ast_loop_semi\n");
+			//printf("filling left from ast_loop_semi\n");
 			tmp->left = fill_leftast(tmp, tmp->tok[i+1], TK_SEMI);
 			ast_loop_and_or(tmp->left, depth);
 			i += 3;
@@ -208,9 +186,9 @@ static void		ast_loop_semi(t_ast *head, int *depth)
 				i += 3;
 			if (tmp->tok[i] && tmp->tok[i] != 1 && tmp->tok[i] != 16)
 			{
-				printf("filling right from ast_loop_semi sending: %s to fill_right\n", tmp->arg);
+				//printf("filling right from ast_loop_semi sending: %s to fill_right\n", tmp->arg);
 				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1], TK_SEMI);
-				printf("\nrecursively calling ast_loop_semi\n");
+				//printf("\nrecursively calling ast_loop_semi\n");
 				if (tmp->right)
 					ast_loop_semi(tmp->right, depth);
 				break ;
@@ -222,61 +200,10 @@ static void		ast_loop_semi(t_ast *head, int *depth)
 			i += 3;
 		while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
 			i += 3;
-		//recursion here? tmp = tmp->left or tmp=tmp->right w conditions?
 	}
-	if (tmp->right != NULL)
-		printf("tmp->right =%s\n", tmp->right->arg);
 	*depth = 2;
 	if (!(tmp->left) && tmp->parent != NULL)	//so that first elements that were recursively filled don't add extra once branch is done
 		ast_loop_and_or(tmp, depth);
-/*	if (((tmp->parent && tmp != tmp->parent->left) || !(tmp->parent)) && *depth != 4)
-	{
-		printf("SENDING TO ast_loop_and_or FROM AST_SEMI \n\n");
-		ast_loop_and_or(tmp, depth);
-	}
-*/	printf("finished ast_loop_semi, depth = %d\n", *depth);
-}
-
-static void		traverse_ast(t_ast *head, int depth)
-{
-	t_ast	*tmp = NULL;
-
-	tmp = head;
-	while (tmp->left)
-		tmp = tmp->left;
-	printf("should be at left-most node in traverse ast, send to recursive funciton before recursively calling traverse_ast with parent->right\n");
-	if (depth == 1)
-		ast_loop_semi(tmp, &depth);
-	if (depth == 2)
-	{
-		printf("should enter depth 2 loop of traverse ast\n");
-		tmp = head;
-		while (tmp->left)
-			tmp = tmp->left;
-		printf("starting and_or loop from taverse ast with str = %s\nparent = %s\ndepth = %d\n", tmp->arg, tmp->parent->arg, depth);
-		ast_loop_and_or(tmp, &depth);
-	}
-	if (depth == 3)
-	{
-		printf("entering ast_loop_PIPE from traverse_ast\n");
-		ast_loop_pipe(tmp, &depth);
-	}
-	/*
-	else if (depth == 3)
-		ast_loop_pipe(tmp);
-	else if (depth == 4)
-		redirection recursions
-	else if (depth == 5)
-		execution
-	else if (depth = 6)
-		free list
-	*/	
-	if (tmp->parent && tmp->parent->right && tmp->parent->right->left)	//i.e. if we've added to an existing tree, call recursively to analyze all nodes of tree
-	{
-		printf("recursive call to traverse_ast with str = %s\ndepth = %d\n", tmp->parent->right->arg, depth);
-		traverse_ast(tmp->parent->right, depth);
-	}
-	printf("finished traverse ast\n");
 }
 
 static t_ast	*get_ast(int **tab, char ***argv)
@@ -289,7 +216,6 @@ static t_ast	*get_ast(int **tab, char ***argv)
 	head = (*tab[0] && *tab[0] != 16) ? init_ast(argv) : NULL;
 	tmp = head;
 	ast_loop_semi(tmp, &depth);
-	//traverse_ast(tmp, 1);
 	return (head);
 }
 
@@ -298,7 +224,6 @@ static void		print_leaf_nodes(t_ast *head)
 	t_ast	*tmp = head;
 	static int	order = 1;
 
-	printf("entered print_leaf_nodes with : %s\n", tmp->arg);
 	if (!tmp)
 		return ;
 	if (!(tmp->left) && !(tmp->right))
@@ -332,75 +257,74 @@ int				main(int argc, char **argv)
 		print_leaf_nodes(head);
 //		printf("trying to call traverse_ast to analyze pipes\n");
 //		traverse_ast(head, 3);
-		/*while (tab[i] != -1)
+	/*	while (tab[i] != -1)
 		{
-			printf("i = %d\n", i);
 			switch(tab[i])
 			{
 				case TK_WORD:
-					printf("WORD \n, tab[i] = %d\ntab[i+1] = %d\ntab[i+2] = %d\n", tab[i], tab[i+1], tab[i+2]);
+					printf("WORD \n");
 					break;
 				case TK_NEWLINE:
-					printf("NEWLINE \n, tab[i] = %d\ntab[i+1] = %d\ntab[i+2] = %d\n", tab[i], tab[i+1], tab[i+2]);
+					printf("NEWLINE \n");
 					break;
 				case TK_IO_NUMBER:
-					printf("IO_NUMBER \n, tab[i] = %d\ntab[i+1] = %d\ntab[i+2] = %d\n", tab[i], tab[i+1], tab[i+2]);
+					printf("IO_NUMBER \n");
 					break;
 				case TK_GREAT:
-					printf("GREAT \n, tab[i] = %d\ntab[i+1] = %d\ntab[i+2] = %d\n", tab[i], tab[i+1], tab[i+2]);
+					printf("GREAT \n");
 					break;
 				case TK_DGREAT:
-					printf("DGREAT \n, tab[i] = %d\ntab[i+1] = %d\ntab[i+2] = %d\n", tab[i], tab[i+1], tab[i+2]);
+					printf("DGREAT \n");
 					break;
 				case TK_GREATAND:
-					printf("GREATAND \n, tab[i] = %d\ntab[i+1] = %d\ntab[i+2] = %d\n", tab[i], tab[i+1], tab[i+2]);
+					printf("GREATAND \n");
 					break;
 				case TK_LESS:
-					printf("LESS \n, tab[i] = %d\ntab[i+1] = %d\ntab[i+2] = %d\n", tab[i], tab[i+1], tab[i+2]);
+					printf("LESS \n");
 					break;
 				case TK_DLESS:
-					printf("DLESS \n, tab[i] = %d\ntab[i+1] = %d\ntab[i+2] = %d\n", tab[i], tab[i+1], tab[i+2]);
+					printf("DLESS \n");
 					break;
 				case TK_LESSAND:
-					printf("LESSAND \n, tab[i] = %d\ntab[i+1] = %d\ntab[i+2] = %d\n", tab[i], tab[i+1], tab[i+2]);
+					printf("LESSAND \n");
 					break;
 				case TK_PIPE:
-					printf("PIPE \n, tab[i] = %d\ntab[i+1] = %d\ntab[i+2] = %d\n", tab[i], tab[i+1], tab[i+2]);
+					printf("PIPE \n");
 					break;
 				case TK_SEMI:
-					printf("SEMI \n, tab[i] = %d\ntab[i+1] = %d\ntab[i+2] = %d\n", tab[i], tab[i+1], tab[i+2]);
+					printf("SEMI \n");
 					break;
 				case TK_COMMENT:
-					printf("COMMENT \n, tab[i] = %d\ntab[i+1] = %d\ntab[i+2] = %d\n", tab[i], tab[i+1], tab[i+2]);
+					printf("COMMENT \n");
 					break;
 				//case TK_SPACE:
 				//	printf("SPACE ");
 				//	break;
 				case TK_AND:
-					printf("AND \n, tab[i] = %d\ntab[i+1] = %d\ntab[i+2] = %d\n", tab[i], tab[i+1], tab[i+2]);
+					printf("AND \n");
 					break;
 				case TK_AND_IF:
-					printf("AND_IF \n, tab[i] = %d\ntab[i+1] = %d\ntab[i+2] = %d\n", tab[i], tab[i+1], tab[i+2]);
+					printf("AND_IF \n");
 					break;
 				case TK_OR_IF:
-					printf("OR_IF \n, tab[i] = %d\ntab[i+1] = %d\ntab[i+2] = %d\n", tab[i], tab[i+1], tab[i+2]);
+					printf("OR_IF \n");
 					break;
 				case TK_END:
-					printf("END \n, tab[i] = %d\ntab[i+1] = %d\ntab[i+2] = %d\n", tab[i], tab[i+1], tab[i+2]);
+					printf("END \n");
 					break;
 				case TK_PROGRAM:
-					printf("PROGRAM \n, tab[i] = %d\ntab[i+1] = %d\ntab[i+2] = %d\n", tab[i], tab[i+1], tab[i+2]);
+					printf("PROGRAM \n");
 					break;
 				case TK_QUOTED_WORD:
-					printf("QUOTED_WORD \n, tab[i] = %d\ntab[i+1] = %d\ntab[i+2] = %d\n", tab[i], tab[i+1], tab[i+2]);
+					printf("QUOTED_WORD \n");
 					break;
 				case TK_DQUOTED_WORD:
-					printf("DQUOTED_WORD \n, tab[i] = %d\ntab[i+1] = %d\ntab[i+2] = %d\n", tab[i], tab[i+1], tab[i+2]);
+					printf("DQUOTED_WORD \n");
 					break;
 			}
 			i += 3;
-		}*/
-		printf("\n");
+		}
+		*/printf("\n");
 	} 
 	return (0);
 }
