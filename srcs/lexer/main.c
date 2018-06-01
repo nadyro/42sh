@@ -99,6 +99,7 @@ static void		ast_loop_pipe(t_ast *head, int *depth)
 	t_ast	*tmp = head;
 	char	*str = tmp->arg;
 	int		split_by = 0;
+	static int	order = 1;
 
 	printf("entering ast_loop_and_or\n");
 	while (tmp->tok[i] != -1)
@@ -129,7 +130,6 @@ static void		ast_loop_pipe(t_ast *head, int *depth)
 			i += 3;
 		//recursion here? tmp = tmp->left or tmp=tmp->right w conditions?
 	}
-	printf("at END of loop_pipe, tmp->arg = %s\n", tmp->arg);
 	*depth = 4;
 }
 
@@ -293,6 +293,30 @@ static t_ast	*get_ast(int **tab, char ***argv)
 	return (head);
 }
 
+static void		print_leaf_nodes(t_ast *head)
+{
+	t_ast	*tmp = head;
+	static int	order = 1;
+
+	printf("entered print_leaf_nodes with : %s\n", tmp->arg);
+	if (!tmp)
+		return ;
+	if (!(tmp->left) && !(tmp->right))
+	{
+		printf("EXECUTE CMD %d: %s\n", order++, tmp->arg);
+		(tmp->split_by == TK_SEMI) ? printf("process with semi\n") :
+		(tmp->split_by == TK_AND_IF) ? printf("process with AND_IF\n") :
+		(tmp->split_by == TK_OR_IF) ? printf("process with OR_IF\n") :
+		(tmp->split_by == TK_PIPE) ? printf("process with PIPE\n") :
+		printf("\n");
+		return ;
+	}
+	if (tmp->left)
+		print_leaf_nodes(tmp->left);
+	if (tmp->right)
+		print_leaf_nodes(tmp->right);
+}
+
 int				main(int argc, char **argv)
 {
 	int *tab;
@@ -304,6 +328,8 @@ int				main(int argc, char **argv)
 		printf("%s\n", argv[1]);
 		tab = get_tokens(argv[1]);
 		head = get_ast(&tab, &argv);
+		printf("TREE COMPILED, SENDING TO printLeafNodes\n\n\n");
+		print_leaf_nodes(head);
 //		printf("trying to call traverse_ast to analyze pipes\n");
 //		traverse_ast(head, 3);
 		/*while (tab[i] != -1)
