@@ -50,6 +50,7 @@ static t_ast	*fill_leftast(t_ast *parent, int size, int split_by)
 	if (!(left = (t_ast *)malloc(sizeof(t_ast))))
 		return (NULL);
 	left->parent = parent;
+	left->depth = parent->depth + 1;
 	left->arg = ft_strndup(parent->arg, size);
 	left->split_by = split_by;
 	left->tok = get_tokens(left->arg);
@@ -68,6 +69,7 @@ static t_ast	*fill_rightast(t_ast *parent, int start, int size, int split_by)
 		return (NULL);
 	right->parent = parent;
 	str = parent->arg + start;
+	right->depth = parent->depth + 1;
 	right->arg = ft_strndup(str, size);
 	right->split_by = split_by;
 	right->tok = get_tokens(right->arg);
@@ -93,7 +95,7 @@ static t_ast	*init_ast(char ***argv)
 	return (head);
 }
 
-static void		ast_loop_pipe(t_ast *head, int *depth)
+static void		ast_loop_pipe(t_ast *head)
 {
 	int		i = 0;
 	t_ast	*tmp = head;
@@ -116,7 +118,7 @@ static void		ast_loop_pipe(t_ast *head, int *depth)
 				//printf("filling right from ast_loop_pipe with:\ntmp->arg = %s\n", tmp->arg);
 				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1], split_by);
 				//printf("\nrecursively calling ast_loop_PIPE\n");
-				ast_loop_pipe(tmp->right, depth);
+				ast_loop_pipe(tmp->right);
 				break ;
 			}
 			else
@@ -127,10 +129,9 @@ static void		ast_loop_pipe(t_ast *head, int *depth)
 		while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
 			i += 3;
 	}
-	*depth = 4;
 }
 
-static void		ast_loop_and_or(t_ast *head, int *depth)
+static void		ast_loop_and_or(t_ast *head)
 {
 	int		i = 0;
 	t_ast	*tmp = head;
@@ -144,7 +145,7 @@ static void		ast_loop_and_or(t_ast *head, int *depth)
 			split_by = tmp->tok[i];
 			//printf("filling left from ast_loop_and_or\n");
 			tmp->left = fill_leftast(tmp, tmp->tok[i+1], split_by);
-			ast_loop_pipe(tmp->left, depth);
+			ast_loop_pipe(tmp->left);
 			i += 3;
 			while (tmp->tok[i] == TK_SPACE)
 				i += 3;
@@ -153,7 +154,7 @@ static void		ast_loop_and_or(t_ast *head, int *depth)
 				//printf("filling right from ast_loop_and_or\n");
 				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1], split_by);
 				//printf("\nrecursively calling ast_loop_and_or\n");
-				ast_loop_and_or(tmp->right, depth);
+				ast_loop_and_or(tmp->right);
 				break ;
 			}
 			else
@@ -165,10 +166,10 @@ static void		ast_loop_and_or(t_ast *head, int *depth)
 			i += 3;
 	}
 	if (!(tmp->left) && tmp->parent != NULL)
-		ast_loop_pipe(tmp, depth);
+		ast_loop_pipe(tmp);
 }
 
-static void		ast_loop_semi(t_ast *head, int *depth)
+static void		ast_loop_semi(t_ast *head)
 {
 	int		i = 0;
 	t_ast	*tmp = head;
@@ -180,7 +181,7 @@ static void		ast_loop_semi(t_ast *head, int *depth)
 		{
 			//printf("filling left from ast_loop_semi\n");
 			tmp->left = fill_leftast(tmp, tmp->tok[i+1], TK_SEMI);
-			ast_loop_and_or(tmp->left, depth);
+			ast_loop_and_or(tmp->left);
 			i += 3;
 			while (tmp->tok[i] == TK_SPACE)
 				i += 3;
@@ -190,7 +191,7 @@ static void		ast_loop_semi(t_ast *head, int *depth)
 				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1], TK_SEMI);
 				//printf("\nrecursively calling ast_loop_semi\n");
 				if (tmp->right)
-					ast_loop_semi(tmp->right, depth);
+					ast_loop_semi(tmp->right);
 				break ;
 			}
 			else
@@ -201,9 +202,8 @@ static void		ast_loop_semi(t_ast *head, int *depth)
 		while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
 			i += 3;
 	}
-	*depth = 2;
 	if (!(tmp->left) && tmp->parent != NULL)	//so that first elements that were recursively filled don't add extra once branch is done
-		ast_loop_and_or(tmp, depth);
+		ast_loop_and_or(tmp);
 }
 
 static t_ast	*get_ast(int **tab, char ***argv)
@@ -211,11 +211,10 @@ static t_ast	*get_ast(int **tab, char ***argv)
 	char	*str = NULL;
 	t_ast	*head;
 	t_ast	*tmp;
-	int		depth = 1;
 
 	head = (*tab[0] && *tab[0] != 16) ? init_ast(argv) : NULL;
 	tmp = head;
-	ast_loop_semi(tmp, &depth);
+	ast_loop_semi(tmp);
 	return (head);
 }
 
@@ -228,7 +227,7 @@ static void		print_leaf_nodes(t_ast *head)
 		return ;
 	if (!(tmp->left) && !(tmp->right))
 	{
-		printf("EXECUTE CMD %d: %s\n", order++, tmp->arg);
+		printf("EXECUTE CMD %d with depth %d: %s\n", order++, tmp->depth, tmp->arg);
 		(tmp->split_by == TK_SEMI) ? printf("process with semi\n") :
 		(tmp->split_by == TK_AND_IF) ? printf("process with AND_IF\n") :
 		(tmp->split_by == TK_OR_IF) ? printf("process with OR_IF\n") :
