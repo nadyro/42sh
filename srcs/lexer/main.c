@@ -43,7 +43,7 @@ size_t	ft_strlen(const char *s)
 	return (len);
 }
 
-static t_ast	*fill_leftast(t_ast *parent, int size, int split_by)
+static t_ast	*fill_leftast(t_ast *parent, int size)
 {
 	t_ast	*left = NULL;
 
@@ -52,15 +52,15 @@ static t_ast	*fill_leftast(t_ast *parent, int size, int split_by)
 	left->parent = parent;
 	left->depth = parent->depth + 1;
 	left->arg = ft_strndup(parent->arg, size);
-	left->split_by = split_by;
+//	left->split_by = split_by;
 	left->tok = get_tokens(left->arg);
 	left->left = NULL;
 	left->right = NULL;
-//	printf("in fill_leftast, left->arg = %s\n", left->arg);
+//	printf("in fill_leftast, left->arg = %s\nparent->split_by = %d\n", left->arg, parent->split_by);
 	return (left);
 }
 
-static t_ast	*fill_rightast(t_ast *parent, int start, int size, int split_by)
+static t_ast	*fill_rightast(t_ast *parent, int start, int size)
 {
 	t_ast	*right = NULL;
 	char	*str;
@@ -71,11 +71,11 @@ static t_ast	*fill_rightast(t_ast *parent, int start, int size, int split_by)
 	str = parent->arg + start;
 	right->depth = parent->depth + 1;
 	right->arg = ft_strndup(str, size);
-	right->split_by = split_by;
+	//right->split_by = split_by;
 	right->tok = get_tokens(right->arg);
 	right->left = NULL;
 	right->right = NULL;
-//	printf("in fill_rightast, right->arg = %s\n", right->arg);
+//	printf("in fill_rightast, right->arg = %s\nparent->split_by = %d\n", right->arg, parent->split_by);
 	return (right);
 }
 
@@ -100,23 +100,22 @@ static void		ast_loop_pipe(t_ast *head)
 	int		i = 0;
 	t_ast	*tmp = head;
 	char	*str = tmp->arg;
-	int		split_by = 0;
 	static int	order = 1;
 
 	while (tmp->tok[i] != -1)
 	{
 		if (tmp->tok[i] == TK_PIPE)
 		{
-			split_by = tmp->tok[i];
+			tmp->split_by = tmp->tok[i];
 			//printf("filling left from ast_loop_pipe\n");
-			tmp->left = fill_leftast(tmp, tmp->tok[i+1], split_by);
+			tmp->left = fill_leftast(tmp, tmp->tok[i+1]);
 			i += 3;
 			while (tmp->tok[i] == TK_SPACE)
 				i += 3;
 			if (tmp->tok[i] && tmp->tok[i] != 1 && tmp->tok[i] != TK_END)
 			{
 				//printf("filling right from ast_loop_pipe with:\ntmp->arg = %s\n", tmp->arg);
-				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1], split_by);
+				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1]);
 				//printf("\nrecursively calling ast_loop_PIPE\n");
 				ast_loop_pipe(tmp->right);
 				break ;
@@ -136,15 +135,14 @@ static void		ast_loop_and_or(t_ast *head)
 	int		i = 0;
 	t_ast	*tmp = head;
 	char	*str = tmp->arg;
-	int		split_by = 0;
 
 	while (tmp->tok[i] != -1)
 	{
 		if (tmp->tok[i] == TK_AND_IF || tmp->tok[i] == TK_OR_IF)
 		{
-			split_by = tmp->tok[i];
+			tmp->split_by = tmp->tok[i];
 			//printf("filling left from ast_loop_and_or\n");
-			tmp->left = fill_leftast(tmp, tmp->tok[i+1], split_by);
+			tmp->left = fill_leftast(tmp, tmp->tok[i+1]);
 			ast_loop_pipe(tmp->left);
 			i += 3;
 			while (tmp->tok[i] == TK_SPACE)
@@ -152,7 +150,7 @@ static void		ast_loop_and_or(t_ast *head)
 			if (tmp->tok[i] && tmp->tok[i] != 1 && tmp->tok[i] != TK_END)
 			{
 				//printf("filling right from ast_loop_and_or\n");
-				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1], split_by);
+				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1]);
 				//printf("\nrecursively calling ast_loop_and_or\n");
 				ast_loop_and_or(tmp->right);
 				break ;
@@ -180,7 +178,8 @@ static void		ast_loop_semi(t_ast *head)
 		if (tmp->tok[i] == TK_SEMI)
 		{
 			//printf("filling left from ast_loop_semi\n");
-			tmp->left = fill_leftast(tmp, tmp->tok[i+1], TK_SEMI);
+			tmp->split_by = TK_SEMI;
+			tmp->left = fill_leftast(tmp, tmp->tok[i+1]);
 			ast_loop_and_or(tmp->left);
 			i += 3;
 			while (tmp->tok[i] == TK_SPACE)
@@ -188,7 +187,7 @@ static void		ast_loop_semi(t_ast *head)
 			if (tmp->tok[i] && tmp->tok[i] != 1 && tmp->tok[i] != 16)
 			{
 				//printf("filling right from ast_loop_semi sending: %s to fill_right\n", tmp->arg);
-				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1], TK_SEMI);
+				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1]);
 				//printf("\nrecursively calling ast_loop_semi\n");
 				if (tmp->right)
 					ast_loop_semi(tmp->right);
@@ -228,15 +227,19 @@ static void		print_leaf_nodes(t_ast *head)
 	if (!(tmp->left) && !(tmp->right))
 	{
 		printf("EXECUTE CMD %d with depth %d: %s\n", order++, tmp->depth, tmp->arg);
-		(tmp->split_by == TK_SEMI) ? printf("process with semi\n") :
-		(tmp->split_by == TK_AND_IF) ? printf("process with AND_IF\n") :
-		(tmp->split_by == TK_OR_IF) ? printf("process with OR_IF\n") :
-		(tmp->split_by == TK_PIPE) ? printf("process with PIPE\n") :
+		(tmp->parent->split_by == TK_SEMI) ? printf("process with semi\n") :
+		(tmp->parent->split_by == TK_AND_IF) ? printf("process with AND_IF\n") :
+		(tmp->parent->split_by == TK_OR_IF) ? printf("process with OR_IF\n") :
+		(tmp->parent->split_by == TK_PIPE) ? printf("process with PIPE\n") :
 		printf("\n");
 		return ;
 	}
 	if (tmp->left)
 		print_leaf_nodes(tmp->left);
+	if (tmp->split_by == TK_AND_IF)
+		printf("verify all previous commands returned 0 before continuing, else STOP\nAlso verify all following commands NOT split by SEMI execute successfully or else stop");
+	else if (tmp->split_by == TK_OR_IF)
+		printf("if previous command return value != 0, execute other OR_IF commands until success, else stop\n");		
 	if (tmp->right)
 		print_leaf_nodes(tmp->right);
 }
