@@ -6,7 +6,7 @@
 /*   By: antoipom <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/07 14:13:58 by antoipom          #+#    #+#             */
-/*   Updated: 2018/05/30 14:15:34 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/06/05 15:16:27 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,10 @@ enum
 	TK_SEMI,
 	TK_COMMENT,
 	TK_SPACE,
-	TK_AND,
 	TK_AND_IF,
 	TK_OR_IF,
 	TK_END,
 	TK_CMD,
-	TK_QUOTED_WORD,
-	TK_DQUOTED_WORD,
 	TK_FILENAME
 };
 

@@ -57,9 +57,6 @@ int				main(int argc, char **argv)
 				case TK_SPACE:
 					printf("SPACE ");
 					break;
-				case TK_AND:
-					printf("AND ");
-					break;
 				case TK_AND_IF:
 					printf("AND_IF ");
 					break;
@@ -71,12 +68,6 @@ int				main(int argc, char **argv)
 					break;
 				case TK_CMD:
 					printf("CMD ");
-					break;
-				case TK_QUOTED_WORD:
-					printf("QUOTED_WORD ");
-					break;
-				case TK_DQUOTED_WORD:
-					printf("DQUOTED_WORD ");
 					break;
 				case TK_FILENAME:
 					printf("FILENAME ");

@@ -6,7 +6,7 @@
 /*   By: antoipom <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 14:07:50 by antoipom          #+#    #+#             */
-/*   Updated: 2018/06/01 16:36:31 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/06/05 15:18:19 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@ static int		convert_token(int token)
 	result = 0;
 	(token == TK_CMD) ? result = 0 : 0;
 	(token == TK_WORD) ? result = 1 : 0;
-	(token == TK_QUOTED_WORD) ? result = 2 : 0;
-	(token == TK_DQUOTED_WORD) ? result = 3 : 0;
 	(token == TK_IO_NUMBER) ? result = 4 : 0;
 	(token == TK_GREAT) ? result = 5 : 0;
 	(token == TK_DGREAT) ? result = 6 : 0;
