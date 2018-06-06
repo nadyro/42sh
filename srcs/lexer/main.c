@@ -103,6 +103,16 @@ char	*ft_strjoin(char const *name1, char const *name2)
 	return (mem);
 }
 
+char	*ft_strchr(const char *s, int c)
+{
+	while (*(s))
+		if (*s++ == (char)c)
+			return ((char *)s - 1);
+	if ((char)c == '\0')
+		return ((char *)s);
+	return (NULL);
+}
+
 char	*ft_strstr(const char *big, const char *little)
 {
 	char	*mem;
@@ -226,6 +236,8 @@ static void		ast_loop_and_or(t_ast *head)
 	t_ast	*tmp = head;
 	char	*str = tmp->arg;
 
+	if (tmp && !(ft_strstr(tmp->arg, "&&") && !(ft_strstr(tmp->arg, "||"))))
+		ast_loop_pipe(tmp);
 	while (tmp->tok[i] != -1)
 	{
 		if (tmp->tok[i] == TK_AND_IF || tmp->tok[i] == TK_OR_IF)
@@ -253,8 +265,8 @@ static void		ast_loop_and_or(t_ast *head)
 		while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
 			i += 3;
 	}
-	if (!(tmp->left) && tmp->parent != NULL)
-		ast_loop_pipe(tmp);
+//	if (!(tmp->left) && tmp->parent != NULL)
+	//	ast_loop_pipe(tmp);
 }
 
 static void		ast_loop_semi(t_ast *head)
@@ -263,6 +275,8 @@ static void		ast_loop_semi(t_ast *head)
 	t_ast	*tmp = head;
 	char	*str = tmp->arg;
 
+	if (tmp && !(ft_strchr(tmp->arg, ';')))
+		ast_loop_and_or(tmp);
 	while (tmp->tok[i] != -1)
 	{
 		if (tmp->tok[i] == TK_SEMI)
@@ -291,8 +305,8 @@ static void		ast_loop_semi(t_ast *head)
 		while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
 			i += 3;
 	}
-	if (!(tmp->left) && tmp->parent != NULL)	//so that first elements that were recursively filled don't add extra once branch is done
-		ast_loop_and_or(tmp);
+	//if (!(tmp->left) && tmp->parent != NULL)	//so that first elements that were recursively filled don't add extra once branch is done
+	//	ast_loop_and_or(tmp);
 }
 
 static t_ast	*get_ast(int **tab, char ***argv)
