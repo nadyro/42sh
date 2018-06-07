@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:23 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/07 15:29:26 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/07 15:32:53 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ static void		ast_loop_pipe(t_ast *head)
 			//printf("filling left from ast_loop_pipe\n");
 			tmp->left = fill_leftast(tmp, tmp->tok[i+1]);
 			i += 3;
-			while (tmp->tok[i] == TK_SPACE)
-				i += 3;
+			//while (tmp->tok[i] == TK_SPACE)
+			//	i += 3;
 			if (tmp->tok[i] && tmp->tok[i] != 1 && tmp->tok[i] != TK_END)
 			{
 				//printf("filling right from ast_loop_pipe with:\ntmp->arg = %s\n", tmp->arg);
@@ -45,8 +45,8 @@ static void		ast_loop_pipe(t_ast *head)
 		}
 		else
 			i += 3;
-		while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
-			i += 3;
+		//while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
+		//	i += 3;
 	}
 }
 
@@ -67,8 +67,8 @@ static void		ast_loop_and_or(t_ast *head)
 			tmp->left = fill_leftast(tmp, tmp->tok[i+1]);
 			ast_loop_pipe(tmp->left);
 			i += 3;
-			while (tmp->tok[i] == TK_SPACE)
-				i += 3;
+			//while (tmp->tok[i] == TK_SPACE)
+			//	i += 3;
 			if (tmp->tok[i] && tmp->tok[i] != 1 && tmp->tok[i] != TK_END)
 			{
 				//printf("filling right from ast_loop_and_or\n");
@@ -82,8 +82,8 @@ static void		ast_loop_and_or(t_ast *head)
 		}
 		else
 			i += 3;
-		while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
-			i += 3;
+		//while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
+		//	i += 3;
 	}
 //	if (!(tmp->left) && tmp->parent != NULL)
 	//	ast_loop_pipe(tmp);
@@ -106,8 +106,8 @@ static void		ast_loop_semi(t_ast *head)
 			tmp->left = fill_leftast(tmp, tmp->tok[i+1]);
 			ast_loop_and_or(tmp->left);
 			i += 3;
-			while (tmp->tok[i] == TK_SPACE)
-				i += 3;
+			//while (tmp->tok[i] == TK_SPACE)
+			//	i += 3;
 			if (tmp->tok[i] && tmp->tok[i] != 1 && tmp->tok[i] != 16)
 			{
 				//printf("filling right from ast_loop_semi sending: %s to fill_right\n", tmp->arg);
@@ -122,8 +122,8 @@ static void		ast_loop_semi(t_ast *head)
 		}
 		else
 			i += 3;
-		while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
-			i += 3;
+		//while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
+		//	i += 3;
 	}
 	//if (!(tmp->left) && tmp->parent != NULL)	//so that first elements that were recursively filled don't add extra once branch is done
 	//	ast_loop_and_or(tmp);
