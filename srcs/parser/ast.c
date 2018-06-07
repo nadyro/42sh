@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/07 15:30:19 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/07 17:12:21 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 #include "libft.h"
 #include <stdio.h>
 
-static t_ast	*fill_leftast(t_ast *parent, int size)
+char			*ft_strndup(const char *s1, size_t n);
+
+t_ast		*fill_leftast(t_ast *parent, int size)
 {
 	t_ast	*left = NULL;
 
@@ -33,7 +35,7 @@ static t_ast	*fill_leftast(t_ast *parent, int size)
 	return (left);
 }
 
-static t_ast	*fill_rightast(t_ast *parent, int start, int size)
+t_ast		*fill_rightast(t_ast *parent, int start, int size)
 {
 	t_ast	*right = NULL;
 	char	*str;
@@ -53,7 +55,7 @@ static t_ast	*fill_rightast(t_ast *parent, int start, int size)
 	return (right);
 }
 
-static t_ast	*init_ast(char ***argv)
+t_ast		*init_ast(char ***argv)
 {
 	t_ast	*head;
 	char	**tab = *argv;
@@ -89,7 +91,7 @@ int         ast_evaluate(t_ast *ast)
 		else if (ast->arg[0] == 'F')
 			return (-1);
 	}
-	else
+	else if (ast)
 	{
 		op = ast->split_by;
 		if (op == TK_AND_IF)

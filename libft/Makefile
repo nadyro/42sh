@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: azybert <azybert@student.42.fr>            +#+  +:+       +#+         #
+#    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/08 19:33:52 by azybert           #+#    #+#              #
-#    Updated: 2018/05/29 17:20:57 by arohani          ###   ########.fr        #
+#    Updated: 2018/06/07 16:59:43 by arohani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ FILES = ft_memset.c \
 		ft_strchr.c \
 		ft_strrchr.c \
 		ft_strstr.c \
+		ft_strndup.c \
 		ft_strnstr.c \
 		ft_strcmp.c \
 		ft_strncmp.c \
@@ -77,7 +78,6 @@ FILES = ft_memset.c \
 		ft_realloc.c \
 		ft_strmerge.c \
 		ft_strcmerge.c \
-		ft_strndup.c
 
 OBJ = $(FILES:.c=.o)
 FLAG = -Wall -Wextra -Werror
