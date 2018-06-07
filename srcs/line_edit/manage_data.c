@@ -6,11 +6,19 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 23:36:42 by azybert           #+#    #+#             */
-/*   Updated: 2018/04/03 16:30:48 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/07 22:21:05 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/sh_line_edit.h"
+
+static size_t	ft_add_nl()
+{
+	size_t	to_add;
+
+	to_add = 0;
+	;
+}
 
 void		write_data(t_prompt *prompt, char *to_display, size_t size)
 {
@@ -18,6 +26,10 @@ void		write_data(t_prompt *prompt, char *to_display, size_t size)
 	size_t	tmp;
 	size_t	displayed;
 
+	tputs(tgetstr("ce", NULL), 1, ft_putshit);
+	write(1, "\n\r", 2);
+	tputs(tgetstr("cd", NULL), 1, ft_putshit);
+	move_cursor(prompt, prompt->pos, true);
 	mem = size;
 	while (size != 0)
 	{
@@ -26,7 +38,7 @@ void		write_data(t_prompt *prompt, char *to_display, size_t size)
 			move_cursor(prompt, displayed, false);
 		tmp = prompt->size->x - displayed % prompt->size->x;
 		tmp = ((tmp > size) ? size : tmp);
-		write(1, to_display, tmp);
+		write(1, to_display, /*ft*/tmp); //print jusqu'au \n
 		if (prompt->size->y - 1 == prompt->origin->y +
 				(prompt->origin->x + displayed) / prompt->size->x &&
 				(displayed + prompt->origin->x + tmp) % prompt->size->x == 0)

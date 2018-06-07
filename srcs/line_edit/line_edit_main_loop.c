@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/04/03 23:44:39 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/07 21:18:20 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,15 @@ t_prompt	*malloc_prompt(t_prompt *prompt)
 	prompt->size->x = w.ws_col;
 	prompt->size->y = w.ws_row;
 	prompt->quotes = none;
+	
+	char *kappa = ft_strdup("i\nlike\ntraiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiins\nand\ncats");
+	int i = 0;
+	while (kappa[i] != '\0')
+	{
+		prompt_stock(prompt, &kappa[i]);
+		i++;
+	}
+	
 	return (prompt);
 }
 

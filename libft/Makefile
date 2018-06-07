@@ -6,7 +6,7 @@
 #    By: azybert <azybert@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/08 19:33:52 by azybert           #+#    #+#              #
-#    Updated: 2017/12/04 05:04:08 by azybert          ###   ########.fr        #
+#    Updated: 2018/04/06 17:40:44 by azybert          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,6 +77,7 @@ FILES = ft_memset.c \
 		ft_realloc.c \
 		ft_strmerge.c \
 		ft_strcmerge.c \
+		ft_strnchr.c \
 
 OBJ = $(FILES:.c=.o)
 FLAG = -Wall -Wextra -Werror

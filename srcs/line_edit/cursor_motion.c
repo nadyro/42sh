@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/10 17:23:30 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/31 23:17:22 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/07 21:23:22 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,36 @@ int		ft_putshit(int c)
 	return (write(0, &c, 1));
 }
 
+static size_t ft_add_nl(t_prompt *prompt, size_t new_pos)
+{
+	size_t loop;
+	size_t to_add;
+
+	loop = 0;
+	to_add = 0;
+	while (loop < new_pos)
+	{
+		if (prompt->line[loop] == '\n')
+		{
+			to_add += prompt->size->x - ((loop + to_add + prompt->origin->x) % prompt->size->x);
+		}
+		loop++;
+	}
+	if (to_add != 0)
+		to_add--;
+	return (new_pos + to_add);
+}
+
 void	move_cursor(t_prompt *prompt, size_t new_pos, bool save)
 {
 	size_t	x;
 	size_t	y;
 
+	if (save == true)
+		prompt->pos = new_pos;
+	if (prompt->line != NULL && ft_strchr(prompt->line, '\n') != NULL)
+		new_pos = ft_add_nl(prompt, new_pos);
 	x = (prompt->origin->x + new_pos) % prompt->size->x;
 	y = prompt->origin->y + (prompt->origin->x + new_pos) / prompt->size->x;
 	tputs(tgoto(tgetstr("cm", NULL), x, y), 1, ft_putshit);
-	if (save == true)
-		prompt->pos = new_pos;
 }
