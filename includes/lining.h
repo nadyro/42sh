@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:12:46 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/28 19:22:37 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/06/07 19:55:24 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,5 +110,6 @@ void					cp_end_select_cp(struct s_line_data *ld, char t);
 void					print_endslct(struct s_line_data *ld);
 t_list					*write_history(struct s_line_data *ld, t_list **history);
 void					write_history_file(t_list *history);
-void					browse_history(struct s_line_data *ld, int *index);
+void					browse_history_down(struct s_line_data *ld, int *index);
+void					browse_history_up(struct s_line_data *ld, int *index);
 #endif

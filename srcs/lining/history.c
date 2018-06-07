@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/28 16:35:14 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/28 20:06:25 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/06/07 19:57:33 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,19 +57,48 @@ void	write_history_file(t_list *history)
 	}
 }
 
-void	browse_history(struct s_line_data *ld, int *index)
+void        browse_history_up(struct s_line_data *ld, int *index)
 {
-	char	*go_to;
+	char    *go_to;
 
-	ft_bzero(ld->buffer, ft_strlen(ld->buffer));
-	ft_strncpy(ld->buffer, ld->history->content, ft_strlen(ld->history->content));
-	go_to = tgoto(tgetstr("cm", NULL), COLSTART, ld->cd->pos_y);
-	tputs(go_to, 1, fprint_char);
-	tputs(tgetstr("ce", NULL), 1, fprint_char);
-	ft_putstr(ld->buffer);
-	go_to = tgoto(tgetstr("cm", NULL), ld->cd->x - 1, ld->cd->pos_y);
-	*index = ft_strlen(ld->buffer);
-	cursor_pos(ld);
-	if (ld->history->previous != NULL)
-		ld->history = ld->history->previous;
+	if (ld->history)
+	{
+		if (ld->history->previous != NULL)
+			ld->history = ld->history->previous;
+		ft_bzero(ld->buffer, ft_strlen(ld->buffer));
+		ft_strncpy(ld->buffer, ld->history->content,
+				ft_strlen(ld->history->content));
+		go_to = tgoto(tgetstr("cm", NULL), COLSTART, ld->cd->pos_y);
+		tputs(go_to, 1, fprint_char);
+		tputs(tgetstr("ce", NULL), 1, fprint_char);
+		ft_putstr(ld->buffer);
+		*index = ft_strlen(ld->buffer);
+		ld->current_size = ft_strlen(ld->buffer);
+		ld->cd->x = ft_strlen(ld->buffer) + COLSTART;
+		ld->cd->pos_x = ft_strlen(ld->buffer);
+		go_to = tgoto(tgetstr("cm", NULL), (ld->cd->pos_x + COLSTART) - 1, ld->cd->pos_y);
+	}
+}
+
+void        browse_history_down(struct s_line_data *ld, int *index)
+{
+	char    *go_to;
+
+	if (ld->history)
+	{
+		if (ld->history->next != NULL)
+			ld->history = ld->history->next;
+		ft_bzero(ld->buffer, ft_strlen(ld->buffer));
+		ft_strncpy(ld->buffer, ld->history->content,
+				ft_strlen(ld->history->content));
+		go_to = tgoto(tgetstr("cm", NULL), COLSTART, ld->cd->pos_y);
+		tputs(go_to, 1, fprint_char);
+		tputs(tgetstr("ce", NULL), 1, fprint_char);
+		ft_putstr(ld->buffer);
+		go_to = tgoto(tgetstr("cm", NULL), (ld->cd->pos_x + COLSTART) - 1, ld->cd->pos_y);
+		*index = ft_strlen(ld->buffer);
+		ld->cd->pos_x = ft_strlen(ld->buffer);
+		ld->current_size = ft_strlen(ld->buffer);
+		ld->cd->x = ft_strlen(ld->buffer) + COLSTART;
+	}
 }

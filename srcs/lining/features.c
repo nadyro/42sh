@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/22 16:15:59 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/28 19:26:15 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/06/07 19:55:22 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ void	manage_movement(char *t, struct s_line_data *ld, int *index)
 		if (t[2] == 67)
 			move_right(ld);
 		if (t[2] == 66)
-			move_down(ld);
+			browse_history_down(ld, index);
 		if (t[2] == 65)
-			browse_history(ld, index);
+			browse_history_up(ld, index);
 	}
 }
 
