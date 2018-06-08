@@ -6,7 +6,7 @@
 /*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/27 15:27:29 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/06/08 11:32:17 by kernel_pani      ###   ########.fr       */
+/*   Updated: 2018/06/08 17:09:52 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,13 @@ void	write_change(struct s_line_data *ld, int is_rewrite)
 	ft_putstr("\x1B[0m");
 	if (is_rewrite == 0)
 	{
-		go_to = tgoto(tgetstr("cm", NULL), ld->cd->x, ld->cd->pos_y);
+		go_to = tgoto(tgetstr("cm", NULL), ld->cd->x % ld->sw->win_col, ld->cd->pos_y);
 		tputs(go_to, 1, fprint_char);
 	}
 	else if (ld->tmp != NULL)
 	{
 		ld->cd->x += ft_strlen(ld->tmp);
-		go_to = tgoto(tgetstr("cm", NULL), ld->cd->x, ld->cd->pos_y);
+		go_to = tgoto(tgetstr("cm", NULL), ld->cd->x % ld->sw->win_col, ld->cd->pos_y);
 		tputs(go_to, 1, fprint_char);
 	}
 }
@@ -70,8 +70,8 @@ void	write_fromstart(struct s_line_data *ld, int is_todel)
 	tputs(tgetstr("ce", NULL), 1, fprint_char);
 	ft_putstr(ld->buffer);
 	if (is_todel == 1)
-		go_to = tgoto(tgetstr("cm", NULL), ld->cd->x - 1, ld->cd->pos_y);
+		go_to = tgoto(tgetstr("cm", NULL), (ld->cd->x - 1) % ld->sw->win_col, ld->cd->o_pos_y);
 	else
-		go_to = tgoto(tgetstr("cm", NULL), ld->cd->x, ld->cd->pos_y);
+		go_to = tgoto(tgetstr("cm", NULL), ld->cd->x % ld->sw->win_col, ld->cd->pos_y);
 	tputs(go_to, 1, fprint_char);
 }

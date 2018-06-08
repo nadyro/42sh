@@ -6,7 +6,7 @@
 /*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:22:04 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/06/08 12:10:13 by kernel_pani      ###   ########.fr       */
+/*   Updated: 2018/06/08 16:49:26 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void					move_up(struct s_line_data *ld)
 	go_to = NULL;
 	if (ld->cd->row - 1 >= 0)
 	{
-		go_to = tgoto(tgetstr("cm", NULL), ld->cd->x, --ld->cd->pos_y);
+		go_to = tgoto(tgetstr("cm", NULL), ld->cd->x % ld->sw->win_col, --ld->cd->pos_y);
 		tputs(go_to, 1, fprint_char);
 	}
 	ld->cd->col = ld->cd->pos_x;
@@ -93,7 +93,7 @@ void					move_down(struct s_line_data *ld)
 	char	*go_to;
 
 	go_to = NULL;
-	go_to = tgoto(tgetstr("cm", NULL), ld->cd->x, ++ld->cd->pos_y);
+	go_to = tgoto(tgetstr("cm", NULL), ld->cd->x % ld->sw->win_col, ++ld->cd->pos_y);
 	tputs(go_to, 1, fprint_char);
 	ld->cd->col = ld->cd->pos_x;
 	ld->cd->row = ld->cd->pos_y;

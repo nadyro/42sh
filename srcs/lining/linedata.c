@@ -6,7 +6,7 @@
 /*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:20:32 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/06/08 11:39:01 by kernel_pani      ###   ########.fr       */
+/*   Updated: 2018/06/08 16:47:28 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,8 @@ int					manage_buffer(struct s_line_data *ld, char *t, int *index)
 		ft_putstr("\x1b[0m");
 	}
 	i++;
-	ld->cd->pos_x++;
 	ld->cd->x++;
-	gt = tgoto(tgetstr("cm", NULL), ld->cd->x, ld->cd->pos_y);
+	gt = tgoto(tgetstr("cm", NULL), ld->cd->x % ld->sw->win_col, ld->cd->pos_y);
 	tputs(gt, 1, fprint_char);
 	*index = i;
 	return (0);

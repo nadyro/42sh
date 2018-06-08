@@ -6,7 +6,7 @@
 /*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:19:24 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/06/08 11:20:41 by kernel_pani      ###   ########.fr       */
+/*   Updated: 2018/06/08 17:08:54 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,12 @@ int		main(void)
 			}
 			dispatch_tasks(ld, t, &index);
 			ld->cd->pos_x = ld->cd->x - COLSTART;
+			if (ld->cd->x % ld->sw->win_col == 0)
+			{
+				ld->cd->pos_y++;
+				ft_putstr(tgetstr("sf", NULL));
+				ld->cd->o_pos_y--;		
+			}
 		}
 	}
 	return (0);
