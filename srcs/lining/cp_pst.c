@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cp_pst.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 13:18:03 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/24 17:59:28 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/06/08 11:35:49 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,8 @@ void	skip_word_right(struct s_line_data *ld)
 	{
 		go_to = tgoto(tgetstr("cm", NULL), COLSTART + i, ld->cd->pos_y);
 		tputs(go_to, 1, fprint_char);
-		cursor_pos(ld);
+		ld->cd->pos_x = i;
+		ld->cd->x = i + COLSTART;
 	}
 }
 
@@ -118,6 +119,7 @@ void	skip_word_left(struct s_line_data *ld)
 	{
 		go_to = tgoto(tgetstr("cm", NULL), (COLSTART) + i, ld->cd->pos_y);
 		tputs(go_to, 1, fprint_char);
-		cursor_pos(ld);
+		ld->cd->pos_x = i;
+		ld->cd->x = COLSTART + i;
 	}
 }

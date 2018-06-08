@@ -6,7 +6,7 @@
 /*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/22 16:15:59 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/06/08 10:51:05 by kernel_pani      ###   ########.fr       */
+/*   Updated: 2018/06/08 11:50:52 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,10 @@ void	manage_deletion(struct s_line_data *ld)
 	ld->current_size = ft_strlen(ld->buffer);
 	ft_strdel(&tmp);
 	if (ld->cd->pos_x - 1 >= 0)
+	{
 		write_fromstart(ld, 1);
-	cursor_pos(ld);
+		ld->cd->x--;
+	}
 }
 
 void	manage_validation(struct s_line_data *ld, t_list **history)
@@ -70,6 +72,8 @@ void	manage_validation(struct s_line_data *ld, t_list **history)
 	while((*history)->next != NULL)
 		*history = (*history)->next;
 	ld->history = *history;
+	ld->cd->x = COLSTART;
+	ld->cd->pos_x = 0;
 	print_line_data(ld, *history);
 	clean_linedata(ld);
 	ft_putscolors("$> 42sh", BCYAN);

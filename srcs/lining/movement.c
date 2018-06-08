@@ -6,7 +6,7 @@
 /*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:22:04 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/06/08 10:50:20 by kernel_pani      ###   ########.fr       */
+/*   Updated: 2018/06/08 11:55:03 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,7 @@ void					move_left(struct s_line_data *ld)
 	char	*go_to;
 
 	go_to = NULL;
-	cursor_pos(ld);
-	if (ld->cd->cp_active == 1)
+	if (ld->cd->pos_x - 1 >= 0 && ld->cd->cp_active == 1)
 	{
 		tputs(tgetstr("mr", NULL), 1, fprint_char);
 		ft_putchar(ld->buffer[ld->cd->pos_x]);
@@ -59,7 +58,6 @@ void					move_right(struct s_line_data *ld)
 	char	*go_to;
 
 	go_to = NULL;
-	cursor_pos(ld);
 	if (ld->cd->cp_active == 1)
 	{
 		tputs(tgetstr("mr", NULL), 1, fprint_char);
@@ -79,7 +77,6 @@ void					move_up(struct s_line_data *ld)
 	char	*go_to;
 
 	go_to = NULL;
-	cursor_pos(ld);
 	if (ld->cd->row - 1 >= 0)
 	{
 		go_to = tgoto(tgetstr("cm", NULL), ld->cd->x, --ld->cd->pos_y);
@@ -95,7 +92,6 @@ void					move_down(struct s_line_data *ld)
 
 	go_to = NULL;
 	go_to = tgoto(tgetstr("cm", NULL), ld->cd->x, ++ld->cd->pos_y);
-	cursor_pos(ld);
 	tputs(go_to, 1, fprint_char);
 	ld->cd->col = ld->cd->pos_x;
 	ld->cd->row = ld->cd->pos_y;

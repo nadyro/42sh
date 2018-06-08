@@ -6,7 +6,7 @@
 /*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:19:24 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/06/08 10:51:36 by kernel_pani      ###   ########.fr       */
+/*   Updated: 2018/06/08 11:20:41 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ int		main(void)
 				manage_validation(ld, &history);
 				index = 0;
 			}
-			cursor_pos(ld);
 			dispatch_tasks(ld, t, &index);
+			ld->cd->pos_x = ld->cd->x - COLSTART;
 		}
 	}
 	return (0);
