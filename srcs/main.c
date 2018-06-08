@@ -1,14 +1,18 @@
 #include "lexer.h"
 #include "parser.h"
 #include "libft.h"
+#include "minishell.h"
 #include <stdio.h>
 
-int				main(int argc, char **argv)
+int				main(int argc, char **argv, char **env)
 {
 	int *tab;
 //	int i = 0;
 	t_ast	*head = NULL;
+	t_shell	shell;
 
+	shell.list = (env && env[0]) ? env_setup(env) : env_init();
+	shell.envv = (shell.list) ? env_to_tab(shell.list) : NULL;
 	if (argc == 2)
 	{
 		printf("%s\n", argv[1]);

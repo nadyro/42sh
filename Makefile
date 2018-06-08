@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: antoipom <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/06/08 14:43:02 by arohani          ###   ########.fr        #
+#    Updated: 2018/06/08 15:35:41 by arohani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,10 +33,29 @@ SRC_FILES = main.c \
 			\
 			parser/parser.c \
 			parser/parser_validation.c \
-			parser/ast.c
+			parser/ast.c \
+			builtins/add_to_mod.c \
+			builtins/ash_exec.c \
+			builtins/bin.c \
+			builtins/cd.c \
+			builtins/cd_canon.c \
+			builtins/cd_options.c \
+			builtins/env.c \
+			builtins/env_exec.c \
+			builtins/env_mod.c \
+			builtins/env_setup.c \
+			builtins/error.c \
+			builtins/free.c \
+			builtins/main.c \
+			builtins/path.c \
+			builtins/pwd.c \
+			builtins/setenv.c \
+			builtins/shell.c \
+			builtins/unsetenv.c 
 
 INC_FILES = lexer.h \
-			parser.h
+			parser.h \
+			minishell.h
 
 NAME = 42sh
 
