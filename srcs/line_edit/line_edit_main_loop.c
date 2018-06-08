@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/07 21:18:20 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/08 16:24:51 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,6 @@ t_prompt	*malloc_prompt(t_prompt *prompt)
 	prompt->size->x = w.ws_col;
 	prompt->size->y = w.ws_row;
 	prompt->quotes = none;
-	
-	char *kappa = ft_strdup("i\nlike\ntraiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiins\nand\ncats");
-	int i = 0;
-	while (kappa[i] != '\0')
-	{
-		prompt_stock(prompt, &kappa[i]);
-		i++;
-	}
-	
 	return (prompt);
 }
 
@@ -59,7 +50,9 @@ t_stat_data	*malloc_stat()
 	if (!(stat_data = malloc(sizeof(stat_data))))
 		exit(1);
 	stat_data->overage = NULL;
+	stat_data->line_save = NULL;
 	stat_data->history = NULL;
+	stat_data->current = NULL;
 	return (stat_data);
 }
 
@@ -105,7 +98,7 @@ char		*line_edit_main_loop(void)
 			ft_bzero(user_entry, 7);
 			nb_user_entry = read(1, user_entry, 6);
 			if (user_entry[0] == 27 || user_entry[0] == 127)
-				esc_react(prompt, nb_user_entry, user_entry);
+				esc_react(prompt, nb_user_entry, user_entry, stat_data);
 			else
 			{
 				prompt->buf = ft_strdup(user_entry);
@@ -117,6 +110,7 @@ char		*line_edit_main_loop(void)
 		}
 	}
 	stat_data->overage = (prompt->buf ? ft_strdup(prompt->buf) : NULL);
+	//add_to_history(to_return, stat_data);
 	free_prompt(prompt);
 	return (to_return);
 }

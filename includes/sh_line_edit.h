@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/04/03 22:50:05 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/08 15:48:18 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,27 @@ typedef struct	s_prompt
 	t_quotes	quotes;
 }				t_prompt;
 
+typedef struct	s_node
+{
+	char			*cmd;
+	struct s_node	*next;
+}				t_node;
+
 typedef struct	s_stat_data
 {
 	char		*overage;
-	char		**history;
+	char		*line_save;
+	t_node		*history;
+	t_node		*current;
 }				t_stat_data;
 
 void			termanip(int sig);
 char			*line_edit_main_loop();
 void			get_cursor_pos(t_coord *actualize, t_prompt *prompt);
 int				ft_putshit(int c);
-int				esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry);
+int				esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry,
+				t_stat_data *stat_data);
+void			add_to_history(char *cmd, t_stat_data *stat_data);
 int				data_react(t_prompt *prompt);
 char			*prompt_stock(t_prompt *prompt, char *user_entry);
 void			prompt_delete(t_prompt *prompt);
