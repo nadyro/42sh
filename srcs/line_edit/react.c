@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/24 13:39:16 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/08 15:04:37 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/07 20:36:26 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,8 @@ int	data_react(t_prompt *prompt)
 	return (0);
 }
 
-int	esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry,
-		t_stat_data *stat_data)
+int	esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry)
 {
-	if (stat_data == NULL) //
-		; //
 	if (nb_user_entry == 1 && user_entry[0] == 127 && prompt->pos > 0)
 		prompt_delete(prompt);
 	else if (nb_user_entry == 4 && user_entry[3] == 126 &&
