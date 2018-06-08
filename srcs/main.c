@@ -6,7 +6,7 @@
 int				main(int argc, char **argv)
 {
 	int *tab;
-	int i = 0;
+//	int i = 0;
 	t_ast	*head = NULL;
 
 	if (argc == 2)
