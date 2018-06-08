@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:22:04 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/24 17:45:40 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/06/08 10:48:09 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ void					move_left(struct s_line_data *ld)
 	}
 	if (ld->cd->pos_x - 1 >= 0)
 	{
-		go_to = tgoto(tgetstr("cm", NULL), --ld->cd->x, ld->cd->pos_y);
+		--ld->cd->x;
+		go_to = tgoto(tgetstr("cm", NULL), ld->cd->x % ld->sw->win_col, ld->cd->pos_y);
 		tputs(go_to, 1, fprint_char);
 	}
 	ld->cd->col = ld->cd->pos_x;
@@ -65,7 +66,8 @@ void					move_right(struct s_line_data *ld)
 	}
 	if (ld->cd->pos_x < ld->current_size)
 	{
-		go_to = tgoto(tgetstr("cm", NULL), ++ld->cd->x, ld->cd->pos_y);
+		++ld->cd->x;
+		go_to = tgoto(tgetstr("cm", NULL), ld->cd->x % ld->sw->win_col, ld->cd->pos_y);
 		tputs(go_to, 1, fprint_char);
 	}
 	ld->cd->col = ld->cd->pos_x;
