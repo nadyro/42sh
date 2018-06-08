@@ -17,7 +17,10 @@ int				main(int argc, char **argv, char **env)
 	{
 		printf("%s\n", argv[1]);
 		tab = get_tokens(argv[1]);
-		head = get_ast(&tab, &argv);
+		if (tab && tab[0])
+			head = get_ast(&argv);
+		else
+			printf("error: no token table was compiled in main\n");
 		printf("TREE COMPILED, SENDING TO printLeafNodes\n\n\n");
 		ast_evaluate(head);
 		//print_leaf_nodes(head);
@@ -91,6 +94,10 @@ int				main(int argc, char **argv, char **env)
 			i += 3;
 		}
 		*/printf("\n");
-	} 
+	}
+	//if (ac >= 1 && av)
+	//		ash_loop(&shell);
+	//if (shell.list && shell->var && shell->var[0])
+	//		free_env(shell.list);
 	return (0);
 }

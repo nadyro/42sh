@@ -6,12 +6,11 @@
 /*   By: arohani <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/04 14:33:11 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/04 14:39:49 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/08 18:11:14 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
 
 void	ft_print_table(char **tab)
 {

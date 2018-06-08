@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/18 12:22:58 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/08 18:03:06 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/08 18:13:45 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # define C10 "\033[42m\033[30m"
 # define C11 "\033[43m\033[30m"
 
+# include "../libft/libft.h"
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/dir.h>
@@ -39,7 +40,6 @@
 # include <grp.h>
 # include <time.h>
 # include <errno.h>
-# include "../libft/libft.h"
 
 typedef struct	s_env
 {

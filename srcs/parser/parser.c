@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:23 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/08 15:04:41 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/08 18:44:56 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,12 +125,12 @@ static void		ast_loop_semi(t_ast *head)
 	//	ast_loop_and_or(tmp);
 }
 
-t_ast	    *get_ast(int **tab, char ***argv)
+t_ast	    *get_ast(char ***argv)
 {
 	t_ast	*head;
 	t_ast	*tmp;
 
-	head = (*tab[0] && *tab[0] != 16) ? init_ast(argv) : NULL;
+	head = init_ast(argv);
 	tmp = head;
 	ast_loop_semi(tmp);
 	return (head);

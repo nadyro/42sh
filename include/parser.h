@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:27:44 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/08 14:37:00 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/08 18:43:43 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ typedef struct	s_ast
 	struct s_ast			*right;
 }				t_ast;
 
-t_ast	    *get_ast(int **tab, char ***argv);
+t_ast	    *get_ast(char ***argv);
 int         ast_evaluate(t_ast *ast);
 t_ast		*fill_leftast(t_ast *parent, int size);
 t_ast		*fill_rightast(t_ast *parent, int start, int size);

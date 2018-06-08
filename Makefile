@@ -6,7 +6,7 @@
 #    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/06/08 17:51:13 by arohani          ###   ########.fr        #
+#    Updated: 2018/06/08 18:25:00 by arohani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,7 +47,6 @@ SRC_FILES = main.c \
 			builtins/env_setup.c \
 			builtins/error.c \
 			builtins/free.c \
-			builtins/main.c \
 			builtins/path.c \
 			builtins/pwd.c \
 			builtins/setenv.c \
@@ -55,7 +54,6 @@ SRC_FILES = main.c \
 			builtins/unsetenv.c 
 
 INC_FILES = lexer.h \
-			get_next_line.h \
 			parser.h \
 			minishell.h \
 

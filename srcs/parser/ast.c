@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/08 14:37:59 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/08 18:42:21 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,21 @@ t_ast		*init_ast(char ***argv)
 {
 	t_ast	*head;
 	char	**tab = *argv;
+	
+	printf("entered init_ast\n");
 	if (!(head = (t_ast *)malloc(sizeof(t_ast))))
 			return (NULL);	
 	head->parent = NULL;
 	head->split_by = 0;
 	head->address = ft_strdup("P");
 	head->depth = 0;
+	printf("tab[0] = %s\n", tab[0]);
 	head->arg = (tab[1]) ? ft_strndup(tab[1], ft_strlen(tab[1])) : NULL;
+	printf("head->arg initialised to : %s\n", head->arg);
 	head->tok = get_tokens(head->arg);
+	printf("initialised ast, with token table\n");
+	if (head->tok[0])
+		printf("head->tok[0] = %d\n", head->tok[0]);
 	head->left = NULL;
 	head->right = NULL;	
 	return (head);
