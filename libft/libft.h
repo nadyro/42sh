@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/14 11:26:13 by azybert           #+#    #+#             */
-/*   Updated: 2017/12/04 05:06:17 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/08 13:09:43 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ char			*ft_strcjoin(char const *name1, char const *name2, char c);
 void			*ft_realloc(void *to_realloc, size_t old_size, size_t new_size);
 char			*ft_strmerge(char **to_merge);
 char			*ft_strcmerge(char **to_merge, char c);
+char			*ft_strndup(const char *s1, size_t n);
 
 typedef struct	s_list
 {

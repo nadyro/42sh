@@ -3,68 +3,140 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antoipom <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/01 14:07:50 by antoipom          #+#    #+#             */
-/*   Updated: 2018/06/05 15:18:19 by antoipom         ###   ########.fr       */
+/*   Created: 2018/06/07 15:24:23 by arohani           #+#    #+#             */
+/*   Updated: 2018/06/08 13:01:07 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "parser.h"
 #include "lexer.h"
+#include "libft.h"
+#include <stdio.h>
 
-int				g_parser_states[10][17] = {
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-	{3, 0, 3, 3, 6, 7, 7, 7, 7, 7, 7, 0, 0, 0, 0, 0, 1},
-	{3, 3, 3, 3, 4, 5, 5, 5, 5, 5, 5, 8, 2, 9, 9, 0, 1},
-	{0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0},
-	{0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0},
-	{0, 0, 0, 0, 0, 7, 7, 7, 7, 7, 7, 0, 0, 0, 0, 0, 0},
-	{0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0},
-	{3, 0, 3, 3, 6, 7, 7, 7, 7, 7, 7, 0, 0, 0, 0, 0, 0},
-	{3, 3, 3, 3, 6, 7, 7, 7, 7, 7, 7, 0, 0, 0, 0, 0, 0}
-};
-
-static int		convert_token(int token)
+static void		ast_loop_pipe(t_ast *head)
 {
-	int result;
+	int		i = 0;
+	t_ast	*tmp = head;
+	//char	*str = tmp->arg;
+	//static int	order = 1;
 
-	result = 0;
-	(token == TK_CMD) ? result = 0 : 0;
-	(token == TK_WORD) ? result = 1 : 0;
-	(token == TK_IO_NUMBER) ? result = 4 : 0;
-	(token == TK_GREAT) ? result = 5 : 0;
-	(token == TK_DGREAT) ? result = 6 : 0;
-	(token == TK_GREATAND) ? result = 7 : 0;
-	(token == TK_LESS) ? result = 8 : 0;
-	(token == TK_DLESS) ? result = 9 : 0;
-	(token == TK_LESSAND) ? result = 10 : 0;
-	(token == TK_PIPE) ? result = 11 : 0;
-	(token == TK_SEMI) ? result = 12 : 0;
-	(token == TK_AND_IF) ? result = 13 : 0;
-	(token == TK_OR_IF) ? result = 14 : 0;
-	(token == TK_FILENAME) ? result = 15 : 0;
-	(token == TK_END) ? result = 16 : 0;
-	return (result);
-};
-
-int				parser_validation(int *tk_arr)
-{
-	int i;
-	int state;
-
-	i = 0;
-	state = 2;
-	while (state != 1 && state != 0)
+	while (tmp->tok[i] != -1)
 	{
-		state = g_parser_states[state][convert_token(tk_arr[i])];
-		if (state != 1 && state != 0)
+		if (tmp->tok[i] == TK_PIPE)
+		{
+			tmp->split_by = tmp->tok[i];
+			//printf("filling left from ast_loop_pipe\n");
+			tmp->left = fill_leftast(tmp, tmp->tok[i+1]);
 			i += 3;
-		else if (tk_arr[i] == TK_END)
-			i -= 3;
+			//while (tmp->tok[i] == TK_SPACE)
+			//	i += 3;
+			if (tmp->tok[i] && tmp->tok[i] != 1 && tmp->tok[i] != TK_END)
+			{
+				//printf("filling right from ast_loop_pipe with:\ntmp->arg = %s\n", tmp->arg);
+				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1]);
+				//printf("\nrecursively calling ast_loop_PIPE\n");
+				ast_loop_pipe(tmp->right);
+				break ;
+			}
+			else
+				tmp->right = NULL;
+		}
+		else
+			i += 3;
+		//while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
+		//	i += 3;
 	}
-	if (state == 1)
-		return (-1);
-	else
-		return (i); //
+}
+
+static void		ast_loop_and_or(t_ast *head)
+{
+	int		i = 0;
+	t_ast	*tmp = head;
+	//char	*str = tmp->arg;
+
+	if (tmp && !(ft_strstr(tmp->arg, "&&") && !(ft_strstr(tmp->arg, "||"))))
+		ast_loop_pipe(tmp);
+	while (tmp->tok[i] != -1)
+	{
+		if (tmp->tok[i] == TK_AND_IF || tmp->tok[i] == TK_OR_IF)
+		{
+			tmp->split_by = tmp->tok[i];
+			//printf("filling left from ast_loop_and_or\n");
+			tmp->left = fill_leftast(tmp, tmp->tok[i+1]);
+			ast_loop_pipe(tmp->left);
+			i += 3;
+			//while (tmp->tok[i] == TK_SPACE)
+			//	i += 3;
+			if (tmp->tok[i] && tmp->tok[i] != 1 && tmp->tok[i] != TK_END)
+			{
+				//printf("filling right from ast_loop_and_or\n");
+				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1]);
+				//printf("\nrecursively calling ast_loop_and_or\n");
+				ast_loop_and_or(tmp->right);
+				break ;
+			}
+			else
+				tmp->right = NULL;
+		}
+		else
+			i += 3;
+		//while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
+		//	i += 3;
+	}
+//	if (!(tmp->left) && tmp->parent != NULL)
+	//	ast_loop_pipe(tmp);
+}
+
+static void		ast_loop_semi(t_ast *head)
+{
+	int		i = 0;
+	t_ast	*tmp = head;
+	//char	*str = tmp->arg;
+
+	if (tmp && !(ft_strchr(tmp->arg, ';')))
+		ast_loop_and_or(tmp);
+	while (tmp->tok[i] != -1)
+	{
+		if (tmp->tok[i] == TK_SEMI)
+		{
+			//printf("filling left from ast_loop_semi\n");
+			tmp->split_by = TK_SEMI;
+			tmp->left = fill_leftast(tmp, tmp->tok[i+1]);
+			ast_loop_and_or(tmp->left);
+			i += 3;
+			//while (tmp->tok[i] == TK_SPACE)
+			//	i += 3;
+			if (tmp->tok[i] && tmp->tok[i] != 1 && tmp->tok[i] != 16)
+			{
+				//printf("filling right from ast_loop_semi sending: %s to fill_right\n", tmp->arg);
+				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1]);
+				//printf("\nrecursively calling ast_loop_semi\n");
+				if (tmp->right)
+					ast_loop_semi(tmp->right);
+				break ;
+			}
+			else
+				tmp->right = NULL;
+		}
+		else
+			i += 3;
+		//while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
+		//	i += 3;
+	}
+	//if (!(tmp->left) && tmp->parent != NULL)	//so that first elements that were recursively filled don't add extra once branch is done
+	//	ast_loop_and_or(tmp);
+}
+
+t_ast	    *get_ast(int **tab, char ***argv)
+{
+	//char	*str = NULL;
+	t_ast	*head;
+	t_ast	*tmp;
+
+	head = (*tab[0] && *tab[0] != 16) ? init_ast(argv) : NULL;
+	tmp = head;
+	ast_loop_semi(tmp);
+	return (head);
 }

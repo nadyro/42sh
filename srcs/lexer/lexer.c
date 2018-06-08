@@ -6,14 +6,13 @@
 /*   By: antoipom <antoipom@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/04 13:13:10 by antoipom          #+#    #+#             */
-/*   Updated: 2018/06/05 15:17:39 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/06/07 15:27:36 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "lexer.h"
 #include <stdlib.h>
-
 
 int				g_tk_states[2][28][15] = {
 	{
@@ -134,10 +133,9 @@ static int		*token_loop(int *tk_arr, char *line, int arr_size)
 		(tk_arr[tk_i] == 1) ? tk_arr[tk_i + 1] = i : 0;
 		prev = tk_arr[tk_i];
 		tk_arr[tk_i] = g_tk_states[0][tk_arr[tk_i] - 1][g_ascii[(int)line[i]]];
-		//(g_tk_states[1][prev - 1][g_ascii[(int)line[i]]] == 1) ? i++ : 0;
-		i+= (g_tk_states[1][prev - 1][g_ascii[(int)line[i]]]);
+		i += (g_tk_states[1][prev - 1][g_ascii[(int)line[i]]]);
 		(tk_arr[tk_i] == 0) ? exit(1) : 0;//zero?reopen line_editing
-		if (tk_arr[tk_i] == 1 && prev != 23)
+		if (tk_arr[tk_i] == 1 && prev != 22 && prev != 23)
 		{
 			tk_arr[tk_i] = prev;
 			tk_arr[tk_i + 2] = i - tk_arr[tk_i + 1];

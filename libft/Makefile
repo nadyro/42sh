@@ -6,7 +6,7 @@
 #    By: azybert <azybert@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/08 19:33:52 by azybert           #+#    #+#              #
-#    Updated: 2017/12/04 05:04:08 by azybert          ###   ########.fr        #
+#    Updated: 2018/06/08 13:08:38 by antoipom         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,6 +77,7 @@ FILES = ft_memset.c \
 		ft_realloc.c \
 		ft_strmerge.c \
 		ft_strcmerge.c \
+		ft_strndup.c
 
 OBJ = $(FILES:.c=.o)
 FLAG = -Wall -Wextra -Werror
@@ -84,14 +85,14 @@ FLAG = -Wall -Wextra -Werror
 all: $(NAME)
 
 $(NAME):
-	    gcc -c $(FLAG) $(FILES)
-		ar r $(NAME) $(OBJ)
-		ranlib $(NAME)
+	    @gcc -c $(FLAG) $(FILES)
+		@ar r $(NAME) $(OBJ)
+		@ranlib $(NAME)
 
 clean:
-	    rm -f $(OBJ)
+	    @rm -f $(OBJ)
 
 fclean: clean
-	    rm -f $(NAME)
+	    @rm -f $(NAME)
 
 re: fclean all
