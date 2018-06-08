@@ -6,7 +6,7 @@
 #    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/06/08 15:35:41 by arohani          ###   ########.fr        #
+#    Updated: 2018/06/08 15:51:28 by arohani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ SRC_FILES = main.c \
 			parser/parser.c \
 			parser/parser_validation.c \
 			parser/ast.c \
+			\
 			builtins/add_to_mod.c \
 			builtins/ash_exec.c \
 			builtins/bin.c \
@@ -57,7 +58,7 @@ INC_FILES = lexer.h \
 			parser.h \
 			minishell.h
 
-NAME = 42sh
+NAME ?= 42sh
 
 ASAN =
 ifeq ($(ASAN), yes)
@@ -102,6 +103,7 @@ $(OBJ_DIR):
 	@/bin/mkdir -p $(OBJ_DIR)
 	@/bin/mkdir -p $(OBJ_DIR)/lexer
 	@/bin/mkdir -p $(OBJ_DIR)/parser
+	@/bin/mkdir -p $(OBJ_DIR)/builtins
 
 clean:
 	@make -C $(LIB_DIR) clean

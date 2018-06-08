@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/18 12:22:58 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/08 15:36:47 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/08 15:58:22 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,9 @@ typedef struct	s_shell
 	char					**envv;
 	char					**args;
 	int						i;
-	int						start;
+	int						p;
+	int						l;
+	int						st;
 	t_env					*list;
 }				t_shell;
 
@@ -66,6 +68,7 @@ int				ash_execute(t_shell *shell);
 int				ash_env(t_shell *shell);
 int				ash_exit(t_shell *shell);
 int				ash_cd(t_shell *shell);
+int				regular_cd(t_shell *shell);
 int				ash_echo(t_shell *shell);
 int				ash_setenv(t_shell *shell);
 int				ash_unsetenv(t_shell *shell);
@@ -74,12 +77,15 @@ void			add_to_mod(t_shell *shell);
 t_env			*mod_init(t_shell *shell);
 int				ft_exec(t_shell *shell, char **env);
 char			**env_to_tab(t_env *list);
-char			*arg_full_path(t_shell *shell, int m);
+char			*arg_full_path(t_shell *shell);
+int				cd_path(t_shell *shell);
 void			free_table(char **tab);
 int				builtin_check(t_shell *shell);
 void			free_env(t_env *list);
-int				has_paths(t_shell *shell);
+int				has_paths(t_shell *shell, int cdpath);
 t_env			*env_init(void);
 void			update_old_pwd(t_shell *shell, char *new_pwd);
+int				cd_opt_check(t_shell *shell);
+void	    	cd_canon(t_shell *shell);
 
 #endif

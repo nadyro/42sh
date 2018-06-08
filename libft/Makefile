@@ -6,7 +6,7 @@
 #    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/08 19:33:52 by azybert           #+#    #+#              #
-#    Updated: 2018/06/07 16:59:43 by arohani          ###   ########.fr        #
+#    Updated: 2018/06/08 16:00:38 by arohani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,7 @@ FILES = ft_memset.c \
 		ft_tolower.c \
 		ft_toupper.c \
 		ft_memalloc.c \
+		ft_print_table.c \
 		ft_memdel.c \
 		ft_strnew.c \
 		ft_strdel.c \

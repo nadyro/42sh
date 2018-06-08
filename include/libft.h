@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/14 11:26:13 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/08 14:11:19 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/08 16:01:49 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ char			*ft_strcjoin(char const *name1, char const *name2, char c);
 void			*ft_realloc(void *to_realloc, size_t old_size, size_t new_size);
 char			*ft_strmerge(char **to_merge);
 char			*ft_strcmerge(char **to_merge, char c);
+void			ft_print_table(char **tab);
 
 typedef struct	s_list
 {
