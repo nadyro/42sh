@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/07 22:39:02 by azybert           #+#    #+#             */
-/*   Updated: 2018/04/03 21:06:23 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/08 19:22:10 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	main(void)
 	while (1)
 	{
 		line = line_edit_main_loop();
+		if (ft_strncmp(line, "exit", 4) == 0)
+			termanip(2);
 		free(line);
 	}
 	termanip(2);

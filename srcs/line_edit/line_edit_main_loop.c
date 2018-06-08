@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/08 18:19:19 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/08 22:49:02 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ t_prompt	*malloc_prompt(t_prompt *prompt)
 	prompt->buf = NULL;
 	prompt->pos = 0;
 	prompt->total = 0;
-	get_cursor_pos(prompt->origin, prompt);
 	prompt->size->x = w.ws_col;
 	prompt->size->y = w.ws_row;
 	prompt->quotes = none;
+	get_cursor_pos(prompt->origin, prompt);
 	return (prompt);
 }
 
@@ -47,9 +47,11 @@ t_stat_data	*malloc_stat()
 {
 	t_stat_data *stat_data;
 
-	if (!(stat_data = malloc(sizeof(stat_data))))
+	if (!(stat_data = malloc(sizeof(*stat_data))))
 		exit(1);
 	stat_data->overage = NULL;
+	stat_data->line_save = NULL;
+	stat_data->current = NULL;
 	stat_data->history = NULL;
 	return (stat_data);
 }
@@ -108,6 +110,7 @@ char		*line_edit_main_loop(void)
 		}
 	}
 	stat_data->overage = (prompt->buf ? ft_strdup(prompt->buf) : NULL);
+	//add_to_history(to_return, stat_data);
 	free_prompt(prompt);
 	return (to_return);
 }

@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/10 17:23:30 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/07 21:23:22 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/08 23:04:55 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,24 @@
 
 void	get_cursor_pos(t_coord *actualize, t_prompt *prompt)
 {
-	char	buf[100];
+	char	buf[50];
 	int		loop;
 
 	ft_flush(prompt);
-	write(1, "\033[6n", 4);
-	ft_bzero(buf, 100);
-	read(1, buf, 100);
+	ft_bzero(buf, 50);
+	while (buf[0] != 27 || ft_strrchr(buf, 'R') == NULL)
+	{
+		write(1, "\033[6n", 4);
+		ft_bzero(buf, 50);
+		read(1, buf, 49);
+	}
 	actualize->y = ft_atol(&buf[2]) - 1;
 	loop = 2;
 	while (buf[loop] != ';')
 		loop++;
 	actualize->x = ft_atol(&buf[loop + 1]) - 1;
+	if (actualize->x > prompt->size->x || actualize->y > prompt->size->y)
+		get_cursor_pos(actualize, prompt);
 }
 
 int		ft_putshit(int c)
@@ -40,9 +46,11 @@ static size_t ft_add_nl(t_prompt *prompt, size_t new_pos)
 
 	loop = 0;
 	to_add = 0;
+	if (prompt->line == NULL)
+		return(0);
 	while (loop < new_pos)
 	{
-		if (prompt->line[loop] == '\n')
+		if (loop < prompt->total && prompt->line[loop] == '\n')
 		{
 			to_add += prompt->size->x - ((loop + to_add + prompt->origin->x) % prompt->size->x);
 		}

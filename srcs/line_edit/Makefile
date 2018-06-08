@@ -6,17 +6,17 @@
 #    By: azybert <azybert@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/04 19:24:34 by azybert           #+#    #+#              #
-#    Updated: 2018/03/24 15:54:49 by azybert          ###   ########.fr        #
+#    Updated: 2018/06/08 20:52:41 by azybert          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = 42sh
 FILES = sh.c line_edit_main_loop.c termanip.c manage_data.c quotes.c\
-		advanced_cursor_motion.c cursor_motion.c react.c
+		advanced_cursor_motion.c cursor_motion.c react.c history.c
 OBJ = $(FILES:.c=.o)
 LIB = ../../libft/libft.a
 CC = gcc
-FLAG = -Werror -Wall -Wextra
+FLAG = -Werror -Wall -Wextra -g
 
 all: $(NAME)
 
