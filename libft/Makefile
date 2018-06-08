@@ -6,18 +6,21 @@
 #    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/08 19:33:52 by azybert           #+#    #+#              #
-#    Updated: 2018/06/08 16:00:38 by arohani          ###   ########.fr        #
+#    Updated: 2018/06/08 18:05:12 by arohani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
+
 FILES = ft_memset.c \
 		ft_bzero.c \
+		ft_get_next_line.c \
 		ft_memcpy.c \
 		ft_memccpy.c \
 		ft_memmove.c \
 		ft_memchr.c \
 		ft_memcmp.c \
+		ft_split_whitespaces.c \
 		ft_strlen.c \
 		ft_strdup.c \
 		ft_strcpy.c \
@@ -81,6 +84,7 @@ FILES = ft_memset.c \
 		ft_strcmerge.c \
 
 OBJ = $(FILES:.c=.o)
+
 FLAG = -Wall -Wextra -Werror
 
 all: $(NAME)

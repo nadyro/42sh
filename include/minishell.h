@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/18 12:22:58 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/08 15:58:22 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/08 18:03:06 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@
 # include <grp.h>
 # include <time.h>
 # include <errno.h>
-# include "libft.h"
+# include "../libft/libft.h"
 
 typedef struct	s_env
 {
