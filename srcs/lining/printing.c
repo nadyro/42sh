@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   printing.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/27 15:27:29 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/28 19:22:12 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/06/08 11:32:17 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	write_change(struct s_line_data *ld, int is_rewrite)
 	ft_putstr("\x1B[0m");
 	if (is_rewrite == 0)
 	{
-		go_to = tgoto(tgetstr("cm", NULL), ++ld->cd->x, ld->cd->pos_y);
+		go_to = tgoto(tgetstr("cm", NULL), ld->cd->x, ld->cd->pos_y);
 		tputs(go_to, 1, fprint_char);
 	}
 	else if (ld->tmp != NULL)
