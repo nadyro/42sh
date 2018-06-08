@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   features.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/22 16:15:59 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/06/07 19:55:22 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/06/08 10:51:05 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,8 @@ void	cursor_pos(struct s_line_data *ld)
 		}
 		ld->cd->x = ft_atoi(&str_pos[i + 1]) - 1;
 		ld->cd->pos_x = ld->cd->x - COLSTART;
+		ld->cd->o_pos_x = ld->cd->pos_x;
+		ld->cd->o_pos_y = ld->cd->pos_y;
 		i = 0;
 		while (i < 20)
 			str_pos[i++] = '\0';

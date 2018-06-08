@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:22:04 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/24 17:45:40 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/06/08 10:50:20 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ struct s_cursor_data	*init_cursordata(void)
 	cd->avg_cp = 0;
 	cd->col = 0;
 	cd->row = 0;
+	cd->o_pos_x = 0;
+	cd->o_pos_y = 0;
 	cd->pos_x = 0;
 	cd->pos_y = 0;
 	return (cd);

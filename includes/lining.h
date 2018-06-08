@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lining.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:12:46 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/06/07 19:55:24 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/06/08 10:49:59 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@
 
 struct					s_cursor_data
 {
+	int		o_pos_x;
+	int		o_pos_y;
 	int		pos_x;
 	int		pos_y;
 	int		x;
