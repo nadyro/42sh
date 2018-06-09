@@ -59,6 +59,7 @@ typedef struct	s_node
 {
 	char			*cmd;
 	struct s_node	*next;
+	struct s_node	*prev;
 }				t_node;
 
 typedef struct	s_stat_data
@@ -73,7 +74,10 @@ void			termanip(int sig);
 char			*line_edit_main_loop();
 void			get_cursor_pos(t_coord *actualize, t_prompt *prompt);
 int				ft_putshit(int c);
-int				esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry);
+int				esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry,
+				t_stat_data *stat_data);
+void			history_next(t_prompt *prompt, t_stat_data *stat_data);
+void			history_prev(t_prompt *prompt, t_stat_data *stat_data);
 void			add_to_history(char *cmd, t_stat_data *stat_data);
 int				data_react(t_prompt *prompt);
 char			*prompt_stock(t_prompt *prompt, char *user_entry);

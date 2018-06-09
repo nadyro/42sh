@@ -35,17 +35,18 @@ int	data_react(t_prompt *prompt)
 	return (0);
 }
 
-int	esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry)
+int	esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry,
+				t_stat_data *stat_data)
 {
 	if (nb_user_entry == 1 && user_entry[0] == 127 && prompt->pos > 0)
 		prompt_delete(prompt);
 	else if (nb_user_entry == 4 && user_entry[3] == 126 &&
 			prompt->pos < prompt->total)
 		prompt_backdel(prompt);
-	/*else if (nb_user_entry == 3 && user_entry[2] == 65)
-	 *      historique up;
-	 *          else if (nb_user_entry == 3 && user_entry[2] == 66)
-	 *              historique down;*/
+	else if (nb_user_entry == 3 && user_entry[2] == 65)
+	      history_next(prompt, stat_data);
+	else if (nb_user_entry == 3 && user_entry[2] == 66)
+		history_prev(prompt, stat_data);
 	else if (nb_user_entry == 3 && user_entry[2] == 68 && prompt->pos > 0)
 		move_cursor(prompt, prompt->pos - 1, true);
 	else if (nb_user_entry == 3 && user_entry[2] == 67 &&

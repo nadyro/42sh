@@ -28,7 +28,6 @@ static void	ft_writenl(char *to_display, size_t tmp) //optimize this shit lol
 
 void		write_data(t_prompt *prompt, char *to_display, size_t size)
 {
-	size_t	mem;
 	size_t	tmp;
 	size_t	displayed;
 
@@ -40,7 +39,6 @@ void		write_data(t_prompt *prompt, char *to_display, size_t size)
 		tputs(tgetstr("cd", NULL), 1, ft_putshit);//
 		move_cursor(prompt, prompt->pos, true);   //
 	}
-	mem = size;
 	while (size != 0)
 	{
 		displayed = prompt->total - ft_strlen(to_display);

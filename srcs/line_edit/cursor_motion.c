@@ -19,7 +19,8 @@ void	get_cursor_pos(t_coord *actualize, t_prompt *prompt)
 
 	ft_flush(prompt);
 	ft_bzero(buf, 50);
-	while (buf[0] != 27 || ft_strrchr(buf, 'R') == NULL)
+	while (buf[0] != 27 || ft_strrchr(buf, 'R') == NULL ||
+		*(ft_strrchr(buf, 'R') + 1) != '\0')
 	{
 		write(1, "\033[6n", 4);
 		ft_bzero(buf, 50);

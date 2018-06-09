@@ -98,7 +98,7 @@ char		*line_edit_main_loop(void)
 			ft_bzero(user_entry, 7);
 			nb_user_entry = read(1, user_entry, 6);
 			if (user_entry[0] == 27 || user_entry[0] == 127)
-				esc_react(prompt, nb_user_entry, user_entry);
+				esc_react(prompt, nb_user_entry, user_entry, stat_data);
 			else
 			{
 				prompt->buf = ft_strdup(user_entry);
@@ -110,7 +110,7 @@ char		*line_edit_main_loop(void)
 		}
 	}
 	stat_data->overage = (prompt->buf ? ft_strdup(prompt->buf) : NULL);
-	//add_to_history(to_return, stat_data);
+	add_to_history(to_return, stat_data);
 	free_prompt(prompt);
 	return (to_return);
 }
