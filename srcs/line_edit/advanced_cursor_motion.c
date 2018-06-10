@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/24 21:42:41 by azybert           #+#    #+#             */
-/*   Updated: 2018/03/15 15:02:21 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/10 19:55:39 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,19 @@
 void	ft_cursor_up(t_prompt *prompt)
 {
 	size_t	tmp;
+	size_t	loop;
 
-	tmp = prompt->pos - prompt->size->x;
+	if (!(ft_strchr(prompt->line, '\n')))
+	{
+		loop = 0;
+		while (loop < prompt->size->x)
+		{
+			tmp = 1;
+		}
+		loop++;
+	}
+	else
+		tmp = prompt->pos - prompt->size->x;
 	if (tmp <= prompt->pos)
 		move_cursor(prompt, tmp, true);
 }
@@ -24,8 +35,29 @@ void	ft_cursor_up(t_prompt *prompt)
 void	ft_cursor_down(t_prompt *prompt)
 {
 	size_t	tmp;
+	size_t	loop;
 
-	tmp = prompt->pos + prompt->size->x;
+	if (ft_strchr(prompt->line, '\n'))
+	{
+		loop = 0;
+		while (loop < prompt->size->x && prompt->line[prompt->pos + loop])
+		{
+			if (prompt->line[prompt->pos + loop] == '\n')
+			{
+				tmp = prompt->pos + loop + 1 + ((move_cursor(prompt, prompt->pos, true) + prompt->origin->x)
+					% prompt->size->x);
+				if ((prompt->origin->y + (prompt->origin->x + ft_add_nl(prompt, tmp)) / prompt->size->x) - 1 !=
+					(prompt->origin->y + (prompt->origin->x + ft_add_nl(prompt, prompt->pos)) / prompt->size->x))
+					tmp = ft_strchr(&prompt->line[prompt->pos + loop + 1], '\n') - &prompt->line[0];
+				//if (tmp > prompt->total)
+				//	tmp = prompt->total;
+				loop = prompt->size->x;
+			}
+			loop++;
+		}
+	}
+	else
+		tmp = prompt->pos + prompt->size->x;
 	if (tmp <= prompt->total)
 		move_cursor(prompt, tmp, true);
 }

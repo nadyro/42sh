@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/10 17:23:30 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/08 23:04:55 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/10 19:53:25 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int		ft_putshit(int c)
 	return (write(0, &c, 1));
 }
 
-static size_t ft_add_nl(t_prompt *prompt, size_t new_pos)
+size_t	ft_add_nl(t_prompt *prompt, size_t new_pos)
 {
 	size_t loop;
 	size_t to_add;
@@ -62,7 +62,7 @@ static size_t ft_add_nl(t_prompt *prompt, size_t new_pos)
 	return (new_pos + to_add);
 }
 
-void	move_cursor(t_prompt *prompt, size_t new_pos, bool save)
+size_t	move_cursor(t_prompt *prompt, size_t new_pos, bool save)
 {
 	size_t	x;
 	size_t	y;
@@ -74,4 +74,5 @@ void	move_cursor(t_prompt *prompt, size_t new_pos, bool save)
 	x = (prompt->origin->x + new_pos) % prompt->size->x;
 	y = prompt->origin->y + (prompt->origin->x + new_pos) / prompt->size->x;
 	tputs(tgoto(tgetstr("cm", NULL), x, y), 1, ft_putshit);
+	return (new_pos);
 }

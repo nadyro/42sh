@@ -6,24 +6,33 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 23:36:42 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/08 18:21:07 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/10 16:05:37 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/sh_line_edit.h"
 
-static void	ft_writenl(char *to_display, size_t tmp) //optimize this shit lol
+static void	ft_writenl(char *to_display, size_t tmp)
 {
 	size_t	k;
+	size_t	sp;
 
 	k = 0;
-	while (k < tmp)
+	sp = 0;
+	while (sp + k < tmp)
 	{
-		write(1, &to_display[k], 1);
-		if (to_display[k] == '\n')
+		if (to_display[sp + k] == '\n')
+		{
+			write(1, &to_display[sp], k + 1);
 			write(1, "\r", 1);
-		k++;
+			sp = sp + k + 1;
+			k = 0;
+		}
+		else
+			k++;
 	}
+	write(1, &to_display[sp], k + 1);
+	write(1, "\r", 1);
 }
 
 void		write_data(t_prompt *prompt, char *to_display, size_t size)
@@ -32,7 +41,7 @@ void		write_data(t_prompt *prompt, char *to_display, size_t size)
 	size_t	displayed;
 
 	tputs(tgetstr("ce", NULL), 1, ft_putshit); //
-	if ((prompt->origin->y + (prompt->origin->x + prompt->pos) / prompt->size->x)  + 1 < prompt->size->y)
+	if ((prompt->origin->y + (prompt->origin->x + prompt->pos) / prompt->size->x) + 1 < prompt->size->y)
 	{
 		move_cursor(prompt, prompt->pos + prompt->origin->x +
 				(prompt->size->x - ((prompt->pos + prompt->origin->x) % prompt->size->x)), false);   //
