@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/08 22:49:02 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/10 13:59:42 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ t_stat_data	*malloc_stat()
 	if (!(stat_data = malloc(sizeof(*stat_data))))
 		exit(1);
 	stat_data->overage = NULL;
-	stat_data->line_save = NULL;
+	stat_data->line_save = 0;
 	stat_data->current = NULL;
 	stat_data->history = NULL;
 	return (stat_data);
@@ -110,7 +110,8 @@ char		*line_edit_main_loop(void)
 		}
 	}
 	stat_data->overage = (prompt->buf ? ft_strdup(prompt->buf) : NULL);
-	add_to_history(to_return, stat_data);
+	//if (prompt->total > 0)
+		add_to_history(to_return, stat_data);
 	free_prompt(prompt);
 	return (to_return);
 }
