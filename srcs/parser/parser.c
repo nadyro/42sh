@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:23 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/08 13:01:07 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/06/08 18:44:56 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ static void		ast_loop_pipe(t_ast *head)
 {
 	int		i = 0;
 	t_ast	*tmp = head;
-	//char	*str = tmp->arg;
-	//static int	order = 1;
 
 	while (tmp->tok[i] != -1)
 	{
@@ -30,8 +28,8 @@ static void		ast_loop_pipe(t_ast *head)
 			//printf("filling left from ast_loop_pipe\n");
 			tmp->left = fill_leftast(tmp, tmp->tok[i+1]);
 			i += 3;
-			//while (tmp->tok[i] == TK_SPACE)
-			//	i += 3;
+			while (tmp->tok[i] == TK_SPACE)
+				i += 3;
 			if (tmp->tok[i] && tmp->tok[i] != 1 && tmp->tok[i] != TK_END)
 			{
 				//printf("filling right from ast_loop_pipe with:\ntmp->arg = %s\n", tmp->arg);
@@ -45,8 +43,8 @@ static void		ast_loop_pipe(t_ast *head)
 		}
 		else
 			i += 3;
-		//while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
-		//	i += 3;
+		while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
+			i += 3;
 	}
 }
 
@@ -54,7 +52,6 @@ static void		ast_loop_and_or(t_ast *head)
 {
 	int		i = 0;
 	t_ast	*tmp = head;
-	//char	*str = tmp->arg;
 
 	if (tmp && !(ft_strstr(tmp->arg, "&&") && !(ft_strstr(tmp->arg, "||"))))
 		ast_loop_pipe(tmp);
@@ -67,8 +64,8 @@ static void		ast_loop_and_or(t_ast *head)
 			tmp->left = fill_leftast(tmp, tmp->tok[i+1]);
 			ast_loop_pipe(tmp->left);
 			i += 3;
-			//while (tmp->tok[i] == TK_SPACE)
-			//	i += 3;
+			while (tmp->tok[i] == TK_SPACE)
+				i += 3;
 			if (tmp->tok[i] && tmp->tok[i] != 1 && tmp->tok[i] != TK_END)
 			{
 				//printf("filling right from ast_loop_and_or\n");
@@ -82,8 +79,8 @@ static void		ast_loop_and_or(t_ast *head)
 		}
 		else
 			i += 3;
-		//while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
-		//	i += 3;
+		while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
+			i += 3;
 	}
 //	if (!(tmp->left) && tmp->parent != NULL)
 	//	ast_loop_pipe(tmp);
@@ -93,7 +90,6 @@ static void		ast_loop_semi(t_ast *head)
 {
 	int		i = 0;
 	t_ast	*tmp = head;
-	//char	*str = tmp->arg;
 
 	if (tmp && !(ft_strchr(tmp->arg, ';')))
 		ast_loop_and_or(tmp);
@@ -106,8 +102,8 @@ static void		ast_loop_semi(t_ast *head)
 			tmp->left = fill_leftast(tmp, tmp->tok[i+1]);
 			ast_loop_and_or(tmp->left);
 			i += 3;
-			//while (tmp->tok[i] == TK_SPACE)
-			//	i += 3;
+			while (tmp->tok[i] == TK_SPACE)
+				i += 3;
 			if (tmp->tok[i] && tmp->tok[i] != 1 && tmp->tok[i] != 16)
 			{
 				//printf("filling right from ast_loop_semi sending: %s to fill_right\n", tmp->arg);
@@ -122,20 +118,19 @@ static void		ast_loop_semi(t_ast *head)
 		}
 		else
 			i += 3;
-		//while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
-		//	i += 3;
+		while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
+			i += 3;
 	}
 	//if (!(tmp->left) && tmp->parent != NULL)	//so that first elements that were recursively filled don't add extra once branch is done
 	//	ast_loop_and_or(tmp);
 }
 
-t_ast	    *get_ast(int **tab, char ***argv)
+t_ast	    *get_ast(char ***argv)
 {
-	//char	*str = NULL;
 	t_ast	*head;
 	t_ast	*tmp;
 
-	head = (*tab[0] && *tab[0] != 16) ? init_ast(argv) : NULL;
+	head = init_ast(argv);
 	tmp = head;
 	ast_loop_semi(tmp);
 	return (head);

@@ -1,19 +1,26 @@
 #include "lexer.h"
 #include "parser.h"
 #include "libft.h"
+#include "minishell.h"
 #include <stdio.h>
 
-int				main(int argc, char **argv)
+int				main(int argc, char **argv, char **env)
 {
 	int *tab;
-	//int i = 0;
+//	int i = 0;
 	t_ast	*head = NULL;
+	t_shell	shell;
 
+	shell.list = (env && env[0]) ? env_setup(env) : env_init();
+	shell.envv = (shell.list) ? env_to_tab(shell.list) : NULL;
 	if (argc == 2)
 	{
 		printf("%s\n", argv[1]);
 		tab = get_tokens(argv[1]);
-		head = get_ast(&tab, &argv);
+		if (tab && tab[0])
+			head = get_ast(&argv);
+		else
+			printf("error: no token table was compiled in main\n");
 		printf("TREE COMPILED, SENDING TO printLeafNodes\n\n\n");
 		ast_evaluate(head);
 		//print_leaf_nodes(head);
@@ -87,6 +94,10 @@ int				main(int argc, char **argv)
 			i += 3;
 		}
 		*/printf("\n");
-	} 
+	}
+	//if (ac >= 1 && av)
+	//		ash_loop(&shell);
+	//if (shell.list && shell->var && shell->var[0])
+	//		free_env(shell.list);
 	return (0);
 }
