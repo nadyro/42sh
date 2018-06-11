@@ -6,11 +6,11 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 15:36:41 by arohani           #+#    #+#             */
-/*   Updated: 2018/02/22 15:22:52 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/11 13:14:54 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "builtins.h"
 #define USGERROR "\nusage: env [-i] [name=value ...] [utility [argument ...]]\n"
 
 static void		add_to_env_i(t_shell *shell, int *k)

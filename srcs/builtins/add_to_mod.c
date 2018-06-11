@@ -6,11 +6,11 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/15 19:00:58 by arohani           #+#    #+#             */
-/*   Updated: 2018/02/21 17:55:24 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/11 13:12:28 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "builtins.h"
 
 static void	add_to_mod_2(t_shell *shell, t_env **tail, int k)
 {

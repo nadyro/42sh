@@ -1,7 +1,7 @@
 #include "lexer.h"
 #include "parser.h"
 #include "libft.h"
-#include "minishell.h"
+#include "builtins.h"
 #include <stdio.h>
 
 int				main(int argc, char **argv, char **env)

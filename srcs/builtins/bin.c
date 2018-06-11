@@ -6,11 +6,11 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 12:01:43 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/08 15:07:58 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/11 13:13:25 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "builtins.h"
 
 int			builtin_check(t_shell *shell)
 {

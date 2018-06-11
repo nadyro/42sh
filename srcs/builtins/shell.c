@@ -6,11 +6,11 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/10 16:47:36 by arohani           #+#    #+#             */
-/*   Updated: 2018/03/21 14:32:16 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/11 13:17:15 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "builtins.h"
 #include <stdio.h>
 
 static int	semicol_loop(t_shell *shell, char *line)

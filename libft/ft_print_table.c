@@ -1,21 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   ft_print_table.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbie <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: arohani <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/05/11 15:16:39 by pbie              #+#    #+#             */
-/*   Updated: 2018/06/11 13:15:58 by antoipom         ###   ########.fr       */
+/*   Created: 2017/10/04 14:33:11 by arohani           #+#    #+#             */
+/*   Updated: 2018/06/08 18:11:14 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
-#include <stdio.h>
+#include "libft.h"
 
-void      cd_not_dir(char *str)
+void	ft_print_table(char **tab)
 {
-    ft_putstr_fd("cd: ", 2);
-    ft_putstr_fd(str, 2);
-    ft_putstr_fd(": Not a directory\n", 2);
+	int j;
+
+	j = 0;
+	while (tab && tab[j])
+		ft_putendl(tab[j++]);
 }

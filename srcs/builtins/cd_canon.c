@@ -6,11 +6,11 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/09 15:16:39 by pbie              #+#    #+#             */
-/*   Updated: 2018/05/18 14:14:56 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/11 13:14:12 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "builtins.h"
 #include <stdio.h>
 #define ARG shell->args[shell->st]
 

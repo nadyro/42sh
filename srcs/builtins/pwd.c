@@ -6,11 +6,11 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/15 19:32:14 by arohani           #+#    #+#             */
-/*   Updated: 2018/05/18 14:14:06 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/11 13:16:43 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "builtins.h"
 #include <stdio.h>
 
 static void		finish_pwd_switch(t_shell *shell, t_env *tmp, char *old_pwd)

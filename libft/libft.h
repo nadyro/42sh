@@ -6,12 +6,14 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/14 11:26:13 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/08 13:09:43 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/06/08 18:21:47 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
+# define BUFF_SIZE 32
+
 # include <string.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -47,6 +49,7 @@ int				ft_toupper(int c);
 int				ft_tolower(int c);
 void			*ft_memalloc(size_t size);
 void			ft_memdel(void **ap);
+void            ft_print_table(char **tab);
 char			*ft_strnew(size_t size);
 void			ft_strdel(char **as);
 void			ft_strclr(char *s);
@@ -75,6 +78,7 @@ int				ft_power(int nbr, int power);
 char			*ft_itoa_base(int value, int base);
 char			*ft_strcjoin(char const *name1, char const *name2, char c);
 void			*ft_realloc(void *to_realloc, size_t old_size, size_t new_size);
+char			**ft_split_whitespaces(char *str);
 char			*ft_strmerge(char **to_merge);
 char			*ft_strcmerge(char **to_merge, char c);
 char			*ft_strndup(const char *s1, size_t n);
@@ -92,4 +96,6 @@ void			ft_lstdel(t_list **alst, void (*del)(void*, size_t));
 void			ft_lstadd(t_list **alst, t_list *new);
 void			ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list			*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
+int				ft_get_next_line(const int fd, char **line);
+
 #endif

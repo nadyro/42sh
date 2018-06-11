@@ -6,7 +6,7 @@
 #    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/06/08 18:25:00 by arohani          ###   ########.fr        #
+#    Updated: 2018/06/11 13:18:10 by antoipom         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,7 +55,7 @@ SRC_FILES = main.c \
 
 INC_FILES = lexer.h \
 			parser.h \
-			minishell.h \
+			builtins.h
 
 NAME ?= 42sh
 

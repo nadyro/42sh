@@ -6,11 +6,11 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/15 13:50:00 by arohani           #+#    #+#             */
-/*   Updated: 2018/02/22 14:30:53 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/11 13:16:12 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "builtins.h"
 
 void		free_table(char **tab)
 {
