@@ -7,6 +7,7 @@
 int				main(int argc, char **argv, char **env)
 {
 	int *tab;
+	int	parsing_return;
 //	int i = 0;
 	t_ast	*head = NULL;
 	t_shell	shell;
@@ -17,6 +18,14 @@ int				main(int argc, char **argv, char **env)
 	{
 		printf("%s\n", argv[1]);
 		tab = get_tokens(argv[1]);
+		parsing_return = parser_validation(tab);
+		if (parsing_return != -1)
+		{
+			write(1, "parse error near ", 17);
+			write(1, argv[1] + tab[parsing_return + 1], tab[parsing_return + 2]);
+			write(1, "\n", 1);
+			return (1);
+		}
 		if (tab && tab[0])
 			head = get_ast(&argv);
 		else
