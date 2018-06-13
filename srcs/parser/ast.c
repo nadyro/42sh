@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/08 18:42:21 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/13 17:52:21 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,50 @@ t_ast		*init_ast(char ***argv)
 	return (head);
 }
 
-int         ast_evaluate(t_ast *ast)
+static char	**create_arg_table(t_ast *cmd, t_ shell *shell)
+{
+	int		i = 0;
+	int		last = 0;
+	
+	if (!(cmd->arg))
+		return (NULL);
+	else
+	{
+		while (cmd->tok[i] != -1)
+		{
+			while (cmd->tok[i] == TK_SPACE) || cmd->tok[i] == TK_NEWLINE
+				i += 3;
+			if (cmd->tok[i] != -1 && cmd->tok[i] != TK_SPACE)
+				last++;
+			if (cmd->tok[i] != -1)
+				i += 3;
+		}
+		if (last)
+		{
+			if (!(shell->args = (char **)malloc(sizeof(char *) * last)))
+				return (NULL);
+			shell->args[last - 1] = 0;
+			last = 0;
+			i = 0;
+			while (cmd->tok[i] != -1)
+			{
+				while (cmd->tok[i] == SPACE)
+					i += 3;
+				if (cmd->tok[i] != -1 && cmd->tok[i] != SPACE)
+				{
+					shell->args[last] = ft_strndup(cmd->arg, ft_strlen(cmd->arg) - cmd->tok[i+1]);
+					last++;
+					i += 3;
+				}
+			}
+		}
+
+		printf("the command: %s should create a table with %d elements", cmd->arg, last);
+	}
+	return (NULL);
+}
+
+int         ast_evaluate(t_ast *ast, t_shell *shell)
 {
 	int		op;
 	int		v1 = 0;
@@ -85,13 +128,12 @@ int         ast_evaluate(t_ast *ast)
 
 	if (ast == NULL)
 	{
-		printf("ENTERED if clause 1\n");
 		printf("error, AST is null, nothing to evaluate\n");
 		return (-1);
 	}
 	if (!(ast->left) && !(ast->right))
 	{
-		printf("ENTERED if clause 2\n");
+		shell->args = create_arg_table(ast, shell);
 		printf("execute %s and do not take next command value into account\n", ast->arg);
 		if (ast->arg[0] == 't')
 			return (0);
@@ -102,16 +144,15 @@ int         ast_evaluate(t_ast *ast)
 	}
 	else if (ast)
 	{
-		printf("ENTERED if clause 3\n");
 		op = ast->split_by;
 		if (op == TK_AND_IF)
 		{
-			v1 = ast_evaluate(ast->left);
+			v1 = ast_evaluate(ast->left, shell);
 			printf("in ANDIF, after evaluating left, left = %d\n", v1);
 			if (v1 == 0)
 			{
 				printf("left branch of ANDIF returned 0\n");
-				v2 = ast_evaluate(ast->right);
+				v2 = ast_evaluate(ast->right, shell);
 				if (v2 == 0)
 				{
 					printf("right branch returned of ANDIF returned 0\n");
@@ -130,7 +171,7 @@ int         ast_evaluate(t_ast *ast)
 		{
 			printf("ORIF found at : %s\n", ast->arg);
 			printf("going to calculate v1 using %s\n", ast->left->arg);
-			v1 = ast_evaluate(ast->left);
+			v1 = ast_evaluate(ast->left, shell);
 			if (v1 == 0)
 			{
 				printf("ENTERED v1 == 0 clause of left side of OR_IF, should return %d\n", v1);
@@ -140,7 +181,7 @@ int         ast_evaluate(t_ast *ast)
 			else
 			{
 				printf("left branch of ORIF did not return 0, v1 = %d\n, evaluate right branch\n", v1);
-				v2 = ast_evaluate(ast->right);
+				v2 = ast_evaluate(ast->right, shell);
 				if (v2 == 0)
 				{
 					printf("right side of OR_IF returned 0, v2 = %d\n", v2);
@@ -157,15 +198,15 @@ int         ast_evaluate(t_ast *ast)
 		{
 			printf("PIPE found at : %s\n", ast->arg);
 			printf("use ft_pipe_execution\n");
-			v1 = ast_evaluate(ast->left);
-			v2 =ast_evaluate(ast->right);
+			v1 = ast_evaluate(ast->left, shell);
+			v2 =ast_evaluate(ast->right, shell);
 			return (0);
 		}
 		else if (op == TK_SEMI)
 		{
 			printf("SEMI found at : %s\n", ast->arg);
-			v1 = ast_evaluate(ast->left);
-			v2 = ast_evaluate(ast->right);
+			v1 = ast_evaluate(ast->left, shell);
+			v2 = ast_evaluate(ast->right, shell);
 			return (0);
 		}
 		printf("LEAVING IF clause 3\n");

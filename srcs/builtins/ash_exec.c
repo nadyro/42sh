@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/16 14:24:51 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/11 13:12:57 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/06/13 17:37:50 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int			ash_execute(t_shell *shell)
 {
 	int		ret;
 
-	ret = 0;
+	ret = 0; 
 	if (shell->args[0] == NULL)
 		return (1);
 	if ((ret = builtin_check(shell)) != -1)
