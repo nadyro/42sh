@@ -6,7 +6,7 @@
 /*   By: antoipom <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 12:45:57 by antoipom          #+#    #+#             */
-/*   Updated: 2018/06/11 14:37:53 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/06/13 16:20:13 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,11 @@ int				g_parser_states[10][16] = {
 	{3, 3, 6, 7, 7, 7, 7, 7, 7, 0, 0, 0, 0, 0, 9, 0}
 };
 
+int				g_convert_token[18] = {
+	1, 14, 2, 3, 4, 5, 6, 7, 8, 9, 10, -1, -1, 11, 12, 15, 0, 13
+};
+
+/*
 static int		convert_token(int token)
 {
 	int result;
@@ -48,6 +53,7 @@ static int		convert_token(int token)
 	(token == TK_END) ? result = 15 : 0;
 	return (result);
 };
+*/
 
 int				parser_validation(int *tk_arr)
 {
@@ -58,7 +64,8 @@ int				parser_validation(int *tk_arr)
 	state = 2;
 	while (state != 1 && state != 0)
 	{
-		state = g_parser_states[state][convert_token(tk_arr[i])];
+		//state = g_parser_states[state][convert_token(tk_arr[i])];
+		state = g_parser_states[state][g_convert_token[tk_arr[i]]];
 		if (state != 1 && state != 0)
 			i += 3;
 		else if (tk_arr[i] == TK_END)
