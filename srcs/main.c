@@ -20,9 +20,9 @@ int				main(int argc, char **argv, char **env)
 		parsing_return = parser_validation(tab);
 		if (parsing_return != -1)
 		{
-			write(1, "parse error near ", 17);
+			write(1, "parse error near '", 18);
 			write(1, argv[1] + tab[parsing_return + 1], tab[parsing_return + 2]);
-			write(1, "\n", 1);
+			write(1, "'\n", 2);
 			return (1);
 		}
 		if (tab && tab[0])
