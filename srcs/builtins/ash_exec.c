@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/16 14:24:51 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/14 14:35:03 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/14 17:48:55 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,10 +104,10 @@ static int	ash_launch(t_shell *shell)
 	}
 	if (full_path && full_path[0])
 		ft_strdel(&full_path);
-	printf("after execution of %s, shell->error = %d\n", shell->args[0], shell->error);
 	if (shell->error == 1)
 		return (-1);
-	return (1);
+	else
+		return (1);
 }
 
 int			ash_execute(t_shell *shell)

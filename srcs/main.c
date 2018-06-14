@@ -14,6 +14,7 @@ int				main(int argc, char **argv, char **env)
 
 	shell.list = (env && env[0]) ? env_setup(env) : env_init();
 	shell.envv = (shell.list) ? env_to_tab(shell.list) : NULL;
+	shell.error = 0;
 	if (argc == 2)
 	{
 		tab = get_tokens(argv[1]);
