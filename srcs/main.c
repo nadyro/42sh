@@ -16,7 +16,6 @@ int				main(int argc, char **argv, char **env)
 	shell.envv = (shell.list) ? env_to_tab(shell.list) : NULL;
 	if (argc == 2)
 	{
-		printf("%s\n", argv[1]);
 		tab = get_tokens(argv[1]);
 		parsing_return = parser_validation(tab);
 		if (parsing_return != -1)
@@ -30,7 +29,7 @@ int				main(int argc, char **argv, char **env)
 			head = get_ast(&argv);
 		else
 			printf("error: no token table was compiled in main\n");
-		printf("TREE COMPILED, SENDING TO printLeafNodes\n\n\n");
+		//printf("TREE COMPILED, SENDING TO printLeafNodes\n\n\n");
 		ast_evaluate(head, &shell);
 		//print_leaf_nodes(head);
 //		printf("trying to call traverse_ast to analyze pipes\n");

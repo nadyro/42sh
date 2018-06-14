@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/13 17:52:21 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/14 14:36:15 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_ast		*fill_leftast(t_ast *parent, int size)
 	left->tok = get_tokens(left->arg);
 	left->left = NULL;
 	left->right = NULL;
-	printf("in fill_leftast, left->arg = %s\nleft->address = %s\nparent operator = %d\n", left->arg, left->address, parent->split_by);
+	//printf("in fill_leftast, left->arg = %s\nleft->address = %s\nparent operator = %d\n", left->arg, left->address, parent->split_by);
 	return (left);
 }
 
@@ -49,7 +49,7 @@ t_ast		*fill_rightast(t_ast *parent, int start, int size)
 	right->tok = get_tokens(right->arg);
 	right->left = NULL;
 	right->right = NULL;
-	printf("in fill_rightast, right->arg = %s\nright->address = %s\nparent operator = %d\n", right->arg, right->address, parent->split_by);
+	//printf("in fill_rightast, right->arg = %s\nright->address = %s\nparent operator = %d\n", right->arg, right->address, parent->split_by);
 	return (right);
 }
 
@@ -58,37 +58,41 @@ t_ast		*init_ast(char ***argv)
 	t_ast	*head;
 	char	**tab = *argv;
 	
-	printf("entered init_ast\n");
+	//printf("entered init_ast\n");
 	if (!(head = (t_ast *)malloc(sizeof(t_ast))))
 			return (NULL);	
 	head->parent = NULL;
 	head->split_by = 0;
 	head->address = ft_strdup("P");
 	head->depth = 0;
-	printf("tab[0] = %s\n", tab[0]);
+	//printf("tab[0] = %s\n", tab[0]);
 	head->arg = (tab[1]) ? ft_strndup(tab[1], ft_strlen(tab[1])) : NULL;
-	printf("head->arg initialised to : %s\n", head->arg);
+	//printf("head->arg initialised to : %s\n", head->arg);
 	head->tok = get_tokens(head->arg);
-	printf("initialised ast, with token table\n");
-	if (head->tok[0])
-		printf("head->tok[0] = %d\n", head->tok[0]);
+	//printf("initialised ast, with token table\n");
+	//if (head->tok[0])
+	//	printf("head->tok[0] = %d\n", head->tok[0]);
 	head->left = NULL;
 	head->right = NULL;	
 	return (head);
 }
 
-static char	**create_arg_table(t_ast *cmd, t_ shell *shell)
+void		create_arg_table(t_ast *cmd, t_shell *shell)
 {
 	int		i = 0;
 	int		last = 0;
+	char	*str = NULL;
 	
 	if (!(cmd->arg))
-		return (NULL);
+	{
+		shell->args = NULL;
+		return ;
+	}
 	else
 	{
-		while (cmd->tok[i] != -1)
+		while (cmd->tok[i] != -1 && cmd->tok[i] != TK_END)
 		{
-			while (cmd->tok[i] == TK_SPACE) || cmd->tok[i] == TK_NEWLINE
+			while (cmd->tok[i] == TK_SPACE) //decide later if NEWLINE, TAB, or anything else should be skipped
 				i += 3;
 			if (cmd->tok[i] != -1 && cmd->tok[i] != TK_SPACE)
 				last++;
@@ -97,27 +101,27 @@ static char	**create_arg_table(t_ast *cmd, t_ shell *shell)
 		}
 		if (last)
 		{
-			if (!(shell->args = (char **)malloc(sizeof(char *) * last)))
-				return (NULL);
-			shell->args[last - 1] = 0;
+			//printf("going to malloc for last = %d strings from %s\n", last+1, cmd->arg);
+			if (!(shell->args = (char **)malloc(sizeof(char *) * (last + 1))))
+				return ;
+			shell->args[last] = 0;
 			last = 0;
 			i = 0;
-			while (cmd->tok[i] != -1)
+			while (cmd->tok[i] != -1 && cmd->tok[i] != TK_END)
 			{
 				while (cmd->tok[i] == SPACE)
 					i += 3;
 				if (cmd->tok[i] != -1 && cmd->tok[i] != SPACE)
 				{
-					shell->args[last] = ft_strndup(cmd->arg, ft_strlen(cmd->arg) - cmd->tok[i+1]);
-					last++;
+					str = cmd->arg + cmd->tok[i+1];
+					//printf("before filling shell->args, str = %s\ni = %d\ntok[i] = %d\ntok[i+1] = %d\ntok[i+2] = %d\n", str, i, cmd->tok[i], cmd->tok[i+1], cmd->tok[i+2]);
+					shell->args[last++] = ft_strndup(str, cmd->tok[i+2]);
+					//printf("in shell->args table, args[%d] = %s\n", last - 1, shell->args[last-1]);
 					i += 3;
 				}
 			}
 		}
-
-		printf("the command: %s should create a table with %d elements", cmd->arg, last);
 	}
-	return (NULL);
 }
 
 int         ast_evaluate(t_ast *ast, t_shell *shell)
@@ -125,19 +129,32 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 	int		op;
 	int		v1 = 0;
 	int		v2 = 0;
+	int		ret = 0;
 
 	if (ast == NULL)
 	{
 		printf("error, AST is null, nothing to evaluate\n");
 		return (-1);
 	}
-	if (!(ast->left) && !(ast->right))
+/*	printf("ast = %s\n", ast->arg);
+	if (ast->left)
+		printf("left = %s\n", ast->left->arg);
+	if (ast->right)
+		printf("right = %s\n", ast->right->arg);
+*/	if (!(ast->left) && !(ast->right))
 	{
-		shell->args = create_arg_table(ast, shell);
-		printf("execute %s and do not take next command value into account\n", ast->arg);
-		if (ast->arg[0] == 't')
+		printf("LEAF NODE REACHED at %s\n", ast->arg);
+		shell->error = 0;
+		create_arg_table(ast, shell);
+		printf("before ash_execute in ast_evaluate\n");
+		ret = ash_execute(shell);
+		printf("after ash_execute in ast_evaluate\n");
+		if (shell->args)
+			free_table(shell->args);
+		//printf("after EXECUTING and FREEING shell->args, ret = %d\n", ret);
+		if (ret == 1)
 			return (0);
-		else if (ast->arg[0] == 'f')
+		else if (ret != 1)
 			return (-1);
 		else
 			printf("error in leaf node execution of %s at depth of %d, v1 = %d, v2 = %d\nfirst char of arg = %c\n", ast->arg, ast->depth, v1, v2, ast->arg[0]);
@@ -148,19 +165,19 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		if (op == TK_AND_IF)
 		{
 			v1 = ast_evaluate(ast->left, shell);
-			printf("in ANDIF, after evaluating left, left = %d\n", v1);
+			//printf("in ANDIF, after evaluating left, left = %d\n", v1);
 			if (v1 == 0)
 			{
-				printf("left branch of ANDIF returned 0\n");
+				//printf("left branch of ANDIF returned 0\n");
 				v2 = ast_evaluate(ast->right, shell);
 				if (v2 == 0)
 				{
-					printf("right branch returned of ANDIF returned 0\n");
+					//printf("right branch returned of ANDIF returned 0\n");
 					return (0);
 				}
 				else
 				{
-					printf("right branch of ANDIF returned %d\n", v2);
+					//printf("right branch of ANDIF returned %d\n", v2);
 					return (-1);
 				}
 			}
@@ -169,49 +186,50 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		}
 		else if (op == TK_OR_IF)
 		{
-			printf("ORIF found at : %s\n", ast->arg);
-			printf("going to calculate v1 using %s\n", ast->left->arg);
+			//printf("ORIF found at : %s\n", ast->arg);
+			//printf("going to calculate v1 using %s\n", ast->left->arg);
 			v1 = ast_evaluate(ast->left, shell);
 			if (v1 == 0)
 			{
-				printf("ENTERED v1 == 0 clause of left side of OR_IF, should return %d\n", v1);
-				printf("left branch of ORIF returned 0\n");
+				//printf("ENTERED v1 == 0 clause of left side of OR_IF, should return %d\n", v1);
+				//printf("left branch of ORIF returned 0\n");
 				return v1;
 			}
 			else
 			{
-				printf("left branch of ORIF did not return 0, v1 = %d\n, evaluate right branch\n", v1);
+				//printf("left branch of ORIF did not return 0, v1 = %d\n, evaluate right branch\n", v1);
 				v2 = ast_evaluate(ast->right, shell);
 				if (v2 == 0)
 				{
-					printf("right side of OR_IF returned 0, v2 = %d\n", v2);
+				//	printf("right side of OR_IF returned 0, v2 = %d\n", v2);
 					return (0);
 				}
 				else
 				{
-					printf("right side of OR_IF did NOT return 0, returning v2 = %d\n", v2);
+				//	printf("right side of OR_IF did NOT return 0, returning v2 = %d\n", v2);
 					return (-1);
 				}
 			}
 		}
 		else if (op == TK_PIPE)
 		{
-			printf("PIPE found at : %s\n", ast->arg);
-			printf("use ft_pipe_execution\n");
+		//	printf("PIPE found at : %s\n", ast->arg);
+		//	printf("use ft_pipe_execution\n");
 			v1 = ast_evaluate(ast->left, shell);
 			v2 =ast_evaluate(ast->right, shell);
 			return (0);
 		}
 		else if (op == TK_SEMI)
 		{
-			printf("SEMI found at : %s\n", ast->arg);
+		//	printf("SEMI found at %s\n", ast->arg);
 			v1 = ast_evaluate(ast->left, shell);
 			v2 = ast_evaluate(ast->right, shell);
+		//	printf("AFTER SEMI, v1 = %d\nv2 = %d\nreturning 0", v1, v2);
 			return (0);
 		}
-		printf("LEAVING IF clause 3\n");
+	//	printf("LEAVING IF clause 3\n");
 	}
-	printf("end of entire ast_evaluate function, tmp = %s\nv1 = %d\nv2 = %d\n", ast->arg, v1, v2);
+	//printf("end of entire ast_evaluate function, tmp = %s\nv1 = %d\nv2 = %d\n", ast->arg, v1, v2);
 	return (-10);
 }
 /*

@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 12:01:43 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/11 13:13:25 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/06/14 13:43:17 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,6 @@ int			builtin_check(t_shell *shell)
 			return (ash_env(shell));
 		else if (ft_strcmp(shell->args[0], "exit") == 0)
 			return (ash_exit(shell));
-		else
-		{
-			return (-1);
-		}
 	}
 	return (-1);
 }

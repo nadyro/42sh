@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/16 14:24:51 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/13 17:37:50 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/14 14:35:03 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ static void	launch_exec(t_shell *shell, char *full_path)
 			(!full_path) ? ft_putstr_fd(shell->args[0], 2) :
 			ft_putstr_fd(full_path, 2);
 			ft_putstr_fd(": Command not found.\n", 2);
-			exit(EXIT_FAILURE);
+			shell->error = 1;
+			//exit(EXIT_FAILURE);
 		}
 	}
 }
@@ -79,6 +80,7 @@ static int	ash_launch(t_shell *shell)
 	char	*full_path;
 	int		*fd_changed;
 
+	printf("entered ash_launch\n");
 	full_path = NULL;
 	status = 0;
 	pid = fork();
@@ -102,6 +104,9 @@ static int	ash_launch(t_shell *shell)
 	}
 	if (full_path && full_path[0])
 		ft_strdel(&full_path);
+	printf("after execution of %s, shell->error = %d\n", shell->args[0], shell->error);
+	if (shell->error == 1)
+		return (-1);
 	return (1);
 }
 
@@ -114,5 +119,6 @@ int			ash_execute(t_shell *shell)
 		return (1);
 	if ((ret = builtin_check(shell)) != -1)
 		return (ret);
-	return (ash_launch(shell));
+	else
+		return (ash_launch(shell));
 }
