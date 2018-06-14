@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/10 20:05:10 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/14 18:04:34 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void		free_prompt(t_prompt *prompt)
 	free(prompt);
 }
 
-t_prompt	*malloc_prompt(t_prompt *prompt)
+t_prompt	*malloc_prompt(t_prompt *prompt, t_stat_data *stat_data)
 {
 	struct winsize	w;
 
@@ -32,14 +32,22 @@ t_prompt	*malloc_prompt(t_prompt *prompt)
 	if (!(prompt->size = malloc(sizeof(t_coord))))
 		exit(1);
 	ioctl(0, TIOCGWINSZ, &w);
-	prompt->line = NULL;
+	prompt->line = ft_strdup("\0");
 	prompt->buf = NULL;
 	prompt->pos = 0;
 	prompt->total = 0;
 	prompt->size->x = w.ws_col;
 	prompt->size->y = w.ws_row;
 	prompt->quotes = none;
-	get_cursor_pos(prompt->origin, prompt);
+	if (stat_data->line_save >= 100000)
+	{
+		prompt->origin->x = stat_data->line_save / 100000;
+		prompt->origin->y = stat_data->line_save % 100000;
+		move_cursor(prompt, 0, true);
+		stat_data->line_save = 0;
+	}
+	else
+		get_cursor_pos(prompt->origin, prompt);
 	return (prompt);
 }
 
@@ -78,12 +86,13 @@ char		*line_edit_main_loop(void)
 {
 	char				user_entry[7];
 	char				*to_return;
+	char				*check;
 	int					nb_user_entry;
 	static t_stat_data	*stat_data = NULL;
 
 	write(1, "prompt> ", 8);
-	prompt = malloc_prompt(prompt);
 	stat_data = (stat_data ? stat_data : malloc_stat());
+	prompt = malloc_prompt(prompt, stat_data);
 	prompt->buf = stat_data->overage;
 	to_return = NULL;
 	while (to_return == NULL || prompt->quotes != none)
@@ -110,8 +119,16 @@ char		*line_edit_main_loop(void)
 		}
 	}
 	stat_data->overage = (prompt->buf ? ft_strdup(prompt->buf) : NULL);
-	//if (prompt->total > 0)
+	check = ft_strtrim(to_return);
+	if (ft_strlen(check) >= 1)
 		add_to_history(to_return, stat_data);
+	else
+	{
+		stat_data->current = stat_data->history;
+		stat_data->line_save = 0;
+		stat_data->line_save = prompt->origin->x * 100000 + prompt->origin->y;
+	}
+	free(check);
 	free_prompt(prompt);
 	return (to_return);
 }

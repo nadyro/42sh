@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@stud.42.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:20:53 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/10 20:05:01 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/14 16:33:21 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,12 @@ void	history_next(t_prompt *prompt, t_stat_data *stat_data)
 {
 	if (stat_data->history == NULL)
 		return ;
-	if (stat_data->line_save == 0)
+	if (stat_data->line_save != 1)
 	{
 		stat_data->current = stat_data->history;
-		add_to_history((prompt->line ? prompt->line : "\0"), stat_data);
+		if (stat_data->line_save == 2 && stat_data->current->next != NULL)
+			stat_data->current = stat_data->current->next;
+		add_to_history((prompt->line ? prompt->line : " \0"), stat_data);
 		stat_data->line_save = 1;
 	}
 	else if (stat_data->current->next != NULL)
@@ -63,12 +65,12 @@ void	history_prev(t_prompt *prompt, t_stat_data *stat_data)
 	if (stat_data->current == NULL || stat_data->current->prev == NULL)
 		return ;
 	stat_data->current = stat_data->current->prev;
-
+	if (stat_data->current->prev == NULL)
+		stat_data->line_save = 2;
 	free(prompt->line);
 	prompt->line = ft_strdup(stat_data->current->cmd);
-	if (ft_strrchr(prompt->line, '\n'))
+	if (ft_strrchr(prompt->line, '\n') != NULL)
 		*(ft_strrchr(prompt->line, '\n')) = '\0';
-
 	move_cursor(prompt, 0, false);
 	tputs(tgetstr("cd", NULL), 1, ft_putshit);
 	prompt->total = ft_strlen(prompt->line);

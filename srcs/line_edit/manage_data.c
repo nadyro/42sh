@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 23:36:42 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/10 16:05:37 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/14 16:40:10 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void		prompt_delete(t_prompt *prompt)
 {
 	ft_memmove(&(prompt->line[prompt->pos - 1]),
 			&(prompt->line[prompt->pos]),
-			ft_strlen(&(prompt->line[prompt->pos - 1])) + 1);
+			ft_strlen(&(prompt->line[prompt->pos])) + 1);
 	move_cursor(prompt, prompt->pos - 1, true);
 	strcat(prompt->line, " ");
 	write_data(prompt, &(prompt->line[prompt->pos]),
