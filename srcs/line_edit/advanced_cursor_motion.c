@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/24 21:42:41 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/10 19:55:39 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/16 22:24:19 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,25 @@ void	ft_cursor_up(t_prompt *prompt)
 	size_t	tmp;
 	size_t	loop;
 
-	if (!(ft_strchr(prompt->line, '\n')))
+	if (ft_strchr(prompt->line, '\n'))
 	{
 		loop = 0;
-		while (loop < prompt->size->x)
+		while (loop < prompt->size->x && loop <= prompt->pos)
 		{
-			tmp = 1;
+			if (prompt->line[prompt->pos - loop] == '\n') //
+			{
+				tmp = prompt->pos + loop + 1 + ((move_cursor(prompt, prompt->pos, true) + prompt->origin->x)
+					% prompt->size->x);
+				if ((prompt->origin->y + (prompt->origin->x + ft_add_nl(prompt, tmp)) / prompt->size->x) - 1 !=
+					(prompt->origin->y + (prompt->origin->x + ft_add_nl(prompt, prompt->pos)) / prompt->size->x))
+					tmp = ft_strchr(&prompt->line[prompt->pos + loop + 1], '\n') - &prompt->line[0];
+				loop = prompt->size->x;
+			}
+			loop++;
 		}
-		loop++;
 	}
 	else
-		tmp = prompt->pos - prompt->size->x;
+		tmp = prompt->pos + prompt->size->x;
 	if (tmp <= prompt->pos)
 		move_cursor(prompt, tmp, true);
 }
@@ -49,8 +57,6 @@ void	ft_cursor_down(t_prompt *prompt)
 				if ((prompt->origin->y + (prompt->origin->x + ft_add_nl(prompt, tmp)) / prompt->size->x) - 1 !=
 					(prompt->origin->y + (prompt->origin->x + ft_add_nl(prompt, prompt->pos)) / prompt->size->x))
 					tmp = ft_strchr(&prompt->line[prompt->pos + loop + 1], '\n') - &prompt->line[0];
-				//if (tmp > prompt->total)
-				//	tmp = prompt->total;
 				loop = prompt->size->x;
 			}
 			loop++;

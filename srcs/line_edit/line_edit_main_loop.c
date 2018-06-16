@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/14 18:04:34 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/16 22:56:22 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,10 @@ t_prompt	*malloc_prompt(t_prompt *prompt, t_stat_data *stat_data)
 	prompt->quotes = none;
 	if (stat_data->line_save >= 100000)
 	{
-		prompt->origin->x = stat_data->line_save / 100000;
-		prompt->origin->y = stat_data->line_save % 100000;
+		prompt->origin->x = stat_data->line_save % 100000;
+		prompt->origin->y = stat_data->line_save / 100000;
+		if (prompt->origin->y >= prompt->size->y)
+			prompt->origin->y = prompt->size->y - 1;
 		move_cursor(prompt, 0, true);
 		stat_data->line_save = 0;
 	}
@@ -86,7 +88,6 @@ char		*line_edit_main_loop(void)
 {
 	char				user_entry[7];
 	char				*to_return;
-	char				*check;
 	int					nb_user_entry;
 	static t_stat_data	*stat_data = NULL;
 
@@ -119,16 +120,13 @@ char		*line_edit_main_loop(void)
 		}
 	}
 	stat_data->overage = (prompt->buf ? ft_strdup(prompt->buf) : NULL);
-	check = ft_strtrim(to_return);
-	if (ft_strlen(check) >= 1)
+	if (to_return[0] != '\n' || to_return[1] != '\0')
 		add_to_history(to_return, stat_data);
 	else
 	{
 		stat_data->current = stat_data->history;
-		stat_data->line_save = 0;
-		stat_data->line_save = prompt->origin->x * 100000 + prompt->origin->y;
+		stat_data->line_save = prompt->origin->x + (prompt->origin->y + 1) * 100000;
 	}
-	free(check);
 	free_prompt(prompt);
 	return (to_return);
 }
