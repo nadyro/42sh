@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/16 22:56:22 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/17 13:47:12 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_prompt	*malloc_prompt(t_prompt *prompt, t_stat_data *stat_data)
 	{
 		prompt->origin->x = stat_data->line_save % 100000;
 		prompt->origin->y = stat_data->line_save / 100000;
-		if (prompt->origin->y >= prompt->size->y)
+		if (prompt->origin->y == prompt->size->y)
 			prompt->origin->y = prompt->size->y - 1;
 		move_cursor(prompt, 0, true);
 		stat_data->line_save = 0;

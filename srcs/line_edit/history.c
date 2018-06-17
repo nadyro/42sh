@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@stud.42.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:20:53 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/14 16:33:21 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/16 23:06:42 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	history_next(t_prompt *prompt, t_stat_data *stat_data)
 	prompt->line = ft_strdup(stat_data->current->cmd);
 	if (ft_strrchr(prompt->line, '\n'))
 		*(ft_strrchr(prompt->line, '\n')) = '\0';
-	move_cursor(prompt, 0, false);
+	move_cursor(prompt, 0, true);
 	tputs(tgetstr("cd", NULL), 1, ft_putshit);
 	prompt->total = ft_strlen(prompt->line);
 	write_data(prompt, prompt->line, prompt->total);
@@ -71,7 +71,7 @@ void	history_prev(t_prompt *prompt, t_stat_data *stat_data)
 	prompt->line = ft_strdup(stat_data->current->cmd);
 	if (ft_strrchr(prompt->line, '\n') != NULL)
 		*(ft_strrchr(prompt->line, '\n')) = '\0';
-	move_cursor(prompt, 0, false);
+	move_cursor(prompt, 0, true);
 	tputs(tgetstr("cd", NULL), 1, ft_putshit);
 	prompt->total = ft_strlen(prompt->line);
 	write_data(prompt, prompt->line, prompt->total);
