@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/16 14:24:51 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/14 17:48:55 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/15 14:50:52 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 static void	launch_exec(t_shell *shell, char *full_path)
 {
+	shell->error = 0;
+	
 	if (execve(shell->args[0], shell->args, shell->envv) == -1)
 	{
 		if (execve(full_path, shell->args, shell->envv) == -1)
@@ -22,7 +24,8 @@ static void	launch_exec(t_shell *shell, char *full_path)
 			(!full_path) ? ft_putstr_fd(shell->args[0], 2) :
 			ft_putstr_fd(full_path, 2);
 			ft_putstr_fd(": Command not found.\n", 2);
-			shell->error = 1;
+			shell->error = -1;
+			printf("shell->error = %d\n", shell->error);
 			//exit(EXIT_FAILURE);
 		}
 	}
@@ -89,6 +92,7 @@ static int	ash_launch(t_shell *shell)
 		fd_changed = redirect_check(shell);
 		full_path = (has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
 		launch_exec(shell, full_path);
+		printf("after launch_exec call, shell->error = %d\n", shell->error);
 		if (fd_changed[1])
 		{
 			close(fd_changed[0]);
@@ -104,8 +108,12 @@ static int	ash_launch(t_shell *shell)
 	}
 	if (full_path && full_path[0])
 		ft_strdel(&full_path);
-	if (shell->error == 1)
+	if (shell->error == -1)
+	{
+		printf("SHELL ERROR  FOUND IN COMMAND EXECUTION, returning -1\n");
+		shell->error = 0;
 		return (-1);
+	}
 	else
 		return (1);
 }
