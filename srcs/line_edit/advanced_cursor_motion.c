@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/24 21:42:41 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/17 22:00:26 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/18 14:48:20 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,16 @@ void	ft_cursor_up(t_prompt *prompt)
 	if (ft_strchr(prompt->line, '\n'))
 	{
 		loop = 0;
+		tmp2 = (ft_add_nl(prompt, prompt->pos) + prompt->origin->x) % prompt->size->x;
 		while (loop < prompt->size->x && loop != prompt->pos)
 		{
-			if (prompt->line[prompt->pos - loop] == '\n')
+			if (prompt->line[prompt->pos - loop] == '\n' && loop != 0)
 			{
 				tmp = (ft_add_nl(prompt, prompt->pos - loop) + prompt->origin->x) % prompt->size->x;
-				tmp = prompt->pos - tmp - 1;
-				/*if (loop == 0)
-				{
-					while ()
-						loop < prompt->size->x && loop != prompt->pos;
-					tmp2 = (ft_add_nl(prompt, prompt->pos - loop) + prompt->origin->x) % prompt->size->x;
-					tmp2 = prompt->pos - tmp - 1;
-				}*/
+				if (prompt->line[prompt->pos] == '\n' && tmp > tmp2)
+					tmp = prompt->pos - tmp - 1;
+				else
+					tmp = prompt->pos - tmp2 - 1;
 				loop = prompt->size->x;
 			}
 			loop++;
