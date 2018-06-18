@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/16 14:24:51 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/15 14:50:52 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/18 13:26:05 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,16 +83,18 @@ static int	ash_launch(t_shell *shell)
 	char	*full_path;
 	int		*fd_changed;
 
-	printf("entered ash_launch\n");
+//	printf("entered ash_launch\n");
 	full_path = NULL;
 	status = 0;
 	pid = fork();
 	if (pid == 0)
 	{
+		printf("pid == 0 i.e. child process: \n");
+		ft_print_table(shell->args);
 		fd_changed = redirect_check(shell);
 		full_path = (has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
 		launch_exec(shell, full_path);
-		printf("after launch_exec call, shell->error = %d\n", shell->error);
+	//	printf("after launch_exec call, shell->error = %d\n", shell->error);
 		if (fd_changed[1])
 		{
 			close(fd_changed[0]);
@@ -105,12 +107,14 @@ static int	ash_launch(t_shell *shell)
 		wpid = waitpid(pid, &status, WUNTRACED);
 		while (!WIFEXITED(status) && !WIFSIGNALED(status))
 			wpid = waitpid(pid, &status, WUNTRACED);
+		printf("should be returning from PARENT process, pid = %d\n", pid);
+		return (10);
 	}
 	if (full_path && full_path[0])
 		ft_strdel(&full_path);
 	if (shell->error == -1)
 	{
-		printf("SHELL ERROR  FOUND IN COMMAND EXECUTION, returning -1\n");
+	//	printf("SHELL ERROR  FOUND IN COMMAND EXECUTION, returning -1\n");
 		shell->error = 0;
 		return (-1);
 	}

@@ -102,7 +102,7 @@ int				main(int argc, char **argv, char **env)
 			}
 			i += 3;
 		}
-		*/printf("\n");
+		*/
 	}
 	//if (ac >= 1 && av)
 	//		ash_loop(&shell);
