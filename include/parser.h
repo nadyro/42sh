@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:27:44 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/15 13:18:57 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/18 14:16:20 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,7 @@ int         ast_evaluate(t_ast *ast, t_shell *shell);
 t_ast		*fill_leftast(t_ast *parent, int size);
 t_ast		*fill_rightast(t_ast *parent, int start, int size);
 t_ast		*init_ast(char ***argv);
+void		ast_loop(t_shell *shell, t_ast *ast);
+int			ast_execute(t_shell *shell, t_ast *cmd);
 
 #endif

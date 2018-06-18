@@ -31,7 +31,7 @@ int				main(int argc, char **argv, char **env)
 		else
 			printf("error: no token table was compiled in main\n");
 		//printf("TREE COMPILED, SENDING TO printLeafNodes\n\n\n");
-		ast_evaluate(head, &shell);
+		ast_loop(&shell, head);
 		//print_leaf_nodes(head);
 //		printf("trying to call traverse_ast to analyze pipes\n");
 //		traverse_ast(head, 3);

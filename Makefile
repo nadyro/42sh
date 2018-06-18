@@ -6,7 +6,7 @@
 #    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/06/11 13:18:10 by antoipom         ###   ########.fr        #
+#    Updated: 2018/06/18 13:50:58 by arohani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,7 @@ SRC_FILES = main.c \
 			lexer/lexer.c \
 			\
 			parser/parser.c \
+			parser/execute.c \
 			parser/parser_validation.c \
 			parser/ast.c \
 			\

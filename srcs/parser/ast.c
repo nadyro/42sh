@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/18 13:25:12 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/18 14:17:02 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,7 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		//printf("DEBUG 1 : GOING TO EXECUTE: %s, address = %s\n", ast->arg, ast->address);
 		create_arg_table(ast, shell);
 		//printf("DEBUG 2\n");
-		ret = ash_execute(shell);
+		ret = ast_execute(shell, ast);
 		//printf("DEBUG 3, address of %s : %s\n", ast->arg, ast->address);
 		if (shell->args)
 			free_table(shell->args);
@@ -183,14 +183,12 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 			ast->cmd_ret = 0;
 		//	printf("DEBUG 6\n");
 			return (0);
-		}
-		else if (ret == 10)
-			return (0);		
+		}	
 		else if (ret != 1)
 		{
 		//	printf("DEBUG 7\n");
 			ast->cmd_ret = -1;
-		//	printf("RETURNING -1 after command execution\n");
+			printf("RETURNING -1 after command execution\n");
 			return (-1);
 		}
 		//else
@@ -202,26 +200,26 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		op = ast->split_by;
 		if (op == TK_AND_IF)
 		{
-			//printf("and if located while in %s\nSENDING left : %s to ast_evaluate\n", ast->arg, ast->left->arg);
+			printf("and if located while in %s\nSENDING left : %s to ast_evaluate\n", ast->arg, ast->left->arg);
 			v1 = ast_evaluate(ast->left, shell);
 			if (v1 != 0)
 			{
-			//	printf("v1 = %d\n", v1);
+				printf("v1 = %d\n, returning -1\n", v1);
 				free_ast(ast->right);
 				return (-1);
 			}
 			else if (v1 == 0)
 			{
-			//	printf("left branch of ANDIF returned 0\n");
+				printf("left branch of ANDIF returned 0\n");
 				v2 = ast_evaluate(ast->right, shell);
 				if (v2 == 0)
 				{
-			//		printf("right branch RETURNING of ANDIF returned v2 = 0\n");
+					printf("right branch RETURNING of ANDIF returned v2 = 0\n");
 					return (0);
 				}
 				else
 				{
-			//		printf("right branch of ANDIF RETURNING v2 = %d\n", v2);
+					printf("right branch of ANDIF RETURNING v2 = %d\n", v2);
 					return (-1);
 				}
 			}
