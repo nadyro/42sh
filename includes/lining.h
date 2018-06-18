@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:12:46 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/06/07 19:55:24 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/06/07 20:46:35 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ struct					s_cursor_data
 };
 struct					s_win
 {
-	int		win_col;
-	int		win_row;
+	int		cols;
+	int		rows;
 };
 struct					s_line_data
 {
