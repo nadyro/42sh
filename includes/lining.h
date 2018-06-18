@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lining.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
+/*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/04/23 13:12:46 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/06/18 16:27:44 by nsehnoun         ###   ########.fr       */
+/*   Created: 2018/06/18 16:31:28 by nsehnoun          #+#    #+#             */
+/*   Updated: 2018/06/18 16:31:32 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ struct					s_cursor_data
 };
 struct					s_win
 {
-	int		cols;
-	int		rows;
+	int		win_col;
+	int		win_row;
 };
 struct					s_line_data
 {
