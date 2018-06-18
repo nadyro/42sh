@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/28 16:35:14 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/06/07 19:57:33 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/06/08 16:59:14 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,7 @@ void        browse_history_up(struct s_line_data *ld, int *index)
 		*index = ft_strlen(ld->buffer);
 		ld->current_size = ft_strlen(ld->buffer);
 		ld->cd->x = ft_strlen(ld->buffer) + COLSTART;
-		ld->cd->pos_x = ft_strlen(ld->buffer);
-		go_to = tgoto(tgetstr("cm", NULL), (ld->cd->pos_x + COLSTART) - 1, ld->cd->pos_y);
+		go_to = tgoto(tgetstr("cm", NULL), (ld->cd->x - 1) % ld->sw->win_col, ld->cd->pos_y);
 	}
 }
 
@@ -95,10 +94,9 @@ void        browse_history_down(struct s_line_data *ld, int *index)
 		tputs(go_to, 1, fprint_char);
 		tputs(tgetstr("ce", NULL), 1, fprint_char);
 		ft_putstr(ld->buffer);
-		go_to = tgoto(tgetstr("cm", NULL), (ld->cd->pos_x + COLSTART) - 1, ld->cd->pos_y);
+		go_to = tgoto(tgetstr("cm", NULL), (ld->cd->x - 1) % ld->sw->win_col, ld->cd->pos_y);
 		*index = ft_strlen(ld->buffer);
-		ld->cd->pos_x = ft_strlen(ld->buffer);
+		ld->cd->x = ft_strlen(ld->buffer) + COLSTART;		
 		ld->current_size = ft_strlen(ld->buffer);
-		ld->cd->x = ft_strlen(ld->buffer) + COLSTART;
 	}
 }

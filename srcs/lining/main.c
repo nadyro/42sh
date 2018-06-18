@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 13:19:24 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/28 20:08:24 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/06/08 17:08:54 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int		main(void)
 	index = 0;
 	get_infoterm();
 	ld = init_linedata();
+	cursor_pos(ld);
 	history = NULL;
 	while (1)
 	{
@@ -56,8 +57,14 @@ int		main(void)
 				manage_validation(ld, &history);
 				index = 0;
 			}
-			cursor_pos(ld);
 			dispatch_tasks(ld, t, &index);
+			ld->cd->pos_x = ld->cd->x - COLSTART;
+			if (ld->cd->x % ld->sw->win_col == 0)
+			{
+				ld->cd->pos_y++;
+				ft_putstr(tgetstr("sf", NULL));
+				ld->cd->o_pos_y--;		
+			}
 		}
 	}
 	return (0);

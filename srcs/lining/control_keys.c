@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   control_keys.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/24 17:01:52 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/05/24 17:52:45 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/06/08 12:06:43 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,24 @@ void	gt_start_end_del(struct s_line_data *ld, char t, int *index)
 	{
 		go_to = tgoto(tgetstr("cm", NULL), COLSTART, ld->cd->pos_y);
 		tputs(go_to, 1, fprint_char);
+		ld->cd->x = COLSTART;
 	}
 	if (t == 5)
 	{
 		go_to = tgoto(tgetstr("cm", NULL),
 				COLSTART + ld->current_size, ld->cd->pos_y);
 		tputs(go_to, 1, fprint_char);
+		ld->cd->x = COLSTART + ld->current_size;		
 	}
 	if (t == 127)
 	{
+		if (ld->cd->pos_x - 1 >= 0)
+		{
 		if (*index - 1 >= 0)
 			*index -= 1;
 		if (ld->buffer[0] != '\0')
 			manage_deletion(ld);
+		}
 	}
 }
 
@@ -51,7 +56,7 @@ void	cp_cut(struct s_line_data *ld, int *index, char t)
 		ld->cd->cp_state = 1;
 		go_to = tgoto(tgetstr("cm", NULL), COLSTART, ld->cd->pos_y);
 		tputs(go_to, 1, fprint_char);
-		cursor_pos(ld);
+		ld->cd->x = COLSTART;
 		tputs(tgetstr("ce", NULL), 1, fprint_char);
 		if (ld->tmp == NULL)
 			ld->tmp = ft_strdup(ld->buffer);
@@ -63,6 +68,7 @@ void	cp_cut(struct s_line_data *ld, int *index, char t)
 		*index = 0;
 		while (y < i)
 			ld->buffer[y++] = '\0';
+		ld->current_size = 0;
 	}
 }
 

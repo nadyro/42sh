@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   features.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/22 16:15:59 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/06/07 19:55:22 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/06/08 11:50:52 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,10 @@ void	manage_deletion(struct s_line_data *ld)
 	ld->current_size = ft_strlen(ld->buffer);
 	ft_strdel(&tmp);
 	if (ld->cd->pos_x - 1 >= 0)
+	{
 		write_fromstart(ld, 1);
-	cursor_pos(ld);
+		ld->cd->x--;
+	}
 }
 
 void	manage_validation(struct s_line_data *ld, t_list **history)
@@ -70,6 +72,8 @@ void	manage_validation(struct s_line_data *ld, t_list **history)
 	while((*history)->next != NULL)
 		*history = (*history)->next;
 	ld->history = *history;
+	ld->cd->x = COLSTART;
+	ld->cd->pos_x = 0;
 	print_line_data(ld, *history);
 	clean_linedata(ld);
 	ft_putscolors("$> 42sh", BCYAN);
@@ -98,6 +102,8 @@ void	cursor_pos(struct s_line_data *ld)
 		}
 		ld->cd->x = ft_atoi(&str_pos[i + 1]) - 1;
 		ld->cd->pos_x = ld->cd->x - COLSTART;
+		ld->cd->o_pos_x = ld->cd->pos_x;
+		ld->cd->o_pos_y = ld->cd->pos_y;
 		i = 0;
 		while (i < 20)
 			str_pos[i++] = '\0';
