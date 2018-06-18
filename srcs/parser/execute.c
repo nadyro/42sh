@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/18 16:05:33 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/18 16:10:32 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 #include "builtins.h"
 #include <stdio.h>
 
-static void	launch_exec(t_shell *shell, char *full_path)
+static void	launch_exec(t_shell *shell, char *full_path, t_ast *cmd)
 {
-	shell->error = 0;
+	cmd->cmd_ret = 0;
 	
 	if (execve(shell->args[0], shell->args, shell->envv) == -1)
 	{
@@ -30,8 +30,7 @@ static void	launch_exec(t_shell *shell, char *full_path)
 			(!full_path) ? ft_putstr_fd(shell->args[0], 2) :
 			ft_putstr_fd(full_path, 2);
 			ft_putstr_fd(": Command not found.\n", 2);
-			shell->error = -1;
-			printf("shell->error = %d\n", shell->error);
+			cmd->cmd_ret = -1;
 			//exit(EXIT_FAILURE);
 		}
 	}
@@ -99,7 +98,7 @@ static int	ast_launch(t_shell *shell, t_ast *cmd)
 		ft_print_table(shell->args);
 		fd_changed = redirect_check(shell);
 		full_path = (has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
-		launch_exec(shell, full_path);
+		launch_exec(shell, full_path, cmd);
 	//	printf("after launch_exec call, shell->error = %d\n", shell->error);
 		if (fd_changed[1])
 		{
