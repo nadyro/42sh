@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/17 13:47:12 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/18 17:06:15 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ char		*line_edit_main_loop(void)
 	prompt = malloc_prompt(prompt, stat_data);
 	prompt->buf = stat_data->overage;
 	to_return = NULL;
-	while (to_return == NULL || prompt->quotes != none)
+	while (to_return == NULL)
 	{
 		if (prompt->buf != NULL)
 		{

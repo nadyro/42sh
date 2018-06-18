@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/11 15:43:54 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/17 13:46:31 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/18 17:06:58 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char			*quotes_managing(t_prompt *prompt, char *to_return)
 	pair_quotes(prompt, loop);
 	if (prompt->origin->y > prompt->size->y)
 		prompt->origin->y = prompt->size->y;
-	if (prompt->quotes == quotes)
+	/*if (prompt->quotes == quotes)
 		write(1, "quotes> ", 8);
 	else if (prompt->quotes == dquotes)
 	{
@@ -94,9 +94,7 @@ char			*quotes_managing(t_prompt *prompt, char *to_return)
 	if (prompt->quotes != none)
 	{
 		prompt->origin->y++;
-		//if (prompt->origin->y >= prompt->size->y)
-		//	prompt->
-	}
+	}*/
 	//here change origin->x in case prompt can change
 	return (stock_line(to_return, prompt));
 }
