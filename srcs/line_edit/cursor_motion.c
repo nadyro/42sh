@@ -6,11 +6,11 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/10 17:23:30 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/18 17:35:05 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/19 11:30:16 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/sh_line_edit.h"
+#include "sh_line_edit.h"
 
 void	get_cursor_pos(t_coord *actualize, t_prompt *prompt)
 {

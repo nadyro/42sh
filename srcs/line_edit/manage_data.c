@@ -6,11 +6,11 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 23:36:42 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/16 21:55:48 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/19 11:31:24 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/sh_line_edit.h"
+#include "sh_line_edit.h"
 
 static void	ft_writenl(char *to_display, size_t tmp)
 {

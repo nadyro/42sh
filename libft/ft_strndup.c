@@ -1,24 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strnchr.c                                       :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/04/06 17:33:06 by azybert           #+#    #+#             */
-/*   Updated: 2018/04/06 18:31:21 by azybert          ###   ########.fr       */
+/*   Created: 2018/01/16 15:05:44 by arohani           #+#    #+#             */
+/*   Updated: 2018/02/19 15:51:25 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_strnchr(const char *s, int c)
+char			*ft_strndup(const char *s1, size_t n)
 {
-	int	o;
+	char		*str;
+	size_t		i;
 
-	o = 0;
-	while (*(s))
-		if (*s++ == (char)c)
-			o++;
-	return (o);
+	i = 0;
+	if (!(str = (char *)malloc(sizeof(char) * n + 1)))
+		return (NULL);
+	while (s1[i] && i < n)
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	str[i] = '\0';
+	return (str);
 }

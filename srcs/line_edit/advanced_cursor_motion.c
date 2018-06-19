@@ -6,11 +6,11 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/24 21:42:41 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/18 16:39:48 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/19 11:30:01 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/sh_line_edit.h"
+#include "sh_line_edit.h"
 
 void	ft_cursor_up(t_prompt *prompt)
 {

@@ -3,21 +3,24 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: azybert <azybert@student.42.fr>            +#+  +:+       +#+         #
+#    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/08 19:33:52 by azybert           #+#    #+#              #
-#    Updated: 2018/04/06 17:40:44 by azybert          ###   ########.fr        #
+#    Updated: 2018/06/11 13:19:21 by antoipom         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
+
 FILES = ft_memset.c \
 		ft_bzero.c \
+		ft_get_next_line.c \
 		ft_memcpy.c \
 		ft_memccpy.c \
 		ft_memmove.c \
 		ft_memchr.c \
 		ft_memcmp.c \
+		ft_split_whitespaces.c \
 		ft_strlen.c \
 		ft_strdup.c \
 		ft_strcpy.c \
@@ -28,6 +31,7 @@ FILES = ft_memset.c \
 		ft_strchr.c \
 		ft_strrchr.c \
 		ft_strstr.c \
+		ft_strndup.c \
 		ft_strnstr.c \
 		ft_strcmp.c \
 		ft_strncmp.c \
@@ -40,6 +44,7 @@ FILES = ft_memset.c \
 		ft_tolower.c \
 		ft_toupper.c \
 		ft_memalloc.c \
+		ft_print_table.c \
 		ft_memdel.c \
 		ft_strnew.c \
 		ft_strdel.c \
@@ -77,22 +82,22 @@ FILES = ft_memset.c \
 		ft_realloc.c \
 		ft_strmerge.c \
 		ft_strcmerge.c \
-		ft_strnchr.c \
 
 OBJ = $(FILES:.c=.o)
+
 FLAG = -Wall -Wextra -Werror
 
 all: $(NAME)
 
 $(NAME):
-	    gcc -c $(FLAG) $(FILES)
-		ar r $(NAME) $(OBJ)
-		ranlib $(NAME)
+	    @gcc -c $(FLAG) $(FILES)
+		@ar r $(NAME) $(OBJ)
+		@ranlib $(NAME)
 
 clean:
-	    rm -f $(OBJ)
+	    @rm -f $(OBJ)
 
 fclean: clean
-	    rm -f $(NAME)
+	    @rm -f $(NAME)
 
 re: fclean all

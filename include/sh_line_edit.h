@@ -6,14 +6,14 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/18 17:36:13 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/19 12:43:00 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SH_LINE_EDIT_H
 # define SH_LINE_EDIT_H
 
-# include "../libft/libft.h"
+# include "libft.h"
 
 # include <termios.h>
 # include <term.h>

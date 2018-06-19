@@ -1,23 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memalloc.c                                      :+:      :+:    :+:   */
+/*   ft_print_table.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: arohani <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/17 13:21:02 by azybert           #+#    #+#             */
-/*   Updated: 2017/12/03 22:59:09 by azybert          ###   ########.fr       */
+/*   Created: 2017/10/04 14:33:11 by arohani           #+#    #+#             */
+/*   Updated: 2018/06/08 18:11:14 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memalloc(size_t size)
+void	ft_print_table(char **tab)
 {
-	char	*mem;
+	int j;
 
-	if (!(mem = malloc(size)))
-		return (NULL);
-	ft_bzero(mem, size);
-	return (mem);
+	j = 0;
+	while (tab && tab[j])
+		ft_putendl(tab[j++]);
 }

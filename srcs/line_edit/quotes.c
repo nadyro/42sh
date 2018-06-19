@@ -6,11 +6,11 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/11 15:43:54 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/18 17:06:58 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/19 11:30:38 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/sh_line_edit.h"
+#include "sh_line_edit.h"
 
 static char		*stock_line(char *to_return, t_prompt *prompt)
 {

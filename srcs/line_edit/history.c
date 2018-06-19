@@ -6,11 +6,11 @@
 /*   By: azybert <azybert@stud.42.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:20:53 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/18 18:12:16 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/19 11:31:13 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/sh_line_edit.h"
+#include "sh_line_edit.h"
 
 void	add_to_history(char *cmd, t_stat_data *stat_data)
 {

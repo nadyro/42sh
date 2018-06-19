@@ -1,23 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memalloc.c                                      :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pbie <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/17 13:21:02 by azybert           #+#    #+#             */
-/*   Updated: 2017/12/03 22:59:09 by azybert          ###   ########.fr       */
+/*   Created: 2018/05/11 15:16:39 by pbie              #+#    #+#             */
+/*   Updated: 2018/06/11 13:15:58 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "builtins.h"
+#include <stdio.h>
 
-void	*ft_memalloc(size_t size)
+void      cd_not_dir(char *str)
 {
-	char	*mem;
-
-	if (!(mem = malloc(size)))
-		return (NULL);
-	ft_bzero(mem, size);
-	return (mem);
+    ft_putstr_fd("cd: ", 2);
+    ft_putstr_fd(str, 2);
+    ft_putstr_fd(": Not a directory\n", 2);
 }
