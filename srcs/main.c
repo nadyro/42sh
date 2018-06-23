@@ -9,9 +9,9 @@ t_prompt	*prompt;
 
 int			main(int argc, char **argv, char **env)
 {
-	int *token_tab;
-	int	parsing_return;
-	t_ast	*head = NULL;
+	//int *token_tab;
+	//int	parsing_return;
+	//t_ast	*head = NULL;
 	t_shell	shell;
 	char	*line;
 	char	*name_term;
@@ -37,7 +37,7 @@ int			main(int argc, char **argv, char **env)
 	while (1)
 	{
 		line = line_edit_main_loop();
-		token_tab = get_tokens(line);
+		/*token_tab = get_tokens(line);
 		parsing_return = parser_validation(token_tab);
 		if (parsing_return != -1)
 		{
@@ -53,9 +53,9 @@ int			main(int argc, char **argv, char **env)
 				printf("error: no token table was compiled in main\n");
 			//printf("TREE COMPILED, SENDING TO printLeafNodes\n\n\n");
 			ast_loop(&shell, head);
-		}
-		//if (ft_strncmp(line, "exit", 4) == 0)
-		//	termanip(2);
+		}*/
+		if (ft_strncmp(line, "exit", 4) == 0)
+			termanip(2);
 		free(line);
 	}
 	termanip(2);
