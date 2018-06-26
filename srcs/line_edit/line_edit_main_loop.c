@@ -91,6 +91,7 @@ char		*line_edit_main_loop(void)
 	int					nb_user_entry;
 	static t_stat_data	*stat_data = NULL;
 
+	termanip(0);
 	write(1, "prompt> ", 8);
 	stat_data = (stat_data ? stat_data : malloc_stat());
 	prompt = malloc_prompt(prompt, stat_data);
