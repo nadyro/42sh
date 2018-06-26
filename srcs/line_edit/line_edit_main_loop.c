@@ -129,5 +129,6 @@ char		*line_edit_main_loop(void)
 		stat_data->line_save = prompt->origin->x + (prompt->origin->y + 1) * 100000;
 	}
 	free_prompt(prompt);
+	termanip(5);
 	return (to_return);
 }
