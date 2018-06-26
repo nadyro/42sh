@@ -79,4 +79,8 @@ void	termanip(int sig)
 		shell.c_cc[VTIME] += 1;
 		tcsetattr(0, TCSADRAIN, &shell);
 	}
+	else if (sig == 5)
+	{
+		tcsetattr(0, TCSADRAIN, &old);
+	}
 }

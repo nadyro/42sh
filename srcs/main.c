@@ -30,7 +30,6 @@ int			main(int argc, char **argv, char **env)
 	}
 	if (tgetent(NULL, name_term) == ERR)
 		return (-1);
-	termanip(0);
 	signal(SIGINT, termanip);
 	//handle_sig();
 	///////////////////////////////////
