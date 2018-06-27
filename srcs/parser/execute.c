@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/18 16:10:32 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/26 15:16:35 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ static void	launch_exec(t_shell *shell, char *full_path, t_ast *cmd)
 {
 	cmd->cmd_ret = 0;
 	
+	printf("before executing commands, here is the table of arguments:\n");
+	ft_print_table(shell->args);
 	if (execve(shell->args[0], shell->args, shell->envv) == -1)
 	{
 		if (execve(full_path, shell->args, shell->envv) == -1)
