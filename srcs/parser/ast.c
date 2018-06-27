@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/26 15:18:38 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/27 12:35:59 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ t_ast		*init_ast(char **argv)
 	head->depth = 0;
 	//printf("tab[0] = %s\n", tab[0]);
 	head->arg = (*argv) ? ft_strdup(*argv) : NULL;
+	printf("in init_ast, argv = %s\nhead->arg = %s\n", *argv, head->arg);
 	//printf("head->arg initialised to : %s\n", head->arg);
 	head->tok = get_tokens(head->arg);
 	//printf("initialised ast, with token table\n");
@@ -145,6 +146,9 @@ void		create_arg_table(t_ast *cmd, t_shell *shell)
 			}
 		}
 	}
+	printf("printing arg table if exists\n");
+	if (shell->args && shell->args[0])
+		ft_print_table(shell->args);
 }
 
 int         ast_evaluate(t_ast *ast, t_shell *shell)
