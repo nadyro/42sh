@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/23 20:03:33 by azybert          ###   ########.fr       */
+/*   Updated: 2018/06/29 20:06:43 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ t_prompt	*malloc_prompt(t_prompt *prompt, t_stat_data *stat_data)
 	prompt->total = 0;
 	prompt->size->x = w.ws_col;
 	prompt->size->y = w.ws_row;
-	prompt->quotes = none;
 	if (stat_data->line_save >= 100000)
 	{
 		prompt->origin->x = stat_data->line_save % 100000;
@@ -60,6 +59,7 @@ t_stat_data	*malloc_stat()
 	if (!(stat_data = malloc(sizeof(*stat_data))))
 		exit(1);
 	stat_data->overage = NULL;
+	stat_data->old_line = NULL;
 	stat_data->line_save = 0;
 	stat_data->current = NULL;
 	stat_data->history = NULL;
@@ -124,10 +124,8 @@ char		*line_edit_main_loop(void)
 	if (to_return[0] != '\n' || to_return[1] != '\0')
 		add_to_history(to_return, stat_data);
 	else
-	{
-		stat_data->current = stat_data->history;
 		stat_data->line_save = prompt->origin->x + (prompt->origin->y + 1) * 100000;
-	}
+	stat_data->current = stat_data->history;
 	free_prompt(prompt);
 	termanip(5);
 	return (to_return);

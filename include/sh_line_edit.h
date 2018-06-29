@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/19 12:43:00 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/06/29 19:11:56 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,6 @@ typedef struct	s_coord
 	size_t	y;
 }				t_coord;
 
-typedef enum	e_quotes
-{
-	none,
-	quotes,
-	dquotes
-}				t_quotes;
-
 typedef struct	s_prompt
 {
 	char		*line;
@@ -52,7 +45,6 @@ typedef struct	s_prompt
 	size_t		total;
 	t_coord		*origin;
 	t_coord		*size;
-	t_quotes	quotes;
 }				t_prompt;
 
 typedef struct	s_node
@@ -65,6 +57,7 @@ typedef struct	s_node
 typedef struct	s_stat_data
 {
 	char		*overage;
+	char		*old_line;
 	int			line_save;
 	t_node		*history;
 	t_node		*current;
@@ -97,5 +90,6 @@ char			*quotes_managing(t_prompt *prompt, char *to_return);
 t_prompt		*malloc_prompt(t_prompt *prompt, t_stat_data *data);
 void			free_prompt(t_prompt *prompt);
 void			ft_flush(t_prompt *prompt);
+void			secure_stock(t_prompt *prompt, char *to_stock);
 
 #endif

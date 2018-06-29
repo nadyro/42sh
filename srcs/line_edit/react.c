@@ -6,13 +6,22 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/24 13:39:16 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/19 11:31:38 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/06/29 18:19:19 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
 
-int	data_react(t_prompt *prompt)
+void	secure_stock(t_prompt *prompt, char *to_stock)
+{
+	int		mem;
+
+	mem = 0;
+	while (to_stock[mem])
+		prompt_stock(prompt, &to_stock[mem++]);
+}
+
+int		data_react(t_prompt *prompt)
 {
 	int		mem;
 	char	*to_free;
@@ -35,7 +44,7 @@ int	data_react(t_prompt *prompt)
 	return (0);
 }
 
-int	esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry,
+int		esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry,
 				t_stat_data *stat_data)
 {
 	if (nb_user_entry == 1 && user_entry[0] == 127 && prompt->pos > 0)
