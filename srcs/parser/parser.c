@@ -127,7 +127,10 @@ t_ast	    *get_ast(char **argv)
 {
 	t_ast	*head;
 	t_ast	*tmp;
+	char	*chr = NULL;	//for removing '\n' from line
 
+	if ((chr = ft_strchr(*argv, '\n')))
+		*chr = '\0';
 	head = init_ast(argv);
 	tmp = head;
 	ast_loop_semi(tmp);

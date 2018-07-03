@@ -90,7 +90,6 @@ t_ast		*init_ast(char **argv)
 	head->depth = 0;
 	//printf("tab[0] = %s\n", tab[0]);
 	head->arg = (*argv) ? ft_strdup(*argv) : NULL;
-	printf("in init_ast, argv = %s\nhead->arg = %s\n", *argv, head->arg);
 	//printf("head->arg initialised to : %s\n", head->arg);
 	head->tok = get_tokens(head->arg);
 	//printf("initialised ast, with token table\n");
@@ -146,9 +145,9 @@ void		create_arg_table(t_ast *cmd, t_shell *shell)
 			}
 		}
 	}
-	printf("printing arg table if exists\n");
-	if (shell->args && shell->args[0])
-		ft_print_table(shell->args);
+	//printf("printing arg table if exists\n");
+	//if (shell->args && shell->args[0])
+	//	ft_print_table(shell->args);
 }
 
 int         ast_evaluate(t_ast *ast, t_shell *shell)
@@ -186,10 +185,10 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		//	printf("DEBUG 6\n");
 			return (ast->cmd_ret);
 		}	
-		else
+		else if (ast->cmd_ret < 0)
 		{
 		//	printf("DEBUG 7\n");
-			printf("ERROR: cmd->cmd_ret not 0 or -1 when cmd = %s\n", ast->arg);
+			printf("ERROR: cmd->cmd_ret = %d when cmd = %s\n", ast->cmd_ret, ast->arg);
 			return (-1);
 		}
 		//else

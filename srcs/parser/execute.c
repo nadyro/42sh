@@ -23,8 +23,8 @@ static void	launch_exec(t_shell *shell, char *full_path, t_ast *cmd)
 {
 	cmd->cmd_ret = 0;
 	
-	printf("before executing commands, here is the table of arguments:\n");
-	ft_print_table(shell->args);
+	//printf("before executing commands, here is the table of arguments:\n");
+	//ßft_print_table(shell->args);
 	if (execve(shell->args[0], shell->args, shell->envv) == -1)
 	{
 		if (execve(full_path, shell->args, shell->envv) == -1)
@@ -96,8 +96,7 @@ static int	ast_launch(t_shell *shell, t_ast *cmd)
 	pid = fork();
 	if (pid == 0)
 	{
-		printf("pid == 0 i.e. child process: \n");
-		ft_print_table(shell->args);
+		printf("pid == 0 i.e. child process: %s\n", shell->args[0]);
 		fd_changed = redirect_check(shell);
 		full_path = (has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
 		launch_exec(shell, full_path, cmd);
@@ -114,9 +113,7 @@ static int	ast_launch(t_shell *shell, t_ast *cmd)
 		wpid = waitpid(pid, &status, WUNTRACED);
 		while (!WIFEXITED(status) && !WIFSIGNALED(status))
 			wpid = waitpid(pid, &status, WUNTRACED);
-		printf("should be returning from PARENT process, pid = %d\n", pid);
-        if (shell->args && shell->args[0])
-            ft_print_table(shell->args);
+		printf("should be returning from PARENT process, command = %s, pid = %d\n", shell->args[0], pid);
 	}
 	if (full_path && full_path[0])
 		ft_strdel(&full_path);
