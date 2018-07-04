@@ -96,7 +96,7 @@ static int	ast_launch(t_shell *shell, t_ast *cmd)
 	pid = fork();
 	if (pid == 0)
 	{
-		printf("pid == 0 i.e. child process: %s\n", shell->args[0]);
+		//printf("pid == 0 i.e. child process: %s\n", shell->args[0]);
 		fd_changed = redirect_check(shell);
 		full_path = (has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
 		launch_exec(shell, full_path, cmd);
@@ -113,7 +113,7 @@ static int	ast_launch(t_shell *shell, t_ast *cmd)
 		wpid = waitpid(pid, &status, WUNTRACED);
 		while (!WIFEXITED(status) && !WIFSIGNALED(status))
 			wpid = waitpid(pid, &status, WUNTRACED);
-		printf("should be returning from PARENT process, command = %s, pid = %d\n", shell->args[0], pid);
+		//printf("should be returning from PARENT process, command = %s, pid = %d\n", shell->args[0], pid);
 	}
 	if (full_path && full_path[0])
 		ft_strdel(&full_path);
@@ -164,6 +164,8 @@ void		ast_loop(t_shell *shell, t_ast *ast)
 	status = 1;
 	//display_prompt(&status);
 	if (ast)
+	{
 		status = ast_evaluate(ast, shell);
+	}
     //if ast_evaluate == 10, i.e. ft_strcmp(cmd->arg, cm)
 }

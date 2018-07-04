@@ -118,6 +118,7 @@ static void		ast_loop_semi(t_ast *head)
 	int 	op;
 	t_ast	*tmp = head;
 
+
 	if ((i = get_tk_end_pos(tmp)) < 1)
 		return ;
 	while (i >= 0)
@@ -165,6 +166,11 @@ t_ast	    *get_ast(char **argv)
 		*chr = '\0';
 	head = init_ast(argv);
 	tmp = head;
-	ast_loop_semi(tmp);
+	if (ft_strchr(tmp->arg, ';'))
+		ast_loop_semi(tmp);
+	else if (ft_strstr(tmp->arg, "&&") || ft_strstr(tmp->arg, "||"))
+		ast_loop_and_or(tmp);
+	else if (ft_strchr(tmp->arg, '|'))
+		ast_loop_pipe(tmp);
 	return (head);
 }
