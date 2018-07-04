@@ -47,8 +47,8 @@ t_ast		*fill_leftast(t_ast *parent, int size)
 		return (NULL);
 	left->parent = parent;
 	left->depth = parent->depth + 1;
-	left->address = ft_strjoin(left->parent->address, "L");
-	left->arg = ft_strndup(parent->arg, size);
+	//left->address = ft_strjoin(left->parent->address, "L");
+	left->arg = ft_strndup(parent->arg, size);	//size indicates position of operator, here we duplicate up to, not including, the operator
 	left->split_by = 0;
 	left->tok = get_tokens(left->arg);
 	left->left = NULL;
@@ -67,7 +67,7 @@ t_ast		*fill_rightast(t_ast *parent, int start, int size)
 	right->parent = parent;
 	str = parent->arg + start;
 	right->depth = parent->depth + 1;
-	right->address = ft_strjoin(right->parent->address, "R");
+	//right->address = ft_strjoin(right->parent->address, "R");
 	right->arg = ft_strndup(str, size);
 	right->split_by = 0;
 	right->tok = get_tokens(right->arg);

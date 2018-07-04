@@ -15,72 +15,98 @@
 #include "libft.h"
 #include <stdio.h>
 
+static int 		get_tk_end_pos(t_ast *tmp)
+{
+	int 	last = 0;
+
+	while (tmp->tok[last] != -1)
+	{
+		if (tmp->tok[last] != TK_END && tmp->tok[last] != -1)
+			last += 3;
+		if (tmp->tok[last] == TK_END)
+			return (last);
+	}
+	return (-1);
+}
+
 static void		ast_loop_pipe(t_ast *head)
 {
-	int		i = 0;
+	int		i;
+	int 	op;
 	t_ast	*tmp = head;
 
-	while (tmp->tok[i] != -1)
+	//if (tmp && !(ft_strchr(tmp->arg, '|')))
+	//	return ;
+	if ((i = get_tk_end_pos(tmp)) < 1)
+		return ;
+	while (i >= 0)
 	{
 		if (tmp->tok[i] == TK_PIPE)
 		{
-			tmp->split_by = tmp->tok[i];
-			//printf("filling left from ast_loop_pipe\n");
-			tmp->left = fill_leftast(tmp, tmp->tok[i+1]);
+			//printf("filling left from ast_loop_semi\n");
+			tmp->split_by = TK_PIPE;
+			op = i;
 			i += 3;
 			while (tmp->tok[i] == TK_SPACE)
 				i += 3;
-			if (tmp->tok[i] && tmp->tok[i] != 1 && tmp->tok[i] != TK_END)
-			{
-				//printf("filling right from ast_loop_pipe with:\ntmp->arg = %s\n", tmp->arg);
+			if (tmp->tok[i] != TK_END && tmp->tok[i] != -1)
 				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1]);
-				//printf("\nrecursively calling ast_loop_PIPE\n");
-				ast_loop_pipe(tmp->right);
+			i = op;
+			if (i > 0)
+			{
+				//printf("filling right from ast_loop_semi sending: %s to fill_right\n", tmp->arg);
+				tmp->left = fill_leftast(tmp, tmp->tok[i+1]);
+				//printf("\nrecursively calling ast_loop_semi\n");
+				if (tmp->left)
+					ast_loop_pipe(tmp->left);
 				break ;
 			}
-			else
-				tmp->right = NULL;
+			//else
+			//	tmp->right = NULL;
 		}
 		else
-			i += 3;
-		while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
-			i += 3;
+			i -= 3;
+		//while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
+		//	i += 3;
 	}
 }
 
 static void		ast_loop_and_or(t_ast *head)
 {
 	int		i = 0;
+	int 	op;
 	t_ast	*tmp = head;
 
-	if (tmp && !(ft_strstr(tmp->arg, "&&") && !(ft_strstr(tmp->arg, "||"))))
-		ast_loop_pipe(tmp);
-	while (tmp->tok[i] != -1)
+	if ((i = get_tk_end_pos(tmp)) < 1)
+		return ;
+	while (i >= 0)
 	{
 		if (tmp->tok[i] == TK_AND_IF || tmp->tok[i] == TK_OR_IF)
 		{
+			//printf("filling left from ast_loop_semi\n");
 			tmp->split_by = tmp->tok[i];
-			//printf("filling left from ast_loop_and_or\n");
-			tmp->left = fill_leftast(tmp, tmp->tok[i+1]);
-			ast_loop_pipe(tmp->left);
+			op = i;
 			i += 3;
 			while (tmp->tok[i] == TK_SPACE)
 				i += 3;
-			if (tmp->tok[i] && tmp->tok[i] != 1 && tmp->tok[i] != TK_END)
-			{
-				//printf("filling right from ast_loop_and_or\n");
+			if (tmp->tok[i] != TK_END && tmp->tok[i] != -1)
 				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1]);
-				//printf("\nrecursively calling ast_loop_and_or\n");
-				ast_loop_and_or(tmp->right);
+			ast_loop_pipe(tmp->right);
+			i = op;
+			if (i > 0)
+			{
+				//printf("filling right from ast_loop_semi sending: %s to fill_right\n", tmp->arg);
+				tmp->left = fill_leftast(tmp, tmp->tok[i+1]);
+				//printf("\nrecursively calling ast_loop_semi\n");
+				if (tmp->left)
+					ast_loop_and_or(tmp->left);
 				break ;
 			}
-			else
-				tmp->right = NULL;
+			//else
+			//	tmp->right = NULL;
 		}
 		else
-			i += 3;
-		while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
-			i += 3;
+			i -= 3;
 	}
 //	if (!(tmp->left) && tmp->parent != NULL)
 	//	ast_loop_pipe(tmp);
@@ -88,39 +114,45 @@ static void		ast_loop_and_or(t_ast *head)
 
 static void		ast_loop_semi(t_ast *head)
 {
-	int		i = 0;
+	int		i;
+	int 	op;
 	t_ast	*tmp = head;
 
-	while (tmp->tok[i] != -1)
+	if ((i = get_tk_end_pos(tmp)) < 1)
+		return ;
+	while (i >= 0)
 	{
 		if (tmp->tok[i] == TK_SEMI)
 		{
 			//printf("filling left from ast_loop_semi\n");
 			tmp->split_by = TK_SEMI;
-			tmp->left = fill_leftast(tmp, tmp->tok[i+1]);
-			ast_loop_and_or(tmp->left);
+			op = i;
 			i += 3;
 			while (tmp->tok[i] == TK_SPACE)
 				i += 3;
-			if (tmp->tok[i] && tmp->tok[i] != 1 && tmp->tok[i] != TK_END)
+			if (tmp->tok[i] != TK_END && tmp->tok[i] != -1)
+				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1]);
+			ast_loop_and_or(tmp->right);
+			i = op;
+			if (i > 0)
 			{
 				//printf("filling right from ast_loop_semi sending: %s to fill_right\n", tmp->arg);
-				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1]);
+				tmp->left = fill_leftast(tmp, tmp->tok[i+1]);
 				//printf("\nrecursively calling ast_loop_semi\n");
-				if (tmp->right)
-					ast_loop_semi(tmp->right);
+				if (tmp->left)
+					ast_loop_semi(tmp->left);
 				break ;
 			}
-			else
-				tmp->right = NULL;
+			//else
+			//	tmp->right = NULL;
 		}
 		else
-			i += 3;
-		while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
-			i += 3;
+			i -= 3;
+		//while (tmp->tok[i] == TK_SPACE)	//skips spaces in token table to find proper starting point before recreating another token table later
+		//	i += 3;
 	}
-	if (!(tmp->left) && tmp && !(ft_strchr(tmp->arg, ';')))	//so that first elements that were recursively filled don't add extra once branch is done
-		ast_loop_and_or(tmp);
+	//if (!(tmp->left) && tmp && !(ft_strchr(tmp->arg, ';')))	//so that first elements that were recursively filled don't add extra once branch is done
+	//	ast_loop_and_or(tmp);
 }
 
 t_ast	    *get_ast(char **argv)
@@ -129,7 +161,7 @@ t_ast	    *get_ast(char **argv)
 	t_ast	*tmp;
 	char	*chr = NULL;	//for removing '\n' from line
 
-	if ((chr = ft_strchr(*argv, '\n')))
+	if ((chr = ft_strchr(*argv, '\n')))	//replaces '\n' from line editing with '\0'
 		*chr = '\0';
 	head = init_ast(argv);
 	tmp = head;
