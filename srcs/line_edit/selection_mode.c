@@ -6,11 +6,32 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/04 22:38:46 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/05 05:52:09 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/06 01:56:00 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
+
+void	selection_delete(t_prompt *prompt, size_t start_pos)
+{
+	int	loop;
+
+	if (start_pos > prompt->pos)
+	{
+		loop = start_pos - prompt->pos + 1;
+		while (loop--)
+			prompt_backdel(prompt);
+	}
+	else
+	{
+		loop = prompt->pos - start_pos;
+		if (loop)
+			prompt_backdel(prompt);
+		while (loop--)
+			prompt_delete(prompt);
+	}
+	return ;
+}
 
 void	selection_write(t_prompt *prompt, size_t start_pos)
 {
@@ -42,17 +63,18 @@ void	selection_mode(t_prompt *prompt, t_stat_data *stat_data)
 	char	user_entry[7];
 	size_t	start_pos;
 	int		nb_user_entry;
-	int		end;
-	int		loop;
 
 	if (!prompt->total)
 		return ;
 	if (prompt->pos == prompt->total)
 		prompt->pos--;
 	start_pos = prompt->pos;
-	end = 0;
-	while (end != 1)
+	while (1)
 	{
+		//
+		if (prompt->pos == prompt->total)
+			prompt->pos--;
+		//
 		selection_write(prompt, start_pos);
 		ft_bzero(user_entry, 7);
 		nb_user_entry = read(1, user_entry, 6);
@@ -80,29 +102,20 @@ void	selection_mode(t_prompt *prompt, t_stat_data *stat_data)
 			ft_cursor_up(prompt);
 		else if (nb_user_entry == 6 && user_entry[5] == 66)
 			ft_cursor_down(prompt);
-		else if (nb_user_entry == 1 && user_entry[0] == 'c')
+		else if (nb_user_entry == 1 && (user_entry[0] == 'c' || user_entry[0] == 'x'))
 		{
 			free(stat_data->copied);
 			stat_data->copied = (start_pos > prompt->pos ?
 					ft_strndup(prompt->line + prompt->pos, start_pos - prompt->pos + 1) :
 					ft_strndup(prompt->line + start_pos, prompt->pos - start_pos + 1));
+			if (user_entry[0] == 'x')
+				selection_delete(prompt, start_pos);
+			return ;
 		}
 		else if (nb_user_entry == 1 && user_entry[0] == 127)
 		{
-			if (start_pos > prompt->pos)
-			{
-				loop = start_pos - prompt->pos;
-				while (loop--)
-					prompt_backdel(prompt);
-			}
-			else
-			{
-				loop = prompt->pos - start_pos;
-				if (loop)
-					prompt_backdel(prompt);
-				while (loop--)
-					prompt_delete(prompt);
-			}
+			selection_delete(prompt, start_pos);
+			return ;
 		}
 		else if (nb_user_entry == 1 && user_entry[0] == 27)
 		{

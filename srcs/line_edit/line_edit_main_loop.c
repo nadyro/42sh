@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/05 03:57:17 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/06 01:50:15 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,17 +69,17 @@ t_stat_data	*malloc_stat()
 
 void		ft_flush(t_prompt *prompt)
 {
-	char	user_entry[512];
+	char	user_entry[4096];
 	char	*to_free;
 
 	termanip(3);
-	ft_bzero(user_entry, 512);
-	while (read(1, user_entry, 511) > 0)
+	ft_bzero(user_entry, 4096);
+	while (read(1, user_entry, 4095) > 0)
 	{
 		to_free = prompt->buf;
 		prompt->buf = ft_strjoin(prompt->buf, user_entry);
 		free(to_free);
-		ft_bzero(user_entry, 511);
+		ft_bzero(user_entry, 4095);
 		termanip(4);
 	}
 	termanip(3);
