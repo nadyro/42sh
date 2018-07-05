@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/24 13:39:16 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/29 18:19:19 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/05 04:43:01 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,11 @@ int		esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry,
 		ft_cursor_up(prompt);
 	else if (nb_user_entry == 6 && user_entry[5] == 66)
 		ft_cursor_down(prompt);
+	else if (nb_user_entry == 2 && user_entry[0] == 27 &&
+			user_entry[1] == 'S')
+		selection_mode(prompt, stat_data);
+	else if (nb_user_entry == 2 && user_entry[0] == 27 &&
+			user_entry[1] == 'V' && stat_data->copied != NULL)
+		secure_stock(prompt, stat_data->copied);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/29 19:11:56 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/05 03:53:58 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef struct	s_stat_data
 {
 	char		*overage;
 	char		*old_line;
+	char		*copied;
 	int			line_save;
 	t_node		*history;
 	t_node		*current;
@@ -91,5 +92,6 @@ t_prompt		*malloc_prompt(t_prompt *prompt, t_stat_data *data);
 void			free_prompt(t_prompt *prompt);
 void			ft_flush(t_prompt *prompt);
 void			secure_stock(t_prompt *prompt, char *to_stock);
+void			selection_mode(t_prompt *prompt, t_stat_data *stat_data);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/29 20:06:43 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/05 03:57:17 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ t_stat_data	*malloc_stat()
 		exit(1);
 	stat_data->overage = NULL;
 	stat_data->old_line = NULL;
+	stat_data->copied = NULL;
 	stat_data->line_save = 0;
 	stat_data->current = NULL;
 	stat_data->history = NULL;

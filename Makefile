@@ -6,7 +6,7 @@
 #    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/06/19 12:38:49 by antoipom         ###   ########.fr        #
+#    Updated: 2018/07/05 03:35:00 by azybert          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,7 +61,8 @@ SRC_FILES = main.c \
 			line_edit/advanced_cursor_motion.c \
 			line_edit/cursor_motion.c \
 			line_edit/react.c \
-			line_edit/history.c
+			line_edit/history.c \
+			line_edit/selection_mode.c
 
 INC_FILES = lexer.h \
 			parser.h \
