@@ -19,13 +19,14 @@ static int 		get_tk_end_pos(t_ast *tmp)
 {
 	int 	last = 0;
 
-	while (tmp->tok[last] != -1)
+	while (tmp && tmp->tok[last] != -1)
 	{
 		if (tmp->tok[last] != TK_END && tmp->tok[last] != -1)
 			last += 3;
 		if (tmp->tok[last] == TK_END)
 			return (last);
 	}
+	ft_putstr_fd("Error : No end token found\n", 2);
 	return (-1);
 }
 
