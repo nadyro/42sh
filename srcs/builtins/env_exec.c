@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "builtins.h"
+#include <stdio.h>
 
 static int	env_launch_exec(t_shell *shell, char **mod)
 {
@@ -92,6 +93,8 @@ int			ft_exec(t_shell *shell, char **env)
 	if (shell->args[0] != NULL)
 	{
 		shell->args = get_new_args(shell);
+		printf("in ft_exec, new arguments table is : \n");
+		ft_print_table(shell->args);
 		return (env_launch(shell, env));
 	}
 	return (0);
