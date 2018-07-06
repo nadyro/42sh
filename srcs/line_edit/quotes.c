@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/11 15:43:54 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/29 17:51:02 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/06 04:45:00 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,5 @@ char			*quotes_managing(t_prompt *prompt, char *to_return)
 {
 	if (prompt->origin->y > prompt->size->y)
 		prompt->origin->y = prompt->size->y;
-	//here change origin->x in case prompt can change
 	return (stock_line(to_return, prompt));
 }

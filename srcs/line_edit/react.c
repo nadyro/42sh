@@ -6,13 +6,13 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/24 13:39:16 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/05 04:43:01 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/06 05:59:47 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
 
-void	secure_stock(t_prompt *prompt, char *to_stock)
+void		secure_stock(t_prompt *prompt, char *to_stock)
 {
 	int		mem;
 
@@ -21,7 +21,7 @@ void	secure_stock(t_prompt *prompt, char *to_stock)
 		prompt_stock(prompt, &to_stock[mem++]);
 }
 
-int		data_react(t_prompt *prompt)
+int			data_react(t_prompt *prompt)
 {
 	int		mem;
 	char	*to_free;
@@ -44,7 +44,22 @@ int		data_react(t_prompt *prompt)
 	return (0);
 }
 
-int		esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry,
+static void	esc_react_aux(t_prompt *prompt, int nb_user_entry, char *user_entry,
+				t_stat_data *stat_data)
+{
+	if (nb_user_entry == 3 && user_entry[2] == 65)
+		history_next(prompt, stat_data);
+	else if (nb_user_entry == 3 && user_entry[2] == 66)
+		history_prev(prompt, stat_data);
+	else if (nb_user_entry == 2 && user_entry[0] == 27 &&
+			user_entry[1] == 'S')
+		selection_mode(prompt, stat_data);
+	else if (nb_user_entry == 2 && user_entry[0] == 27 &&
+			user_entry[1] == 'V' && stat_data->copied != NULL)
+		secure_stock(prompt, stat_data->copied);
+}
+
+void		esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry,
 				t_stat_data *stat_data)
 {
 	if (nb_user_entry == 1 && user_entry[0] == 127 && prompt->pos > 0)
@@ -52,10 +67,6 @@ int		esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry,
 	else if (nb_user_entry == 4 && user_entry[3] == 126 &&
 			prompt->pos < prompt->total)
 		prompt_backdel(prompt);
-	else if (nb_user_entry == 3 && user_entry[2] == 65)
-	      history_next(prompt, stat_data);
-	else if (nb_user_entry == 3 && user_entry[2] == 66)
-		history_prev(prompt, stat_data);
 	else if (nb_user_entry == 3 && user_entry[2] == 68 && prompt->pos > 0)
 		move_cursor(prompt, prompt->pos - 1, true);
 	else if (nb_user_entry == 3 && user_entry[2] == 67 &&
@@ -73,11 +84,6 @@ int		esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry,
 		ft_cursor_up(prompt);
 	else if (nb_user_entry == 6 && user_entry[5] == 66)
 		ft_cursor_down(prompt);
-	else if (nb_user_entry == 2 && user_entry[0] == 27 &&
-			user_entry[1] == 'S')
-		selection_mode(prompt, stat_data);
-	else if (nb_user_entry == 2 && user_entry[0] == 27 &&
-			user_entry[1] == 'V' && stat_data->copied != NULL)
-		secure_stock(prompt, stat_data->copied);
-	return (0);
+	else
+		esc_react_aux(prompt, nb_user_entry, user_entry, stat_data);
 }

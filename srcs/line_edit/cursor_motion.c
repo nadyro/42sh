@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/10 17:23:30 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/19 11:30:16 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/07/06 04:44:00 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,13 @@ size_t	ft_add_nl(t_prompt *prompt, size_t new_pos)
 	loop = 0;
 	to_add = 0;
 	if (prompt->line == NULL)
-		return(0);
+		return (0);
 	while (loop < new_pos)
 	{
 		if (loop < prompt->total && prompt->line[loop] == '\n')
 		{
-			to_add += prompt->size->x - ((loop + to_add + prompt->origin->x) % prompt->size->x);
+			to_add += prompt->size->x -
+				((loop + to_add + prompt->origin->x) % prompt->size->x);
 		}
 		loop++;
 	}

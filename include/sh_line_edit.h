@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/05 03:53:58 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/06 05:06:03 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void			termanip(int sig);
 char			*line_edit_main_loop();
 void			get_cursor_pos(t_coord *actualize, t_prompt *prompt);
 int				ft_putshit(int c);
-int				esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry,
+void			esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry,
 				t_stat_data *stat_data);
 void			history_next(t_prompt *prompt, t_stat_data *stat_data);
 void			history_prev(t_prompt *prompt, t_stat_data *stat_data);
