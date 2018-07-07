@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/07 02:53:14 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/07 05:37:05 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ char		*line_edit_main_loop(void)
 	write(1, "prompt> ", 8);
 	stat_data = (stat_data ? stat_data : malloc_stat());
 	prompt = malloc_prompt(prompt, stat_data);
+	handle_sig();
 	prompt->buf = stat_data->overage;
 	to_return = NULL;
 	to_return = line_edit_main_loop_aux(prompt, stat_data, to_return);
@@ -79,6 +80,7 @@ char		*line_edit_main_loop(void)
 			prompt->origin->x + (prompt->origin->y + 1) * 100000;
 	stat_data->current = stat_data->history;
 	free_prompt(prompt);
+	reverse_handle();
 	termanip(5);
 	return (to_return);
 }
