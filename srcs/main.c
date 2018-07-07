@@ -30,8 +30,6 @@ int			main(int argc, char **argv, char **env)
 	}
 	if (tgetent(NULL, name_term) == ERR)
 		return (-1);
-	signal(SIGINT, termanip);
-	//handle_sig();
 	///////////////////////////////////
 	while (1)
 	{
@@ -54,7 +52,10 @@ int			main(int argc, char **argv, char **env)
 			ast_loop(&shell, head);
 		}*/
 		if (ft_strncmp(line, "exit", 4) == 0)
-			termanip(2);
+		{
+			termanip(5);
+			exit(0);
+		}
 		free(line);
 	}
 	termanip(2);

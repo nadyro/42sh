@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 01:45:43 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/07 01:54:24 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/07 05:10:34 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,20 @@
 void		free_prompt(t_prompt *prompt)
 {
 	free(prompt->line);
+	prompt->line = NULL;
 	free(prompt->buf);
+	prompt->buf = NULL;
 	free(prompt->origin);
+	prompt->origin = NULL;
 	free(prompt->size);
+	prompt->size = NULL;
 	free(prompt);
+	prompt = NULL;
 }
 
 void		prompt_origin(t_prompt *prompt, t_stat_data *stat_data)
 {
-	if (stat_data->line_save >= 100000)
+	if (stat_data != NULL && stat_data->line_save >= 100000)
 	{
 		prompt->origin->x = stat_data->line_save % 100000;
 		prompt->origin->y = stat_data->line_save / 100000;
