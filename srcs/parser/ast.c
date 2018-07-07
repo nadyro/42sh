@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/18 16:15:55 by arohani          ###   ########.fr       */
+/*   Updated: 2018/06/27 12:35:59 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ t_ast		*fill_leftast(t_ast *parent, int size)
 		return (NULL);
 	left->parent = parent;
 	left->depth = parent->depth + 1;
-	left->address = ft_strjoin(left->parent->address, "L");
-	left->arg = ft_strndup(parent->arg, size);
+	//left->address = ft_strjoin(left->parent->address, "L");
+	left->arg = ft_strndup(parent->arg, size);	//size indicates position of operator, here we duplicate up to, not including, the operator
 	left->split_by = 0;
 	left->tok = get_tokens(left->arg);
 	left->left = NULL;
@@ -67,7 +67,7 @@ t_ast		*fill_rightast(t_ast *parent, int start, int size)
 	right->parent = parent;
 	str = parent->arg + start;
 	right->depth = parent->depth + 1;
-	right->address = ft_strjoin(right->parent->address, "R");
+	//right->address = ft_strjoin(right->parent->address, "R");
 	right->arg = ft_strndup(str, size);
 	right->split_by = 0;
 	right->tok = get_tokens(right->arg);
@@ -77,10 +77,9 @@ t_ast		*fill_rightast(t_ast *parent, int start, int size)
 	return (right);
 }
 
-t_ast		*init_ast(char ***argv)
+t_ast		*init_ast(char **argv)
 {
 	t_ast	*head;
-	char	**tab = *argv;
 	
 	//printf("entered init_ast\n");
 	if (!(head = (t_ast *)malloc(sizeof(t_ast))))
@@ -90,7 +89,7 @@ t_ast		*init_ast(char ***argv)
 	head->address = ft_strdup("P");
 	head->depth = 0;
 	//printf("tab[0] = %s\n", tab[0]);
-	head->arg = (tab[1]) ? ft_strndup(tab[1], ft_strlen(tab[1])) : NULL;
+	head->arg = (*argv) ? ft_strdup(*argv) : NULL;
 	//printf("head->arg initialised to : %s\n", head->arg);
 	head->tok = get_tokens(head->arg);
 	//printf("initialised ast, with token table\n");
@@ -146,6 +145,9 @@ void		create_arg_table(t_ast *cmd, t_shell *shell)
 			}
 		}
 	}
+	//printf("printing arg table if exists\n");
+	//if (shell->args && shell->args[0])
+	//	ft_print_table(shell->args);
 }
 
 int         ast_evaluate(t_ast *ast, t_shell *shell)
@@ -183,10 +185,10 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		//	printf("DEBUG 6\n");
 			return (ast->cmd_ret);
 		}	
-		else
+		else if (ast->cmd_ret < 0)
 		{
 		//	printf("DEBUG 7\n");
-			printf("ERROR: cmd->cmd_ret not 0 or -1 when cmd = %s\n", ast->arg);
+			printf("ERROR: cmd->cmd_ret = %d when cmd = %s\n", ast->cmd_ret, ast->arg);
 			return (-1);
 		}
 		//else

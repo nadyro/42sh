@@ -75,7 +75,7 @@ static void		process_env_args(t_shell *shell)
 			ash_env_mod(shell);
 			envs = env_to_tab(shell->list->mod);
 			if (shell->args[shell->list->last])
-				ft_exec(shell, envs);
+				(envs) ? ft_exec(shell, envs) : ft_exec(shell, shell->envv);
 			else
 				ft_print_table(envs);
 			free_env(shell->list->mod);
