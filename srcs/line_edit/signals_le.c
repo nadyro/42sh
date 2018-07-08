@@ -6,13 +6,13 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 03:46:15 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/08 02:17:42 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/08 03:14:40 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
 
-void	reverse_handle()
+void	reverse_handle(void)
 {
 	signal(SIGINT, NULL);
 	signal(SIGWINCH, NULL);
@@ -21,7 +21,7 @@ void	reverse_handle()
 void	handle_resize(int sig)
 {
 	struct winsize	w;
-	
+
 	UNUSED(sig);
 	tputs(tgetstr("cl", NULL), 0, ft_putshit);
 	ioctl(0, TIOCGWINSZ, &w);
@@ -37,8 +37,8 @@ void	handle_int(int sig)
 {
 	UNUSED(sig);
 	if (prompt->size->y - 1 == prompt->origin->y +
-				(prompt->origin->x + prompt->total) / prompt->size->x)
-			tputs(tgetstr("sf", NULL), 1, ft_putshit);
+			(prompt->origin->x + prompt->total) / prompt->size->x)
+		tputs(tgetstr("sf", NULL), 1, ft_putshit);
 	move_cursor(prompt, prompt->total + prompt->size->x -
 			((prompt->total + prompt->origin->x) % prompt->size->x), false);
 	write(1, "prompt> ", 8);

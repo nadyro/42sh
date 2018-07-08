@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/11 15:43:54 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/08 02:14:09 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/08 03:13:50 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ static char		*stock_line(char *to_return, t_prompt *prompt)
 {
 	char			**merge;
 	char			*to_free;
-	struct winsize	w;
 
 	if (to_return == NULL)
 	{
@@ -35,11 +34,6 @@ static char		*stock_line(char *to_return, t_prompt *prompt)
 		free(to_free);
 		free(merge);
 	}
-	ioctl(0, TIOCGWINSZ, &w);
-	free(prompt->line);
-	prompt->line = NULL;
-	prompt->pos = 0;
-	prompt->total = 0;
 	return (to_return);
 }
 
