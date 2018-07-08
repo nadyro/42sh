@@ -6,7 +6,7 @@
 #    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/07/07 04:46:31 by azybert          ###   ########.fr        #
+#    Updated: 2018/07/08 06:50:09 by azybert          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,7 +64,8 @@ SRC_FILES = main.c \
 			line_edit/history.c \
 			line_edit/selection_mode.c \
 			line_edit/struct_alloc.c \
-			line_edit/signals_le.c
+			line_edit/signals_le.c \
+			line_edit/search_mode.c
 
 INC_FILES = lexer.h \
 			parser.h \

@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/08 02:09:46 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/08 05:59:09 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,13 @@ char		*line_edit_main_loop(void)
 	to_return = NULL;
 	to_return = line_edit_main_loop_aux(prompt, stat_data, to_return);
 	stat_data->overage = (prompt->buf ? ft_strdup(prompt->buf) : NULL);
+	free(stat_data->old_line);
+	stat_data->old_line = NULL;
 	if (to_return[0] != '\n' || to_return[1] != '\0')
 		add_to_history(to_return, stat_data);
 	else
-		stat_data->line_save =
-			prompt->origin->x + (prompt->origin->y + 1) * 100000;
+		stat_data->old_line =
+			ft_itoa(prompt->origin->x + (prompt->origin->y + 1) * 100000);
 	stat_data->current = stat_data->history;
 	free_prompt(prompt);
 	reverse_handle();

@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/07 04:10:28 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/08 04:56:45 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ typedef struct	s_stat_data
 	char		*overage;
 	char		*old_line;
 	char		*copied;
-	int			line_save;
 	t_node		*history;
 	t_node		*current;
 }				t_stat_data;
