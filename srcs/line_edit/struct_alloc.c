@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 01:45:43 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/07 05:10:34 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/08 02:18:20 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ t_prompt	*malloc_prompt(t_prompt *prompt, t_stat_data *stat_data)
 	if (!(prompt->size = malloc(sizeof(t_coord))))
 		exit(1);
 	ioctl(0, TIOCGWINSZ, &w);
-	prompt->line = ft_strdup("\0");
+	if (!(prompt->line = ft_strdup("\0")))
+		exit(1);
 	prompt->buf = NULL;
 	prompt->pos = 0;
 	prompt->total = 0;

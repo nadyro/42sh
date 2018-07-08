@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 03:46:15 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/07 05:43:18 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/08 02:17:42 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ void	handle_int(int sig)
 	write(1, "prompt> ", 8);
 	get_cursor_pos(prompt->origin, prompt);
 	free(prompt->line);
-	prompt->line = ft_strdup("\0");
+	if (!(prompt->line = ft_strdup("\0")))
+		exit(1);
 	free(prompt->buf);
 	prompt->buf = NULL;
 	prompt->total = 0;

@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/07 05:37:05 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/08 02:09:46 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char		*line_edit_main_loop_aux(t_prompt *prompt, t_stat_data *stat_data,
 				esc_react(prompt, nb_user_entry, user_entry, stat_data);
 			else
 			{
-				prompt->buf = ft_strdup(user_entry);
+				((prompt->buf = ft_strdup(user_entry)) != NULL ? 0 : exit(1));
 				if (nb_user_entry == 6)
 					ft_flush(prompt);
 				if (data_react(prompt))

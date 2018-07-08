@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/24 13:39:16 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/06 05:59:47 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/08 02:14:44 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ int			data_react(t_prompt *prompt)
 		move_cursor(prompt, prompt->total, true);
 		prompt_stock(prompt, &prompt->buf[mem]);
 		to_free = prompt->buf;
-		prompt->buf = ft_strdup(&prompt->buf[mem + 1]);
+		if (!(prompt->buf = ft_strdup(&prompt->buf[mem + 1])))
+			exit(1);
 		free(to_free);
 		tputs(tgetstr("ce", NULL), 1, ft_putshit);
 		return (1);
