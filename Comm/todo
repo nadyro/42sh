@@ -3,3 +3,16 @@ la commande exit ne fonctionne pas
 leaks!
 signaux (Alex actuellement ta gestion des signaux pose des problemes, mettons nous d'accord sur qui s'en occupe svp!)
 il faudrait changer le prompt pour afficher le repertoire courant
+
+armon:
+-EXEC/PARSER:
+	-manage leaks
+	-handle redirections
+	-handle pipes (maybe Thibaud can if he's already done it for 21sh?)
+	-handle heredoc
+	-norm
+-BUILTINS:
+	-need to fix bugs with env <utility_call> (env -i <utility_call> seems to work)
+	-handle exit builtin
+	-go through all builtins with parser data structures and verify compatibility
+	
