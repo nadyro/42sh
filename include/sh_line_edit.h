@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/08 04:56:45 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/10 06:19:38 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ char			*quotes_managing(t_prompt *prompt, char *to_return);
 void			handle_sig(void);
 void			handle_int(int sig);
 void			handle_resize(int sig);
+void			ignore_sig(int sig);
+void			ignore_handle(void);
 void			reverse_handle();
 t_prompt		*malloc_prompt(t_prompt *prompt, t_stat_data *data);
 t_stat_data		*malloc_stat(void);
@@ -94,5 +96,6 @@ void			free_prompt(t_prompt *prompt);
 void			ft_flush(t_prompt *prompt);
 void			secure_stock(t_prompt *prompt, char *to_stock);
 void			selection_mode(t_prompt *prompt, t_stat_data *stat_data);
+void			search_mode(t_prompt *prompt, t_stat_data *stat_data);
 
 #endif
