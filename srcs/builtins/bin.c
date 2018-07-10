@@ -71,6 +71,6 @@ int			ash_echo(t_shell *shell)
 int			ash_exit(t_shell *shell)
 {
 	if (shell)
-		return (0);
-	return (0);
+		exit (0);
+	return (1);
 }
