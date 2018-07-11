@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/08 06:09:10 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/10 06:21:06 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/11 07:44:19 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static char	*find_in_history(char *cmd, t_node *history)
 		return (find_in_history(cmd, history->next));
 }
 
-void	search_display(t_prompt *prompt, char *cmd_found)
+static void	search_display(t_prompt *prompt, char *cmd_found)
 {
 	char	*to_display;
 	char	*to_free;
@@ -36,6 +36,12 @@ void	search_display(t_prompt *prompt, char *cmd_found)
 	cmd_search = prompt->line;
 	prompt->line = to_display;
 	prompt->total = ft_strlen(prompt->line);
+	if (prompt->size->y <= prompt->origin->y + (prompt->origin->x +
+				ft_add_nl(prompt, prompt->total)) / prompt->size->x)
+	{
+		tputs(tgetstr("sf", NULL), 1, ft_putshit);
+		            prompt->origin->y--;
+	}
 	write_data(prompt, prompt->line, prompt->total);
 	free(to_free);
 	to_free = NULL;
@@ -53,7 +59,7 @@ static int	search_react(t_prompt *prompt)
 
 	ft_bzero(user_entry, 7);
 	nb_user_entry = read(1, user_entry, 6);
-	if (user_entry[0] == 27)
+	if (user_entry[0] == 27 && user_entry[1] == 'R')
 		return (-1);
 	else if (user_entry[0] == 127)
 		prompt_delete(prompt);
@@ -68,13 +74,30 @@ static int	search_react(t_prompt *prompt)
 	return (0);
 }
 
-void	search_mode(t_prompt *prompt, t_stat_data *stat_data)
+static void	search_mode_aux(t_prompt *prompt, t_stat_data *stat_data)
 {
-	char	*cmd_found;
 	int		loop_state;
+	char	*cmd_found;
 
-	cmd_found = NULL;
 	loop_state = 0;
+	while (loop_state == 0)
+	{
+		cmd_found = find_in_history(prompt->line, stat_data->history);
+		search_display(prompt, cmd_found);
+		loop_state = search_react(prompt);
+	}
+	free(prompt->line);
+	prompt->line = NULL;
+	move_cursor(prompt, 0, true);
+	tputs(tgetstr("cd", NULL), 1, ft_putshit);
+	prompt->total = 0;
+	secure_stock(prompt, (loop_state == 1 ? cmd_found : stat_data->old_line));
+	free(stat_data->old_line);
+	stat_data->old_line = NULL;
+}
+
+void		search_mode(t_prompt *prompt, t_stat_data *stat_data)
+{
 	ignore_handle();
 	if (stat_data->old_line)
 	{
@@ -83,26 +106,6 @@ void	search_mode(t_prompt *prompt, t_stat_data *stat_data)
 	}
 	stat_data->old_line = prompt->line;
 	((prompt->line = ft_strdup("\0")) ? 0 : exit(1));
-	while (loop_state == 0)
-	{
-		cmd_found = find_in_history(prompt->line, stat_data->history);
-		search_display(prompt, cmd_found);
-		loop_state = search_react(prompt);
-		if (loop_state == 1)
-		{
-			free(prompt->line);
-			prompt->line = NULL;
-			prompt->pos = 0;
-			prompt->total = 0;
-			secure_stock(prompt, cmd_found);
-			free(stat_data->old_line);
-		}
-		else if (loop_state == -1)
-		{
-			free(prompt->line);
-			prompt->line = stat_data->old_line;
-		}
-		stat_data->old_line = NULL;
-	}
+	search_mode_aux(prompt, stat_data);
 	handle_sig();
 }

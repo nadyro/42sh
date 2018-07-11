@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 23:36:42 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/06 05:12:52 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/11 08:30:59 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,18 @@ void		write_data(t_prompt *prompt, char *to_display, size_t size)
 
 	move_cursor(prompt, prompt->pos, true);
 	tputs(tgetstr("cd", NULL), 1, ft_putshit);
+	displayed = prompt->total - ft_strlen(to_display);
 	while (size != 0)
 	{
-		displayed = prompt->total - ft_strlen(to_display);
-		if (displayed % prompt->size->x == 0)
+		if ((displayed + prompt->origin->x) % prompt->size->x == 0)
 			move_cursor(prompt, displayed, false);
-		tmp = prompt->size->x - displayed % prompt->size->x;
+		tmp = prompt->size->x - (displayed + prompt->origin->x) % prompt->size->x;
 		tmp = ((tmp > size) ? size : tmp);
 		ft_writenl(to_display, tmp);
-		if (prompt->size->y - 1 == prompt->origin->y +
+		displayed = displayed + tmp;
+		if (prompt->size->y == prompt->origin->y +
 				(prompt->origin->x + displayed) / prompt->size->x &&
-				(displayed + prompt->origin->x + tmp) % prompt->size->x == 0)
+				(prompt->origin->x + displayed) % prompt->size->x == 0)
 		{
 			tputs(tgetstr("sf", NULL), 1, ft_putshit);
 			prompt->origin->y--;
