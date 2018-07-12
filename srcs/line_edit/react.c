@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/24 13:39:16 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/06 05:59:47 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/12 09:40:55 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void	esc_react_aux(t_prompt *prompt, int nb_user_entry, char *user_entry,
 	else if (nb_user_entry == 2 && user_entry[0] == 27 &&
 			user_entry[1] == 'S')
 		selection_mode(prompt, stat_data);
-	else if (nb_user_entry == 2 && user_entry[0] == 27 &&
+	else if (nb_user_entry == 1 && user_entry[0] == 27 &&
 			user_entry[1] == 'V' && stat_data->copied != NULL)
 		secure_stock(prompt, stat_data->copied);
 }
