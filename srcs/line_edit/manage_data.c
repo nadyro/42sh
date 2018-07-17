@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 23:36:42 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/17 19:34:28 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/18 00:36:45 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void		prompt_backdel(t_prompt *prompt)
 	ft_memmove(&(prompt->line[prompt->pos]),
 			&(prompt->line[prompt->pos + 1]),
 			ft_strlen(&(prompt->line[prompt->pos])));
+	strcat(prompt->line, " ");
 	write_data(prompt, &(prompt->line[prompt->pos]),
 			ft_strlen(&(prompt->line[prompt->pos])));
 	*(ft_strrchr(prompt->line, 32)) = '\0';
