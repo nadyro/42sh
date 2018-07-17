@@ -6,7 +6,7 @@
 #    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/07/07 04:46:31 by azybert          ###   ########.fr        #
+#    Updated: 2018/07/17 15:34:41 by antoipom         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -73,10 +73,10 @@ INC_FILES = lexer.h \
 
 NAME ?= 42sh
 
-ASAN =
-ifeq ($(ASAN), yes)
-	SANITIZER ?= -fsanitize=address -fno-omit-frame-pointer 
-endif
+#ASAN =
+#ifeq ($(ASAN), yes)
+#	SANITIZER ?= -fsanitize=address -fno-omit-frame-pointer 
+#endif
 
 LIB_DIR = libft
 SRC_DIR = srcs
@@ -86,7 +86,7 @@ LIB_INC = -I$(LIB_DIR)/include
 
 OPTIMIZATION ?= -O0
 CC ?= gcc
-CCFLAGS ?= -g -Wall -Wextra -Werror
+CCFLAGS ?= -g -Wall -Wextra -Werror -fsanitize=address -fno-omit-frame-pointer 
 LDFLAGS = -L$(LIB_DIR) -lft -ltermcap
 INCLUDES = $(LOCAL_INC) $(LIB_INC)
 
