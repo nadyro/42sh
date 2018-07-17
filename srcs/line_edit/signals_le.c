@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 03:46:15 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/17 03:18:03 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/17 19:32:18 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ void	handle_int(int sig)
 {
 	UNUSED(sig);
 	if (prompt->size->y - 1 == prompt->origin->y +
-			(prompt->origin->x + ft_add_nl(prompt, prompt->total)) / prompt->size->x)
+			(prompt->origin->x + ft_add_nl(prompt, prompt->total))
+			/ prompt->size->x)
 		tputs(tgetstr("sf", NULL), 1, ft_putshit);
 	move_cursor(prompt, prompt->total + prompt->size->x -
 			((prompt->total + prompt->origin->x) % prompt->size->x), false);

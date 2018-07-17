@@ -34,7 +34,7 @@ int			main(int argc, char **argv, char **env)
 	///////////////////////////////////
 	while (1)
 	{
-		line = line_edit_main_loop();
+		line = line_edit_main_loop("42shit> ");
 		/*token_tab = get_tokens(line);
 		parsing_return = parser_validation(token_tab);
 		if (parsing_return != -1)

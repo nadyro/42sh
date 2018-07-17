@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/10 06:19:38 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/17 19:44:01 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ typedef struct	s_stat_data
 }				t_stat_data;
 
 void			termanip(int sig);
-char			*line_edit_main_loop();
+char			*line_edit_main_loop(char *d_prompt);
 void			get_cursor_pos(t_coord *actualize, t_prompt *prompt);
 int				ft_putshit(int c);
 void			esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry,

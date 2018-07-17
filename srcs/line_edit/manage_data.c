@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 23:36:42 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/17 05:47:26 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/17 19:34:28 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,20 +43,19 @@ void		write_data(t_prompt *prompt, char *to_display, size_t size)
 	move_cursor(prompt, prompt->pos, true);
 	tputs(tgetstr("cd", NULL), 1, ft_putshit);
 	displayed = prompt->total - ft_strlen(to_display);
+	while (prompt->size->y <= prompt->origin->y + (prompt->origin->x +
+				ft_add_nl(prompt, prompt->pos + size)) / prompt->size->x)
+	{
+		move_cursor(prompt, (prompt->size->y - prompt->origin->y) *
+				prompt->size->x, false);
+		tputs(tgetstr("sf", NULL), 1, ft_putshit);
+		prompt->origin->y--;
+	}
 	while (size != 0)
 	{
-		if (prompt->size->y <= prompt->origin->y +
-				(prompt->origin->x + ft_add_nl(prompt, displayed) + 1) / prompt->size->x)
-		{
-			if ((prompt->origin->x + ft_add_nl(prompt, prompt->pos) + 1) % prompt->size->x == 0)
-			{
-				move_cursor(prompt, prompt->size->y - prompt->origin->y, false);
-				tputs(tgetstr("sf", NULL), 1, ft_putshit);
-			}
-			prompt->origin->y--;
-		}
 		move_cursor(prompt, displayed, false);
-		tmp = prompt->size->x - (ft_add_nl(prompt, displayed) + prompt->origin->x) % prompt->size->x;
+		tmp = prompt->size->x - (ft_add_nl(prompt, displayed) +
+				prompt->origin->x) % prompt->size->x;
 		tmp = ((tmp > size) ? size : tmp);
 		ft_writenl(to_display, tmp);
 		displayed = displayed + tmp;
