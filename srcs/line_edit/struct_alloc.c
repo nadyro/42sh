@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 01:45:43 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/08 05:11:17 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/17 23:02:26 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void		free_prompt(t_prompt *prompt)
 	prompt->line = NULL;
 	free(prompt->buf);
 	prompt->buf = NULL;
+	free(prompt->disp);
+	prompt->disp = NULL;
 	free(prompt->origin);
 	prompt->origin = NULL;
 	free(prompt->size);
@@ -44,7 +46,7 @@ void		prompt_origin(t_prompt *prompt, t_stat_data *stat_data)
 		get_cursor_pos(prompt->origin, prompt);
 }
 
-t_prompt	*malloc_prompt(t_prompt *prompt, t_stat_data *stat_data)
+t_prompt	*malloc_prompt(t_prompt *prompt, t_stat_data *stat_data, char *d_prompt)
 {
 	struct winsize	w;
 
@@ -56,6 +58,8 @@ t_prompt	*malloc_prompt(t_prompt *prompt, t_stat_data *stat_data)
 		exit(1);
 	ioctl(0, TIOCGWINSZ, &w);
 	if (!(prompt->line = ft_strdup("\0")))
+		exit(1);
+	if (!(prompt->disp = ft_strdup(d_prompt)))
 		exit(1);
 	prompt->buf = NULL;
 	prompt->pos = 0;

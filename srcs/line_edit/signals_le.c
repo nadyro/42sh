@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 03:46:15 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/17 19:32:18 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/17 23:02:20 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	handle_resize(int sig)
 	ioctl(0, TIOCGWINSZ, &w);
 	prompt->size->x = w.ws_col;
 	prompt->size->y = w.ws_row;
-	write(1, "prompt> ", 8);
+	write(1, prompt->disp, ft_strlen(prompt->disp));
 	get_cursor_pos(prompt->origin, prompt);
 	write_data(prompt, prompt->line, prompt->total);
 	move_cursor(prompt, prompt->pos, true);
@@ -42,7 +42,7 @@ void	handle_int(int sig)
 		tputs(tgetstr("sf", NULL), 1, ft_putshit);
 	move_cursor(prompt, prompt->total + prompt->size->x -
 			((prompt->total + prompt->origin->x) % prompt->size->x), false);
-	write(1, "prompt> ", 8);
+	write(1, prompt->disp, ft_strlen(prompt->disp));
 	get_cursor_pos(prompt->origin, prompt);
 	free(prompt->line);
 	if (!(prompt->line = ft_strdup("\0")))

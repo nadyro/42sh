@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/17 19:44:01 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/17 23:02:22 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct	s_prompt
 {
 	char		*line;
 	char		*buf;
+	char		*disp;
 	size_t		pos;
 	size_t		total;
 	t_coord		*origin;
@@ -90,7 +91,7 @@ void			handle_resize(int sig);
 void			ignore_sig(int sig);
 void			ignore_handle(void);
 void			reverse_handle();
-t_prompt		*malloc_prompt(t_prompt *prompt, t_stat_data *data);
+t_prompt		*malloc_prompt(t_prompt *prompt, t_stat_data *data, char *d_prompt);
 t_stat_data		*malloc_stat(void);
 void			free_prompt(t_prompt *prompt);
 void			ft_flush(t_prompt *prompt);
