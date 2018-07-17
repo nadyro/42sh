@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/08 06:09:10 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/11 07:44:19 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/17 05:49:58 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,13 @@ static void	search_display(t_prompt *prompt, char *cmd_found)
 	cmd_search = prompt->line;
 	prompt->line = to_display;
 	prompt->total = ft_strlen(prompt->line);
-	if (prompt->size->y <= prompt->origin->y + (prompt->origin->x +
+	while (prompt->size->y <= prompt->origin->y + (prompt->origin->x +
 				ft_add_nl(prompt, prompt->total)) / prompt->size->x)
 	{
+		move_cursor(prompt, prompt->size->y - prompt->origin->y, false);
 		tputs(tgetstr("sf", NULL), 1, ft_putshit);
-		            prompt->origin->y--;
+		prompt->origin->y--;
+		move_cursor(prompt, prompt->pos, true);
 	}
 	write_data(prompt, prompt->line, prompt->total);
 	free(to_free);
@@ -61,7 +63,7 @@ static int	search_react(t_prompt *prompt)
 	nb_user_entry = read(1, user_entry, 6);
 	if (user_entry[0] == 27 && user_entry[1] == 'R')
 		return (-1);
-	else if (user_entry[0] == 127)
+	else if (user_entry[0] == 127 && prompt->total > 0)
 		prompt_delete(prompt);
 	else
 	{
