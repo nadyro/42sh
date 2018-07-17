@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 23:36:42 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/06 05:12:52 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/17 19:34:28 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,21 +42,23 @@ void		write_data(t_prompt *prompt, char *to_display, size_t size)
 
 	move_cursor(prompt, prompt->pos, true);
 	tputs(tgetstr("cd", NULL), 1, ft_putshit);
+	displayed = prompt->total - ft_strlen(to_display);
+	while (prompt->size->y <= prompt->origin->y + (prompt->origin->x +
+				ft_add_nl(prompt, prompt->pos + size)) / prompt->size->x)
+	{
+		move_cursor(prompt, (prompt->size->y - prompt->origin->y) *
+				prompt->size->x, false);
+		tputs(tgetstr("sf", NULL), 1, ft_putshit);
+		prompt->origin->y--;
+	}
 	while (size != 0)
 	{
-		displayed = prompt->total - ft_strlen(to_display);
-		if (displayed % prompt->size->x == 0)
-			move_cursor(prompt, displayed, false);
-		tmp = prompt->size->x - displayed % prompt->size->x;
+		move_cursor(prompt, displayed, false);
+		tmp = prompt->size->x - (ft_add_nl(prompt, displayed) +
+				prompt->origin->x) % prompt->size->x;
 		tmp = ((tmp > size) ? size : tmp);
 		ft_writenl(to_display, tmp);
-		if (prompt->size->y - 1 == prompt->origin->y +
-				(prompt->origin->x + displayed) / prompt->size->x &&
-				(displayed + prompt->origin->x + tmp) % prompt->size->x == 0)
-		{
-			tputs(tgetstr("sf", NULL), 1, ft_putshit);
-			prompt->origin->y--;
-		}
+		displayed = displayed + tmp;
 		to_display += tmp;
 		size -= tmp;
 	}
@@ -67,7 +69,6 @@ void		prompt_backdel(t_prompt *prompt)
 	ft_memmove(&(prompt->line[prompt->pos]),
 			&(prompt->line[prompt->pos + 1]),
 			ft_strlen(&(prompt->line[prompt->pos])));
-	strcat(prompt->line, " ");
 	write_data(prompt, &(prompt->line[prompt->pos]),
 			ft_strlen(&(prompt->line[prompt->pos])));
 	*(ft_strrchr(prompt->line, 32)) = '\0';
@@ -84,7 +85,7 @@ void		prompt_delete(t_prompt *prompt)
 	strcat(prompt->line, " ");
 	write_data(prompt, &(prompt->line[prompt->pos]),
 			ft_strlen(&(prompt->line[prompt->pos])));
-	*(ft_strrchr(prompt->line, 32)) = '\0';
+	*(ft_strrchr(prompt->line, ' ')) = '\0';
 	prompt->total--;
 	move_cursor(prompt, prompt->pos, true);
 }
