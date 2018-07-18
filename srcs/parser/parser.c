@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:23 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/18 17:15:40 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/18 18:07:21 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,17 @@ static int 		get_tk_end_pos(t_ast *tmp)
 {
 	int 	last = 0;
 
+	//if (tmp->arg)
+	//	printf("sending %s to tk_end_pos\n", tmp->arg);
 	while (tmp && tmp->tok[last] != -1)
 	{
+	//	printf("DEBUG 1\n");
 		if (tmp->tok[last] != TK_END && tmp->tok[last] != -1)
 			last += 3;
+	//	printf("DEBUG 2, tmp->tok[last] = %d\n", tmp->tok[last]);	
 		if (tmp->tok[last] == TK_END)
 			return (last);
+	//	printf("DEBUG 3\n");
 	}
 	ft_putstr_fd("Error : No end token found\n", 2);
 	return (-1);
@@ -92,7 +97,8 @@ static void		ast_loop_and_or(t_ast *head)
 				i += 3;
 			if (tmp->tok[i] != TK_END && tmp->tok[i] != -1)
 				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1]);
-			ast_loop_pipe(tmp->right);
+			if (tmp->right && ft_strchr(tmp->right->arg, '|'))
+				ast_loop_pipe(tmp->right);
 			i = op;
 			if (i > 0)
 			{
@@ -134,7 +140,10 @@ static void		ast_loop_semi(t_ast *head)
 				i += 3;
 			if (tmp->tok[i] != TK_END && tmp->tok[i] != -1)
 				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1]);
-			ast_loop_and_or(tmp->right);
+			if (tmp->right && (ft_strstr(tmp->right->arg, "&&") || ft_strstr(tmp->right->arg, "||")))
+				ast_loop_and_or(tmp->right);
+			else if (tmp->right && ft_strchr(tmp->right->arg, '|'))
+				ast_loop_pipe(tmp->right);	
 			i = op;
 			if (i > 0)
 			{
