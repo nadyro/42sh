@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/26 15:16:35 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/18 14:55:23 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,6 @@ static void	launch_exec(t_shell *shell, char *full_path, t_ast *cmd)
 	{
 		if (execve(full_path, shell->args, shell->envv) == -1)
 		{
-			(!full_path) ? ft_putstr_fd(shell->args[0], 2) :
-			ft_putstr_fd(full_path, 2);
-			ft_putstr_fd(": Command not found.\n", 2);
 			cmd->cmd_ret = -1;
 			//exit(EXIT_FAILURE);
 		}
@@ -82,24 +79,21 @@ static int	*redirect_check(t_shell *shell)
 	return (result);
 }
 
-static int	ast_launch(t_shell *shell, t_ast *cmd)
+static void	ast_launch(t_shell *shell, t_ast *cmd)
 {
 	pid_t	pid;
 	pid_t	wpid;
 	int		status;
-	char	*full_path;
 	int		*fd_changed;
 
 //	printf("entered ast_launch\n");
-	full_path = NULL;
 	status = 0;
 	pid = fork();
 	if (pid == 0)
 	{
 		//printf("pid == 0 i.e. child process: %s\n", shell->args[0]);
 		fd_changed = redirect_check(shell);
-		full_path = (has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
-		launch_exec(shell, full_path, cmd);
+		launch_exec(shell, shell->full_path, cmd);
 	//	printf("after launch_exec call, shell->error = %d\n", shell->error);
 		if (fd_changed[1])
 		{
@@ -115,48 +109,41 @@ static int	ast_launch(t_shell *shell, t_ast *cmd)
 			wpid = waitpid(pid, &status, WUNTRACED);
 		//printf("should be returning from PARENT process, command = %s, pid = %d\n", shell->args[0], pid);
 	}
-	if (full_path && full_path[0])
-		ft_strdel(&full_path);
-	if (shell->error == -1)
+	if (shell->full_path)
+		ft_strdel(&(shell->full_path));
+	/*if (shell->error == -1)
 	{
 	//	printf("SHELL ERROR  FOUND IN COMMAND EXECUTION, returning -1\n");
 		shell->error = 0;
 		return (-1);
 	}
 	else
-		return (1);
+		return (1);*/
 }
 
 int			ast_execute(t_shell *shell, t_ast *cmd)
 {
-	int		ret;
-
-	ret = 0; 
-	if (shell->args[0] == NULL)
-		return (1);
-	if ((ret = builtin_check(shell)) != -1)
-		return (ret);
+	if (shell && shell->args && shell->args[0])
+	{
+		shell->full_path = (has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
+		if ((cmd->cmd_ret = builtin_check(shell)) != -1)
+			return (cmd->cmd_ret = 0);
+		else if (shell->full_path || !(access(shell->args[0], F_OK)))	//if binary exists in PATH, fork and execute
+		{
+			ast_launch(shell, cmd);
+			return (cmd->cmd_ret);
+		}
+		else
+		{
+			ft_putstr_fd(shell->args[0], 2);
+			ft_putstr_fd(": Command not found.\n", 2);
+			return (cmd->cmd_ret = -1);			
+		}
+	}
 	else
-		return (ast_launch(shell, cmd));
+		return (0);		//ie if args table doesnt exist and command line is just spaces and tabs, return 0
 }
 
-/*static void	display_prompt(int *status)
-{
-	char		cwd[256];
-
-	*status = 0;
-	if (getcwd(cwd, sizeof(cwd)) == NULL)
-		ft_putstr_fd("error retrieving cwd\n", 2);
-	ft_putstr(C01);
-	if (cwd[0])
-		ft_putstr(cwd);
-	ft_putstr(RESET);
-	ft_putstr(C05);
-	ft_putstr(" @$h >");
-	ft_putstr(RESET);
-	ft_putchar(' ');
-}
-*/
 void		ast_loop(t_shell *shell, t_ast *ast)
 {
 	int		status;

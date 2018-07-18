@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/06/15 13:39:50 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/18 14:44:26 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ typedef struct	s_shell
 {
 	char					**envv;
 	char					**args;
+	char					*full_path;
 	int						i;
 	int						p;
 	int						l;
