@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/27 12:35:59 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/18 14:56:55 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,7 +205,7 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 			if (v1 != 0)
 			{
 			//	printf("v1 = %d\n, returning -1\n", v1);
-				free_ast(ast->right);
+				//free_ast(ast->right);
 				return (-1);
 			}
 			else if (v1 == 0)
@@ -233,7 +233,7 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 			{
 			//	printf("ENTERED v1 = 0 clause of left side of OR_IF, should return %d\n", v1);
 			//	printf("left branch of ORIF RETURNING 0\n");
-				free_ast(ast->right);
+			//	free_ast(ast->right);
 				return (v1);
 			}
 			else
