@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/18 17:13:53 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/18 19:19:43 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,13 @@
 
 static void	launch_exec(t_shell *shell, char *full_path, t_ast *cmd)
 {
-	cmd->cmd_ret = 0;
-	
 	//printf("before executing commands, here is the table of arguments:\n");
 	//ßft_print_table(shell->args);
 	if (execve(shell->args[0], shell->args, shell->envv) == -1)
 	{
 		if (execve(full_path, shell->args, shell->envv) == -1)
 		{
+			printf("both execve calls didn't work properly!!!!\n");
 			cmd->cmd_ret = -1;
 			//exit(EXIT_FAILURE);
 		}
@@ -126,22 +125,25 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 	if (shell && shell->args && shell->args[0])
 	{
 		shell->full_path = (has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
-		if ((cmd->cmd_ret = builtin_check(shell)) != -1)
-			return (cmd->cmd_ret = 0);
+		if (builtin_check(shell) != -1)
+			cmd->cmd_ret = 0;
 		else if (shell->full_path || !(access(shell->args[0], F_OK)))	//if binary exists in PATH, fork and execute
 		{
 			ast_launch(shell, cmd);
+			//printf("launched fork, returning : cmd_ret = %d\n", cmd->cmd_ret);
 			return (cmd->cmd_ret);
 		}
 		else
 		{
 			ft_putstr_fd(shell->args[0], 2);
 			ft_putstr_fd(": Command not found.\n", 2);
-			return (cmd->cmd_ret = -1);			
+			cmd->cmd_ret = -1;			
 		}
 	}
-	else
-		return (0);		//ie if args table doesnt exist and command line is just spaces and tabs, return 0
+	//printf("about to return ast_execute: cmd_ret = %d\n", cmd->cmd_ret);
+	return (cmd->cmd_ret);
+	//else
+	//	return (0);		//ie if args table doesnt exist and command line is just spaces and tabs, return 0
 }
 
 void		ast_loop(t_shell *shell, t_ast *ast)

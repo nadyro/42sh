@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/18 17:50:04 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/18 19:20:36 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,11 +168,12 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		printf("right = %s\n", ast->right->arg); 
 */	if (!(ast->left) && !(ast->right))
 	{
+		ast->cmd_ret = 0;
 		//printf("DEBUG 1 : GOING TO EXECUTE: %s, address = %s\n", ast->arg, ast->address);
 		create_arg_table(ast, shell);
-		//printf("DEBUG 2\n");
+		//printf("DEBUG 2, before executing %s, cmd->ret = %d\n", ast->arg, ast->cmd_ret);
 		ast_execute(shell, ast);
-		//printf("DEBUG 3, address of %s : %s\n", ast->arg, ast->address);
+		//printf("DEBUG 3, AFTER executing %s, cmd->ret = %d\n", ast->arg, ast->cmd_ret);
 		if (shell->args)
 		{	
 		//	printf("in ast_evaluate, shell->args is about to be freed, first element = %s\n", shell->args[0]);
@@ -211,44 +212,44 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 			}
 			else if (v1 == 0)
 			{
-				//printf("left branch of ANDIF returned 0\n");
+			//	printf("left branch of ANDIF returned 0\n");
 				v2 = ast_evaluate(ast->right, shell);
 				if (v2 == 0)
 				{
-				//	printf("right branch RETURNING of ANDIF returned v2 = 0\n");
+			//		printf("right branch RETURNING of ANDIF returned v2 = 0\n");
 					return (0);
 				}
 				else
 				{
-				//	printf("right branch of ANDIF RETURNING v2 = %d\n", v2);
+			//		printf("right branch of ANDIF RETURNING v2 = %d\n", v2);
 					return (-1);
 				}
 			}
 		}
 		else if (op == TK_OR_IF)
 		{
-			//printf("ORIF found at : %s\n", ast->arg);
-			//printf("going to calculate v1 using %s\n", ast->left->arg);
+		//	printf("ORIF found at : %s\n", ast->arg);
+		//	printf("going to calculate v1 using %s\n", ast->left->arg);
 			v1 = ast_evaluate(ast->left, shell);
 			if (v1 == 0)
 			{
 			//	printf("ENTERED v1 = 0 clause of left side of OR_IF, should return %d\n", v1);
-			//	printf("left branch of ORIF RETURNING 0\n");
+		//		printf("left branch of ORIF RETURNING 0\n");
 			//	free_ast(ast->right);
 				return (v1);
 			}
 			else
 			{
-			//	printf("left branch of ORIF did not return 0, v1 = %d\n, evaluate right branch\n", v1);
+		//		printf("left branch of ORIF did not return 0, v1 = %d\n, evaluate right branch\n", v1);
 				v2 = ast_evaluate(ast->right, shell);
 				if (v2 == 0)
 				{
-			//		printf("right side of OR_IF RETURNING 0, v2 = %d\n", v2);
+		//			printf("right side of OR_IF RETURNING 0, v2 = %d\n", v2);
 					return (0);
 				}
 				else
 				{
-			//		printf("right side of OR_IF RETURNING v2 = %d\n", v2);
+		//			printf("right side of OR_IF RETURNING v2 = %d\n", v2);
 					return (-1);
 				}
 			}
