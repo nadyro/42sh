@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/18 14:56:55 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/18 17:15:25 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,11 @@ t_ast		*init_ast(char **argv)
 			return (NULL);	
 	head->parent = NULL;
 	head->split_by = 0;
-	head->address = ft_strdup("P");
+	//head->address = ft_strdup("P");
 	head->depth = 0;
 	//printf("tab[0] = %s\n", tab[0]);
 	head->arg = (*argv) ? ft_strdup(*argv) : NULL;
+	//(head->arg) ? printf("ast initialized with arg = %s\n", head->arg) : printf("ast initialized with a NULL arg\n");
 	//printf("head->arg initialised to : %s\n", head->arg);
 	head->tok = get_tokens(head->arg);
 	//printf("initialised ast, with token table\n");
@@ -108,6 +109,7 @@ void		create_arg_table(t_ast *cmd, t_shell *shell)
 	
 	if (!(cmd->arg))
 	{
+		printf("in create_arg_table, the argument is NULL, no table created\n");
 		shell->args = NULL;
 		return ;
 	}
@@ -145,9 +147,11 @@ void		create_arg_table(t_ast *cmd, t_shell *shell)
 			}
 		}
 	}
-	//printf("printing arg table if exists\n");
-	//if (shell->args && shell->args[0])
-	//	ft_print_table(shell->args);
+	if (shell->args && shell->args[0])
+	{
+		printf("printing arg table if exists, first char of first table element is %d\n", shell->args[0][0]);
+		ft_print_table(shell->args);
+	}
 }
 
 int         ast_evaluate(t_ast *ast, t_shell *shell)
@@ -157,11 +161,10 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 	int		v1 = 0;
 	int		v2 = 0;
 
-	//printf("ENTERED ast_evaluate with ast = %s\n", ast->arg);
 	if (ast == NULL)
 	{
 		//printf("error, AST is null, nothing to evaluate\n");
-		return (-1);
+		return (0);
 	}
 /*	printf("ast = %s\n", ast->arg);
 	if (ast->left)
@@ -176,7 +179,10 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		ast_execute(shell, ast);
 		//printf("DEBUG 3, address of %s : %s\n", ast->arg, ast->address);
 		if (shell->args)
+		{	
+			printf("in ast_evaluate, shell->args is about to be freed, first element = %s\n", shell->args[0]);
 			free_table(shell->args);
+		}
 		//printf("DEBUG 4, ret = %d\n", ret);
 		if (ast->cmd_ret == 0 || ast->cmd_ret == -1)
 		{

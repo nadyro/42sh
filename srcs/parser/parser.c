@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:23 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/26 15:18:04 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/18 17:15:40 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ t_ast	    *get_ast(char **argv)
 	char	*chr = NULL;	//for removing '\n' from line
 
 	if ((chr = ft_strchr(*argv, '\n')))	//replaces '\n' from line editing with '\0'
-		*chr = '\0';
+		*chr = '\0';	
 	head = init_ast(argv);
 	tmp = head;
 	if (ft_strchr(tmp->arg, ';'))

@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 11:50:10 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/11 13:16:30 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/07/18 16:22:22 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ char		*arg_full_path(t_shell *shell)
 		if (full_path && full_path[0])
 			ft_strdel(&full_path);
 	}
-	free_table(paths);
+	if (paths)
+		free_table(paths);
 	return (NULL);
 }
 

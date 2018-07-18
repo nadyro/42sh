@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/18 14:55:23 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/18 17:13:53 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,10 +149,11 @@ void		ast_loop(t_shell *shell, t_ast *ast)
 	int		status;
 
 	status = 1;
-	//display_prompt(&status);
-	if (ast)
+	//printf("DEBUG 1: in ast_loop, ast->arg = %s\n, first char = %d\nsecond char = %d\n", ast->arg, ast->arg[0], ast->arg[1]);
+	if (ast && ast->arg[0])
 	{
+		//printf("DEBUG 2: entering ast_evaluate FROM ast_loop\n");
 		status = ast_evaluate(ast, shell);
+	//	printf("exiting ast_evaluate FROM ast_loop after completion\n");
 	}
-    //if ast_evaluate == 10, i.e. ft_strcmp(cmd->arg, cm)
 }

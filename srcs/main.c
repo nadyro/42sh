@@ -131,5 +131,5 @@ int			main(int argc, char **argv, char **env)
 	//if (ac >= 1 && av)
 	//		ash_loop(&shell);
 	//if (shell.list && shell->var && shell->var[0])
-	//		free_env(shell.list);
+	//		env(shell.list);
 ///////////////////////////////////////////////////////////////////////////////
