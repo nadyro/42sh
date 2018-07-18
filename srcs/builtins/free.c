@@ -6,11 +6,12 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/15 13:50:00 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/15 14:03:03 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/18 17:13:57 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
+#include <stdio.h>
 
 void		free_table(char **tab)
 {
@@ -18,13 +19,24 @@ void		free_table(char **tab)
 
 	i = 0;
 	if (tab && !(tab[0]))
+	{
+		//printf("about to free tab in free_table, address = %p\n", tab);
 		free(tab);
+	}
 	else
 	{
+		//printf("going to print all elements of the following table : \n");
+		//ft_print_table(tab);
 		while (tab && tab[i] != 0)
+		{
+		//	printf("about to free : %s, address = %p\n", tab[i], tab[i]);
 			ft_strdel(&(tab[i++]));
+		}
 		if (tab != NULL)
+		{
+		//	printf("about to free tab after deleting all string elements, tab address = %p\n", tab);
 			free(tab);
+		}
 		tab = NULL;
 	}
 }

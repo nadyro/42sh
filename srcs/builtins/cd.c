@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 11:05:03 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/11 13:13:53 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/07/18 16:28:00 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static int	cd_no_arg(t_shell *shell)
 {
 	t_env	*tmp;
 
+	printf("Processing cd_no_argument\n");
 	tmp = (shell->list->var) ? shell->list : NULL;
 	while (tmp && !(ARG))
 	{
