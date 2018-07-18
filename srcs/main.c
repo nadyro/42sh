@@ -30,12 +30,10 @@ int			main(int argc, char **argv, char **env)
 	}
 	if (tgetent(NULL, name_term) == ERR)
 		return (-1);
-	signal(SIGINT, termanip);
-	//handle_sig();
 	///////////////////////////////////
 	while (1)
 	{
-		line = line_edit_main_loop();
+		line = line_edit_main_loop("42sh-it> ");
 		token_tab = get_tokens(line);
 		parsing_return = parser_validation(token_tab);
 		if (parsing_return != -1)
@@ -53,11 +51,8 @@ int			main(int argc, char **argv, char **env)
 			//printf("TREE COMPILED, SENDING TO printLeafNodes\n\n\n");
 			ast_loop(&shell, head);
 		}
-		//if (ft_strncmp(line, "exit", 4) == 0)
-		//	termanip(2);
 		free(line);
 	}
-	termanip(2);
 	return (0);
 }
 
