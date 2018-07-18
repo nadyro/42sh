@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/07 04:10:28 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/18 13:54:32 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,5 +95,4 @@ void			free_prompt(t_prompt *prompt);
 void			ft_flush(t_prompt *prompt);
 void			secure_stock(t_prompt *prompt, char *to_stock);
 void			selection_mode(t_prompt *prompt, t_stat_data *stat_data);
-
 #endif
