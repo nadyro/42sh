@@ -7,6 +7,30 @@
 
 t_prompt	*prompt;
 
+static char	*get_pwd(t_shell *shell)
+{
+	int		i;
+	t_shell *shell_ptr;
+	char	*ptr;
+	char	*ptr2;
+
+	shell_ptr = shell;
+	while (shell_ptr->list && ft_strcmp(shell_ptr->list->var, "PWD") != 0)
+		shell_ptr->list = shell_ptr->list->next;
+	if (shell_ptr->list == NULL)
+	{
+		ft_putstr("pwd error");
+		exit(1);
+	}
+	i = ft_strlen(shell_ptr->list->val) - 1;
+	while (i > 0 && (shell_ptr->list->val)[i - 1] != '/')
+		i--;
+	ptr = ft_strjoin("\x1b[36m[", (shell_ptr->list->val) + i);
+	ptr2 = ft_strjoin(ptr, "]\x1b[0m ");
+	free(ptr);
+	return (ptr2);
+}
+
 int			main(int argc, char **argv, char **env)
 {
 	int *token_tab;
@@ -15,6 +39,7 @@ int			main(int argc, char **argv, char **env)
 	t_shell	shell;
 	char	*line;
 	char	*name_term;
+	char 	*prompt;
 
 	(void)argc;
 	(void)argv;
@@ -33,7 +58,9 @@ int			main(int argc, char **argv, char **env)
 	///////////////////////////////////
 	while (1)
 	{
-		line = line_edit_main_loop("42sh-it> ");
+		prompt = get_pwd(&shell);
+		line = line_edit_main_loop(prompt);
+		free(prompt);
 		token_tab = get_tokens(line);
 		parsing_return = parser_validation(token_tab);
 		if (parsing_return != -1)
