@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/18 17:15:25 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/18 17:50:04 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,11 +147,6 @@ void		create_arg_table(t_ast *cmd, t_shell *shell)
 			}
 		}
 	}
-	if (shell->args && shell->args[0])
-	{
-		printf("printing arg table if exists, first char of first table element is %d\n", shell->args[0][0]);
-		ft_print_table(shell->args);
-	}
 }
 
 int         ast_evaluate(t_ast *ast, t_shell *shell)
@@ -180,7 +175,7 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		//printf("DEBUG 3, address of %s : %s\n", ast->arg, ast->address);
 		if (shell->args)
 		{	
-			printf("in ast_evaluate, shell->args is about to be freed, first element = %s\n", shell->args[0]);
+		//	printf("in ast_evaluate, shell->args is about to be freed, first element = %s\n", shell->args[0]);
 			free_table(shell->args);
 		}
 		//printf("DEBUG 4, ret = %d\n", ret);
