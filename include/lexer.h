@@ -6,7 +6,7 @@
 /*   By: antoipom <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/07 14:13:58 by antoipom          #+#    #+#             */
-/*   Updated: 2018/06/05 15:16:27 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/07/18 17:00:57 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,6 @@ enum
 };
 
 int						*get_tokens(char *line);
+void					main_loop(char *line);
 
 #endif

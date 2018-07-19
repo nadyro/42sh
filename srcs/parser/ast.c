@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/27 12:35:59 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/18 19:20:36 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,11 @@ t_ast		*init_ast(char **argv)
 			return (NULL);	
 	head->parent = NULL;
 	head->split_by = 0;
-	head->address = ft_strdup("P");
+	//head->address = ft_strdup("P");
 	head->depth = 0;
 	//printf("tab[0] = %s\n", tab[0]);
 	head->arg = (*argv) ? ft_strdup(*argv) : NULL;
+	//(head->arg) ? printf("ast initialized with arg = %s\n", head->arg) : printf("ast initialized with a NULL arg\n");
 	//printf("head->arg initialised to : %s\n", head->arg);
 	head->tok = get_tokens(head->arg);
 	//printf("initialised ast, with token table\n");
@@ -108,6 +109,7 @@ void		create_arg_table(t_ast *cmd, t_shell *shell)
 	
 	if (!(cmd->arg))
 	{
+		printf("in create_arg_table, the argument is NULL, no table created\n");
 		shell->args = NULL;
 		return ;
 	}
@@ -145,9 +147,6 @@ void		create_arg_table(t_ast *cmd, t_shell *shell)
 			}
 		}
 	}
-	//printf("printing arg table if exists\n");
-	//if (shell->args && shell->args[0])
-	//	ft_print_table(shell->args);
 }
 
 int         ast_evaluate(t_ast *ast, t_shell *shell)
@@ -157,11 +156,10 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 	int		v1 = 0;
 	int		v2 = 0;
 
-	//printf("ENTERED ast_evaluate with ast = %s\n", ast->arg);
 	if (ast == NULL)
 	{
 		//printf("error, AST is null, nothing to evaluate\n");
-		return (-1);
+		return (0);
 	}
 /*	printf("ast = %s\n", ast->arg);
 	if (ast->left)
@@ -170,13 +168,17 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		printf("right = %s\n", ast->right->arg); 
 */	if (!(ast->left) && !(ast->right))
 	{
+		ast->cmd_ret = 0;
 		//printf("DEBUG 1 : GOING TO EXECUTE: %s, address = %s\n", ast->arg, ast->address);
 		create_arg_table(ast, shell);
-		//printf("DEBUG 2\n");
+		//printf("DEBUG 2, before executing %s, cmd->ret = %d\n", ast->arg, ast->cmd_ret);
 		ast_execute(shell, ast);
-		//printf("DEBUG 3, address of %s : %s\n", ast->arg, ast->address);
+		//printf("DEBUG 3, AFTER executing %s, cmd->ret = %d\n", ast->arg, ast->cmd_ret);
 		if (shell->args)
+		{	
+		//	printf("in ast_evaluate, shell->args is about to be freed, first element = %s\n", shell->args[0]);
 			free_table(shell->args);
+		}
 		//printf("DEBUG 4, ret = %d\n", ret);
 		if (ast->cmd_ret == 0 || ast->cmd_ret == -1)
 		{
@@ -205,49 +207,49 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 			if (v1 != 0)
 			{
 			//	printf("v1 = %d\n, returning -1\n", v1);
-				free_ast(ast->right);
+				//free_ast(ast->right);
 				return (-1);
 			}
 			else if (v1 == 0)
 			{
-				//printf("left branch of ANDIF returned 0\n");
+			//	printf("left branch of ANDIF returned 0\n");
 				v2 = ast_evaluate(ast->right, shell);
 				if (v2 == 0)
 				{
-				//	printf("right branch RETURNING of ANDIF returned v2 = 0\n");
+			//		printf("right branch RETURNING of ANDIF returned v2 = 0\n");
 					return (0);
 				}
 				else
 				{
-				//	printf("right branch of ANDIF RETURNING v2 = %d\n", v2);
+			//		printf("right branch of ANDIF RETURNING v2 = %d\n", v2);
 					return (-1);
 				}
 			}
 		}
 		else if (op == TK_OR_IF)
 		{
-			//printf("ORIF found at : %s\n", ast->arg);
-			//printf("going to calculate v1 using %s\n", ast->left->arg);
+		//	printf("ORIF found at : %s\n", ast->arg);
+		//	printf("going to calculate v1 using %s\n", ast->left->arg);
 			v1 = ast_evaluate(ast->left, shell);
 			if (v1 == 0)
 			{
 			//	printf("ENTERED v1 = 0 clause of left side of OR_IF, should return %d\n", v1);
-			//	printf("left branch of ORIF RETURNING 0\n");
-				free_ast(ast->right);
+		//		printf("left branch of ORIF RETURNING 0\n");
+			//	free_ast(ast->right);
 				return (v1);
 			}
 			else
 			{
-			//	printf("left branch of ORIF did not return 0, v1 = %d\n, evaluate right branch\n", v1);
+		//		printf("left branch of ORIF did not return 0, v1 = %d\n, evaluate right branch\n", v1);
 				v2 = ast_evaluate(ast->right, shell);
 				if (v2 == 0)
 				{
-			//		printf("right side of OR_IF RETURNING 0, v2 = %d\n", v2);
+		//			printf("right side of OR_IF RETURNING 0, v2 = %d\n", v2);
 					return (0);
 				}
 				else
 				{
-			//		printf("right side of OR_IF RETURNING v2 = %d\n", v2);
+		//			printf("right side of OR_IF RETURNING v2 = %d\n", v2);
 					return (-1);
 				}
 			}

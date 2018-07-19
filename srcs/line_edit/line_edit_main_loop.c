@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/07 05:37:05 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/17 23:02:24 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char		*line_edit_main_loop_aux(t_prompt *prompt, t_stat_data *stat_data,
 				esc_react(prompt, nb_user_entry, user_entry, stat_data);
 			else
 			{
-				prompt->buf = ft_strdup(user_entry);
+				((prompt->buf = ft_strdup(user_entry)) != NULL ? 0 : exit(1));
 				if (nb_user_entry == 6)
 					ft_flush(prompt);
 				if (data_react(prompt))
@@ -59,25 +59,27 @@ char		*line_edit_main_loop_aux(t_prompt *prompt, t_stat_data *stat_data,
 	return (to_return);
 }
 
-char		*line_edit_main_loop(void)
+char		*line_edit_main_loop(char *d_prompt)
 {
 	char				*to_return;
 	static t_stat_data	*stat_data = NULL;
 
 	termanip(0);
-	write(1, "prompt> ", 8);
+	write(1, d_prompt, ft_strlen(d_prompt));
 	stat_data = (stat_data ? stat_data : malloc_stat());
-	prompt = malloc_prompt(prompt, stat_data);
+	prompt = malloc_prompt(prompt, stat_data, d_prompt);
 	handle_sig();
 	prompt->buf = stat_data->overage;
 	to_return = NULL;
 	to_return = line_edit_main_loop_aux(prompt, stat_data, to_return);
 	stat_data->overage = (prompt->buf ? ft_strdup(prompt->buf) : NULL);
+	free(stat_data->old_line);
+	stat_data->old_line = NULL;
 	if (to_return[0] != '\n' || to_return[1] != '\0')
 		add_to_history(to_return, stat_data);
 	else
-		stat_data->line_save =
-			prompt->origin->x + (prompt->origin->y + 1) * 100000;
+		stat_data->old_line =
+			ft_itoa(prompt->origin->x + (prompt->origin->y + 1) * 100000);
 	stat_data->current = stat_data->history;
 	free_prompt(prompt);
 	reverse_handle();

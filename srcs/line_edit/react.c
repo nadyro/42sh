@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/24 13:39:16 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/12 09:40:55 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/07/19 15:31:30 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,12 @@ void		secure_stock(t_prompt *prompt, char *to_stock)
 {
 	int		mem;
 
+	if (to_stock == NULL || to_stock[0] == '\0')
+	{
+		if (!(prompt->line = ft_strdup("\0")))
+			exit(1);
+		return ;
+	}
 	mem = 0;
 	while (to_stock[mem])
 		prompt_stock(prompt, &to_stock[mem++]);
@@ -34,7 +40,8 @@ int			data_react(t_prompt *prompt)
 		move_cursor(prompt, prompt->total, true);
 		prompt_stock(prompt, &prompt->buf[mem]);
 		to_free = prompt->buf;
-		prompt->buf = ft_strdup(&prompt->buf[mem + 1]);
+		if (!(prompt->buf = ft_strdup(&prompt->buf[mem + 1])))
+			exit(1);
 		free(to_free);
 		tputs(tgetstr("ce", NULL), 1, ft_putshit);
 		return (1);
@@ -52,11 +59,14 @@ static void	esc_react_aux(t_prompt *prompt, int nb_user_entry, char *user_entry,
 	else if (nb_user_entry == 3 && user_entry[2] == 66)
 		history_prev(prompt, stat_data);
 	else if (nb_user_entry == 2 && user_entry[0] == 27 &&
-			user_entry[1] == 'S')
+			user_entry[1] == 'S' && prompt->total > 0)
 		selection_mode(prompt, stat_data);
 	else if (nb_user_entry == 1 && user_entry[0] == 27 &&
 			user_entry[1] == 'V' && stat_data->copied != NULL)
 		secure_stock(prompt, stat_data->copied);
+	else if (nb_user_entry == 2 && user_entry[0] == 27 &&
+			user_entry[1] == 'R' && stat_data->history)
+		search_mode(prompt, stat_data);
 }
 
 void		esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry,

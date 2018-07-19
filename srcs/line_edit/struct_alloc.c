@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 01:45:43 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/07 05:10:34 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/17 23:02:26 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void		free_prompt(t_prompt *prompt)
 	prompt->line = NULL;
 	free(prompt->buf);
 	prompt->buf = NULL;
+	free(prompt->disp);
+	prompt->disp = NULL;
 	free(prompt->origin);
 	prompt->origin = NULL;
 	free(prompt->size);
@@ -28,19 +30,23 @@ void		free_prompt(t_prompt *prompt)
 
 void		prompt_origin(t_prompt *prompt, t_stat_data *stat_data)
 {
-	if (stat_data != NULL && stat_data->line_save >= 100000)
+	long int	nbr;
+
+	if (stat_data != NULL && stat_data->old_line != NULL)
 	{
-		prompt->origin->x = stat_data->line_save % 100000;
-		prompt->origin->y = stat_data->line_save / 100000;
+		nbr = atol(stat_data->old_line);
+		prompt->origin->x = nbr % 100000;
+		prompt->origin->y = nbr / 100000;
 		prompt->origin->y += (prompt->origin->y == prompt->size->y ? -1 : 0);
 		move_cursor(prompt, 0, true);
-		stat_data->line_save = 0;
+		free(stat_data->old_line);
+		stat_data->old_line = NULL;
 	}
 	else
 		get_cursor_pos(prompt->origin, prompt);
 }
 
-t_prompt	*malloc_prompt(t_prompt *prompt, t_stat_data *stat_data)
+t_prompt	*malloc_prompt(t_prompt *prompt, t_stat_data *stat_data, char *d_prompt)
 {
 	struct winsize	w;
 
@@ -51,7 +57,10 @@ t_prompt	*malloc_prompt(t_prompt *prompt, t_stat_data *stat_data)
 	if (!(prompt->size = malloc(sizeof(t_coord))))
 		exit(1);
 	ioctl(0, TIOCGWINSZ, &w);
-	prompt->line = ft_strdup("\0");
+	if (!(prompt->line = ft_strdup("\0")))
+		exit(1);
+	if (!(prompt->disp = ft_strdup(d_prompt)))
+		exit(1);
 	prompt->buf = NULL;
 	prompt->pos = 0;
 	prompt->total = 0;
@@ -70,7 +79,6 @@ t_stat_data	*malloc_stat(void)
 	stat_data->overage = NULL;
 	stat_data->old_line = NULL;
 	stat_data->copied = NULL;
-	stat_data->line_save = 0;
 	stat_data->current = NULL;
 	stat_data->history = NULL;
 	return (stat_data);

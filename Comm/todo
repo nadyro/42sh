@@ -4,6 +4,8 @@ leaks!
 signaux (Alex actuellement ta gestion des signaux pose des problemes, mettons nous d'accord sur qui s'en occupe svp!)
 il faudrait changer le prompt pour afficher le repertoire courant
 
+gerer les quotes et autres reouvertures avec le line editing 
+
 armon:
 -EXEC/PARSER:
 	-manage leaks
@@ -16,5 +18,6 @@ armon:
 	-handle exit builtin
 	-go through all builtins with parser data structures and verify compatibility
 	
+nadir:
 -LINE EDITING:
-	-autocompletion v1 to finish (Nadir)
+	-Auto completion v1 to finish. (On branch autocompletion lel)

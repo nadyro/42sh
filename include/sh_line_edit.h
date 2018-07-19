@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/18 13:54:32 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/07/19 15:31:58 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct	s_prompt
 {
 	char		*line;
 	char		*buf;
+	char		*disp;
 	size_t		pos;
 	size_t		total;
 	t_coord		*origin;
@@ -59,13 +60,12 @@ typedef struct	s_stat_data
 	char		*overage;
 	char		*old_line;
 	char		*copied;
-	int			line_save;
 	t_node		*history;
 	t_node		*current;
 }				t_stat_data;
 
 void			termanip(int sig);
-char			*line_edit_main_loop();
+char			*line_edit_main_loop(char *d_prompt);
 void			get_cursor_pos(t_coord *actualize, t_prompt *prompt);
 int				ft_putshit(int c);
 void			esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry,
@@ -88,11 +88,14 @@ char			*quotes_managing(t_prompt *prompt, char *to_return);
 void			handle_sig(void);
 void			handle_int(int sig);
 void			handle_resize(int sig);
+void			ignore_sig(int sig);
+void			ignore_handle(void);
 void			reverse_handle();
-t_prompt		*malloc_prompt(t_prompt *prompt, t_stat_data *data);
+t_prompt		*malloc_prompt(t_prompt *prompt, t_stat_data *data, char *d_prompt);
 t_stat_data		*malloc_stat(void);
 void			free_prompt(t_prompt *prompt);
 void			ft_flush(t_prompt *prompt);
 void			secure_stock(t_prompt *prompt, char *to_stock);
 void			selection_mode(t_prompt *prompt, t_stat_data *stat_data);
+void			search_mode(t_prompt *prompt, t_stat_data *stat_data);
 #endif
