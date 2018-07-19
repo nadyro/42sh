@@ -64,25 +64,29 @@ void		main_loop(char *line)
 	while (1)
 	{
 		line = line_mgmt(line);
-		token_tab = get_tokens(line);
-		parsing_return = parser_validation(token_tab);
-		if (parsing_return != -1)
+		if ((token_tab = get_tokens(line)) != NULL)
 		{
-			write(1, "parse error near '", 18);
-			write(1, line + token_tab[parsing_return + 1], token_tab[parsing_return + 2]);
-			write(1, "'\n", 2);
-		}
-		else
-		{
-			if (token_tab && token_tab[0])
-				head = get_ast(&line);
+			parsing_return = parser_validation(token_tab);
+			if (parsing_return != -1)
+			{
+				write(1, "parse error near '", 18);
+				write(1, line + token_tab[parsing_return + 1], token_tab[parsing_return + 2]);
+				write(1, "'\n", 2);
+			}
 			else
-				printf("error: no token table was compiled in main\n");
-			//printf("TREE COMPILED, SENDING TO printLeafNodes\n\n\n");
-			ast_loop(&g_shell, head);
+			{
+				if (token_tab && token_tab[0])
+					head = get_ast(&line);
+				else
+					printf("error: no token table was compiled in main\n");
+				//printf("TREE COMPILED, SENDING TO printLeafNodes\n\n\n");
+				ast_loop(&g_shell, head);
+			}
+			free(line);
+			line = NULL;
 		}
-		free(line);
-		line = NULL;
+		//else
+		//	line[ft_strlen(line) - 1] = '\0';
 	}
 }
 
