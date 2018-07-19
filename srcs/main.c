@@ -6,6 +6,7 @@
 #include <stdio.h>
 
 t_prompt	*prompt;
+t_shell		g_shell;
 
 static char	*get_pwd(t_shell *shell)
 {
@@ -31,22 +32,75 @@ static char	*get_pwd(t_shell *shell)
 	return (ptr2);
 }
 
+static char	*line_mgmt(char *line)
+{
+	char *prompt;
+	char *ret;
+	char *tmp;
+
+	if (line == NULL)
+	{
+		prompt = get_pwd(&g_shell);
+		ret = line_edit_main_loop(prompt);
+		free(prompt);
+	}
+	else
+	{
+		tmp = line_edit_main_loop("> ");
+		ret = ft_strjoin(line, tmp);
+		free(tmp);
+		free(line);
+	}
+	return (ret);
+}
+
+void		main_loop(char *line)
+{
+	int		*token_tab;
+	int		parsing_return;
+	t_ast	*head;
+
+	head = NULL;
+	while (1)
+	{
+		line = line_mgmt(line);
+		if ((token_tab = get_tokens(line)) != NULL)
+		{
+			parsing_return = parser_validation(token_tab);
+			if (parsing_return != -1)
+			{
+				write(1, "parse error near '", 18);
+				write(1, line + token_tab[parsing_return + 1], token_tab[parsing_return + 2]);
+				write(1, "'\n", 2);
+			}
+			else
+			{
+				if (token_tab && token_tab[0])
+					head = get_ast(line);
+				else
+					printf("error: no token table was compiled in main\n");
+				//printf("TREE COMPILED, SENDING TO printLeafNodes\n\n\n");
+				ast_loop(&g_shell, head);
+			}
+			free(line);
+			line = NULL;
+		}
+		//else
+		//	line[ft_strlen(line) - 1] = '\0';
+	}
+}
+
 int			main(int argc, char **argv, char **env)
 {
-	int *token_tab;
-	int	parsing_return;
-	t_ast	*head = NULL;
 	t_shell	shell;
-	char	*line;
 	char	*name_term;
-	char 	*prompt;
 
 	(void)argc;
 	(void)argv;
 	///////////////////////////////////
-	shell.list = (env && env[0]) ? env_setup(env) : env_init();
-	shell.envv = (shell.list) ? env_to_tab(shell.list) : NULL;
-	shell.error = 0;
+	g_shell.list = (env && env[0]) ? env_setup(env) : env_init();
+	g_shell.envv = (shell.list) ? env_to_tab(shell.list) : NULL;
+	g_shell.error = 0;
 	///////////////////////////////////
 	if ((name_term = getenv("TERM")) == NULL)
 	{
@@ -55,31 +109,7 @@ int			main(int argc, char **argv, char **env)
 	}
 	if (tgetent(NULL, name_term) == ERR)
 		return (-1);
-	///////////////////////////////////
-	while (1)
-	{
-		prompt = get_pwd(&shell);
-		line = line_edit_main_loop(prompt);
-		free(prompt);
-		token_tab = get_tokens(line);
-		parsing_return = parser_validation(token_tab);
-		if (parsing_return != -1)
-		{
-			write(1, "parse error near '", 18);
-			write(1, line + token_tab[parsing_return + 1], token_tab[parsing_return + 2]);
-			write(1, "'\n", 2);
-		}
-		else
-		{
-			if (token_tab && token_tab[0])
-				head = get_ast(&line);
-			else
-				printf("error: no token table was compiled in main\n");
-			//printf("TREE COMPILED, SENDING TO printLeafNodes\n\n\n");
-			ast_loop(&shell, head);
-		}
-		free(line);
-	}
+	main_loop(NULL);
 	return (0);
 }
 

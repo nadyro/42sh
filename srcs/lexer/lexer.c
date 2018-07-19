@@ -6,7 +6,7 @@
 /*   By: antoipom <antoipom@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/04 13:13:10 by antoipom          #+#    #+#             */
-/*   Updated: 2018/06/07 15:27:36 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/07/19 16:13:28 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,16 +116,14 @@ int				*lexer_alloc(int *tk_arr, int *arr_size)
 	return (new);
 }
 
-static int		*token_loop(int *tk_arr, char *line, int arr_size)
+static int		*token_loop(int *tk_arr, char *line, int arr_size, int i)
 {
-	int i;
 	int prev;
 	int tk_i;
 
-	i = 0;
 	prev = 0;
 	tk_i = 0;
-	while (prev != 2)
+	while (prev != 2 && tk_arr[tk_i] != 0)
 	{
 		while (tk_i >= arr_size - 3)
 			tk_arr = lexer_alloc(tk_arr, &arr_size);
@@ -134,13 +132,18 @@ static int		*token_loop(int *tk_arr, char *line, int arr_size)
 		prev = tk_arr[tk_i];
 		tk_arr[tk_i] = g_tk_states[0][tk_arr[tk_i] - 1][g_ascii[(int)line[i]]];
 		i += (g_tk_states[1][prev - 1][g_ascii[(int)line[i]]]);
-		(tk_arr[tk_i] == 0) ? exit(1) : 0;//zero?reopen line_editing
+//		(tk_arr[tk_i] == 0) ? main_loop(line) : 0; //////////////
 		if (tk_arr[tk_i] == 1 && prev != 22 && prev != 23)
 		{
 			tk_arr[tk_i] = prev;
 			tk_arr[tk_i + 2] = i - tk_arr[tk_i + 1];
 			tk_i += 3;
 		}
+	}
+	if (tk_arr[tk_i] == 0)
+	{
+		free(tk_arr);
+		tk_arr = NULL;
 	}
 	return (tk_arr);
 }
@@ -203,13 +206,16 @@ int				*get_tokens(char *line)
 	tk_arr = (int*)malloc(sizeof(int) * arr_size);
 	(tk_arr == NULL) ? exit(1) : 0; //error handling?
 	memset(tk_arr, -1, arr_size * sizeof(int));
-	tk_arr = token_loop(tk_arr, line, arr_size);
-	while (tk_arr[i] != -1)
+	tk_arr = token_loop(tk_arr, line, arr_size, 0);
+	if (tk_arr != NULL)
 	{
-		tk_arr[i] = g_state_to_token[tk_arr[i]];
-		i += 3;
+		while (tk_arr[i] != -1)
+		{
+			tk_arr[i] = g_state_to_token[tk_arr[i]];
+			i += 3;
+		}
+		tk_arr = check_filename_token(tk_arr);
+		tk_arr = check_cmd_token(tk_arr);
 	}
-	tk_arr = check_filename_token(tk_arr);
-	tk_arr = check_cmd_token(tk_arr);
 	return (tk_arr);
 }
