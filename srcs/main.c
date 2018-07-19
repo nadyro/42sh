@@ -6,7 +6,6 @@
 #include <stdio.h>
 
 t_prompt	*prompt;
-t_shell		g_shell;
 
 static char	*get_pwd(t_shell *shell)
 {
@@ -32,7 +31,7 @@ static char	*get_pwd(t_shell *shell)
 	return (ptr2);
 }
 
-static char	*line_mgmt(char *line)
+static char	*line_mgmt(char *line, t_shell shell)
 {
 	char *prompt;
 	char *ret;
@@ -40,7 +39,7 @@ static char	*line_mgmt(char *line)
 
 	if (line == NULL)
 	{
-		prompt = get_pwd(&g_shell);
+		prompt = get_pwd(&shell);
 		ret = line_edit_main_loop(prompt);
 		free(prompt);
 	}
@@ -54,7 +53,7 @@ static char	*line_mgmt(char *line)
 	return (ret);
 }
 
-void		main_loop(char *line)
+void		main_loop(char *line, t_shell shell)
 {
 	int		*token_tab;
 	int		parsing_return;
@@ -63,7 +62,7 @@ void		main_loop(char *line)
 	head = NULL;
 	while (1)
 	{
-		line = line_mgmt(line);
+		line = line_mgmt(line, shell);
 		if ((token_tab = get_tokens(line)) != NULL)
 		{
 			parsing_return = parser_validation(token_tab);
@@ -80,7 +79,7 @@ void		main_loop(char *line)
 				else
 					printf("error: no token table was compiled in main\n");
 				//printf("TREE COMPILED, SENDING TO printLeafNodes\n\n\n");
-				ast_loop(&g_shell, head);
+				ast_loop(&shell, head);
 			}
 			free(line);
 			line = NULL;
@@ -98,9 +97,9 @@ int			main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	///////////////////////////////////
-	g_shell.list = (env && env[0]) ? env_setup(env) : env_init();
-	g_shell.envv = (shell.list) ? env_to_tab(shell.list) : NULL;
-	g_shell.error = 0;
+	shell.list = (env && env[0]) ? env_setup(env) : env_init();
+	shell.envv = (shell.list) ? env_to_tab(shell.list) : NULL;
+	shell.error = 0;
 	///////////////////////////////////
 	if ((name_term = getenv("TERM")) == NULL)
 	{
@@ -109,7 +108,7 @@ int			main(int argc, char **argv, char **env)
 	}
 	if (tgetent(NULL, name_term) == ERR)
 		return (-1);
-	main_loop(NULL);
+	main_loop(NULL, shell);
 	return (0);
 }
 

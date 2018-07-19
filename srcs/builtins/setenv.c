@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/15 14:17:29 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/11 13:16:57 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/07/19 17:23:58 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	display_setenv(t_shell *shell)
 		ft_print_table(shell->envv);
 		return (1);
 	}
-	else if (shell->args && shell->args[3])
+	else if (shell->args && shell->args[1] && shell->args[2] && shell->args[3])
 	{
 		ft_putstr_fd("setenv: Too many arguments.\n", 2);
 		return (1);
