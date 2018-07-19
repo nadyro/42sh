@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/19 16:38:48 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/19 18:14:51 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,6 @@ void		create_arg_table(t_ast *cmd, t_shell *shell)
 	
 	if (!(cmd->arg))
 	{
-		printf("in create_arg_table, the argument is NULL, no table created\n");
 		shell->args = NULL;
 		return ;
 	}
@@ -117,9 +116,9 @@ void		create_arg_table(t_ast *cmd, t_shell *shell)
 	{
 		while (cmd->tok[i] != -1 && cmd->tok[i] != TK_END)
 		{
-			while (cmd->tok[i] == TK_SPACE) //decide later if NEWLINE, TAB, or anything else should be skipped
+			while (cmd->tok[i] == TK_SPACE || cmd->tok[i] == TK_NEWLINE) //decide later if NEWLINE, TAB, or anything else should be skipped
 				i += 3;
-			if (cmd->tok[i] != -1 && cmd->tok[i] != TK_SPACE)
+			if (cmd->tok[i] != -1 && cmd->tok[i] != TK_SPACE && cmd->tok[i] != TK_NEWLINE)
 				last++;
 			if (cmd->tok[i] != -1)
 				i += 3;
@@ -134,9 +133,9 @@ void		create_arg_table(t_ast *cmd, t_shell *shell)
 			i = 0;
 			while (cmd->tok[i] != -1 && cmd->tok[i] != TK_END)
 			{
-				while (cmd->tok[i] == SPACE)
+				while (cmd->tok[i] == TK_SPACE || cmd->tok[i] == TK_NEWLINE)
 					i += 3;
-				if (cmd->tok[i] != -1 && cmd->tok[i] != SPACE)
+				if (cmd->tok[i] != -1 && cmd->tok[i] != TK_SPACE && cmd->tok[i] != TK_NEWLINE)
 				{
 					str = cmd->arg + cmd->tok[i+1];
 					//printf("before filling shell->args, str = %s\ni = %d\ntok[i] = %d\ntok[i+1] = %d\ntok[i+2] = %d\n", str, i, cmd->tok[i], cmd->tok[i+1], cmd->tok[i+2]);
