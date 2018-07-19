@@ -16,3 +16,5 @@ armon:
 	-handle exit builtin
 	-go through all builtins with parser data structures and verify compatibility
 	
+-LINE EDITING:
+	-autocompletion v1 to finish (Nadir)
