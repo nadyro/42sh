@@ -6,7 +6,7 @@
 #    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/07/17 20:06:43 by azybert          ###   ########.fr        #
+#    Updated: 2018/07/19 16:43:22 by arohani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ SRC_FILES = main.c \
 			parser/parser.c \
 			parser/execute.c \
 			parser/parser_validation.c \
+			parser/redirections.c \
 			parser/ast.c \
 			\
 			builtins/add_to_mod.c \
