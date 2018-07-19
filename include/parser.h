@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:27:44 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/26 15:18:54 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/19 13:05:06 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,6 @@ t_ast		*fill_rightast(t_ast *parent, int start, int size);
 t_ast		*init_ast(char **argv);
 void		ast_loop(t_shell *shell, t_ast *ast);
 int			ast_execute(t_shell *shell, t_ast *cmd);
+int	        *redirect_check(t_shell *shell);
 
 #endif
