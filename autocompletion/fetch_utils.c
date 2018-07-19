@@ -6,7 +6,7 @@
 /*   By: nsehnoun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/18 16:16:05 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/07/18 18:09:45 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/07/19 15:28:19 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ char	**fetch_from_env_o(void)
 				y++;
 			i++;
 		}
-		if (!(all_paths = (char **)malloc(sizeof(char *) * (y + 2))))
+		if (!(all_paths = (char **)malloc(sizeof(char *) * (y + 1))))
 			return (NULL);
-		all_paths[y + 1] = NULL;
+		all_paths[y] = NULL;
 		return (all_paths);
 	}
 	return (NULL);
@@ -61,7 +61,6 @@ char	**fetch_from_env_a(char **all_paths)
 			i++;
 		}
 		all_paths[ap_index] = ft_strsub(path, j, i - j);
-		all_paths[ap_index + 1] = ft_strdup(".");
 		return (all_paths);
 	}
 	return (NULL);
@@ -125,6 +124,8 @@ t_list	*fetch_names(char *user_entry)
 		matches = cmp_space_entry("./");
 	else
 		matches = cmp_user_entry(binaries, user_entry);
+	if (matches == NULL)
+		matches = cmp_space_entry(user_entry);
 	free_lists(binaries_1);
 	return (matches);
 }
