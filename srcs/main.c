@@ -76,7 +76,7 @@ void		main_loop(char *line)
 			else
 			{
 				if (token_tab && token_tab[0])
-					head = get_ast(&line);
+					head = get_ast(line);
 				else
 					printf("error: no token table was compiled in main\n");
 				//printf("TREE COMPILED, SENDING TO printLeafNodes\n\n\n");

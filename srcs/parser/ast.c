@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/18 19:20:36 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/19 16:38:48 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ t_ast		*fill_rightast(t_ast *parent, int start, int size)
 	return (right);
 }
 
-t_ast		*init_ast(char **argv)
+t_ast		*init_ast(char *argv)
 {
 	t_ast	*head;
 	
@@ -89,7 +89,7 @@ t_ast		*init_ast(char **argv)
 	//head->address = ft_strdup("P");
 	head->depth = 0;
 	//printf("tab[0] = %s\n", tab[0]);
-	head->arg = (*argv) ? ft_strdup(*argv) : NULL;
+	head->arg = (argv) ? ft_strdup(argv) : NULL;
 	//(head->arg) ? printf("ast initialized with arg = %s\n", head->arg) : printf("ast initialized with a NULL arg\n");
 	//printf("head->arg initialised to : %s\n", head->arg);
 	head->tok = get_tokens(head->arg);

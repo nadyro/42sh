@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:23 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/18 18:07:21 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/19 16:39:16 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,14 +166,13 @@ static void		ast_loop_semi(t_ast *head)
 	//	ast_loop_and_or(tmp);
 }
 
-t_ast	    *get_ast(char **argv)
+t_ast	    *get_ast(char *argv)
 {
 	t_ast	*head;
 	t_ast	*tmp;
-	char	*chr = NULL;	//for removing '\n' from line
 
-	if ((chr = ft_strchr(*argv, '\n')))	//replaces '\n' from line editing with '\0'
-		*chr = '\0';	
+	if (argv[ft_strlen(argv) - 1] == '\n')	//replaces '\n' from line editing with '\0'
+		argv[ft_strlen(argv) - 1] = '\0';
 	head = init_ast(argv);
 	tmp = head;
 	if (ft_strchr(tmp->arg, ';'))
