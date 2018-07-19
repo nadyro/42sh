@@ -56,6 +56,7 @@ static char	*line_mgmt(char *line, t_shell shell)
 void		main_loop(char *line, t_shell shell)
 {
 	int		*token_tab;
+	int		parser_ret;
 	t_ast	*head;
 
 	head = NULL;
@@ -64,7 +65,7 @@ void		main_loop(char *line, t_shell shell)
 		line = line_mgmt(line, shell);
 		if ((token_tab = get_tokens(line)) != NULL)
 		{
-			if (parser_validation(token_tab, line) == 1)
+			if ((parser_ret = parser_validation(token_tab, line)) == 1)
 			{
 				if (token_tab && token_tab[0])
 					head = get_ast(line);
@@ -72,9 +73,10 @@ void		main_loop(char *line, t_shell shell)
 					printf("error: no token table was compiled in main\n");
 				//printf("TREE COMPILED, SENDING TO printLeafNodes\n\n\n");
 				ast_loop(&shell, head);
-				free(line);
-				line = NULL;
+				ft_strdel(&line);
 			}
+			else if (parser_ret == 0)
+				ft_strdel(&line);
 		}
 	}
 }

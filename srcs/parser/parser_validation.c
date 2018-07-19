@@ -6,7 +6,7 @@
 /*   By: antoipom <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 12:45:57 by antoipom          #+#    #+#             */
-/*   Updated: 2018/07/19 17:28:38 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/07/19 18:27:09 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,11 @@ int				parser_validation(int *tk_arr, char *line)
 			i -= 3;
 	}
 	if (state == -1)
-		return (0);
+		return (-1);
 	else if (state == 0)
+	{
 		parsing_error(tk_arr, i, line);
+		return (0);
+	}
 	return (1);
 }
