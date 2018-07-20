@@ -6,6 +6,7 @@
 #include <stdio.h>
 
 t_prompt	*prompt;
+t_stat_data	*stat_data;
 
 static char	*get_pwd(t_shell *shell)
 {
@@ -68,7 +69,10 @@ void		main_loop(char *line, t_shell shell)
 			if ((parser_ret = parser_validation(token_tab, line)) == 1)
 			{
 				if (token_tab && token_tab[0])
+				{
+					add_to_history(line, stat_data);
 					head = get_ast(line);
+				}
 				else
 					printf("error: no token table was compiled in main\n");
 				//printf("TREE COMPILED, SENDING TO printLeafNodes\n\n\n");
@@ -88,6 +92,7 @@ int			main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
+	stat_data = NULL;
 	///////////////////////////////////
 	shell.list = (env && env[0]) ? env_setup(env) : env_init();
 	shell.envv = (shell.list) ? env_to_tab(shell.list) : NULL;

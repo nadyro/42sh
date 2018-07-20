@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/17 23:02:22 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/20 07:22:01 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@
 # define BUFFER 4
 # define UNUSED(x) (void)(x)
 
-extern struct s_prompt	*prompt;
+extern struct s_prompt		*prompt;
+extern struct s_stat_data	*stat_data;
 
 typedef struct	s_coord
 {

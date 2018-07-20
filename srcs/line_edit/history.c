@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@stud.42.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:20:53 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/08 06:02:10 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/20 08:07:44 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,14 @@
 void	add_to_history(char *cmd, t_stat_data *stat_data)
 {
 	t_node	*new;
+	char	*check;
 
-	if (cmd == NULL)
+	check = NULL;
+	if (cmd == NULL || ft_strlen((check = ft_strtrim(cmd))) == 0)
+	{
+		free(check);
 		return ;
+	}
 	if (!(new = malloc(sizeof(*new))))
 		exit(1);
 	if (!(new->cmd = ft_strdup(cmd)))
