@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/17 23:02:24 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/20 03:59:00 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void		ft_flush(t_prompt *prompt)
 	char	user_entry[4096];
 	char	*to_free;
 
-	termanip(3);
+	termanip(33);
 	ft_bzero(user_entry, 4096);
 	while (read(1, user_entry, 4095) > 0)
 	{
@@ -25,9 +25,9 @@ void		ft_flush(t_prompt *prompt)
 		prompt->buf = ft_strjoin(prompt->buf, user_entry);
 		free(to_free);
 		ft_bzero(user_entry, 4095);
-		termanip(4);
+		termanip(34);
 	}
-	termanip(3);
+	termanip(33);
 }
 
 char		*line_edit_main_loop_aux(t_prompt *prompt, t_stat_data *stat_data,
@@ -83,6 +83,6 @@ char		*line_edit_main_loop(char *d_prompt)
 	stat_data->current = stat_data->history;
 	free_prompt(prompt);
 	reverse_handle();
-	termanip(5);
+	termanip(35);
 	return (to_return);
 }

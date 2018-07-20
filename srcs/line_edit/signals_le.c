@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 03:46:15 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/17 23:02:20 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/20 03:50:28 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,14 @@ void	handle_sig(void)
 {
 	signal(SIGINT, handle_int);
 	signal(SIGWINCH, handle_resize);
+	signal(SIGHUP, termanip);
+	signal(SIGQUIT, termanip);
+	signal(SIGILL, termanip);
+	signal(SIGABRT, termanip);
+	signal(SIGKILL, termanip);
+	signal(SIGSEGV, termanip);
+	signal(SIGPIPE, termanip);
+	signal(SIGTERM, termanip);
+	signal(SIGSTOP, termanip);
+	signal(SIGTSTP, termanip);
 }

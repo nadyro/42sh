@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/24 13:39:16 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/17 22:34:36 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/20 03:59:22 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int			data_react(t_prompt *prompt)
 		tputs(tgetstr("ce", NULL), 1, ft_putshit);
 		return (1);
 	}
+	(prompt->buf[0] == 4 && prompt->total == 0 ? termanip(42) : 0);
 	free(prompt->buf);
 	prompt->buf = NULL;
 	return (0);
