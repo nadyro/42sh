@@ -31,13 +31,13 @@ static char	*get_pwd(t_shell *shell)
 	return (ptr2);
 }
 
-static char	*line_mgmt(char *line, t_shell shell)
+static char	*line_mgmt(t_shell shell)
 {
 	char *prompt;
 	char *ret;
 	char *tmp;
 
-	if (line == NULL)
+	if (shell.line == NULL)
 	{
 		prompt = get_pwd(&shell);
 		ret = line_edit_main_loop(prompt);
@@ -46,34 +46,34 @@ static char	*line_mgmt(char *line, t_shell shell)
 	else
 	{
 		tmp = line_edit_main_loop("> ");
-		ret = ft_strjoin(line, tmp);
+		ret = ft_strjoin(shell.line, tmp);
 		free(tmp);
-		free(line);
+		free(shell.line);
 	}
 	return (ret);
 }
 
-void		main_loop(char *line, t_shell shell)
+static void	main_loop(t_shell shell)
 {
-	int		*token_tab;
+	//int		*token_tab; 		replacing with shell.tok;
 	t_ast	*head;
 
 	head = NULL;
 	while (1)
 	{
-		line = line_mgmt(line, shell);
-		if ((token_tab = get_tokens(line)) != NULL)
+		shell.line = line_mgmt(shell);
+		if ((shell.tok = get_tokens(shell.line)) != NULL)
 		{
-			if (parser_validation(token_tab, line) == 1)
+			if (parser_validation(shell.tok, shell.line) == 1)
 			{
-				if (token_tab && token_tab[0])
-					head = get_ast(line);
+				if (shell.tok && shell.tok[0])
+					head = get_ast(shell.line);
 				else
 					printf("error: no token table was compiled in main\n");
 				//printf("TREE COMPILED, SENDING TO printLeafNodes\n\n\n");
 				ast_loop(&shell, head);
-				free(line);
-				line = NULL;
+				free(shell.line);
+				shell.line = NULL;
 			}
 		}
 	}
@@ -90,6 +90,7 @@ int			main(int argc, char **argv, char **env)
 	shell.list = (env && env[0]) ? env_setup(env) : env_init();
 	shell.envv = (shell.list) ? env_to_tab(shell.list) : NULL;
 	shell.error = 0;
+	shell.line = NULL;
 	///////////////////////////////////
 	if ((name_term = getenv("TERM")) == NULL)
 	{
@@ -98,7 +99,7 @@ int			main(int argc, char **argv, char **env)
 	}
 	if (tgetent(NULL, name_term) == ERR)
 		return (-1);
-	main_loop(NULL, shell);
+	main_loop(shell);
 	return (0);
 }
 

@@ -58,6 +58,8 @@ typedef struct	s_shell
 	char					**envv;
 	char					**args;
 	char					*full_path;
+	char					*line;
+	int 					*tok;
 	int						i;
 	int						p;
 	int						l;
