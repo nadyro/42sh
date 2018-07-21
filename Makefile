@@ -6,7 +6,7 @@
 #    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/07/19 16:43:22 by arohani          ###   ########.fr        #
+#    Updated: 2018/07/21 12:00:35 by azybert          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,7 +58,6 @@ SRC_FILES = main.c \
 			line_edit/line_edit_main_loop.c \
 			line_edit/termanip.c \
 			line_edit/manage_data.c \
-			line_edit/quotes.c \
 			line_edit/advanced_cursor_motion.c \
 			line_edit/cursor_motion.c \
 			line_edit/react.c \
