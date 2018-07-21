@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/12 10:04:15 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/07/21 14:53:04 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/07/21 15:59:37 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ t_node	*cmp_user_entry(t_node *lst, char *user_entry)
 	return (matches);
 }
 
-t_node	*cmp_space_entry(char *a_name)
+t_node	*cmp_space_entry(char *a_name, int	is_null)
 {
 	t_node			*matches;
 	DIR				*directory;
@@ -70,7 +70,15 @@ t_node	*cmp_space_entry(char *a_name)
 	struct stat		st;
 
 	matches = NULL;
-	if ((lstat(a_name, &st) != -1) && (directory = opendir(a_name)))
+	if (is_null == 1 && (directory = opendir("./")))
+	{
+		while ((elements = readdir(directory)) != NULL)
+		if ((ft_strncmp(elements->d_name, a_name, ft_strlen(a_name))) == 0)
+				matches = add_elements(matches, elements->d_name);
+		closedir(directory);
+	}
+	else if (is_null == 0 && (lstat(a_name, &st) != -1) 
+			&& (directory = opendir(a_name)))
 	{
 		while ((elements = readdir(directory)) != NULL)
 			matches = add_elements(matches, elements->d_name);

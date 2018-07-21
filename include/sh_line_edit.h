@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/19 18:07:34 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/07/21 15:57:48 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ char			**fetch_from_env_a(char **all_paths);
 t_node			*fetch_binaries(char **all_paths);
 t_node			*add_elements(t_node *lst, char *file_bin);
 t_node			*cmp_user_entry(t_node *lst, char *user_entry);
-t_node			*cmp_space_entry(char *a_name);
+t_node			*cmp_space_entry(char *a_name, int is_null);
 t_node			*fetch_names(char *user_entry);
 int				fetch_names_dirent(char *user_entry);
 void			clean_tabs(char **t, int j);
