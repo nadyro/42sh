@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
+#    By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/07/19 15:32:38 by nsehnoun         ###   ########.fr        #
+#    Updated: 2018/07/19 17:31:44 by nsehnoun         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,7 +66,12 @@ SRC_FILES = main.c \
 			line_edit/struct_alloc.c \
 			line_edit/signals_le.c \
 			line_edit/signals_le_mode.c \
-			line_edit/search_mode.c 
+			line_edit/search_mode.c \
+			\
+			line_edit/autocompletion.c \
+			line_edit/cmpltn_utils.c \
+			line_edit/fetch_utils.c \
+			
 
 INC_FILES = lexer.h \
 			parser.h \

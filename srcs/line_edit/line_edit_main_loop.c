@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   line_edit.c                                        :+:      :+:    :+:   */
+/*   line_edit_main_loop.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/17 23:02:24 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/21 14:57:51 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,13 @@ char		*line_edit_main_loop_aux(t_prompt *prompt, t_stat_data *stat_data,
 {
 	char	user_entry[7];
 	int		nb_user_entry;
+	t_node	*matches;
+	char	**matches_tab;
+	int		i;
 
+	matches = NULL;
+	matches_tab = NULL;
+	i = 0;
 	while (to_return == NULL)
 	{
 		if (prompt->buf != NULL && data_react(prompt))
@@ -46,6 +52,16 @@ char		*line_edit_main_loop_aux(t_prompt *prompt, t_stat_data *stat_data,
 			nb_user_entry = read(1, user_entry, 6);
 			if (user_entry[0] == 27 || user_entry[0] == 127)
 				esc_react(prompt, nb_user_entry, user_entry, stat_data);
+			else if (user_entry[0] == 9)
+			{
+				matches = fetch_names(prompt->line);
+				while (matches->prev != NULL)
+					matches = matches->prev;
+				matches_tab = lst_to_array(matches);
+				while (matches_tab[i])
+				ft_putendl(matches_tab[i++]);
+				i = 0;
+			}
 			else
 			{
 				((prompt->buf = ft_strdup(user_entry)) != NULL ? 0 : exit(1));

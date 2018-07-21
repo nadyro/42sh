@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   21sh.h                                             :+:      :+:    :+:   */
+/*   sh_line_edit.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/19 15:31:58 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/07/19 18:07:34 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # include <string.h>
 # include <signal.h>
 # include <unistd.h>
+# include <dirent.h>
+# include <sys/stat.h>
 
 # define BUFFER 4
 # define UNUSED(x) (void)(x)
@@ -61,6 +63,7 @@ typedef struct	s_stat_data
 	char		*old_line;
 	char		*copied;
 	t_node		*history;
+	t_node		*matches;
 	t_node		*current;
 }				t_stat_data;
 
@@ -98,4 +101,18 @@ void			ft_flush(t_prompt *prompt);
 void			secure_stock(t_prompt *prompt, char *to_stock);
 void			selection_mode(t_prompt *prompt, t_stat_data *stat_data);
 void			search_mode(t_prompt *prompt, t_stat_data *stat_data);
+// Autocompletion
+char			**fetch_from_env_o(void);
+char			**fetch_from_env_a(char **all_paths);
+t_node			*fetch_binaries(char **all_paths);
+t_node			*add_elements(t_node *lst, char *file_bin);
+t_node			*cmp_user_entry(t_node *lst, char *user_entry);
+t_node			*cmp_space_entry(char *a_name);
+t_node			*fetch_names(char *user_entry);
+int				fetch_names_dirent(char *user_entry);
+void			clean_tabs(char **t, int j);
+void			send_nudes(t_node **my_phone);
+void			free_lists(t_node *lst);
+void			print_nudes(t_node *matches);
+char			**lst_to_array(t_node *matches);
 #endif
