@@ -15,69 +15,39 @@
 #include "libft.h"
 #include <stdio.h>
 
-void		free_ast(t_ast *ast)
-{
-	t_ast	*left;
-	t_ast	*right;
-	t_ast	*tmp;
-
-	left = NULL;
-	right = NULL;
-	tmp = ast;
-	if (!tmp)
-		return ;
-	else
-	{
-		left = tmp->left;
-		right = tmp->right;
-		free(tmp->tok);
-		free(tmp->address);
-		free(tmp->arg);
-		free(tmp);
-		free_ast(left);
-		free_ast(right);
-	}
-}
-
-t_ast		*fill_leftast(t_ast *parent, int size)
+t_ast		*fill_leftast(t_ast *parent)
 {
 	t_ast	*left = NULL;
 
 	if (!(left = (t_ast *)malloc(sizeof(t_ast))))
 		return (NULL);
 	left->parent = parent;
-	left->depth = parent->depth + 1;
-	//left->address = ft_strjoin(left->parent->address, "L");
-	left->arg = ft_strndup(parent->arg, size);	//size indicates position of operator, here we duplicate up to, not including, the operator
-	left->split_by = 0;
-	left->tok = get_tokens(left->arg);
+	left->split = 0;
+	left->beg = parent->beg;
+	left->end = parent->split - 3;
 	left->left = NULL;
 	left->right = NULL;
-	//printf("in fill_leftast, left->arg = %s\naddress = %s\nparent operator = %d\n", left->arg, left->address, parent->split_by);
+	//printf("in fill_LEFTast, beg = %d, end = %d\n", left->beg, left->end);
 	return (left);
 }
 
-t_ast		*fill_rightast(t_ast *parent, int start, int size)
+t_ast		*fill_rightast(t_ast *parent)
 {
 	t_ast	*right = NULL;
-	char	*str;
 
 	if (!(right = (t_ast *)malloc(sizeof(t_ast))))
 		return (NULL);
 	right->parent = parent;
-	str = parent->arg + start;
-	right->depth = parent->depth + 1;
-	//right->address = ft_strjoin(right->parent->address, "R");
-	right->arg = ft_strndup(str, size);
-	right->split_by = 0;
-	right->tok = get_tokens(right->arg);
+	right->split = 0;
+	right->beg = parent->split + 3;
+	right->end = parent->end;
 	right->left = NULL;
 	right->right = NULL;
-	//printf("in fill_rightast, right->arg = %s\naddress = %s\nparent operator = %d\n", right->arg, right->address, parent->split_by);
+	//printf("in fill_RIGHTast, beg = %d, end = %d\n", right->beg, right->end);
 	return (right);
 }
 
-t_ast		*init_ast(char *argv)
+t_ast		*init_ast(t_shell *shell)
 {
 	t_ast	*head;
 	
@@ -85,14 +55,15 @@ t_ast		*init_ast(char *argv)
 	if (!(head = (t_ast *)malloc(sizeof(t_ast))))
 			return (NULL);	
 	head->parent = NULL;
-	head->split_by = 0;
+	head->split = 0;
+	head->beg = 0;
+	head->end = get_tk_end_pos(shell) - 3;
 	//head->address = ft_strdup("P");
-	head->depth = 0;
 	//printf("tab[0] = %s\n", tab[0]);
-	head->arg = (argv) ? ft_strdup(argv) : NULL;
+	//head->arg = (argv) ? ft_strdup(argv) : NULL;
 	//(head->arg) ? printf("ast initialized with arg = %s\n", head->arg) : printf("ast initialized with a NULL arg\n");
 	//printf("head->arg initialised to : %s\n", head->arg);
-	head->tok = get_tokens(head->arg);
+	//head->tok = get_tokens(head->arg);
 	//printf("initialised ast, with token table\n");
 	//if (head->tok[0])
 	//	printf("head->tok[0] = %d\n", head->tok[0]);
@@ -103,46 +74,49 @@ t_ast		*init_ast(char *argv)
 
 void		create_arg_table(t_ast *cmd, t_shell *shell)
 {
-	int		i = 0;
+	int		i = cmd->beg;
 	int		last = 0;
 	char	*str = NULL;
+	int 	end = cmd->end;
 	
-	if (!(cmd->arg))
+	if ((end - i) < 0)
 	{
 		shell->args = NULL;
 		return ;
 	}
 	else
 	{
-		while (cmd->tok[i] != -1 && cmd->tok[i] != TK_END)
+		while (i <= end)
 		{
-			while (cmd->tok[i] == TK_SPACE || cmd->tok[i] == TK_NEWLINE) //decide later if NEWLINE, TAB, or anything else should be skipped
+			while (shell->tok[i] == TK_SPACE || shell->tok[i] == TK_NEWLINE) //decide later if NEWLINE, TAB, or anything else should be skipped
 				i += 3;
-			if (cmd->tok[i] != -1 && cmd->tok[i] != TK_SPACE && cmd->tok[i] != TK_NEWLINE)
+			if (shell->tok[i] != TK_END && shell->tok[i] != TK_SPACE && shell->tok[i] != TK_NEWLINE)
 				last++;
-			if (cmd->tok[i] != -1)
+			if (shell->tok[i] != TK_END)
 				i += 3;
 		}
 		if (last)
 		{
-			//printf("going to malloc for last = %d strings from %s\n", last+1, cmd->arg);
+			//printf("going to malloc for last = %d strings\n", last+1);
+			//printf("trying to create table from start: %d, end: %d of :\n->%s<-\n", shell->tok[cmd->beg + 1], shell->tok[cmd->end + 1], shell->line);
 			if (!(shell->args = (char **)malloc(sizeof(char *) * (last + 1))))
 				return ;
 			shell->args[last] = 0;
 			last = 0;
-			i = 0;
-			while (cmd->tok[i] != -1 && cmd->tok[i] != TK_END)
+			i = cmd->beg;
+			while (i <= cmd->end)
 			{
-				while (cmd->tok[i] == TK_SPACE || cmd->tok[i] == TK_NEWLINE)
+				while (shell->tok[i] == TK_SPACE || shell->tok[i] == TK_NEWLINE)
 					i += 3;
-				if (cmd->tok[i] != -1 && cmd->tok[i] != TK_SPACE && cmd->tok[i] != TK_NEWLINE)
+				if (shell->tok[i] != TK_SPACE && shell->tok[i] != TK_NEWLINE && shell->tok[i] != TK_END)
 				{
-					str = cmd->arg + cmd->tok[i+1];
-					//printf("before filling shell->args, str = %s\ni = %d\ntok[i] = %d\ntok[i+1] = %d\ntok[i+2] = %d\n", str, i, cmd->tok[i], cmd->tok[i+1], cmd->tok[i+2]);
-					shell->args[last++] = ft_strndup(str, cmd->tok[i+2]);
+					str = shell->line + shell->tok[i+1];
+					//printf("before filling shell->args, str = %s\ni = %d\ntok[i] = %d\ntok[i+1] = %d\ntok[i+2] = %d\n", str, i, shell->tok[i], shell->tok[i+1], shell->tok[i+2]);
+					shell->args[last++] = ft_strndup(str, shell->tok[i+2]);
 					//printf("in shell->args table, args[%d] = %s\n", last - 1, shell->args[last-1]);
 					i += 3;
 				}
+			//	printf("shell->args[%d] = %s\n", last - 1, shell->args[last - 1]);
 			}
 		}
 	}
@@ -160,24 +134,15 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		//printf("error, AST is null, nothing to evaluate\n");
 		return (0);
 	}
-/*	printf("ast = %s\n", ast->arg);
-	if (ast->left)
-		printf("left = %s\n", ast->left->arg);
-	if (ast->right)
-		printf("right = %s\n", ast->right->arg); 
-*/	if (!(ast->left) && !(ast->right))
+	if (!(ast->left) && !(ast->right))
 	{
 		ast->cmd_ret = 0;
 		//printf("DEBUG 1 : GOING TO EXECUTE: %s, address = %s\n", ast->arg, ast->address);
 		create_arg_table(ast, shell);
-		//printf("DEBUG 2, before executing %s, cmd->ret = %d\n", ast->arg, ast->cmd_ret);
 		ast_execute(shell, ast);
 		//printf("DEBUG 3, AFTER executing %s, cmd->ret = %d\n", ast->arg, ast->cmd_ret);
 		if (shell->args)
-		{	
-		//	printf("in ast_evaluate, shell->args is about to be freed, first element = %s\n", shell->args[0]);
 			free_table(shell->args);
-		}
 		//printf("DEBUG 4, ret = %d\n", ret);
 		if (ast->cmd_ret == 0 || ast->cmd_ret == -1)
 		{
@@ -188,17 +153,14 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		}	
 		else if (ast->cmd_ret < 0)
 		{
-		//	printf("DEBUG 7\n");
-			printf("ERROR: cmd->cmd_ret = %d when cmd = %s\n", ast->cmd_ret, ast->arg);
+			printf("ERROR: cmd->cmd_ret = %d when cmd = \n", ast->cmd_ret);
+			ft_print_table(shell->args);
 			return (-1);
 		}
-		//else
-		//	printf("error in leaf node execution of %s at depth of %d, v1 = %d, v2 = %d\nfirst char of arg = %c\n", ast->arg, ast->depth, v1, v2, ast->arg[0]);
-		//printf("DEBUG 8\n");	
 	}
 	else if (ast)
 	{
-		op = ast->split_by;
+		op = shell->tok[ast->split];
 		if (op == TK_AND_IF)
 		{
 			//printf("and if located while in %s\nSENDING left : %s to ast_evaluate\n", ast->arg, ast->left->arg);
