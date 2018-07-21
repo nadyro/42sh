@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 03:46:15 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/17 23:02:20 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/21 13:16:19 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,17 @@ void	handle_resize(int sig)
 void	handle_int(int sig)
 {
 	UNUSED(sig);
-	if (prompt->size->y - 1 == prompt->origin->y +
+	if (prompt->size->y - 1 <= prompt->origin->y +
 			(prompt->origin->x + ft_add_nl(prompt, prompt->total))
 			/ prompt->size->x)
+	{
+		move_cursor(prompt, (prompt->size->y - prompt->origin->y) *
+				prompt->size->x, false);
 		tputs(tgetstr("sf", NULL), 1, ft_putshit);
+	}
 	move_cursor(prompt, prompt->total + prompt->size->x -
-			((prompt->total + prompt->origin->x) % prompt->size->x), false);
+			(ft_add_nl(prompt, prompt->total +
+			prompt->origin->x) % prompt->size->x), false);
 	write(1, prompt->disp, ft_strlen(prompt->disp));
 	get_cursor_pos(prompt->origin, prompt);
 	free(prompt->line);
@@ -51,10 +56,21 @@ void	handle_int(int sig)
 	prompt->buf = NULL;
 	prompt->total = 0;
 	prompt->pos = 0;
+	prompt->current = NULL;
 }
 
 void	handle_sig(void)
 {
 	signal(SIGINT, handle_int);
 	signal(SIGWINCH, handle_resize);
+	signal(SIGHUP, termanip);
+	signal(SIGQUIT, termanip);
+	signal(SIGILL, termanip);
+	signal(SIGABRT, termanip);
+	signal(SIGKILL, termanip);
+	signal(SIGSEGV, termanip);
+	signal(SIGPIPE, termanip);
+	signal(SIGTERM, termanip);
+	signal(SIGSTOP, termanip);
+	signal(SIGTSTP, termanip);
 }

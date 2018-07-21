@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/08 06:09:10 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/17 23:02:29 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/21 11:51:31 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static void	search_mode_aux(t_prompt *prompt, t_stat_data *stat_data)
 	loop_state = 0;
 	while (loop_state == 0)
 	{
-		cmd_found = find_in_history(prompt->line, stat_data->history);
+		cmd_found = find_in_history(prompt->line, prompt->history);
 		search_display(prompt, cmd_found);
 		loop_state = search_react(prompt);
 	}

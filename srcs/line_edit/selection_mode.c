@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/04 22:38:46 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/17 22:48:58 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/21 15:16:23 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,8 +120,6 @@ void		selection_mode(t_prompt *prompt, t_stat_data *stat_data)
 	int		nb_user_entry;
 
 	ignore_handle();
-	if (!prompt->total)
-		return ;
 	if (prompt->pos == prompt->total)
 		prompt->pos--;
 	start_pos = prompt->pos;

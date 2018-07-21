@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/24 13:39:16 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/17 22:34:36 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/21 15:19:39 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int			data_react(t_prompt *prompt)
 		tputs(tgetstr("ce", NULL), 1, ft_putshit);
 		return (1);
 	}
+	(prompt->buf[0] == 4 && prompt->total == 0 ? termanip(42) : 0);
 	free(prompt->buf);
 	prompt->buf = NULL;
 	return (0);
@@ -65,7 +66,7 @@ static void	esc_react_aux(t_prompt *prompt, int nb_user_entry, char *user_entry,
 			user_entry[1] == 'V' && stat_data->copied != NULL)
 		secure_stock(prompt, stat_data->copied);
 	else if (nb_user_entry == 2 && user_entry[0] == 27 &&
-			user_entry[1] == 'R' && stat_data->history)
+			user_entry[1] == 'R' && prompt->history)
 		search_mode(prompt, stat_data);
 }
 
