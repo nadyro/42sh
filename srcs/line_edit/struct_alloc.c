@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 01:45:43 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/17 23:02:26 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/21 13:31:49 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ void		prompt_origin(t_prompt *prompt, t_stat_data *stat_data)
 		get_cursor_pos(prompt->origin, prompt);
 }
 
-t_prompt	*malloc_prompt(t_prompt *prompt, t_stat_data *stat_data, char *d_prompt)
+t_prompt	*malloc_prompt(t_prompt *prompt, t_stat_data *stat_data,
+		char *d_prompt)
 {
 	struct winsize	w;
 
@@ -67,6 +68,7 @@ t_prompt	*malloc_prompt(t_prompt *prompt, t_stat_data *stat_data, char *d_prompt
 	prompt->size->x = w.ws_col;
 	prompt->size->y = w.ws_row;
 	prompt_origin(prompt, stat_data);
+	prompt->current = NULL;
 	return (prompt);
 }
 
@@ -79,7 +81,5 @@ t_stat_data	*malloc_stat(void)
 	stat_data->overage = NULL;
 	stat_data->old_line = NULL;
 	stat_data->copied = NULL;
-	stat_data->current = NULL;
-	stat_data->history = NULL;
 	return (stat_data);
 }

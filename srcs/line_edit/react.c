@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/24 13:39:16 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/20 03:59:22 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/21 13:39:52 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,14 @@ static void	esc_react_aux(t_prompt *prompt, int nb_user_entry, char *user_entry,
 		history_next(prompt, stat_data);
 	else if (nb_user_entry == 3 && user_entry[2] == 66)
 		history_prev(prompt, stat_data);
-	else if (nb_user_entry == 2 && user_entry[0] == 27 &&
-			user_entry[1] == 'S' && prompt->total > 0)
+	else if (nb_user_entry == 2 && /*user_entry[0] == 27 &&*/
+			user_entry[0] == 'S' && prompt->total > 0)
 		selection_mode(prompt, stat_data);
 	else if (nb_user_entry == 2 && user_entry[0] == 27 &&
 			user_entry[1] == 'V' && stat_data->copied != NULL)
 		secure_stock(prompt, stat_data->copied);
 	else if (nb_user_entry == 2 && user_entry[0] == 27 &&
-			user_entry[1] == 'R' && stat_data->history)
+			user_entry[1] == 'R' && prompt->history)
 		search_mode(prompt, stat_data);
 }
 

@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/20 07:22:01 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/21 11:48:33 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,19 @@
 # define UNUSED(x) (void)(x)
 
 extern struct s_prompt		*prompt;
-extern struct s_stat_data	*stat_data;
 
 typedef struct	s_coord
 {
 	size_t	x;
 	size_t	y;
 }				t_coord;
+
+typedef struct	s_node
+{
+	char			*cmd;
+	struct s_node	*next;
+	struct s_node	*prev;
+}				t_node;
 
 typedef struct	s_prompt
 {
@@ -47,33 +53,26 @@ typedef struct	s_prompt
 	size_t		total;
 	t_coord		*origin;
 	t_coord		*size;
+	t_node		*history;
+	t_node		*current;
 }				t_prompt;
-
-typedef struct	s_node
-{
-	char			*cmd;
-	struct s_node	*next;
-	struct s_node	*prev;
-}				t_node;
 
 typedef struct	s_stat_data
 {
 	char		*overage;
 	char		*old_line;
 	char		*copied;
-	t_node		*history;
-	t_node		*current;
 }				t_stat_data;
 
 void			termanip(int sig);
-char			*line_edit_main_loop(char *d_prompt);
+char			*line_edit_main_loop(char *d_prompt, t_node *history);
 void			get_cursor_pos(t_coord *actualize, t_prompt *prompt);
 int				ft_putshit(int c);
 void			esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry,
 				t_stat_data *stat_data);
 void			history_next(t_prompt *prompt, t_stat_data *stat_data);
 void			history_prev(t_prompt *prompt, t_stat_data *stat_data);
-void			add_to_history(char *cmd, t_stat_data *stat_data);
+t_node			*add_to_history(char *cmd, t_node *node);
 int				data_react(t_prompt *prompt);
 char			*prompt_stock(t_prompt *prompt, char *user_entry);
 void			prompt_delete(t_prompt *prompt);
@@ -85,7 +84,6 @@ void			ft_cursor_word_left(t_prompt *prompt);
 void			ft_cursor_word_right(t_prompt *prompt);
 void			ft_cursor_up(t_prompt *prompt);
 void			ft_cursor_down(t_prompt *prompt);
-char			*quotes_managing(t_prompt *prompt, char *to_return);
 void			handle_sig(void);
 void			handle_int(int sig);
 void			handle_resize(int sig);

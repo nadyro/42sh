@@ -6,11 +6,13 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/20 07:30:58 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/21 13:43:07 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
+
+t_prompt	*prompt;
 
 void		ft_flush(t_prompt *prompt)
 {
@@ -30,16 +32,16 @@ void		ft_flush(t_prompt *prompt)
 	termanip(33);
 }
 
-char		*line_edit_main_loop_aux(t_prompt *prompt, t_stat_data *stat_data,
-		char *to_return)
+char		*line_edit_main_loop_aux(t_prompt *prompt, t_stat_data *stat_data)
 {
 	char	user_entry[7];
 	int		nb_user_entry;
+	char	*to_return;
 
+	to_return = NULL;
 	while (to_return == NULL)
-	{
 		if (prompt->buf != NULL && data_react(prompt))
-			to_return = quotes_managing(prompt, to_return);
+			((to_return = ft_strdup(prompt->line)) ? 0 : exit(0));
 		else
 		{
 			ft_bzero(user_entry, 7);
@@ -52,33 +54,31 @@ char		*line_edit_main_loop_aux(t_prompt *prompt, t_stat_data *stat_data,
 				if (nb_user_entry == 6)
 					ft_flush(prompt);
 				if (data_react(prompt))
-					to_return = quotes_managing(prompt, to_return);
+					((to_return = ft_strdup(prompt->line)) ? 0 : exit(0));
 			}
 		}
-	}
 	return (to_return);
 }
 
-char		*line_edit_main_loop(char *d_prompt)
+char		*line_edit_main_loop(char *d_prompt, t_node *history)
 {
 	char				*to_return;
-	//static t_stat_data	*stat_data = NULL;
+	static t_stat_data	*stat_data = NULL;
 
 	termanip(0);
 	write(1, d_prompt, ft_strlen(d_prompt));
 	stat_data = (stat_data ? stat_data : malloc_stat());
 	prompt = malloc_prompt(prompt, stat_data, d_prompt);
+	prompt->history = history;
 	handle_sig();
 	prompt->buf = stat_data->overage;
-	to_return = NULL;
-	to_return = line_edit_main_loop_aux(prompt, stat_data, to_return);
+	to_return = line_edit_main_loop_aux(prompt, stat_data);
 	stat_data->overage = (prompt->buf ? ft_strdup(prompt->buf) : NULL);
 	free(stat_data->old_line);
 	stat_data->old_line = NULL;
 	if (!(to_return[0] != '\n' || to_return[1] != '\0'))
 		stat_data->old_line =
 			ft_itoa(prompt->origin->x + (prompt->origin->y + 1) * 100000);
-	stat_data->current = stat_data->history;
 	free_prompt(prompt);
 	reverse_handle();
 	termanip(35);

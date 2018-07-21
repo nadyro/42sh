@@ -6,7 +6,6 @@
 #include <stdio.h>
 
 t_prompt	*prompt;
-t_stat_data	*stat_data;
 
 static char	*get_pwd(t_shell *shell)
 {
@@ -32,7 +31,7 @@ static char	*get_pwd(t_shell *shell)
 	return (ptr2);
 }
 
-static char	*line_mgmt(char *line, t_shell shell)
+static char	*line_mgmt(char *line, t_shell shell, t_node *history)
 {
 	char *prompt;
 	char *ret;
@@ -41,12 +40,12 @@ static char	*line_mgmt(char *line, t_shell shell)
 	if (line == NULL)
 	{
 		prompt = get_pwd(&shell);
-		ret = line_edit_main_loop(prompt);
+		ret = line_edit_main_loop(prompt, history);
 		free(prompt);
 	}
 	else
 	{
-		tmp = line_edit_main_loop("> ");
+		tmp = line_edit_main_loop("> ", history);
 		ret = ft_strjoin(line, tmp);
 		free(tmp);
 		free(line);
@@ -59,18 +58,20 @@ void		main_loop(char *line, t_shell shell)
 	int		*token_tab;
 	int		parser_ret;
 	t_ast	*head;
+	t_node	*history;
 
 	head = NULL;
+	history = NULL;
 	while (1)
 	{
-		line = line_mgmt(line, shell);
+		line = line_mgmt(line, shell, history);
 		if ((token_tab = get_tokens(line)) != NULL)
 		{
 			if ((parser_ret = parser_validation(token_tab, line)) == 1)
 			{
 				if (token_tab && token_tab[0])
 				{
-					add_to_history(line, stat_data);
+					history = add_to_history(line, history);
 					head = get_ast(line);
 				}
 				else
@@ -92,7 +93,6 @@ int			main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
-	stat_data = NULL;
 	///////////////////////////////////
 	shell.list = (env && env[0]) ? env_setup(env) : env_init();
 	shell.envv = (shell.list) ? env_to_tab(shell.list) : NULL;

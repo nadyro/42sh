@@ -6,13 +6,13 @@
 /*   By: azybert <azybert@stud.42.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:20:53 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/20 08:07:44 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/21 12:16:21 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
 
-void	add_to_history(char *cmd, t_stat_data *stat_data)
+t_node	*add_to_history(char *cmd, t_node *history)
 {
 	t_node	*new;
 	char	*check;
@@ -21,33 +21,38 @@ void	add_to_history(char *cmd, t_stat_data *stat_data)
 	if (cmd == NULL || ft_strlen((check = ft_strtrim(cmd))) == 0)
 	{
 		free(check);
-		return ;
+		return (history);
 	}
 	if (!(new = malloc(sizeof(*new))))
 		exit(1);
 	if (!(new->cmd = ft_strdup(cmd)))
 		exit(1);
-	new->next = stat_data->history;
+	new->next = history;
 	new->prev = NULL;
-	if (stat_data->history)
-		stat_data->history->prev = new;
-	stat_data->history = new;
-	if (*(ft_strrchr(stat_data->history->cmd, '\n') + 1) == '\0')
-		*(ft_strrchr(stat_data->history->cmd, '\n')) = '\0';
+	if (history)
+		history->prev = new;
+	history = new;
+	if (*(ft_strrchr(history->cmd, '\n') + 1) == '\0')
+		*(ft_strrchr(history->cmd, '\n')) = '\0';
+	return (history);
 }
 
 void	history_next(t_prompt *prompt, t_stat_data *stat_data)
 {
-	if (stat_data->history == NULL)
+	if (prompt->history == NULL)
 		return ;
-	if (stat_data->old_line == NULL)
+	if (prompt->current == NULL)
 	{
-		stat_data->current = stat_data->history;
-		if (!(stat_data->old_line = ft_strdup(prompt->line)))
-			exit(1);
+		prompt->current = prompt->history;
+		if (ft_strlen(prompt->line))
+			((stat_data->old_line = ft_strdup(prompt->line)) ? 0 : exit(0));
 	}
-	else if (stat_data->current->next != NULL)
-		stat_data->current = stat_data->current->next;
+	else if (prompt->current->next != NULL)
+	{
+		if (ft_strcmp(prompt->line, prompt->current->cmd))
+			((stat_data->old_line = ft_strdup(prompt->line)) ? 0 : exit(0));
+		prompt->current = prompt->current->next;
+	}
 	else
 		return ;
 	free(prompt->line);
@@ -55,21 +60,21 @@ void	history_next(t_prompt *prompt, t_stat_data *stat_data)
 	prompt->total = 0;
 	move_cursor(prompt, 0, true);
 	tputs(tgetstr("cd", NULL), 1, ft_putshit);
-	secure_stock(prompt, stat_data->current->cmd);
+	secure_stock(prompt, prompt->current->cmd);
 }
 
 void	history_prev(t_prompt *prompt, t_stat_data *stat_data)
 {
-	if (stat_data->current == NULL)
+	if (prompt->current == NULL)
 		return ;
-	stat_data->current = stat_data->current->prev;
+	prompt->current = prompt->current->prev;
 	free(prompt->line);
 	prompt->line = NULL;
 	prompt->total = 0;
 	move_cursor(prompt, 0, true);
 	tputs(tgetstr("cd", NULL), 1, ft_putshit);
-	if (stat_data->current)
-		secure_stock(prompt, stat_data->current->cmd);
+	if (prompt->current)
+		secure_stock(prompt, prompt->current->cmd);
 	else
 	{
 		secure_stock(prompt, stat_data->old_line);
