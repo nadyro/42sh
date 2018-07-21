@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/21 14:57:51 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/07/21 15:18:39 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char		*line_edit_main_loop_aux(t_prompt *prompt, t_stat_data *stat_data,
 			else if (user_entry[0] == 9)
 			{
 				matches = fetch_names(prompt->line);
-				while (matches->prev != NULL)
+				while (matches && matches->prev != NULL)
 					matches = matches->prev;
 				matches_tab = lst_to_array(matches);
 				while (matches_tab[i])
