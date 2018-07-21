@@ -106,7 +106,7 @@ void		ast_loop(t_shell *shell, t_ast *ast)
 
 	status = 1;
 	//printf("DEBUG 1: in ast_loop, ast->arg = %s\n, first char = %d\nsecond char = %d\n", ast->arg, ast->arg[0], ast->arg[1]);
-	if (ast && ast->arg[0])
+	if (ast)
 	{
 		//printf("DEBUG 2: entering ast_evaluate FROM ast_loop\n");
 		status = ast_evaluate(ast, shell);

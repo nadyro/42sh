@@ -15,46 +15,72 @@
 #include "libft.h"
 #include <stdio.h>
 
-static int 		get_tk_end_pos(t_ast *tmp)
+int 			get_tk_end_pos(t_shell *shell)
 {
 	int 	last = 0;
 
-	while (tmp && tmp->tok[last] != -1)
+	while (shell->tok[last] != -1 && shell->tok[last] != TK_END)
 	{
-		if (tmp->tok[last] != TK_END && tmp->tok[last] != -1)
+		if (shell->tok[last] != TK_END && shell->tok[last] != -1)
 			last += 3;
-		if (tmp->tok[last] == TK_END)
+		//printf("last = %d\ntok[last] = %d\n", last, shell->tok[last]);
+		if (shell->tok[last] == TK_END)
+		{
+			if (shell->tok[last-3] == TK_NEWLINE)
+			{	
+				shell->tok[last-3] = TK_END;
+				return (last - 3);
+			}
 			return (last);
+		}
 	}
 	ft_putstr_fd("Error : No end token found\n", 2);
 	return (-1);
 }
 
-static void		ast_loop_pipe(t_ast *head)
+static int 		split_next_operator(t_shell *shell, t_ast *ast, int check_pipe)
+{
+	// check_pipe = 1 if searching for pipe token, 0 if searching for && or ||
+	int 	beg = ast->beg;
+	int 	end = ast->end;
+
+	//printf("entered split next operator, beg = %d, end = %d\n", beg, end);
+	while (end > beg)
+	{
+		//printf("end = %d, tok[end] = %d\n", end, shell->tok[end]);
+		if (shell->tok[end] == TK_PIPE && check_pipe == 1)
+			return (1);
+		else if ((shell->tok[end] == TK_AND_IF || shell->tok[end] == TK_OR_IF)
+			&& check_pipe == 0)
+			return (1);
+		end -= 3;
+	}
+	//printf("returning 0 instead of 1\n");
+	return (0);
+}
+
+static void		ast_loop_pipe(t_ast *head, t_shell *shell)
 {
 	int		i;
-	int 	op;
 	t_ast	*tmp = head;
 
-	if ((i = get_tk_end_pos(tmp)) < 1)
+	if ((i = tmp->end) <= 0)
 		return ;
-	while (i >= 0)
+	while (i > tmp->beg)
 	{
-		if (tmp->tok[i] == TK_PIPE)
+		if (shell->tok[i] == TK_PIPE)
 		{
-			tmp->split_by = TK_PIPE;
-			op = i;
-			i += 3;
-			while (tmp->tok[i] == TK_SPACE)
-				i += 3;
-			if (tmp->tok[i] != TK_END && tmp->tok[i] != -1)
-				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1]);
-			i = op;
-			if (i > 0)
+			tmp->split = i;
+			//i += 3;
+			//while (shell->tok[i] == TK_SPACE)
+			//	i += 3;
+			if (shell->tok[i] != TK_END && shell->tok[i] != -1)
+				tmp->right = fill_rightast(tmp);
+			if (tmp->split > 0)
 			{
-				tmp->left = fill_leftast(tmp, tmp->tok[i+1]);
+				tmp->left = fill_leftast(tmp);
 				if (tmp->left)
-					ast_loop_pipe(tmp->left);
+					ast_loop_pipe(tmp->left, shell);
 				break ;
 			}
 		}
@@ -63,93 +89,101 @@ static void		ast_loop_pipe(t_ast *head)
 	}
 }
 
-static void		ast_loop_and_or(t_ast *head)
+static void		ast_loop_and_or(t_ast *head, t_shell *shell)
 {
 	int		i = 0;
-	int 	op;
 	t_ast	*tmp = head;
 
-	if ((i = get_tk_end_pos(tmp)) < 1)
+	if ((i = tmp->end) <= 0)
 		return ;
-	while (i >= 0)
+	while (i > tmp->beg)
 	{
-		if (tmp->tok[i] == TK_AND_IF || tmp->tok[i] == TK_OR_IF)
+		if (shell->tok[i] == TK_AND_IF || shell->tok[i] == TK_OR_IF)
 		{
-			tmp->split_by = tmp->tok[i];
-			op = i;
-			i += 3;
-			while (tmp->tok[i] == TK_SPACE)
-				i += 3;
-			if (tmp->tok[i] != TK_END && tmp->tok[i] != -1)
-				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1]);
-			if (tmp->right && ft_strchr(tmp->right->arg, '|'))
-				ast_loop_pipe(tmp->right);
-			i = op;
-			if (i > 0)
+			tmp->split = i;
+			tmp->right = fill_rightast(tmp);
+			if (split_next_operator(shell, tmp->right, 1) == 1)
+				ast_loop_pipe(tmp->right, shell);
+			if (tmp->split > 0)
 			{
-				tmp->left = fill_leftast(tmp, tmp->tok[i+1]);
+				tmp->left = fill_leftast(tmp);
 				if (tmp->left)
-					ast_loop_and_or(tmp->left);
+					ast_loop_and_or(tmp->left, shell);
 				break ;
 			}
 		}
 		else
 			i -= 3;
 	}
+	if (tmp && !(tmp->left) && !(tmp->right) && tmp->parent && tmp == tmp->parent->left)
+		ast_loop_pipe(tmp, shell);
 }
 
-static void		ast_loop_semi(t_ast *head)
+static void		ast_loop_semi(t_ast *head, t_shell *shell)
 {
 	int		i;
-	int 	op;
 	t_ast	*tmp = head;
 
-
-	if ((i = get_tk_end_pos(tmp)) < 1)
-		return ;
-	while (i >= 0)
+/*	if (tmp->parent)
 	{
-		if (tmp->tok[i] == TK_SEMI)
+		if (tmp == tmp->parent->left)
+			printf("starting ast_loop_semi with LEFT, beg = %d, end = %d\n", tmp->beg, tmp->end);
+		else
+			printf("starting ast_loop_semi with RIGHT, beg = %d, end = %d\n", tmp->beg, tmp->end);
+	}
+*/	if ((i = tmp->end) <= 0)
+		return ;
+	while (i > tmp->beg)
+	{
+		if (shell->tok[i] == TK_SEMI)
 		{
-			tmp->split_by = TK_SEMI;
-			op = i;
-			i += 3;
-			while (tmp->tok[i] == TK_SPACE)
-				i += 3;
-			if (tmp->tok[i] != TK_END && tmp->tok[i] != -1)
-				tmp->right = fill_rightast(tmp, tmp->tok[i+1], ft_strlen(tmp->arg) - tmp->tok[i+1]);
-			if (tmp->right && (ft_strstr(tmp->right->arg, "&&") || ft_strstr(tmp->right->arg, "||")))
-				ast_loop_and_or(tmp->right);
-			else if (tmp->right && ft_strchr(tmp->right->arg, '|'))
-				ast_loop_pipe(tmp->right);	
-			i = op;
-			if (i > 0)
+			tmp->split = i;
+			tmp->right = fill_rightast(tmp);
+			if (split_next_operator(shell, tmp->right, 0) == 1)
 			{
-				tmp->left = fill_leftast(tmp, tmp->tok[i+1]);
+				//printf("sending tmp->right from semi to and_or split function\n");
+				ast_loop_and_or(tmp->right, shell);
+			}
+			else if (split_next_operator(shell, tmp->right, 1) == 1)
+			{
+				//printf("sending tmp->right from semi to pipe function\n");
+				ast_loop_pipe(tmp->right, shell);
+			}
+			//printf("tmp->split = %d\n", tmp->split);
+			if (tmp->split > 0)
+			{
+				tmp->left = fill_leftast(tmp);
 				if (tmp->left)
-					ast_loop_semi(tmp->left);
+					ast_loop_semi(tmp->left, shell);
 				break ;
 			}
 		}
 		else
 			i -= 3;
 	}
+	if (tmp && !(tmp->left) && !(tmp->right) && tmp->parent && tmp == tmp->parent->left)
+	{
+		if (split_next_operator(shell, tmp, 0) == 1)
+			ast_loop_and_or(tmp, shell);
+		else
+			ast_loop_pipe(tmp, shell);
+	}
 }
 
-t_ast	    *get_ast(char *argv)
+t_ast	    *get_ast(t_shell *shell)
 {
 	t_ast	*head;
 	t_ast	*tmp;
 
-	if (argv[ft_strlen(argv) - 1] == '\n')	//replaces '\n' from line editing with '\0'
-		argv[ft_strlen(argv) - 1] = '\0';
-	head = init_ast(argv);
+	if (shell->line[ft_strlen(shell->line) - 1] == '\n')	//replaces '\n' from line editing with '\0'
+		shell->line[ft_strlen(shell->line) - 1] = '\0';
+	head = init_ast(shell);
 	tmp = head;
-	if (ft_strchr(tmp->arg, ';'))
-		ast_loop_semi(tmp);
-	else if (ft_strstr(tmp->arg, "&&") || ft_strstr(tmp->arg, "||"))
-		ast_loop_and_or(tmp);
-	else if (ft_strchr(tmp->arg, '|'))
-		ast_loop_pipe(tmp);
+	if (ft_strchr(shell->line, ';'))
+		ast_loop_semi(tmp, shell);
+	else if (ft_strstr(shell->line, "&&") || ft_strstr(shell->line, "||"))
+		ast_loop_and_or(tmp, shell);
+	else if (ft_strchr(shell->line, '|'))
+		ast_loop_pipe(tmp, shell);
 	return (head);
 }

@@ -81,8 +81,11 @@ int				parser_validation(int *tk_arr, char *line)
 			i -= 3;
 	}
 	if (state == -1)
-		return (0);
+		return (-1);
 	else if (state == 0)
+	{
 		parsing_error(tk_arr, i, line);
+		return (0);
+	}
 	return (1);
 }
