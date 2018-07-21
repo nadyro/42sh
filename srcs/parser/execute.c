@@ -19,15 +19,12 @@
 
 static void	launch_exec(t_shell *shell, char *full_path, t_ast *cmd)
 {
-	//printf("before executing commands, here is the table of arguments:\n");
-	//ßft_print_table(shell->args);
 	if (execve(shell->args[0], shell->args, shell->envv) == -1)
 	{
 		if (execve(full_path, shell->args, shell->envv) == -1)
 		{
 			printf("both execve calls didn't work properly!!!!\n");
 			cmd->cmd_ret = -1;
-			//exit(EXIT_FAILURE);
 		}
 	}
 }
@@ -39,7 +36,6 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 	int		status;
 	int		*fd_changed;
 
-//	printf("entered ast_launch\n");
 	status = 0;
 	pid = fork();
 	if (pid == 0)
@@ -47,7 +43,6 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 		//printf("pid == 0 i.e. child process: %s\n", shell->args[0]);
 		fd_changed = redirect_check(shell);
 		launch_exec(shell, shell->full_path, cmd);
-	//	printf("after launch_exec call, shell->error = %d\n", shell->error);
 		if (fd_changed[1])
 		{
 			close(fd_changed[0]);
@@ -58,20 +53,16 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 	else
 	{
 		wpid = waitpid(pid, &status, WUNTRACED);
+		if (status)	//necessary as status !=0 means command return value was non-zero
+			cmd->cmd_ret = -1;
 		while (!WIFEXITED(status) && !WIFSIGNALED(status))
+		{
 			wpid = waitpid(pid, &status, WUNTRACED);
+		}
 		//printf("should be returning from PARENT process, command = %s, pid = %d\n", shell->args[0], pid);
 	}
 	if (shell->full_path)
 		ft_strdel(&(shell->full_path));
-	/*if (shell->error == -1)
-	{
-	//	printf("SHELL ERROR  FOUND IN COMMAND EXECUTION, returning -1\n");
-		shell->error = 0;
-		return (-1);
-	}
-	else
-		return (1);*/
 }
 
 int			ast_execute(t_shell *shell, t_ast *cmd)

@@ -134,12 +134,7 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		//printf("error, AST is null, nothing to evaluate\n");
 		return (0);
 	}
-/*	printf("ast = %s\n", ast->arg);
-	if (ast->left)
-		printf("left = %s\n", ast->left->arg);
-	if (ast->right)
-		printf("right = %s\n", ast->right->arg); 
-*/	if (!(ast->left) && !(ast->right))
+	if (!(ast->left) && !(ast->right))
 	{
 		ast->cmd_ret = 0;
 		//printf("DEBUG 1 : GOING TO EXECUTE: %s, address = %s\n", ast->arg, ast->address);
@@ -147,10 +142,7 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		ast_execute(shell, ast);
 		//printf("DEBUG 3, AFTER executing %s, cmd->ret = %d\n", ast->arg, ast->cmd_ret);
 		if (shell->args)
-		{	
-		//	printf("in ast_evaluate, shell->args is about to be freed, first element = %s\n", shell->args[0]);
 			free_table(shell->args);
-		}
 		//printf("DEBUG 4, ret = %d\n", ret);
 		if (ast->cmd_ret == 0 || ast->cmd_ret == -1)
 		{
@@ -161,14 +153,10 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		}	
 		else if (ast->cmd_ret < 0)
 		{
-		//	printf("DEBUG 7\n");
 			printf("ERROR: cmd->cmd_ret = %d when cmd = \n", ast->cmd_ret);
 			ft_print_table(shell->args);
 			return (-1);
 		}
-		//else
-		//	printf("error in leaf node execution of %s at depth of %d, v1 = %d, v2 = %d\nfirst char of arg = %c\n", ast->arg, ast->depth, v1, v2, ast->arg[0]);
-		//printf("DEBUG 8\n");	
 	}
 	else if (ast)
 	{
