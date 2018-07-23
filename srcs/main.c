@@ -7,31 +7,28 @@
 
 t_prompt	*prompt;
 
-static char	*get_pwd(t_shell *shell)
+static char	*get_pwd(void)
 {
 	int		i;
-	t_shell *shell_ptr;
+	char	pwd[1024];
 	char	*ptr;
 	char	*ptr2;
 
-	shell_ptr = shell;
-	while (shell_ptr->list && ft_strcmp(shell_ptr->list->var, "PWD") != 0)
-		shell_ptr->list = shell_ptr->list->next;
-	if (shell_ptr->list == NULL)
+	if (getcwd(pwd, 1024) == NULL)
 	{
-		ft_putstr("pwd error");
-		exit(1);
+		ft_putendl_fd("pwd error", 2);
+		return (ft_strcpy(ft_strnew(2), "> "));
 	}
-	i = ft_strlen(shell_ptr->list->val) - 1;
-	while (i > 0 && (shell_ptr->list->val)[i - 1] != '/')
+	i = ft_strlen(pwd) - 1;
+	while (i > 0 && pwd[i - 1] != '/')
 		i--;
-	ptr = ft_strjoin("\x1b[36m[", (shell_ptr->list->val) + i);
+	ptr = ft_strjoin("\x1b[36m[", pwd + i);
 	ptr2 = ft_strjoin(ptr, "]\x1b[0m ");
 	free(ptr);
 	return (ptr2);
 }
 
-static char	*line_mgmt(char *line, t_shell shell, t_node *history)
+static char	*line_mgmt(char *line, t_node *history)
 {
 	char *prompt;
 	char *ret;
@@ -39,7 +36,7 @@ static char	*line_mgmt(char *line, t_shell shell, t_node *history)
 
 	if (line == NULL)
 	{
-		prompt = get_pwd(&shell);
+		prompt = get_pwd();
 		ret = line_edit_main_loop(prompt, history);
 		free(prompt);
 	}
@@ -64,7 +61,7 @@ void		main_loop(char *line, t_shell shell)
 	history = NULL;
 	while (1)
 	{
-		line = line_mgmt(line, shell, history);
+		line = line_mgmt(line, history);
 		if ((shell.tok = get_tokens(line)) != NULL)
 		{
 			if ((parser_ret = parser_validation(shell.tok, line)) == 1)
