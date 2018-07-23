@@ -53,6 +53,85 @@ static char	*line_mgmt(char *line, t_shell shell, t_node *history)
 	return (ret);
 }
 
+static void	test_tokens(int *tok)
+{
+	int		i = 0;
+
+	while (tok[i] != -1)
+	{
+		switch(tok[i])
+		{
+			case TK_WORD:
+				printf("WORD \n");
+				break;
+			case TK_FILENAME:
+				printf("FILENAME \n");
+				break;
+			case TK_CMD:
+				printf("COMMAND \n");
+				break;
+			case TK_NEWLINE:
+				printf("NEWLINE \n");
+				break;
+			case TK_IO_NUMBER:
+				printf("IO_NUMBER \n");
+				break;
+			case TK_GREAT:
+				printf("GREAT \n");
+				break;
+			case TK_DGREAT:
+				printf("DGREAT \n");
+				break;
+			case TK_GREATAND:
+				printf("GREATAND \n");
+				break;
+			case TK_LESS:
+				printf("LESS \n");
+				break;
+			case TK_DLESS:
+				printf("DLESS \n");
+				break;
+			case TK_LESSAND:
+				printf("LESSAND \n");
+				break;
+			case TK_PIPE:
+				printf("PIPE \n");
+				break;
+			case TK_SEMI:
+				printf("SEMI \n");
+				break;
+			case TK_COMMENT:
+				printf("COMMENT \n");
+				break;
+			//case TK_SPACE:
+			//	printf("SPACE ");
+			//	break;
+			//case TK_AND:
+			//	printf("AND \n");
+			//	break;
+			case TK_AND_IF:
+				printf("AND_IF \n");
+				break;
+			case TK_OR_IF:
+				printf("OR_IF \n");
+				break;
+			case TK_END:
+				printf("END \n");
+				break;
+			/*case TK_PROGRAM:
+				printf("PROGRAM \n");
+				break;
+			case TK_QUOTED_WORD:
+				printf("QUOTED_WORD \n");
+				break;
+			case TK_DQUOTED_WORD:
+				printf("DQUOTED_WORD \n");
+				break;*/
+		}
+		i += 3;
+	}
+}
+
 void		main_loop(char *line, t_shell shell)
 {
 	//int		*token_tab;
@@ -67,6 +146,7 @@ void		main_loop(char *line, t_shell shell)
 		line = line_mgmt(line, shell, history);
 		if ((shell.tok = get_tokens(line)) != NULL)
 		{
+			test_tokens(shell.tok);
 			if ((parser_ret = parser_validation(shell.tok, line)) == 1)
 			{
 				shell.line = ft_strdup(line);
@@ -112,9 +192,6 @@ int			main(int argc, char **argv, char **env)
 }
 
 //TESTS/////////////////////////////////////////////////////////////////////////
-		//print_leaf_nodes(head);
-//		printf("trying to call traverse_ast to analyze pipes\n");
-//		traverse_ast(head, 3);
 	/*	while (tab[i] != -1)
 		{
 			switch(tab[i])

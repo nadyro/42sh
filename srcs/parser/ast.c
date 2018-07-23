@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/19 18:14:51 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/23 18:46:20 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,9 +125,9 @@ void		create_arg_table(t_ast *cmd, t_shell *shell)
 int         ast_evaluate(t_ast *ast, t_shell *shell)
 {
 	int		op;
-	//int		ret = 0;
 	int		v1 = 0;
 	int		v2 = 0;
+	t_redirs	*head = NULL;
 
 	if (ast == NULL)
 	{
@@ -138,8 +138,13 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 	{
 		ast->cmd_ret = 0;
 		//printf("DEBUG 1 : GOING TO EXECUTE: %s, address = %s\n", ast->arg, ast->address);
-		create_arg_table(ast, shell);
-		ast_execute(shell, ast);
+		if (is_redirect(shell, ast->beg, ast->end))
+			printf("need to send from ast_evaluate to redirect_execute_loop\n") :
+		else
+		{
+			create_arg_table(ast, shell);
+			ast_execute(shell, ast);
+		}
 		//printf("DEBUG 3, AFTER executing %s, cmd->ret = %d\n", ast->arg, ast->cmd_ret);
 		if (shell->args)
 			free_table(shell->args);
