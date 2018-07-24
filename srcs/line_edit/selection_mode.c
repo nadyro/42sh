@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/04 22:38:46 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/21 15:16:23 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/24 04:09:09 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,22 +66,22 @@ static int	selection_tree_aux(t_prompt *prompt, t_stat_data *stat_data,
 					start_pos - prompt->pos + 1) :
 				ft_strndup(prompt->line + start_pos,
 					prompt->pos - start_pos + 1));
+		selection_write(prompt, prompt->pos);
 		if (user_entry[0] == 'x')
 			selection_delete(prompt, start_pos);
-		return (1);
 	}
 	else if (user_entry[0] == 127)
-	{
 		selection_delete(prompt, start_pos);
-		return (1);
-	}
-	else if (user_entry[0] == 27)
+	else if (user_entry[0] == 27 || prompt->end == 1)
 	{
 		selection_write(prompt, prompt->pos);
 		handle_sig();
-		return (1);
+		termanip(33);
+		prompt->end = 0;
 	}
-	return (0);
+	else
+		return (0);
+	return (1);
 }
 
 static int	selection_tree(t_prompt *prompt, int nb_user_entry,
@@ -123,6 +123,7 @@ void		selection_mode(t_prompt *prompt, t_stat_data *stat_data)
 	if (prompt->pos == prompt->total)
 		prompt->pos--;
 	start_pos = prompt->pos;
+	termanip(36);
 	while (1)
 	{
 		if (prompt->pos == prompt->total)
@@ -132,8 +133,8 @@ void		selection_mode(t_prompt *prompt, t_stat_data *stat_data)
 		nb_user_entry = read(1, user_entry, 6);
 		if (nb_user_entry == 6)
 			ft_flush(prompt);
-		if (selection_tree(prompt, nb_user_entry, user_entry) &&
-				nb_user_entry == 1)
+		(prompt->buf ? ft_strdel(&prompt->buf) : 0);
+		if (selection_tree(prompt, nb_user_entry, user_entry))
 			if (selection_tree_aux(prompt, stat_data, user_entry, start_pos))
 				return ;
 	}

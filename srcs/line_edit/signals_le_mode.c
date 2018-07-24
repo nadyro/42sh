@@ -6,19 +6,25 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/10 06:10:10 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/17 22:48:39 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/24 06:48:11 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
 
-void	ignore_sig(int sig)
+static void	ignore_sig(int sig)
 {
 	UNUSED(sig);
 }
 
-void	ignore_handle(void)
+static void	quit_mode(int sig)
 {
-	signal(SIGINT, ignore_sig);
+	UNUSED(sig);
+	prompt->end = 1;
+}
+
+void		ignore_handle(void)
+{
+	signal(SIGINT, quit_mode);
 	signal(SIGWINCH, ignore_sig);
 }

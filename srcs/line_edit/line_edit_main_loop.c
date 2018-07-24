@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/21 15:17:39 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/24 06:40:19 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void		ft_flush(t_prompt *prompt)
 	termanip(33);
 }
 
-char		*line_edit_main_loop_aux(t_prompt *prompt, t_stat_data *stat_data)
+static char	*line_edit_main_loop_aux(t_prompt *prompt, t_stat_data *stat_data)
 {
 	char	user_entry[7];
 	int		nb_user_entry;

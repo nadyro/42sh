@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 03:46:15 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/21 13:16:19 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/24 06:44:13 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	reverse_handle(void)
 	signal(SIGWINCH, NULL);
 }
 
-void	handle_resize(int sig)
+static void	handle_resize(int sig)
 {
 	struct winsize	w;
 
@@ -33,7 +33,7 @@ void	handle_resize(int sig)
 	move_cursor(prompt, prompt->pos, true);
 }
 
-void	handle_int(int sig)
+static void	handle_int(int sig)
 {
 	UNUSED(sig);
 	if (prompt->size->y - 1 <= prompt->origin->y +
@@ -59,7 +59,7 @@ void	handle_int(int sig)
 	prompt->current = NULL;
 }
 
-void	handle_sig(void)
+void		handle_sig(void)
 {
 	signal(SIGINT, handle_int);
 	signal(SIGWINCH, handle_resize);

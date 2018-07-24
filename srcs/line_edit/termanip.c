@@ -6,13 +6,21 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/14 22:21:10 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/20 03:25:53 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/24 06:36:32 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
 
-void	termanip_aux(int sig, struct termios shell, struct termios old)
+static void	termode(struct termios shell)
+{
+	tcgetattr(0, &shell);
+	shell.c_cc[VMIN] = (shell.c_cc[VMIN] == 1 ? 0 : 1);
+	shell.c_cc[VTIME] = 2;
+	tcsetattr(0, TCSADRAIN, &shell);
+}
+
+static void	termanip_aux(int sig, struct termios shell, struct termios old)
 {
 	if (sig == 33)
 	{
@@ -28,9 +36,9 @@ void	termanip_aux(int sig, struct termios shell, struct termios old)
 		tcsetattr(0, TCSADRAIN, &shell);
 	}
 	else if (sig == 35)
-	{
 		tcsetattr(0, TCSADRAIN, &old);
-	}
+	else if (sig == 36)
+		termode(shell);
 	else
 	{
 		tcsetattr(0, TCSADRAIN, &old);
@@ -38,7 +46,7 @@ void	termanip_aux(int sig, struct termios shell, struct termios old)
 	}
 }
 
-void	termanip(int sig)
+void		termanip(int sig)
 {
 	static struct termios	shell;
 	static struct termios	old;
@@ -50,6 +58,7 @@ void	termanip(int sig)
 		shell.c_oflag &= ~(OPOST);
 		shell.c_lflag &= ~(ICANON);
 		shell.c_lflag &= ~(ECHO);
+		shell.c_cflag &= ~(CREAD);
 		shell.c_cc[VMIN] = 1;
 		shell.c_cc[VTIME] = 0;
 		tcsetattr(0, TCSADRAIN, &shell);

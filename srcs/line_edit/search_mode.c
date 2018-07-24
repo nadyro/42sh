@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/08 06:09:10 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/21 11:51:31 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/24 03:22:22 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static int	search_react(t_prompt *prompt)
 
 	ft_bzero(user_entry, 7);
 	nb_user_entry = read(1, user_entry, 6);
-	if (user_entry[0] == 27)
+	if (user_entry[0] == 27 || prompt->end == 1)
 		return (-1);
 	else if (user_entry[0] == 127 && prompt->total > 0)
 		prompt_delete(prompt);
@@ -93,6 +93,7 @@ static void	search_mode_aux(t_prompt *prompt, t_stat_data *stat_data)
 void		search_mode(t_prompt *prompt, t_stat_data *stat_data)
 {
 	ignore_handle();
+	termanip(36);
 	if (stat_data->old_line)
 	{
 		free(stat_data->old_line);
@@ -101,5 +102,7 @@ void		search_mode(t_prompt *prompt, t_stat_data *stat_data)
 	stat_data->old_line = prompt->line;
 	((prompt->line = ft_strdup("\0")) ? 0 : exit(1));
 	search_mode_aux(prompt, stat_data);
+	termanip(33);
 	handle_sig();
+	prompt->end = 0;
 }

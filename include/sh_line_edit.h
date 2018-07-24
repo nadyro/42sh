@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/21 11:48:33 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/24 06:48:51 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct	s_prompt
 	char		*line;
 	char		*buf;
 	char		*disp;
+	int			end;
 	size_t		pos;
 	size_t		total;
 	t_coord		*origin;
@@ -85,12 +86,10 @@ void			ft_cursor_word_right(t_prompt *prompt);
 void			ft_cursor_up(t_prompt *prompt);
 void			ft_cursor_down(t_prompt *prompt);
 void			handle_sig(void);
-void			handle_int(int sig);
-void			handle_resize(int sig);
-void			ignore_sig(int sig);
 void			ignore_handle(void);
-void			reverse_handle();
-t_prompt		*malloc_prompt(t_prompt *prompt, t_stat_data *data, char *d_prompt);
+void			reverse_handle(void);
+t_prompt		*malloc_prompt(t_prompt *prompt, t_stat_data *data,
+				char *d_prompt);
 t_stat_data		*malloc_stat(void);
 void			free_prompt(t_prompt *prompt);
 void			ft_flush(t_prompt *prompt);
