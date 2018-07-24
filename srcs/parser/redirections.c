@@ -26,6 +26,44 @@
 **	comes after "<", open as READONLY instead of WRITEONLY
 */
 
+int	        execute_redirect(t_shell *shell)
+{	
+	int		i;
+	int		fd = -1;
+	int		*result = (int *)malloc(sizeof(int) * 2);
+
+	i = 0;
+	while (shell->args && shell->args[i])
+	{
+		if (shell->args[i] && ((!(ft_strcmp(shell->args[i], ">")) 
+			|| !(ft_strcmp(shell->args[i], "<")) || !(ft_strcmp(shell->args[i], ">>")))))
+		{
+			/* in this clause bc either > or >> or < exists. If <, close 0, else close 1 for other redirections */
+			(ft_strcmp(shell->args[i], "<") == 0) ? close(0) : close(1);
+			if (ft_strcmp(shell->args[i], "<") == 0)
+				fd = open(shell->args[i + 1], O_RDONLY);
+			else
+				fd = (shell->args[i][1] && shell->args[i][1] == '>') ? open(shell->args[i + 1], O_CREAT | O_APPEND | O_WRONLY, 0644)
+				: open(shell->args[i + 1], O_CREAT | O_TRUNC | O_WRONLY, 0644);
+			if (fd < 0)
+			{
+				printf("manage error opening file here\n");
+				exit(EXIT_FAILURE);
+			}
+			shell->args[i] = 0;
+			result[1] = i;
+			result[0] = fd;
+			return (result);
+		}
+		i++;
+	}
+	result[0] = 0;
+	result[1] = 0;
+	/* returns int table with tb[0] = the post-redirect fd,
+	 ** tb[1] = index of redirection location in table (redirect is replaced with NULL) */
+	return (result);
+}
+
 void		fill_redirs(t_shell *shell, t_ast *ast, int beg, int redir)
 {
 	t_redirs	*tmp;

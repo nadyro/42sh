@@ -29,7 +29,7 @@ static void	launch_exec(t_shell *shell, char *full_path, t_ast *cmd)
 	}
 }
 
-static void	ast_launch(t_shell *shell, t_ast *cmd)
+static void	ast_launch(t_shell *shell, t_ast *cmd, int redirs)
 {
 	pid_t	pid;
 	pid_t	wpid;
@@ -65,7 +65,42 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 		ft_strdel(&(shell->full_path));
 }
 
-int			ast_execute(t_shell *shell, t_ast *cmd)
+int 		implement_redirs(t_shell *shell, t_ast *cmd)
+{
+	t_redirs	*tmp = NULL;
+	int 		beg;
+	int 		i = 0;
+	char		**next;
+
+	tmp = cmd->redirs;
+	next = (tmp && tmp->next) ? create_arg_table(shell, tmp->next->beg, tmp->next->end);
+	while (tmp)	//creates argument table, opens and closes respective fd before launching execution then freeing table and t_redirs before & after redirection
+	{
+		//beg = tmp->beg;
+		//end = tmp->end;
+		create_arg_table(shell, tmp->beg, tmp->end);
+		if (shell->tok[tmp->next_re] == TK_LESS || shell->tok[tmp->next_re] == TK_DLESS ||
+			shell->tok[tmp->next_re] == TK_LESSAND)
+		{
+			close (0);
+			tmp->new_fd = open(shell->args[i + 1], O_RDONLY);
+		}
+		else
+		{
+			close (1);
+			if (shell->tok[tmp->next_re] == TK_GREAT || shell->tok[tmp->next_re] == TK_GREATAND)
+				tmp->new_fd = open(shell->args[i + 1], O_CREAT | O_TRUNC | O_WRONLY, 0644);
+			else if (shell->tok[tmp->next_re] == TK_DGREAT)
+				tmp->new_fd = open(shell->args[i + 1], O_CREAT | O_APPEND | O_WRONLY, 0644);
+			else
+				printf("REDIRECTION #%d STILL NEEDS HANDLING\n", tmp->next_re);
+		}
+		//still need to carefully test for how command return values work with redirections
+		ast_execute(shell, cmd, 1);
+	}
+}
+
+int			ast_execute(t_shell *shell, t_ast *cmd, int redirs)
 {
 	if (shell && shell->args && shell->args[0])
 	{
@@ -74,7 +109,7 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 			cmd->cmd_ret = 0;
 		else if (shell->full_path || !(access(shell->args[0], F_OK)))	//if binary exists in PATH, fork and execute
 		{
-			ast_launch(shell, cmd);
+			ast_launch(shell, cmd, 0);
 			//printf("launched fork, returning : cmd_ret = %d\n", cmd->cmd_ret);
 			return (cmd->cmd_ret);
 		}

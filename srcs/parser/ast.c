@@ -72,14 +72,13 @@ t_ast		*init_ast(t_shell *shell)
 	return (head);
 }
 
-void		create_arg_table(t_ast *cmd, t_shell *shell)
+void		create_arg_table(t_shell *shell, int beg, int end)
 {
-	int		i = cmd->beg;
+	int		i = beg;
 	int		last = 0;
 	char	*str = NULL;
-	int 	end = cmd->end;
 	
-	if ((end - i) < 0)
+	if ((end - beg) < 0)
 	{
 		shell->args = NULL;
 		return ;
@@ -103,8 +102,8 @@ void		create_arg_table(t_ast *cmd, t_shell *shell)
 				return ;
 			shell->args[last] = 0;
 			last = 0;
-			i = cmd->beg;
-			while (i <= cmd->end)
+			i = beg;
+			while (i <= end)
 			{
 				while (shell->tok[i] == TK_SPACE || shell->tok[i] == TK_NEWLINE)
 					i += 3;
@@ -124,10 +123,11 @@ void		create_arg_table(t_ast *cmd, t_shell *shell)
 
 int         ast_evaluate(t_ast *ast, t_shell *shell)
 {
-	int		op;
-	int		v1 = 0;
-	int		v2 = 0;
-	int 	ret = 0;
+	int			op;
+	int			v1 = 0;
+	int			v2 = 0;
+	int 		ret = 0;
+	t_redirs	*tmp;
 
 	if (ast == NULL)
 	{
@@ -146,14 +146,15 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 			//	ft_putchar(*str++);
 			printf("filling redirs list\n");
 			fill_redirs(shell, ast, ast->beg, ret);
+			implement_redirs(shell, ast);
 		}
 		else
 		{
 			//char *str = shell->line + shell->tok[ast->beg + 1];
 			//while (*str != shell->line[shell->tok[ast->end] + shell->tok[ast->end + 2]])
 			//	ft_putchar(*str++);			
-			create_arg_table(ast, shell);
-			ast_execute(shell, ast);
+			create_arg_table(shell, ast->beg, ast->end);
+			ast_execute(shell, ast, 0);
 		}
 		//printf("DEBUG 3, AFTER executing %s, cmd->ret = %d\n", ast->arg, ast->cmd_ret);
 		if (shell->args)
