@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/21 15:57:48 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/07/21 17:38:09 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,4 +115,5 @@ void			send_nudes(t_node **my_phone);
 void			free_lists(t_node *lst);
 void			print_nudes(t_node *matches);
 char			**lst_to_array(t_node *matches);
+int				write_completion(t_prompt *prompt, int *y);
 #endif
