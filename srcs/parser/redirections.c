@@ -26,30 +26,54 @@
 **	comes after "<", open as READONLY instead of WRITEONLY
 */
 
-t_redirs	*init_redirs(t_shell *shell, t_ast *cmd, int redir)
+void		fill_redirs(t_shell *shell, t_ast *ast, int beg, int redir)
 {
-	t_redirs	*head;
-	int			end;
-	int			beg;
+	t_redirs	*tmp;
+	int 		ret;
 
-	if (!(head = (t_redirs *)malloc(sizeof(t_redirs))))
-		return (NULL);
-	head->beg = cmd->beg;
-	beg = head->beg;
-	while (beg < cmd->end)
+	printf("DEBUG 1\n");
+	if (!(tmp = (t_redirs *)malloc(sizeof(t_redirs))))
+		return ;
+	printf("DEBUG 2\n");
+	ast->redirs = tmp;
+	tmp->beg = beg;
+	tmp->end = redir - 3;
+	tmp->next_re = redir;
+	printf("DEBUG 3\n");
+	tmp->prev = NULL;
+	tmp->next = NULL;
+	while ((ret = is_redirect(shell, ast, redir + 3, ast->end)))
 	{
-		if (shell->tok[beg] == TK_GREAT || shell->tok[beg] == TK_DGREAT ||
-			shell->tok[beg] == TK_GREATAND || shell->tok[beg] == TK_LESS ||
-			shell->tok[beg] == TK_DLESS || shell->tok[beg] == TK_LESSAND)
-			{
-				head->end = beg - 3;
+		printf("returned %d from is_direct check in fill_redirs\n", ret);
+		if (!(tmp->next = (t_redirs *)malloc(sizeof(t_redirs))))
+			return ;
+		tmp->next->prev = tmp;
+		tmp = tmp->next;
+		tmp->beg = redir + 3;
+		tmp->end = ret - 3;
+		tmp->next_re = ret;
+		redir = ret;
+		tmp->next = NULL;
+	}
+	printf("DEBUG 4, ret = %d\n", ret);
+}
 
-			}
+static void	display_redir_list(t_ast *ast)
+{
+	t_redirs	*tmp;
+
+	tmp = ast->redirs;
+	while (tmp)
+	{
+		printf("tmp->beg = %d, tmp->end = %d\n", tmp->beg, tmp->end);
+		tmp = tmp->next;
 	}
 }
 
-int			is_redirect(t_shell *shell, int beg, int end)
+int			is_redirect(t_shell *shell, t_ast *ast, int beg, int end)
 {
+	t_redirs		*tmp = NULL;
+
 	while (beg <= end)
 	{
 		if (shell->tok[beg] == TK_GREAT || shell->tok[beg] == TK_DGREAT ||
@@ -58,7 +82,22 @@ int			is_redirect(t_shell *shell, int beg, int end)
 			return (beg);
 		beg += 3;
 	}
+	if ((tmp = ast->redirs))
+	{
+		while (tmp->next)
+			tmp = tmp->next;
+		if (!(tmp->next = (t_redirs *)malloc(sizeof(t_redirs))))
+			return (-1);
+		tmp->next->prev = tmp;
+		tmp = tmp->next;
+		tmp->beg = beg;
+		tmp->end = ast->end;
+		tmp->next = NULL;
+		printf("t_redirs is officially completed, now sending to TEST DISPLAY function\n");
+		display_redir_list(ast);
+	}
 	return (0);
+
 }
 
 int	        *redirect_check(t_shell *shell)

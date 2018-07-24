@@ -127,7 +127,7 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 	int		op;
 	int		v1 = 0;
 	int		v2 = 0;
-	t_redirs	*head = NULL;
+	int 	ret = 0;
 
 	if (ast == NULL)
 	{
@@ -137,11 +137,21 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 	if (!(ast->left) && !(ast->right))
 	{
 		ast->cmd_ret = 0;
+		ast->redirs = NULL;
 		//printf("DEBUG 1 : GOING TO EXECUTE: %s, address = %s\n", ast->arg, ast->address);
-		if (is_redirect(shell, ast->beg, ast->end))
-			printf("need to send from ast_evaluate to redirect_execute_loop\n") :
+		if ((ret = is_redirect(shell, ast, ast->beg, ast->end)))
+		{
+			//char *str = shell->line + shell->tok[ast->beg + 1];
+			//while (*str != shell->line[shell->tok[ast->end - 3] + shell->tok[ast->end - 1]])
+			//	ft_putchar(*str++);
+			printf("filling redirs list\n");
+			fill_redirs(shell, ast, ast->beg, ret);
+		}
 		else
 		{
+			//char *str = shell->line + shell->tok[ast->beg + 1];
+			//while (*str != shell->line[shell->tok[ast->end] + shell->tok[ast->end + 2]])
+			//	ft_putchar(*str++);			
 			create_arg_table(ast, shell);
 			ast_execute(shell, ast);
 		}

@@ -15,6 +15,16 @@
 
 # include <builtins.h>
 
+typedef struct	s_redirs
+{
+	int						beg;
+	int						end;
+	int						next_re;
+	//int						handled;
+	struct s_redirs			*prev;
+	struct s_redirs			*next;
+}				t_redirs;
+
 typedef struct	s_ast
 {
 	int 					beg;	//relevant start token in token table for ast node
@@ -23,19 +33,9 @@ typedef struct	s_ast
 	int						cmd_ret;
 	struct s_ast			*parent;
 	struct s_ast			*left;
+	t_redirs				*redirs;
 	struct s_ast			*right;
 }				t_ast;
-
-typedef struct	s_redir
-{
-	int						beg;
-	int						end;
-	int						next_redir;
-	int						split;
-	int						handled;
-	struct s_redir			*left;
-	struct s_redir			*right;
-}				t_redirs;
 
 int			parser_validation(int *tk_arr, char *ine);
 int 		get_tk_end_pos(t_shell *shell);
@@ -47,6 +47,7 @@ t_ast		*init_ast(t_shell *shell);
 void		ast_loop(t_shell *shell, t_ast *ast);
 int			ast_execute(t_shell *shell, t_ast *cmd);
 int	        *redirect_check(t_shell *shell);
-int			is_redirect(t_shell *shell, int beg, int end);
+int			is_redirect(t_shell *shell, t_ast *ast, int beg, int end);
+void		fill_redirs(t_shell *shell, t_ast *ast, int beg, int redir);
 
 #endif

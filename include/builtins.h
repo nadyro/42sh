@@ -41,8 +41,6 @@
 # include <time.h>
 # include <errno.h>
 
-
-
 typedef struct	s_env
 {
 	char					*var;

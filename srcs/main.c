@@ -53,7 +53,7 @@ static char	*line_mgmt(char *line, t_shell shell, t_node *history)
 	return (ret);
 }
 
-static void	test_tokens(int *tok)
+/*static void	test_tokens(int *tok)
 {
 	int		i = 0;
 
@@ -118,7 +118,7 @@ static void	test_tokens(int *tok)
 			case TK_END:
 				printf("END \n");
 				break;
-			/*case TK_PROGRAM:
+			case TK_PROGRAM:
 				printf("PROGRAM \n");
 				break;
 			case TK_QUOTED_WORD:
@@ -126,11 +126,11 @@ static void	test_tokens(int *tok)
 				break;
 			case TK_DQUOTED_WORD:
 				printf("DQUOTED_WORD \n");
-				break;*/
+				break;
 		}
 		i += 3;
 	}
-}
+}*/
 
 void		main_loop(char *line, t_shell shell)
 {
@@ -146,7 +146,7 @@ void		main_loop(char *line, t_shell shell)
 		line = line_mgmt(line, shell, history);
 		if ((shell.tok = get_tokens(line)) != NULL)
 		{
-			test_tokens(shell.tok);
+			//test_tokens(shell.tok);
 			if ((parser_ret = parser_validation(shell.tok, line)) == 1)
 			{
 				shell.line = ft_strdup(line);
@@ -178,7 +178,6 @@ int			main(int argc, char **argv, char **env)
 	///////////////////////////////////
 	shell.list = (env && env[0]) ? env_setup(env) : env_init();
 	shell.envv = (shell.list) ? env_to_tab(shell.list) : NULL;
-	shell.error = 0;
 	///////////////////////////////////
 	if ((name_term = getenv("TERM")) == NULL)
 	{

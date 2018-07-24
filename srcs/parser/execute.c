@@ -34,19 +34,19 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 	pid_t	pid;
 	pid_t	wpid;
 	int		status;
-	int		*fd_changed;
+//IMPORTANT	int		*fd_changed;
 
 	status = 0;
 	pid = fork();
 	if (pid == 0)
 	{
 		//printf("pid == 0 i.e. child process: %s\n", shell->args[0]);
-		fd_changed = redirect_check(shell);
+//IMPORTANT		fd_changed = redirect_check(shell);
 		launch_exec(shell, shell->full_path, cmd);
-		if (fd_changed[1])
-		{
-			close(fd_changed[0]);
-		}
+//		if (fd_changed[1])
+//		{
+//			close(fd_changed[0]);
+//		}
 	}
 	else if (pid < 0)
 		ft_putstr_fd("error pid less than 0 in lsh launch", 2);
