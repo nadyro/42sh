@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/25 18:55:50 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/25 20:22:19 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,6 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 	{
 		printf("pid == 0 i.e. child process: %s\n", shell->args[0]);
 		launch_exec(shell, shell->full_path, cmd);
-		if (!(cmd->redirs))
-			printf("ast_launch things cmd->redirs is NULL\n");
-		if (cmd->redirs)
-		{
-			printf("in AST_LAUNCH, CLOSING %d\n", shell->new_fd);
-			close (shell->new_fd);
-			shell->new_fd = -1;
-		}
 	}
 	else if (pid < 0)
 		ft_putstr_fd("error pid less than 0 in lsh launch", 2);
@@ -60,6 +52,16 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 		while (!WIFEXITED(status) && !WIFSIGNALED(status))
 		{
 			wpid = waitpid(pid, &status, WUNTRACED);
+		}
+		printf("after execution, closing shell->new_fd: %d and setting to -1\n", shell->new_fd);
+		if (shell->new_fd != -1)
+		{
+			dup2(shell->s_out, 1);
+			close(shell->s_out);
+			//dup2(shell->s_in, 0);
+			//close(shell->s_in);
+			//close (shell->new_fd);
+		//	shell->new_fd = -1;
 		}
 		printf("should be returning from PARENT process, command = %s, pid = %d\n", shell->args[0], pid);
 	}
@@ -94,7 +96,7 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 		{
 			ft_putstr_fd(shell->args[0], 2);
 			ft_putstr_fd(": Command not found.\n", 2);
-			cmd->cmd_ret = -1;			
+			cmd->cmd_ret = -1;
 		}
 	}
 	//printf("about to return ast_execute: cmd_ret = %d\n", cmd->cmd_ret);

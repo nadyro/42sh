@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/19 12:59:04 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/25 18:50:14 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/25 20:16:49 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,10 @@ void 		implement_redirs(t_shell *shell, t_ast *cmd)
 	while (tmp)	//creates argument table, opens and closes respective fd before launching execution then freeing table and t_redirs before & after redirection
 	{
 		if (tmp->prev && tmp->next)
+		{	
+			printf("closing fd = %d\n", tmp->prev->new_fd);
 			close(tmp->prev->new_fd);
+		}
 		printf("DEBUG implement 3\n");
 		beg = tmp->beg;
 		//end = tmp->end;
@@ -72,11 +75,12 @@ void 		implement_redirs(t_shell *shell, t_ast *cmd)
 			if (shell->tok[tmp->next_re] == TK_LESS || shell->tok[tmp->next_re] == TK_DLESS ||
 				shell->tok[tmp->next_re] == TK_LESSAND)
 			{
+				shell->s_in = dup(0);
 				printf("DEBUG implement 10, next_re = %d\n", tmp->next_re);
-				(ionum != -1) ? close (ionum) : close (0);
+				//(ionum != -1) ? close (ionum) : close (0);
 				printf("DEBUG implement 11, CLOSED 0\n");
 				if (tmp->next)
-				{	
+				{
 					printf("DEBUG implement 12\n");
 					str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
 					tmp->new_fd = open(str, O_RDONLY);
@@ -87,12 +91,8 @@ void 		implement_redirs(t_shell *shell, t_ast *cmd)
 			else
 			{
 				printf("DEBUG implement 14, ionum = %d\n", ionum);
-			//	(ionum != -1) ? close (ionum) : close (1);
-				if (ionum != -1)
-					close (1);
-					//printf("should close 1 here, but need to debug\n");
-				else
-					close (ionum);				
+			//	(ionum != -1) ? close (ionum) : close (1);			
+				shell->s_out = dup(1);
 				printf("DEBUG implement 15, CLOSED 1\n");
 				if (tmp->next)
 				{
@@ -103,6 +103,7 @@ void 		implement_redirs(t_shell *shell, t_ast *cmd)
 						tmp->new_fd = open(str, O_CREAT | O_APPEND | O_WRONLY, 0644);
 					else
 						printf("REDIRECTION #%d STILL NEEDS HANDLING\n", tmp->next_re);
+					dup2(tmp->new_fd, 1);
 					printf("DEBUG implement 16, OPENED %d\n", tmp->new_fd);
 					ft_strdel(&str);
 				}

@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/07/25 17:40:26 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/25 20:14:25 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,9 @@ typedef struct	s_shell
 	int						l;
 	int						st;
 	int						error;
+	int						s_out;
+	int						s_in;
+	int						s_err;
 	t_env					*list;
 }				t_shell;
 
