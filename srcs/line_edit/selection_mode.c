@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/04 22:38:46 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/24 04:09:09 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/24 23:34:53 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,12 @@ static int	selection_tree_aux(t_prompt *prompt, t_stat_data *stat_data,
 	else if (user_entry[0] == 127)
 		selection_delete(prompt, start_pos);
 	else if (user_entry[0] == 27 || prompt->end == 1)
-	{
 		selection_write(prompt, prompt->pos);
-		handle_sig();
-		termanip(33);
-		prompt->end = 0;
-	}
 	else
 		return (0);
+	handle_sig();
+	termanip(33);
+	prompt->end = 0;
 	return (1);
 }
 
@@ -91,8 +89,8 @@ static int	selection_tree(t_prompt *prompt, int nb_user_entry,
 		ft_cursor_up(prompt);
 	else if (nb_user_entry == 3 && user_entry[2] == 66)
 		ft_cursor_down(prompt);
-	else if (nb_user_entry == 3 && user_entry[2] == 68 && prompt->pos > 0)
-		move_cursor(prompt, prompt->pos - 1, true);
+	else if (nb_user_entry == 3 && user_entry[2] == 68)
+		(prompt->pos > 0 ? move_cursor(prompt, prompt->pos - 1, true) : 0);
 	else if (nb_user_entry == 3 && user_entry[2] == 67 &&
 			prompt->pos < prompt->total)
 		move_cursor(prompt, prompt->pos + 1, true);
