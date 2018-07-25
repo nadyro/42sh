@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/19 13:04:22 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/25 16:26:57 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,14 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 	if (shell && shell->args && shell->args[0])
 	{
 		shell->full_path = (has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
+		if (ft_strcmp(shell->args[0], ".") == 0 || ft_strcmp(shell->args[0], "..") == 0)
+		{
+			ft_putstr_fd(shell->args[0], 2);
+			ft_putstr_fd(": Command not found.\n", 2);
+			ft_bzero((void *)(shell->args[0]), ft_strlen(shell->args[0]));
+			ft_strdel(&(shell->full_path));
+			cmd->cmd_ret = -1;			
+		}
 		if (builtin_check(shell) != -1)
 			cmd->cmd_ret = 0;
 		else if (shell->full_path || !(access(shell->args[0], F_OK)))	//if binary exists in PATH, fork and execute
@@ -78,7 +86,7 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 			//printf("launched fork, returning : cmd_ret = %d\n", cmd->cmd_ret);
 			return (cmd->cmd_ret);
 		}
-		else
+		else if (shell->args[0][0] != '\0' && access(shell->args[0], F_OK))
 		{
 			ft_putstr_fd(shell->args[0], 2);
 			ft_putstr_fd(": Command not found.\n", 2);

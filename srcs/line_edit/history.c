@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@stud.42.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:20:53 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/21 12:16:21 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/25 02:51:37 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_node	*add_to_history(char *cmd, t_node *history)
 		free(check);
 		return (history);
 	}
+	free(check);
 	if (!(new = malloc(sizeof(*new))))
 		exit(1);
 	if (!(new->cmd = ft_strdup(cmd)))
@@ -45,12 +46,18 @@ void	history_next(t_prompt *prompt, t_stat_data *stat_data)
 	{
 		prompt->current = prompt->history;
 		if (ft_strlen(prompt->line))
+		{
+			free(stat_data->old_line);
 			((stat_data->old_line = ft_strdup(prompt->line)) ? 0 : exit(0));
+		}
 	}
 	else if (prompt->current->next != NULL)
 	{
 		if (ft_strcmp(prompt->line, prompt->current->cmd))
+		{
+			free(stat_data->old_line);
 			((stat_data->old_line = ft_strdup(prompt->line)) ? 0 : exit(0));
+		}
 		prompt->current = prompt->current->next;
 	}
 	else
