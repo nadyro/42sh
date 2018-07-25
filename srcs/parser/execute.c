@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/23 18:16:28 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/25 18:55:50 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,24 +29,26 @@ static void	launch_exec(t_shell *shell, char *full_path, t_ast *cmd)
 	}
 }
 
-static void	ast_launch(t_shell *shell, t_ast *cmd, int redirs)
+static void	ast_launch(t_shell *shell, t_ast *cmd)
 {
 	pid_t	pid;
 	pid_t	wpid;
 	int		status;
-//IMPORTANT	int		*fd_changed;
 
 	status = 0;
 	pid = fork();
 	if (pid == 0)
 	{
-		//printf("pid == 0 i.e. child process: %s\n", shell->args[0]);
-//IMPORTANT		fd_changed = redirect_check(shell);
+		printf("pid == 0 i.e. child process: %s\n", shell->args[0]);
 		launch_exec(shell, shell->full_path, cmd);
-//		if (fd_changed[1])
-//		{
-//			close(fd_changed[0]);
-//		}
+		if (!(cmd->redirs))
+			printf("ast_launch things cmd->redirs is NULL\n");
+		if (cmd->redirs)
+		{
+			printf("in AST_LAUNCH, CLOSING %d\n", shell->new_fd);
+			close (shell->new_fd);
+			shell->new_fd = -1;
+		}
 	}
 	else if (pid < 0)
 		ft_putstr_fd("error pid less than 0 in lsh launch", 2);
@@ -59,61 +61,36 @@ static void	ast_launch(t_shell *shell, t_ast *cmd, int redirs)
 		{
 			wpid = waitpid(pid, &status, WUNTRACED);
 		}
-		//printf("should be returning from PARENT process, command = %s, pid = %d\n", shell->args[0], pid);
+		printf("should be returning from PARENT process, command = %s, pid = %d\n", shell->args[0], pid);
 	}
 	if (shell->full_path)
 		ft_strdel(&(shell->full_path));
 }
 
-int 		implement_redirs(t_shell *shell, t_ast *cmd)
-{
-	t_redirs	*tmp = NULL;
-	int 		beg;
-	int 		i = 0;
-	char		**next;
-
-	tmp = cmd->redirs;
-	next = (tmp && tmp->next) ? create_arg_table(shell, tmp->next->beg, tmp->next->end);
-	while (tmp)	//creates argument table, opens and closes respective fd before launching execution then freeing table and t_redirs before & after redirection
-	{
-		//beg = tmp->beg;
-		//end = tmp->end;
-		create_arg_table(shell, tmp->beg, tmp->end);
-		if (shell->tok[tmp->next_re] == TK_LESS || shell->tok[tmp->next_re] == TK_DLESS ||
-			shell->tok[tmp->next_re] == TK_LESSAND)
-		{
-			close (0);
-			tmp->new_fd = open(shell->args[i + 1], O_RDONLY);
-		}
-		else
-		{
-			close (1);
-			if (shell->tok[tmp->next_re] == TK_GREAT || shell->tok[tmp->next_re] == TK_GREATAND)
-				tmp->new_fd = open(shell->args[i + 1], O_CREAT | O_TRUNC | O_WRONLY, 0644);
-			else if (shell->tok[tmp->next_re] == TK_DGREAT)
-				tmp->new_fd = open(shell->args[i + 1], O_CREAT | O_APPEND | O_WRONLY, 0644);
-			else
-				printf("REDIRECTION #%d STILL NEEDS HANDLING\n", tmp->next_re);
-		}
-		//still need to carefully test for how command return values work with redirections
-		ast_execute(shell, cmd, 1);
-	}
-}
-
-int			ast_execute(t_shell *shell, t_ast *cmd, int redirs)
+int			ast_execute(t_shell *shell, t_ast *cmd)
 {
 	if (shell && shell->args && shell->args[0])
 	{
 		shell->full_path = (has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
+		if (ft_strcmp(shell->args[0], ".") == 0 || ft_strcmp(shell->args[0], "..") == 0)
+		{
+			ft_putstr_fd(shell->args[0], 2);
+			ft_putstr_fd(": Command not found.\n", 2);
+			ft_bzero((void *)(shell->args[0]), ft_strlen(shell->args[0]));
+			ft_strdel(&(shell->full_path));
+			cmd->cmd_ret = -1;			
+		}
 		if (builtin_check(shell) != -1)
 			cmd->cmd_ret = 0;
 		else if (shell->full_path || !(access(shell->args[0], F_OK)))	//if binary exists in PATH, fork and execute
 		{
-			ast_launch(shell, cmd, 0);
+			printf("sending to ast_launch with following args table : \n");
+			ft_print_table(shell->args);
+			ast_launch(shell, cmd);
 			//printf("launched fork, returning : cmd_ret = %d\n", cmd->cmd_ret);
 			return (cmd->cmd_ret);
 		}
-		else
+		else if (shell->args[0][0] != '\0' && access(shell->args[0], F_OK))
 		{
 			ft_putstr_fd(shell->args[0], 2);
 			ft_putstr_fd(": Command not found.\n", 2);

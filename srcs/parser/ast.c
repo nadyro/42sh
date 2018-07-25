@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/23 18:46:20 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/25 18:56:07 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,9 @@ void		create_arg_table(t_shell *shell, int beg, int end)
 	int		last = 0;
 	char	*str = NULL;
 	
-	if ((end - beg) < 0)
+	if (end < beg)
 	{
+		printf("end is less than big in create arg table, setting shell->args to NULL\n");
 		shell->args = NULL;
 		return ;
 	}
@@ -127,7 +128,6 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 	int			v1 = 0;
 	int			v2 = 0;
 	int 		ret = 0;
-	t_redirs	*tmp;
 
 	if (ast == NULL)
 	{
@@ -154,7 +154,7 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 			//while (*str != shell->line[shell->tok[ast->end] + shell->tok[ast->end + 2]])
 			//	ft_putchar(*str++);			
 			create_arg_table(shell, ast->beg, ast->end);
-			ast_execute(shell, ast, 0);
+			ast_execute(shell, ast);
 		}
 		//printf("DEBUG 3, AFTER executing %s, cmd->ret = %d\n", ast->arg, ast->cmd_ret);
 		if (shell->args)

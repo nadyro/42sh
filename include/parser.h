@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:27:44 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/23 18:44:15 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/25 17:45:15 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ typedef struct	s_redirs
 	int						end;
 	int						next_re;
 	int 					new_fd;
-	//int						handled;
+	int						handled;
 	struct s_redirs			*prev;
 	struct s_redirs			*next;
 }				t_redirs;
@@ -47,9 +47,10 @@ t_ast		*fill_leftast(t_ast *parent);
 t_ast		*fill_rightast(t_ast *parent);
 t_ast		*init_ast(t_shell *shell);
 void		ast_loop(t_shell *shell, t_ast *ast);
-int			ast_execute(t_shell *shell, t_ast *cmd, int redirs);
+int			ast_execute(t_shell *shell, t_ast *cmd);
 int	        *redirect_check(t_shell *shell);
 int			is_redirect(t_shell *shell, t_ast *ast, int beg, int end);
 void		fill_redirs(t_shell *shell, t_ast *ast, int beg, int redir);
+void 		implement_redirs(t_shell *shell, t_ast *cmd);
 
 #endif
