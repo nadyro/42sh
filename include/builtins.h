@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/07/18 14:44:26 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/26 18:02:22 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # define C11 "\033[43m\033[30m"
 
 # include "../libft/libft.h"
+# include "sh_line_edit.h"
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/dir.h>
@@ -40,8 +41,6 @@
 # include <grp.h>
 # include <time.h>
 # include <errno.h>
-
-
 
 typedef struct	s_env
 {
@@ -66,6 +65,7 @@ typedef struct	s_shell
 	int						st;
 	int						error;
 	t_env					*list;
+	t_node					*history;
 }				t_shell;
 
 t_env			*env_setup(char **env);
@@ -85,7 +85,7 @@ int				ft_exec(t_shell *shell, char **env);
 char			**env_to_tab(t_env *list);
 char			*arg_full_path(t_shell *shell);
 int				cd_path(t_shell *shell);
-void			free_table(char **tab);
+void			free_table(char **tabs);
 int				builtin_check(t_shell *shell);
 void			free_env(t_env *list);
 int				has_paths(t_shell *shell, int cdpath);

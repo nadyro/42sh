@@ -3,41 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/15 13:50:00 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/18 17:13:57 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/26 18:06:12 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 #include <stdio.h>
 
-void		free_table(char **tab)
+void		free_table(char **tabs)
 {
 	int		i;
 
 	i = 0;
-	if (tab && !(tab[0]))
+	if (tabs && !(tabs[0]))
 	{
-		//printf("about to free tab in free_table, address = %p\n", tab);
-		free(tab);
+		//printf("about to free tabs in free_table, address = %p\n", tabs);
+		free(tabs);
 	}
 	else
 	{
 		//printf("going to print all elements of the following table : \n");
-		//ft_print_table(tab);
-		while (tab && tab[i] != 0)
+		//ft_print_table(tabs);
+		while (tabs && tabs[i] != 0)
 		{
-		//	printf("about to free : %s, address = %p\n", tab[i], tab[i]);
-			ft_strdel(&(tab[i++]));
+		//	printf("about to free : %s, address = %p\n", tabs[i], tabs[i]);
+			ft_strdel(&(tabs[i++]));
 		}
-		if (tab != NULL)
+		if (tabs != NULL)
 		{
-		//	printf("about to free tab after deleting all string elements, tab address = %p\n", tab);
-			free(tab);
+		//	printf("about to free tabs after deleting all string elements, tabs address = %p\n", tabs);
+			free(tabs);
 		}
-		tab = NULL;
+		tabs = NULL;
 	}
 }
 

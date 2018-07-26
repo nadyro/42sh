@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 15:36:41 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/11 13:14:54 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/07/26 18:05:03 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int				ash_env(t_shell *shell)
 
 char			**env_to_tab(t_env *list)
 {
-	char	**tab;
+	char	**tabs;
 	int		count;
 	t_env	*tmp;
 	char	*str;
@@ -121,17 +121,17 @@ char			**env_to_tab(t_env *list)
 		count++;
 		tmp = tmp->next;
 	}
-	if (!(tab = (char **)malloc(sizeof(char *) * (count + 1))))
+	if (!(tabs = (char **)malloc(sizeof(char *) * (count + 1))))
 		return (NULL);
-	tab[count] = 0;
+	tabs[count] = 0;
 	tmp = list;
 	count = 0;
 	while (tmp)
 	{
 		str = ft_strjoin(tmp->var, "=");
-		tab[count++] = (tmp->val) ? ft_strjoin(str, tmp->val) : ft_strdup(str);
+		tabs[count++] = (tmp->val) ? ft_strjoin(str, tmp->val) : ft_strdup(str);
 		ft_strdel(&str);
 		tmp = tmp->next;
 	}
-	return (tab);
+	return (tabs);
 }

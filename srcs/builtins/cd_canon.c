@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_canon.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/09 15:16:39 by pbie              #+#    #+#             */
-/*   Updated: 2018/06/11 13:14:12 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/07/26 18:06:32 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,13 @@ static int	cd_get_last(t_shell *shell, char ***split)
 {
 	int		dotdots = 0;
 	int		i = 0;
-	char	**tab;
+	char	**tabs;
 	
-	tab = *split;
-	while (tab && tab[i])
+	tabs = *split;
+	while (tabs && tabs[i])
 	{
-		//printf("in cd_get_last loop, tab[i] = %s\n", tab[i]);
-		if (ft_strcmp(tab[i], "..") == 0)
+		//printf("in cd_get_last loop, tabs[i] = %s\n", tabs[i]);
+		if (ft_strcmp(tabs[i], "..") == 0)
 			dotdots++;
 		i++;
 	}
@@ -59,7 +59,7 @@ static int	cd_get_last(t_shell *shell, char ***split)
 
 static void handle_dot_dots(t_shell *shell)
 {
-	char	**tab;
+	char	**tabs;
 	int		i = 0;
 	int		last = 0;
 	int		deleted_match = 0;
@@ -67,24 +67,24 @@ static void handle_dot_dots(t_shell *shell)
 	char	*tmp = NULL;
 
    // printf("at top of handle_dot_dots, ARG = %s\n", ARG);
-	tab = (shell->st > -1) ? ft_strsplit(ARG, '/') : NULL;
-	if ((last = cd_get_last(shell, &tab)) < 0)
+	tabs = (shell->st > -1) ? ft_strsplit(ARG, '/') : NULL;
+	if ((last = cd_get_last(shell, &tabs)) < 0)
 		return ;
 	clean = ft_strdup("/");
     //printf("cd canon 2 debug: i = %dlast = %d\n", i, last);
-	while (tab && i < last && i >= 0)
+	while (tabs && i < last && i >= 0)
 	{
       //  printf("top of cd canon 2 debug: i = %d\n", i);
-		if (tab[i] && ft_strcmp(tab[i], "..") == 0)
+		if (tabs[i] && ft_strcmp(tabs[i], "..") == 0)
 		{
 			deleted_match = 0;
-			ft_strdel(&tab[i--]);
+			ft_strdel(&tabs[i--]);
         //    printf("cd_canon DEBUG : i = %d\n", i);
 			while (i >= 0 && deleted_match == 0)
 			{
-                if (tab[i])
+                if (tabs[i])
                 {
-                    ft_strdel(&tab[i]);
+                    ft_strdel(&tabs[i]);
                     deleted_match = 1;
                 }
 				else if (deleted_match == 0)
@@ -96,17 +96,17 @@ static void handle_dot_dots(t_shell *shell)
 	i = 0;
 	while (i < last)
 	{
-		if (tab[i])
+		if (tabs[i])
 		{
-			tmp = ft_strjoin(clean, tab[i]);
+			tmp = ft_strjoin(clean, tabs[i]);
 			ft_strdel(&clean);
-			ft_strdel(&tab[i]);
+			ft_strdel(&tabs[i]);
 			clean = ft_strjoin(tmp, "/");
 			ft_strdel(&tmp);
 		}
 		i++;
 	}
-	free(tab);
+	free(tabs);
 	if (clean[ft_strlen(clean) - 1] == '/')
 		clean[ft_strlen(clean) - 1] = '\0';
 	ft_strdel(&ARG);
@@ -119,30 +119,30 @@ void	    cd_canon(t_shell *shell)
 	char	*clean = NULL;
 	char	*tmp = NULL;
 	int		i = 0;
-	char	**tab;
+	char	**tabs;
 
-	tab = (shell->st > -1) ? ft_strsplit(ARG, '/') : NULL;
+	tabs = (shell->st > -1) ? ft_strsplit(ARG, '/') : NULL;
 	if (ARG[0] != '/')
 		grab_pwd(shell, &clean);
 	else
 		clean = ft_strdup("/");
-	while (tab && tab[i])
+	while (tabs && tabs[i])
 	{
-		if (tab[i] && ft_strcmp(tab[i], "."))
+		if (tabs[i] && ft_strcmp(tabs[i], "."))
 		{
 			if (!clean)
-				clean = ft_strjoin(tab[i], "/");
-			else if (clean && tab[i])
+				clean = ft_strjoin(tabs[i], "/");
+			else if (clean && tabs[i])
 			{
-				tmp = ft_strjoin(clean, tab[i]);
+				tmp = ft_strjoin(clean, tabs[i]);
 				ft_strdel(&clean);
-				clean = (tab[i+1]) ? ft_strjoin(tmp, "/") : ft_strdup(tmp);
+				clean = (tabs[i+1]) ? ft_strjoin(tmp, "/") : ft_strdup(tmp);
 				ft_strdel(&tmp);
 			}
 		}
 		i++;
 	}
-	free_table(tab);
+	free_table(tabs);
 	ft_strdel(&(ARG));
 	ARG = ft_strdup(clean);
 	ft_strdel(&clean);
