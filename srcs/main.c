@@ -7,7 +7,7 @@
 
 t_prompt	*prompt;
 
-static char	*get_pwd(void)
+char	*get_pwd(void)
 {
 	int		i;
 	char	pwd[1024];

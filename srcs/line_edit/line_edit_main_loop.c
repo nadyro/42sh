@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/25 02:48:37 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/26 06:01:14 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ static char	*line_edit_main_loop_aux(t_prompt *prompt, t_stat_data *stat_data)
 			nb_user_entry = read(1, user_entry, 6);
 			if (user_entry[0] == 27 || user_entry[0] == 127)
 				esc_react(prompt, nb_user_entry, user_entry, stat_data);
+			else if (!ft_isprint(user_entry[0]) && user_entry[0] != '\n')
+				sig_react(prompt, user_entry[0]);
 			else
 			{
 				((prompt->buf = ft_strdup(user_entry)) != NULL ? 0 : exit(1));
@@ -66,6 +68,7 @@ char		*line_edit_main_loop(char *d_prompt, t_node *history)
 	static t_stat_data	*stat_data = NULL;
 
 	termanip(0);
+	termanip(34);
 	write(1, d_prompt, ft_strlen(d_prompt));
 	stat_data = (stat_data ? stat_data : malloc_stat());
 	prompt = malloc_prompt(prompt, stat_data, d_prompt);

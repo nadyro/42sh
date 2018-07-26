@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/24 06:48:51 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/26 06:03:01 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ typedef struct	s_stat_data
 	char		*copied;
 }				t_stat_data;
 
+char			*get_pwd(void);
 void			termanip(int sig);
 char			*line_edit_main_loop(char *d_prompt, t_node *history);
 void			get_cursor_pos(t_coord *actualize, t_prompt *prompt);
@@ -85,9 +86,11 @@ void			ft_cursor_word_left(t_prompt *prompt);
 void			ft_cursor_word_right(t_prompt *prompt);
 void			ft_cursor_up(t_prompt *prompt);
 void			ft_cursor_down(t_prompt *prompt);
+void			sig_react(t_prompt *prompt, char c);
 void			handle_sig(void);
 void			ignore_handle(void);
 void			reverse_handle(void);
+void			term_clear(void);
 t_prompt		*malloc_prompt(t_prompt *prompt, t_stat_data *data,
 				char *d_prompt);
 t_stat_data		*malloc_stat(void);

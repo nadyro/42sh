@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/24 13:39:16 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/21 15:19:39 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/26 06:09:59 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,14 @@ void		secure_stock(t_prompt *prompt, char *to_stock)
 	mem = 0;
 	while (to_stock[mem])
 		prompt_stock(prompt, &to_stock[mem++]);
+}
+
+void		sig_react(t_prompt *prompt, char c)
+{
+	if (c == 4 && prompt->total == 0)
+		termanip(42);
+	else if (c == 12)
+		term_clear();
 }
 
 int			data_react(t_prompt *prompt)
@@ -46,7 +54,6 @@ int			data_react(t_prompt *prompt)
 		tputs(tgetstr("ce", NULL), 1, ft_putshit);
 		return (1);
 	}
-	(prompt->buf[0] == 4 && prompt->total == 0 ? termanip(42) : 0);
 	free(prompt->buf);
 	prompt->buf = NULL;
 	return (0);
