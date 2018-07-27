@@ -17,6 +17,17 @@
 #include "builtins.h"
 #include <stdio.h>
 
+static void	restore_std_fds(t_shell *shell)
+{
+	dup2(shell->s_in, 0);
+	close(shell->s_in);
+	dup2(shell->s_out, 1);
+	close(shell->s_out);
+	dup2(shell->s_err, 2);
+	close(shell->s_err);
+	close(shell->new_fd);
+}
+
 static void	launch_exec(t_shell *shell, char *full_path, t_ast *cmd)
 {
 	if (execve(shell->args[0], shell->args, shell->envv) == -1)
@@ -39,7 +50,7 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 	pid = fork();
 	if (pid == 0)
 	{
-		printf("pid == 0 i.e. child process: %s\n", shell->args[0]);
+		//printf("pid == 0 i.e. child process: %s\n", shell->args[0]);
 		launch_exec(shell, shell->full_path, cmd);
 	}
 	else if (pid < 0)
@@ -53,17 +64,9 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 		{
 			wpid = waitpid(pid, &status, WUNTRACED);
 		}
-		printf("after execution, closing shell->new_fd: %d and setting to -1\n", shell->new_fd);
-		if (shell->new_fd != -1)
-		{
-			dup2(shell->s_out, 1);
-			close(shell->s_out);
-			//dup2(shell->s_in, 0);
-			//close(shell->s_in);
-			//close (shell->new_fd);
-		//	shell->new_fd = -1;
-		}
-		printf("should be returning from PARENT process, command = %s, pid = %d\n", shell->args[0], pid);
+		if (cmd->redirs)
+			restore_std_fds(shell);
+		//printf("should be returning from PARENT process, command = %s, pid = %d\n", shell->args[0], pid);
 	}
 	if (shell->full_path)
 		ft_strdel(&(shell->full_path));
@@ -86,8 +89,6 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 			cmd->cmd_ret = 0;
 		else if (shell->full_path || !(access(shell->args[0], F_OK)))	//if binary exists in PATH, fork and execute
 		{
-			printf("sending to ast_launch with following args table : \n");
-			ft_print_table(shell->args);
 			ast_launch(shell, cmd);
 			//printf("launched fork, returning : cmd_ret = %d\n", cmd->cmd_ret);
 			return (cmd->cmd_ret);
@@ -96,6 +97,8 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 		{
 			ft_putstr_fd(shell->args[0], 2);
 			ft_putstr_fd(": Command not found.\n", 2);
+			if (cmd->redirs)
+				restore_std_fds(shell);
 			cmd->cmd_ret = -1;
 		}
 	}

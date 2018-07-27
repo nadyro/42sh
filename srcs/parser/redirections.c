@@ -51,9 +51,10 @@ static void		shell_args_from_redirs(t_shell *shell, t_ast *cmd)
 
 	tmp = cmd->redirs;
 	beg = tmp->beg;
-	if (tmp->beg == tmp->end == tmp->next_re)
+	if (tmp->beg == tmp->next_re)
 	{
 		handle_prefix_syntax(shell, cmd);
+		ft_print_table(shell->args);
 		return ;
 	}
 	while (beg <= tmp->end)
@@ -74,7 +75,7 @@ void 		implement_redirs(t_shell *shell, t_ast *cmd)
 	t_redirs	*tmp = NULL;
 	int 		beg;
 	char		*str = NULL;
-	int			ionum = -1;
+	//int			ionum = -1;
 
 	shell_args_from_redirs(shell, cmd);
 	tmp = cmd->redirs;
@@ -88,39 +89,41 @@ void 		implement_redirs(t_shell *shell, t_ast *cmd)
 			if (shell->tok[tmp->next_re] == TK_LESS || shell->tok[tmp->next_re] == TK_DLESS ||
 				shell->tok[tmp->next_re] == TK_LESSAND)
 			{
-				shell->s_in = dup(0);
+				close (0);
 				//(ionum != -1) ? close (ionum) : close (0);
 				if (tmp->next)
 				{
 					str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
-					tmp->new_fd = open(str, O_RDONLY);
+					if ((tmp->new_fd = open(str, O_RDONLY)) < 0)
+						printf("FD ERROR in < redirection, need to handle\n");
 					ft_strdel(&str);
 				}
 			}
-			else
+			else	//should be all non less-than redirections
 			{
 			//	(ionum != -1) ? close (ionum) : close (1);			
-				shell->s_out = dup(1);
+				close (1);
 				if (tmp->next)
 				{
 					str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
 					if (shell->tok[tmp->next_re] == TK_GREAT || shell->tok[tmp->next_re] == TK_GREATAND)
-						tmp->new_fd = open(str, O_CREAT | O_TRUNC | O_WRONLY, 0644);
-					else if (shell->tok[tmp->next_re] == TK_DGREAT)
-						tmp->new_fd = open(str, O_CREAT | O_APPEND | O_WRONLY, 0644);
-					else
-						printf("REDIRECTION #%d STILL NEEDS HANDLING\n", tmp->next_re);
-					dup2(tmp->new_fd, 1);
+						if ((tmp->new_fd = open(str, O_CREAT | O_TRUNC | O_WRONLY, 0644)) < 0)
+							printf("FD ERROR in > redirection, need to handle\n");
+					if (shell->tok[tmp->next_re] == TK_DGREAT)
+						if ((tmp->new_fd = open(str, O_CREAT | O_APPEND | O_WRONLY, 0644)) < 0)
+							printf("FD ERROR in >> redirection, need to handle\n");
+				//	else
+				//		printf("REDIRECTION #%d STILL NEEDS HANDLING\n", tmp->next_re), this is meant for letting other token squeek through;
+					//dup2(tmp->new_fd, 1);
 					ft_strdel(&str);
 				}
 			}
 		}
 		//still need to carefully test for how command return values work with redirections
 		if (!(tmp->next))
-			shell->new_fd = (tmp->next_re == -1) ? tmp->prev->new_fd : tmp->new_fd;
+			shell->new_fd = tmp->new_fd;
 		tmp = tmp->next;	//if tmp->next, free list through tmp->prev
 	}
-	printf("DEBUG implement 20, shell->new_fd = %d\n", shell->new_fd);
 	ast_execute(shell, cmd);
 }
 
@@ -133,13 +136,12 @@ void		fill_redirs(t_shell *shell, t_ast *ast, int beg, int redir)
 		return ;
 	ast->redirs = tmp;
 	tmp->beg = beg;
-	tmp->end = redir - 3;
+	tmp->end = (beg != redir) ? redir - 3 : redir;
 	tmp->ionum = -1;
 	tmp->next_re = redir;
-	tmp->handled = 0;
 	tmp->prev = NULL;
 	tmp->next = NULL;
-	while ((ret = is_redirect(shell, ast, redir + 3, ast->end)))
+	while ((ret = is_redirect(shell, ast, redir + 3, ast->end)) != -1)
 	{
 		if (!(tmp->next = (t_redirs *)malloc(sizeof(t_redirs))))
 			return ;
@@ -148,33 +150,10 @@ void		fill_redirs(t_shell *shell, t_ast *ast, int beg, int redir)
 		tmp->beg = redir + 3;
 		tmp->end = ret - 3;
 		tmp->ionum = -1;
-		tmp->handled = 0;
 		tmp->next_re = ret;
 		redir = ret;
 		tmp->next = NULL;
 	}
-}
-
-static void	display_redir_list(t_shell *shell, t_ast *ast)
-{
-	t_redirs	*tmp;
-	char		*str;
-	int			i = 1;
-
-	tmp = ast->redirs;
-	while (tmp->next)
-	{
-		str = ft_strndup(shell->line + shell->tok[tmp->beg + 1], shell->tok[tmp->beg + 2]);
-		ft_strdel(&str);
-		tmp = tmp->next;
-	}
-	while (tmp)
-	{
-		str = ft_strndup(shell->line + shell->tok[tmp->beg + 1], shell->tok[tmp->beg + 2]);
-		printf("redir list item %d = %s\n", i++, str);;
-		ft_strdel(&str);
-		tmp = tmp->prev;
-	}	
 }
 
 int			is_redirect(t_shell *shell, t_ast *ast, int beg, int end)
@@ -201,13 +180,9 @@ int			is_redirect(t_shell *shell, t_ast *ast, int beg, int end)
 		tmp->end = ast->end;
 		tmp->ionum = -1;
 		tmp->next_re = -1;
-		tmp->handled = 0;
 		tmp->next = NULL;
-	//	printf("t_redirs is officially completed, now sending to TEST DISPLAY function\n");
-	//	display_redir_list(shell, ast);
 	}
-	return (0);
-
+	return (-1);
 }
 
 int	        *redirect_check(t_shell *shell)
