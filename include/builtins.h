@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/07/18 14:44:26 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/25 20:14:25 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@
 # include <time.h>
 # include <errno.h>
 
-
-
 typedef struct	s_env
 {
 	char					*var;
@@ -60,11 +58,15 @@ typedef struct	s_shell
 	char					*full_path;
 	char					*line;
 	int 					*tok;
+	int						new_fd;
 	int						i;
 	int						p;
 	int						l;
 	int						st;
 	int						error;
+	int						s_out;
+	int						s_in;
+	int						s_err;
 	t_env					*list;
 }				t_shell;
 
@@ -85,7 +87,7 @@ int				ft_exec(t_shell *shell, char **env);
 char			**env_to_tab(t_env *list);
 char			*arg_full_path(t_shell *shell);
 int				cd_path(t_shell *shell);
-void			free_table(char **tab);
+void			free_table(char **tabs);
 int				builtin_check(t_shell *shell);
 void			free_env(t_env *list);
 int				has_paths(t_shell *shell, int cdpath);

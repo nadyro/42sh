@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/26 06:01:14 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/27 02:41:56 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,18 @@ void		ft_flush(t_prompt *prompt)
 	termanip(33);
 }
 
+static void	prompt_clean()
+{
+	free(prompt->line);
+	if (!(prompt->line = ft_strdup("\0")))
+		exit(1);
+	prompt->pos = 0;
+	prompt->total = 0;
+	prompt->current = NULL;
+	term_clear();
+	write(1, "Your line was full, usually you don't need these, are you maybe sleeping on your keyboard?", 90);
+}
+
 static char	*line_edit_main_loop_aux(t_prompt *prompt, t_stat_data *stat_data)
 {
 	char	user_entry[7];
@@ -44,9 +56,10 @@ static char	*line_edit_main_loop_aux(t_prompt *prompt, t_stat_data *stat_data)
 			((to_return = ft_strdup(prompt->line)) ? 0 : exit(0));
 		else
 		{
+			(prompt->origin->y == 0xffffffffffffffff ? prompt_clean() : 0);
 			ft_bzero(user_entry, 7);
 			nb_user_entry = read(1, user_entry, 6);
-			if (user_entry[0] == 27 || user_entry[0] == 127)
+			if (user_entry[0] == 27 || user_entry[0] == 127 || user_entry[0] == 9)
 				esc_react(prompt, nb_user_entry, user_entry, stat_data);
 			else if (!ft_isprint(user_entry[0]) && user_entry[0] != '\n')
 				sig_react(prompt, user_entry[0]);
