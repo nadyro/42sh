@@ -87,7 +87,7 @@ int				ft_exec(t_shell *shell, char **env);
 char			**env_to_tab(t_env *list);
 char			*arg_full_path(t_shell *shell);
 int				cd_path(t_shell *shell);
-void			free_table(char **tab);
+void			free_table(char **tabs);
 int				builtin_check(t_shell *shell);
 void			free_env(t_env *list);
 int				has_paths(t_shell *shell, int cdpath);
