@@ -26,6 +26,49 @@
 **	comes after "<", open as READONLY instead of WRITEONLY
 */
 
+static void		handle_prefix_syntax(t_shell *shell, t_ast *cmd)
+{
+	t_redirs	*tmp = NULL;
+
+	//for handling : > FILENAME CMD WORD WORD WORD into CMD WORD WORD WORD > FILENAME ..... IO
+	tmp = cmd->redirs;
+	if (tmp->next && (tmp->next->beg + 3) <= tmp->next->end)
+	{
+		/* here we presume that shell considers everything that follows FILENAME to be CMD + WORDS when written in prefix syntax */
+		tmp->beg = tmp->next->beg + 3;
+		tmp->end = tmp->next->end;
+		tmp->next->end = tmp->next->beg;
+		create_arg_table(shell, tmp->beg, tmp->end);
+	}
+	else
+		shell->args = NULL;
+}
+
+static void		shell_args_from_redirs(t_shell *shell, t_ast *cmd)
+{
+	t_redirs	*tmp = NULL;
+	int 		beg;
+
+	tmp = cmd->redirs;
+	beg = tmp->beg;
+	if (tmp->beg == tmp->end == tmp->next_re)
+	{
+		handle_prefix_syntax(shell, cmd);
+		return ;
+	}
+	while (beg <= tmp->end)
+	{
+		if (shell->tok[beg] == TK_IO_NUMBER)
+		{
+			tmp->ionum = beg;
+			create_arg_table(shell, tmp->beg, tmp->ionum - 3);
+			return ;
+		}
+		beg += 3;
+	}
+	create_arg_table(shell, tmp->beg, tmp->end);
+}
+
 void 		implement_redirs(t_shell *shell, t_ast *cmd)
 {
 	t_redirs	*tmp = NULL;
@@ -33,67 +76,31 @@ void 		implement_redirs(t_shell *shell, t_ast *cmd)
 	char		*str = NULL;
 	int			ionum = -1;
 
-	printf("DEBUG implement 1\n");
+	shell_args_from_redirs(shell, cmd);
 	tmp = cmd->redirs;
-	printf("DEBUG implement 2\n");
-	while (tmp)	//creates argument table, opens and closes respective fd before launching execution then freeing table and t_redirs before & after redirection
+	while (tmp)	//opens and closes respective fd before launching execution
 	{
 		if (tmp->prev && tmp->next)
-		{	
-			printf("closing fd = %d\n", tmp->prev->new_fd);
 			close(tmp->prev->new_fd);
-		}
-		printf("DEBUG implement 3\n");
 		beg = tmp->beg;
-		//end = tmp->end;
-		//should consider a clause for create arg table to handle prefix, ie if end < beg, means redir was first item, ie handle as prefix
-//		create_arg_table(shell, tmp->beg, tmp->end);
-		while (beg <= tmp->end)
-		{
-			printf("DEBUG implement 4\n");
-			if (shell->tok[beg] == TK_IO_NUMBER)
-			{
-				printf("DEBUG implement 5\n");
-				str = ft_strndup(shell->line + shell->tok[beg + 1], shell->tok[beg + 2]);
-				ionum = ft_atoi(str);
-				ft_strdel(&str);
-				printf("DEBUG implement 6, ionum = %d\n", ionum);
-				if (!(shell->args))
-					create_arg_table(shell, tmp->beg, beg - 3);
-			}
-			else
-				beg += 3;
-			printf("DEBUG implement 7\n");
-		}
-		beg = tmp->beg;
-		printf("DEBUG implement 8\n");
-		if (ionum == -1 && !(shell->args))
-			create_arg_table(shell, tmp->beg, tmp->end);
-		printf("DEBUG implement 9\n");
-		if (tmp->next_re != -1)
+		if (tmp->next)
 		{
 			if (shell->tok[tmp->next_re] == TK_LESS || shell->tok[tmp->next_re] == TK_DLESS ||
 				shell->tok[tmp->next_re] == TK_LESSAND)
 			{
 				shell->s_in = dup(0);
-				printf("DEBUG implement 10, next_re = %d\n", tmp->next_re);
 				//(ionum != -1) ? close (ionum) : close (0);
-				printf("DEBUG implement 11, CLOSED 0\n");
 				if (tmp->next)
 				{
-					printf("DEBUG implement 12\n");
 					str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
 					tmp->new_fd = open(str, O_RDONLY);
 					ft_strdel(&str);
-					printf("DEBUG implement 13, OPENED %d\n", tmp->new_fd);
 				}
 			}
 			else
 			{
-				printf("DEBUG implement 14, ionum = %d\n", ionum);
 			//	(ionum != -1) ? close (ionum) : close (1);			
 				shell->s_out = dup(1);
-				printf("DEBUG implement 15, CLOSED 1\n");
 				if (tmp->next)
 				{
 					str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
@@ -104,18 +111,14 @@ void 		implement_redirs(t_shell *shell, t_ast *cmd)
 					else
 						printf("REDIRECTION #%d STILL NEEDS HANDLING\n", tmp->next_re);
 					dup2(tmp->new_fd, 1);
-					printf("DEBUG implement 16, OPENED %d\n", tmp->new_fd);
 					ft_strdel(&str);
 				}
 			}
 		}
 		//still need to carefully test for how command return values work with redirections
-		printf("DEBUG implement 17\n");
 		if (!(tmp->next))
 			shell->new_fd = (tmp->next_re == -1) ? tmp->prev->new_fd : tmp->new_fd;
 		tmp = tmp->next;	//if tmp->next, free list through tmp->prev
-		if (!tmp)
-			printf("DEBUG implement 19, tmp is NULL\n");
 	}
 	printf("DEBUG implement 20, shell->new_fd = %d\n", shell->new_fd);
 	ast_execute(shell, cmd);
@@ -126,33 +129,30 @@ void		fill_redirs(t_shell *shell, t_ast *ast, int beg, int redir)
 	t_redirs	*tmp;
 	int 		ret;
 
-	printf("DEBUG 1, initial redir pos = %d\n", redir);
 	if (!(tmp = (t_redirs *)malloc(sizeof(t_redirs))))
 		return ;
-	printf("DEBUG 2\n");
 	ast->redirs = tmp;
 	tmp->beg = beg;
 	tmp->end = redir - 3;
+	tmp->ionum = -1;
 	tmp->next_re = redir;
-	printf("DEBUG 3\n");
 	tmp->handled = 0;
 	tmp->prev = NULL;
 	tmp->next = NULL;
 	while ((ret = is_redirect(shell, ast, redir + 3, ast->end)))
 	{
-		printf("returned %d from is_direct check in fill_redirs\n", ret);
 		if (!(tmp->next = (t_redirs *)malloc(sizeof(t_redirs))))
 			return ;
 		tmp->next->prev = tmp;
 		tmp = tmp->next;
 		tmp->beg = redir + 3;
 		tmp->end = ret - 3;
+		tmp->ionum = -1;
 		tmp->handled = 0;
 		tmp->next_re = ret;
 		redir = ret;
 		tmp->next = NULL;
 	}
-	printf("DEBUG 4, ret = %d\n", ret);
 }
 
 static void	display_redir_list(t_shell *shell, t_ast *ast)
@@ -165,11 +165,9 @@ static void	display_redir_list(t_shell *shell, t_ast *ast)
 	while (tmp->next)
 	{
 		str = ft_strndup(shell->line + shell->tok[tmp->beg + 1], shell->tok[tmp->beg + 2]);
-		printf("redir list item %d = %s\n", i++, str);;
 		ft_strdel(&str);
 		tmp = tmp->next;
 	}
-	printf("now displaying backwards navigation of redir list\n");
 	while (tmp)
 	{
 		str = ft_strndup(shell->line + shell->tok[tmp->beg + 1], shell->tok[tmp->beg + 2]);
@@ -201,11 +199,12 @@ int			is_redirect(t_shell *shell, t_ast *ast, int beg, int end)
 		tmp = tmp->next;
 		tmp->beg = tmp->prev->next_re + 3;
 		tmp->end = ast->end;
+		tmp->ionum = -1;
 		tmp->next_re = -1;
 		tmp->handled = 0;
 		tmp->next = NULL;
-		printf("t_redirs is officially completed, now sending to TEST DISPLAY function\n");
-		display_redir_list(shell, ast);
+	//	printf("t_redirs is officially completed, now sending to TEST DISPLAY function\n");
+	//	display_redir_list(shell, ast);
 	}
 	return (0);
 

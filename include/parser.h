@@ -21,6 +21,7 @@ typedef struct	s_redirs
 	int						end;
 	int						next_re;
 	int 					new_fd;
+	int 					ionum; // ft_atoi(str) with str = ft_strndup(shell->line + shell->tok[beg + 1], shell->tok[beg + 2]);
 	int						handled;
 	struct s_redirs			*prev;
 	struct s_redirs			*next;
