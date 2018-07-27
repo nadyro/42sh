@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 23:36:42 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/26 06:01:02 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/27 07:33:40 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ void		write_data(t_prompt *prompt, char *to_display, size_t size)
 	size_t	tmp;
 	size_t	displayed;
 
+	if (prompt->origin->y == 0xffffffffffffffff)
+		return;
 	move_cursor(prompt, prompt->pos, true);
 	tputs(tgetstr("cd", NULL), 1, ft_putshit);
 	displayed = prompt->total - ft_strlen(to_display);
@@ -51,6 +53,8 @@ void		write_data(t_prompt *prompt, char *to_display, size_t size)
 		tputs(tgetstr("sf", NULL), 1, ft_putshit);
 		prompt->origin->y--;
 	}
+	if (prompt->origin->y == 0xffffffffffffffff)
+		return;
 	while (size != 0)
 	{
 		move_cursor(prompt, displayed, false);
