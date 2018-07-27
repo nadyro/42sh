@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/25 16:26:57 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/25 20:22:19 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,17 @@
 #include <stdio.h>
 #include "builtins.h"
 #include <stdio.h>
+
+static void	restore_std_fds(t_shell *shell)
+{
+	dup2(shell->s_in, 0);
+	close(shell->s_in);
+	dup2(shell->s_out, 1);
+	close(shell->s_out);
+	dup2(shell->s_err, 2);
+	close(shell->s_err);
+	close(shell->new_fd);
+}
 
 static void	launch_exec(t_shell *shell, char *full_path, t_ast *cmd)
 {
@@ -34,19 +45,13 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 	pid_t	pid;
 	pid_t	wpid;
 	int		status;
-	int		*fd_changed;
 
 	status = 0;
 	pid = fork();
 	if (pid == 0)
 	{
 		//printf("pid == 0 i.e. child process: %s\n", shell->args[0]);
-		fd_changed = redirect_check(shell);
 		launch_exec(shell, shell->full_path, cmd);
-		if (fd_changed[1])
-		{
-			close(fd_changed[0]);
-		}
 	}
 	else if (pid < 0)
 		ft_putstr_fd("error pid less than 0 in lsh launch", 2);
@@ -59,6 +64,8 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 		{
 			wpid = waitpid(pid, &status, WUNTRACED);
 		}
+		if (cmd->redirs)
+			restore_std_fds(shell);
 		//printf("should be returning from PARENT process, command = %s, pid = %d\n", shell->args[0], pid);
 	}
 	if (shell->full_path)
@@ -90,7 +97,9 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 		{
 			ft_putstr_fd(shell->args[0], 2);
 			ft_putstr_fd(": Command not found.\n", 2);
-			cmd->cmd_ret = -1;			
+			if (cmd->redirs)
+				restore_std_fds(shell);
+			cmd->cmd_ret = -1;
 		}
 	}
 	//printf("about to return ast_execute: cmd_ret = %d\n", cmd->cmd_ret);
@@ -108,7 +117,7 @@ void		ast_loop(t_shell *shell, t_ast *ast)
 	if (ast)
 	{
 		//printf("DEBUG 2: entering ast_evaluate FROM ast_loop\n");
-		status = ast_evaluate(ast, shell);
+		ast_evaluate(ast, shell);
 	//	printf("exiting ast_evaluate FROM ast_loop after completion\n");
 	}
 }

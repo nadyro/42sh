@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/19 18:14:51 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/25 20:08:29 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,15 +72,15 @@ t_ast		*init_ast(t_shell *shell)
 	return (head);
 }
 
-void		create_arg_table(t_ast *cmd, t_shell *shell)
+void		create_arg_table(t_shell *shell, int beg, int end)
 {
-	int		i = cmd->beg;
+	int		i = beg;
 	int		last = 0;
 	char	*str = NULL;
-	int 	end = cmd->end;
 	
-	if ((end - i) < 0)
+	if (end < beg)
 	{
+		//printf("end is less than big in create arg table, setting shell->args to NULL\n");
 		shell->args = NULL;
 		return ;
 	}
@@ -103,8 +103,8 @@ void		create_arg_table(t_ast *cmd, t_shell *shell)
 				return ;
 			shell->args[last] = 0;
 			last = 0;
-			i = cmd->beg;
-			while (i <= cmd->end)
+			i = beg;
+			while (i <= end)
 			{
 				while (shell->tok[i] == TK_SPACE || shell->tok[i] == TK_NEWLINE)
 					i += 3;
@@ -124,10 +124,10 @@ void		create_arg_table(t_ast *cmd, t_shell *shell)
 
 int         ast_evaluate(t_ast *ast, t_shell *shell)
 {
-	int		op;
-	//int		ret = 0;
-	int		v1 = 0;
-	int		v2 = 0;
+	int			op;
+	int			v1 = 0;
+	int			v2 = 0;
+	int 		ret = 0;
 
 	if (ast == NULL)
 	{
@@ -137,9 +137,21 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 	if (!(ast->left) && !(ast->right))
 	{
 		ast->cmd_ret = 0;
+		ast->redirs = NULL;
 		//printf("DEBUG 1 : GOING TO EXECUTE: %s, address = %s\n", ast->arg, ast->address);
-		create_arg_table(ast, shell);
-		ast_execute(shell, ast);
+		if ((ret = is_redirect(shell, ast, ast->beg, ast->end)) != -1)
+		{
+			fill_redirs(shell, ast, ast->beg, ret);
+			shell->s_in = dup(0);
+			shell->s_out = dup(1);
+			shell->s_err = dup(2);
+			implement_redirs(shell, ast);
+		}
+		else
+		{	
+			create_arg_table(shell, ast->beg, ast->end);
+			ast_execute(shell, ast);
+		}
 		//printf("DEBUG 3, AFTER executing %s, cmd->ret = %d\n", ast->arg, ast->cmd_ret);
 		if (shell->args)
 			free_table(shell->args);

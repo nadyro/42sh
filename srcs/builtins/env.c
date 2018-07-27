@@ -109,7 +109,7 @@ int				ash_env(t_shell *shell)
 
 char			**env_to_tab(t_env *list)
 {
-	char	**tab;
+	char	**tabs;
 	int		count;
 	t_env	*tmp;
 	char	*str;
@@ -121,17 +121,17 @@ char			**env_to_tab(t_env *list)
 		count++;
 		tmp = tmp->next;
 	}
-	if (!(tab = (char **)malloc(sizeof(char *) * (count + 1))))
+	if (!(tabs = (char **)malloc(sizeof(char *) * (count + 1))))
 		return (NULL);
-	tab[count] = 0;
+	tabs[count] = 0;
 	tmp = list;
 	count = 0;
 	while (tmp)
 	{
 		str = ft_strjoin(tmp->var, "=");
-		tab[count++] = (tmp->val) ? ft_strjoin(str, tmp->val) : ft_strdup(str);
+		tabs[count++] = (tmp->val) ? ft_strjoin(str, tmp->val) : ft_strdup(str);
 		ft_strdel(&str);
 		tmp = tmp->next;
 	}
-	return (tab);
+	return (tabs);
 }
