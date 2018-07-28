@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azybert <azybert@stud.42.fr>               +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:20:53 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/25 02:51:37 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/26 19:43:22 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,4 +88,25 @@ void	history_prev(t_prompt *prompt, t_stat_data *stat_data)
 		free(stat_data->old_line);
 		stat_data->old_line = NULL;
 	}
+}
+
+void	write_history_file(t_node *history)
+{
+	int		i;
+
+	while (history->next != NULL)
+		history = history->next;
+	if ((i = open(".history", O_CREAT | O_RDWR , S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)) != -1)
+		while (history)
+		{
+			ft_putendl_fd(history->cmd, i);
+			history = history->prev;
+		}
+	if (i < 0)
+	{
+		ft_putstr("Error");
+		exit(0);
+	}
+	else
+	close(i);
 }

@@ -50,15 +50,48 @@ static char	*line_mgmt(char *line, t_node *history)
 	return (ret);
 }
 
+t_node		*init_nonvoid_history(char *cmd, t_node *history)
+{
+	t_node	*new;
+
+	if (!(new = malloc(sizeof(*new))))
+		exit(1);
+	if (!(new->cmd = ft_strdup(cmd)))
+		exit(1);
+	new->next = history;
+	new->prev = NULL;
+	if (history)
+		history->prev = new;
+	history = new;
+	return (history);
+}
+
+t_node		*fill_history_file(t_node *history)
+{
+	int		i;
+	char	*c;
+
+	c = NULL;
+	i = open(".history", O_RDWR | S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+	if (i >= 0)
+	{
+		while (ft_get_next_line(i, &c) == 1)
+			history = init_nonvoid_history(c, history);
+		close(i);
+	}
+	return (history);
+}
+
 void		main_loop(char *line, t_shell shell)
 {
 	//int		*token_tab;
 	int		parser_ret;
 	t_ast	*head;
 	t_node	*history;
-
+	
 	head = NULL;
 	history = NULL;
+	history = fill_history_file(history);
 	while (1)
 	{
 		line = line_mgmt(line, history);
@@ -71,6 +104,7 @@ void		main_loop(char *line, t_shell shell)
 				{
 					history = add_to_history(line, history);
 					head = get_ast(&shell);
+					shell.history = history;										
 				}
 				else
 					printf("error: no token table was compiled in main\n");

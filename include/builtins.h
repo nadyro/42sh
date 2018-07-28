@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/07/25 20:14:25 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/28 17:20:13 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # define C11 "\033[43m\033[30m"
 
 # include "../libft/libft.h"
+# include "sh_line_edit.h"
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/dir.h>
@@ -68,6 +69,7 @@ typedef struct	s_shell
 	int						s_in;
 	int						s_err;
 	t_env					*list;
+	t_node					*history;
 }				t_shell;
 
 t_env			*env_setup(char **env);
