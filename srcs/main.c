@@ -119,7 +119,7 @@ void		main_loop(char *line, t_shell shell)
 			}
 			else if (parser_ret == 0)
 				ft_strdel(&line);
-		//}
+		}
 	}
 }
 
