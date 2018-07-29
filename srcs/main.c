@@ -60,6 +60,8 @@ t_node		*init_nonvoid_history(char *cmd, t_node *history)
 		exit(1);
 	new->next = history;
 	new->prev = NULL;
+	free(cmd);
+	cmd = NULL;
 	if (history)
 		history->prev = new;
 	history = new;
