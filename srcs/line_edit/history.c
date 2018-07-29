@@ -6,13 +6,13 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:20:53 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/26 19:43:22 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/07/28 18:14:07 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
 
-t_node	*add_to_history(char *cmd, t_node *history)
+t_node		*add_to_history(char *cmd, t_node *history)
 {
 	t_node	*new;
 	char	*check;
@@ -38,7 +38,16 @@ t_node	*add_to_history(char *cmd, t_node *history)
 	return (history);
 }
 
-void	history_next(t_prompt *prompt, t_stat_data *stat_data)
+static void	ft_norme(t_prompt *prompt)
+{
+	free(prompt->line);
+	prompt->line = NULL;
+	prompt->total = 0;
+	move_cursor(prompt, 0, true);
+	tputs(tgetstr("cd", NULL), 1, ft_putshit);
+}
+
+void		history_next(t_prompt *prompt, t_stat_data *stat_data)
 {
 	if (prompt->history == NULL)
 		return ;
@@ -62,24 +71,21 @@ void	history_next(t_prompt *prompt, t_stat_data *stat_data)
 	}
 	else
 		return ;
-	free(prompt->line);
-	prompt->line = NULL;
-	prompt->total = 0;
-	move_cursor(prompt, 0, true);
-	tputs(tgetstr("cd", NULL), 1, ft_putshit);
+	ft_norme(prompt);
 	secure_stock(prompt, prompt->current->cmd);
 }
 
-void	history_prev(t_prompt *prompt, t_stat_data *stat_data)
+void		history_prev(t_prompt *prompt, t_stat_data *stat_data)
 {
 	if (prompt->current == NULL)
 		return ;
+	if (ft_strcmp(prompt->line, prompt->current->cmd))
+	{
+		free(stat_data->old_line);
+		((stat_data->old_line = ft_strdup(prompt->line)) ? 0 : exit(0));
+	}
 	prompt->current = prompt->current->prev;
-	free(prompt->line);
-	prompt->line = NULL;
-	prompt->total = 0;
-	move_cursor(prompt, 0, true);
-	tputs(tgetstr("cd", NULL), 1, ft_putshit);
+	ft_norme(prompt);
 	if (prompt->current)
 		secure_stock(prompt, prompt->current->cmd);
 	else
@@ -90,13 +96,14 @@ void	history_prev(t_prompt *prompt, t_stat_data *stat_data)
 	}
 }
 
-void	write_history_file(t_node *history)
+void		write_history_file(t_node *history)
 {
 	int		i;
 
 	while (history->next != NULL)
 		history = history->next;
-	if ((i = open(".history", O_CREAT | O_RDWR , S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)) != -1)
+	if ((i = open(".history",
+		O_CREAT | O_RDWR, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)) != -1)
 		while (history)
 		{
 			ft_putendl_fd(history->cmd, i);
@@ -108,5 +115,5 @@ void	write_history_file(t_node *history)
 		exit(0);
 	}
 	else
-	close(i);
+		close(i);
 }

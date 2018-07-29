@@ -6,13 +6,13 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 03:46:15 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/27 07:50:30 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/28 16:43:36 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
 
-void	reverse_handle(void)
+void		reverse_handle(void)
 {
 	signal(SIGINT, NULL);
 	signal(SIGWINCH, NULL);
