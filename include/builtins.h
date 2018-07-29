@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/07/29 19:51:29 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/07/29 23:22:53 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ typedef struct	s_shell
 	int						s_out;
 	int						s_in;
 	int						s_err;
+	int						history_length;
 	t_env					*list;
 	t_node					*history;
 }				t_shell;
@@ -97,6 +98,8 @@ t_env			*env_init(void);
 void			update_old_pwd(t_shell *shell, char *new_pwd);
 int				cd_opt_check(t_shell *shell);
 void	    	cd_canon(t_shell *shell);
-void			read_history(t_node *history);
+t_node			*fill_history_file(t_node *history, t_shell shell);
+void			read_history(t_node *history, int nbr);
+int				ash_history(t_shell *shell);
 
 #endif
