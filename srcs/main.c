@@ -75,7 +75,7 @@ t_node		*fill_history_file(t_node *history)
 	i = open(".history", O_RDWR | S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	if (i >= 0)
 	{
-		while (ft_get_next_line(i, &c) == 1)
+		while (get_next_line(i, &c) == 1)
 			history = init_nonvoid_history(c, history);
 		close(i);
 	}
@@ -91,19 +91,19 @@ void		main_loop(char *line, t_shell shell)
 	
 	head = NULL;
 	history = NULL;
-	history = fill_history_file(history);
+	//history = fill_history_file(history);
 	while (1)
 	{
 		line = line_mgmt(line, history);
-		if ((shell.tok = get_tokens(line)) != NULL)
+		/*if ((shell.tok = get_tokens(line)) != NULL)
 		{
 			if ((parser_ret = parser_validation(shell.tok, line)) == 1)
 			{
 				shell.line = ft_strdup(line);
 				if (shell.tok && shell.tok[0])
 				{
-					history = add_to_history(line, history);
-					head = get_ast(&shell);
+					*/history = add_to_history(line, history);
+					/*head = get_ast(&shell);
 					shell.history = history;										
 				}
 				else
@@ -114,8 +114,8 @@ void		main_loop(char *line, t_shell shell)
 				ft_strdel(&(shell.line));
 			}
 			else if (parser_ret == 0)
-				ft_strdel(&line);
-		}
+				*/ft_strdel(&line);
+		//}
 	}
 }
 

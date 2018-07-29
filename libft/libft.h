@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/14 11:26:13 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/21 12:49:55 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/29 19:01:22 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,6 @@ typedef struct  s_gnl_list
 	struct s_gnl_node   *first;
 }               t_gnl_list;
 
-int				ft_get_next_line(const int fd, char **line);
+int				get_next_line(const int fd, char **line);
 
 #endif

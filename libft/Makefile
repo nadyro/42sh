@@ -6,7 +6,7 @@
 #    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/08 19:33:52 by azybert           #+#    #+#              #
-#    Updated: 2018/07/20 01:02:15 by azybert          ###   ########.fr        #
+#    Updated: 2018/07/29 19:02:17 by azybert          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = libft.a
 
 FILES = ft_memset.c \
 		ft_bzero.c \
-		ft_get_next_line.c \
+		get_next_line.c \
 		ft_memcpy.c \
 		ft_memccpy.c \
 		ft_memmove.c \
