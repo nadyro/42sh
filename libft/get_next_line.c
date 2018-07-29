@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_get_next_line.c                                 :+:      :+:    :+:   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/12 14:09:24 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/29 14:51:21 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/07/29 16:25:56 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int		get_all_stuff(char **static_tmp, char **line, char **a)
 {
 	int i;
 
+	i = 0;
 	if (a == NULL)
 	{
 		*line = ft_strdup(*static_tmp);
@@ -33,7 +34,7 @@ int		get_all_stuff(char **static_tmp, char **line, char **a)
 	return (1);
 }
 
-int		ft_get_next_line(const int fd, char **line)
+int		get_next_line(const int fd, char **line)
 {
 	int				x;
 	char			*a;
@@ -112,7 +113,7 @@ static int		handle_errors(int ret)
 		return (-1);
 }
 
-int				ft_get_next_line(const int fd, char **line)
+int				get_next_line(const int fd, char **line)
 {
 	static char	*stock = NULL;
 	char		*buff;
@@ -139,4 +140,5 @@ int				ft_get_next_line(const int fd, char **line)
 	if (stock && (check_stock(&stock, line, 1)))
 		return (1);
 	return (0);
-}*/
+}
+*/

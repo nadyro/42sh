@@ -72,12 +72,14 @@ t_node		*fill_history_file(t_node *history)
 {
 	int		i;
 	char	*c;
+	int		gnl;
 
 	c = NULL;
+	gnl = 0;
 	i = open(".history", O_RDWR | S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	if (i >= 0)
 	{
-		while (ft_get_next_line(i, &c) == 1)
+		while ((gnl = get_next_line(i, &c)) == 1)
 			history = init_nonvoid_history(c, history);
 		close(i);
 	}

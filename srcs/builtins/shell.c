@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/10 16:47:36 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/11 13:17:15 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/07/29 16:27:12 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static void	display_prompt(char **line, int *status, t_shell *shell)
 	ft_putstr(" @$h >");
 	ft_putstr(RESET);
 	ft_putchar(' ');
-	ret = ft_get_next_line(0, line);
+	ret = get_next_line(0, line);
 	if (cmd_d(ret, shell) == -1)
 	{
 		if (*line && *line[0])

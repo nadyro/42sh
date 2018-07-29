@@ -6,7 +6,7 @@
 #    By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/07/29 15:14:39 by nsehnoun         ###   ########.fr        #
+#    Updated: 2018/07/29 16:44:31 by nsehnoun         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,6 +54,7 @@ SRC_FILES = main.c \
 			builtins/setenv.c \
 			builtins/shell.c \
 			builtins/unsetenv.c \
+			builtins/history.c \
 			\
 			line_edit/line_edit_main_loop.c \
 			line_edit/termanip.c \
