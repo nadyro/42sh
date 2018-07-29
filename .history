@@ -57,3 +57,50 @@ history 1
 history 3
 history
 exit
+ls
+pwd
+cd ../ && cd 42sh ; ls -l || ls && pwd > test.txt
+ls
+cat test.txt
+rm test.txt
+ls
+history 10
+history 3
+history 20
+history 9
+history 11
+history 10
+history 20
+exit
+history
+exit
+history 2
+history 2
+exit
+exit
+pwd
+ls
+history 10
+exit
+history 20
+les
+loups
+ne
+sont
+pas
+mechants
+!
+history 10
+exit
+ks
+ls
+cat test.txt
+ls
+cat test.txt
+cd ../ && cd 42sh ; ls -l || ls && pwd > test.txt
+ls
+cat test.txt
+exit
+cd ../ && cd 42sh ; ls -l || ls && pwd > test.txt
+pwd
+exit

@@ -69,7 +69,7 @@ t_node		*init_nonvoid_history(char *cmd, t_node *history)
 	return (history);
 }
 
-t_node		*fill_history_file(t_node *history, t_shell shell)
+t_node		*fill_history_file(t_node *history, t_shell *shell)
 {
 	int		i;
 	char	*c;
@@ -82,7 +82,7 @@ t_node		*fill_history_file(t_node *history, t_shell shell)
 	{
 		while ((gnl = get_next_line(i, &c)) == 1)
 		{
-			shell.history_length++;
+			shell->history_length++;
 			history = init_nonvoid_history(c, history);
 		}
 		close(i);
@@ -99,7 +99,7 @@ void		main_loop(char *line, t_shell shell)
 	
 	head = NULL;
 	history = NULL;
-	history = fill_history_file(history, shell);
+	history = fill_history_file(history, &shell);
 	while (1)
 	{
 		line = line_mgmt(line, history);
