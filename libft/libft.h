@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/14 11:26:13 by azybert           #+#    #+#             */
-/*   Updated: 2018/06/08 18:21:47 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/21 12:49:55 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int				ft_toupper(int c);
 int				ft_tolower(int c);
 void			*ft_memalloc(size_t size);
 void			ft_memdel(void **ap);
-void            ft_print_table(char **tab);
+void			ft_print_table(char **tab);
 char			*ft_strnew(size_t size);
 void			ft_strdel(char **as);
 void			ft_strclr(char *s);
@@ -82,6 +82,7 @@ char			**ft_split_whitespaces(char *str);
 char			*ft_strmerge(char **to_merge);
 char			*ft_strcmerge(char **to_merge, char c);
 char			*ft_strndup(const char *s1, size_t n);
+void			ft_fusion_sort(int *tab, int max);
 
 typedef struct	s_list
 {
@@ -96,6 +97,21 @@ void			ft_lstdel(t_list **alst, void (*del)(void*, size_t));
 void			ft_lstadd(t_list **alst, t_list *new);
 void			ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list			*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
+
+typedef struct  s_gnl_node
+{
+	int                 fd;
+	int                 to_read;
+	int                 ended;
+	char                *next_line;
+	struct s_gnl_node   *next;
+}               t_gnl_node;
+
+typedef struct  s_gnl_list
+{
+	struct s_gnl_node   *first;
+}               t_gnl_list;
+
 int				ft_get_next_line(const int fd, char **line);
 
 #endif

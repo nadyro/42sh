@@ -6,7 +6,7 @@
 #    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/08 19:33:52 by azybert           #+#    #+#              #
-#    Updated: 2018/06/11 13:19:21 by antoipom         ###   ########.fr        #
+#    Updated: 2018/07/20 01:02:15 by azybert          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,6 +82,7 @@ FILES = ft_memset.c \
 		ft_realloc.c \
 		ft_strmerge.c \
 		ft_strcmerge.c \
+		ft_fusion_sort.c \
 
 OBJ = $(FILES:.c=.o)
 

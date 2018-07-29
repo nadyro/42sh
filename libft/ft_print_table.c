@@ -6,7 +6,7 @@
 /*   By: arohani <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/04 14:33:11 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/08 18:11:14 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/20 01:40:49 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@ void	ft_print_table(char **tab)
 {
 	int j;
 
+	if (tab == NULL)
+		return ;
 	j = 0;
-	while (tab && tab[j])
+	while (tab[j])
 		ft_putendl(tab[j++]);
 }
