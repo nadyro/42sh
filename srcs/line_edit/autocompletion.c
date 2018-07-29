@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/12 10:04:15 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/07/21 19:21:32 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/07/29 19:43:05 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,32 +111,4 @@ char	**lst_to_array(t_node *matches)
 		lst = lst->next;
 	}
 	return (matches_tab);
-}
-
-int		write_completion(t_prompt *prompt, int *y)
-{
-	t_node	*matches;
-	char	**matches_tab;
-	int		i;
-	int		x;
-
-	x = *y;
-	matches = NULL;
-	matches_tab = NULL;
-	i = 0;
-	matches = fetch_names(prompt->line);
-	while (matches && matches->prev != NULL)
-		matches = matches->prev;
-	matches_tab = lst_to_array(matches);
-	while (matches_tab[i])
-			i++;
-	if (i != 0)
-	{
-		ft_putstr(matches_tab[x++]);
-		ft_putstr(" ");
-	}
-	if (i == x)
-		x = 0;
-	*y = x;
-	return (i);
 }

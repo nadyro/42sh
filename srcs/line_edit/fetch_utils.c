@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/18 16:16:05 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/07/21 15:58:11 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/07/29 19:43:07 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ int		fetch_names_dirent(char *user_entry)
 	return (1);
 }
 
+// Fetch_names reçoit le mot et renvoie la liste correspondant à sa completion
 t_node	*fetch_names(char *user_entry)
 {
 	char	**p;

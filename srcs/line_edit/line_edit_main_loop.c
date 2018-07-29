@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/21 19:16:19 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/07/29 19:43:23 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,6 @@ char		*line_edit_main_loop_aux(t_prompt *prompt, t_stat_data *stat_data,
 			nb_user_entry = read(1, user_entry, 6);
 			if (user_entry[0] == 27 || user_entry[0] == 127)
 				esc_react(prompt, nb_user_entry, user_entry, stat_data);
-			else if (user_entry[0] == 9)
-				write_completion(prompt, &y);
 			else
 			{
 				((prompt->buf = ft_strdup(user_entry)) != NULL ? 0 : exit(1));
