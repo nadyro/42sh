@@ -6,7 +6,7 @@
 /*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/28 17:18:06 by kernel_pani      ###   ########.fr       */
+/*   Updated: 2018/07/28 19:05:47 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void		ft_flush(t_prompt *prompt)
 	termanip(33);
 }
 
-static void	prompt_clean()
+static void	prompt_clean(void)
 {
 	free(prompt->line);
 	if (!(prompt->line = ft_strdup("\0")))
@@ -41,16 +41,17 @@ static void	prompt_clean()
 	prompt->total = 0;
 	prompt->current = NULL;
 	term_clear();
-	write(1, "Your line was full, usually you don't need these, are you maybe sleeping on your keyboard?", 90);
+	write(1, "Your line was full, ", 20);
+	write(1, "usually you don't need these, ", 30);
+	write(1, "are you maybe sleeping on your keyboard?", 40);
 }
 
-static char	*line_edit_main_loop_aux(t_prompt *prompt, t_stat_data *stat_data)
+static char	*line_edit_main_loop_aux(t_prompt *prompt, t_stat_data *stat_data,
+		char *to_return)
 {
 	char	user_entry[7];
 	int		nb_user_entry;
-	char	*to_return;
 
-	to_return = NULL;
 	while (to_return == NULL)
 		if (prompt->buf != NULL && data_react(prompt))
 			((to_return = ft_strdup(prompt->line)) ? 0 : exit(0));
@@ -88,7 +89,8 @@ char		*line_edit_main_loop(char *d_prompt, t_node *history)
 	prompt->history = history;
 	handle_sig();
 	prompt->buf = stat_data->overage;
-	to_return = line_edit_main_loop_aux(prompt, stat_data);
+	to_return = NULL;
+	to_return = line_edit_main_loop_aux(prompt, stat_data, to_return);
 	stat_data->overage = (prompt->buf ? ft_strdup(prompt->buf) : NULL);
 	free(stat_data->old_line);
 	stat_data->old_line = NULL;

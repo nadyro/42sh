@@ -6,7 +6,11 @@
 #    By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/08 19:33:52 by azybert           #+#    #+#              #
+<<<<<<< HEAD
 #    Updated: 2018/07/29 16:26:26 by nsehnoun         ###   ########.fr        #
+=======
+#    Updated: 2018/07/29 19:02:17 by azybert          ###   ########.fr        #
+>>>>>>> 664b8d3d477ae181e039f6528b77cc8773b831bb
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,6 +86,7 @@ FILES = ft_memset.c \
 		ft_realloc.c \
 		ft_strmerge.c \
 		ft_strcmerge.c \
+		ft_fusion_sort.c \
 
 OBJ = $(FILES:.c=.o)
 

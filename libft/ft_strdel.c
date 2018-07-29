@@ -6,11 +6,11 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/17 14:07:18 by azybert           #+#    #+#             */
-/*   Updated: 2017/01/21 15:21:44 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/19 05:43:36 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include "libft.h"
 
 void	ft_strdel(char **as)
 {

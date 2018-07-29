@@ -6,13 +6,13 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 16:42:49 by arohani           #+#    #+#             */
-/*   Updated: 2018/02/21 16:01:11 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/19 03:58:55 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		ft_count_words(char *str)
+static int	ft_count_words(char *str)
 {
 	int i;
 	int n;
@@ -31,7 +31,7 @@ int		ft_count_words(char *str)
 	return (n);
 }
 
-int		ft_word_length(char *str)
+static int	ft_word_length(char *str)
 {
 	int i;
 
@@ -41,7 +41,7 @@ int		ft_word_length(char *str)
 	return (i);
 }
 
-int		ft_word_transfer(char *str, char *word)
+static int	ft_word_transfer(char *str, char *word)
 {
 	int i;
 	int j;
@@ -57,7 +57,7 @@ int		ft_word_transfer(char *str, char *word)
 	return (i);
 }
 
-char	**ft_split_whitespaces(char *str)
+char		**ft_split_whitespaces(char *str)
 {
 	int		i;
 	int		j;

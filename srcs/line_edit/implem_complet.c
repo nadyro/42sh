@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/27 03:07:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/27 07:51:02 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/28 18:16:05 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,22 @@ void	final_display(t_prompt *prompt, char *to_display)
 	rline = prompt->line;
 	prompt->line = to_display;
 	prompt->total = ft_strlen(prompt->line);
-    write_data(prompt, prompt->line, prompt->total);
+	write_data(prompt, prompt->line, prompt->total);
 	prompt->line = rline;
 	prompt->total = ft_strlen(prompt->line);
 	move_cursor(prompt, rpos, true);
 }
 
-void	completion_display_aux(t_prompt *prompt, t_node *complete, int nb, int max)
+void	completion_display_aux(t_prompt *prompt,
+		t_node *complete, int nb, int max)
 {
 	t_node	*loop;
 	char	*to_display;
 	char	*spn;
 	int		count;
 
-	if (!(to_display = ft_memalloc(sizeof(char) * nb * max + 1 + prompt->total + 1)))
+	if (!(to_display =
+				ft_memalloc(sizeof(char) * nb * max + 1 + prompt->total + 1)))
 		exit(1);
 	ft_strcat(to_display, prompt->line);
 	ft_strcat(to_display, "\n");
@@ -77,8 +79,8 @@ void	completion_display(t_prompt *prompt, t_node *complete)
 void	auto_complete(t_prompt *prompt)
 {
 	t_node	*complete;
-	
-	complete = prompt->current;					//ft_nadir;
+
+	complete = prompt->current;
 	if (complete == NULL)
 		return ;
 	else if (complete->next == NULL)
