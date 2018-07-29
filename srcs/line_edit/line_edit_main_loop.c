@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_edit_main_loop.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/28 19:05:47 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/29 19:50:20 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,9 @@ static char	*line_edit_main_loop_aux(t_prompt *prompt, t_stat_data *stat_data,
 {
 	char	user_entry[7];
 	int		nb_user_entry;
+	int		y;
 
+	y = 0;
 	while (to_return == NULL)
 		if (prompt->buf != NULL && data_react(prompt))
 			((to_return = ft_strdup(prompt->line)) ? 0 : exit(0));

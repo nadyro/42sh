@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_line_edit.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/28 17:19:46 by kernel_pani      ###   ########.fr       */
+/*   Updated: 2018/07/29 19:52:29 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # include <string.h>
 # include <signal.h>
 # include <unistd.h>
+# include <dirent.h>
+# include <sys/stat.h>
 
 # define BUFFER 4
 # define UNUSED(x) (void)(x)
@@ -63,6 +65,9 @@ typedef struct	s_stat_data
 	char		*overage;
 	char		*old_line;
 	char		*copied;
+	t_node		*history;
+	t_node		*matches;
+	t_node		*current;
 }				t_stat_data;
 
 char			*get_pwd(void);
@@ -105,4 +110,19 @@ void			auto_complete(t_prompt *prompt);
 
 void			write_history_file(t_node *history);
 
+// Autocompletion
+char			**fetch_from_env_o(void);
+char			**fetch_from_env_a(char **all_paths);
+t_node			*fetch_binaries(char **all_paths);
+t_node			*add_elements(t_node *lst, char *file_bin);
+t_node			*cmp_user_entry(t_node *lst, char *user_entry);
+t_node			*cmp_space_entry(char *a_name, int is_null);
+t_node			*fetch_names(char *user_entry);
+int				fetch_names_dirent(char *user_entry);
+void			clean_tabs(char **t, int j);
+void			send_nudes(t_node **my_phone);
+void			free_lists(t_node *lst);
+void			print_nudes(t_node *matches);
+char			**lst_to_array(t_node *matches);
+int				write_completion(t_prompt *prompt, int *y);
 #endif

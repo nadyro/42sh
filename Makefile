@@ -6,7 +6,7 @@
 #    By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/07/29 19:18:11 by nsehnoun         ###   ########.fr        #
+#    Updated: 2018/07/29 19:49:26 by nsehnoun         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,7 +69,11 @@ SRC_FILES = main.c \
 			line_edit/signals_le_mode.c \
 			line_edit/search_mode.c \
 			line_edit/implem_complet.c \
-			line_edit/write_data.c
+			line_edit/write_data.c\
+			line_edit/autocompletion.c \
+			line_edit/cmpltn_utils.c \
+			line_edit/fetch_utils.c \
+			
 
 INC_FILES = lexer.h \
 			parser.h \

@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/14 11:26:13 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/29 16:26:18 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/07/29 19:51:18 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ typedef struct	s_list
 {
 	void			*content;
 	size_t			content_size;
+	struct s_list	*previous;
 	struct s_list	*next;
 }				t_list;
 
