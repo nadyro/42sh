@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/18 16:16:05 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/07/29 19:43:07 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/07/29 19:59:59 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,13 +130,3 @@ t_node	*fetch_names(char *user_entry)
 	free_lists(binaries_1);
 	return (matches);
 }
-
-/*int		main(int argc, char **argv)
-{
-	t_node	*matches;
-
-	(void)argc;
-	matches = fetch_names(argv[1]);
-	print_nudes(matches);
-}
-*/
