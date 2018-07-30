@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 12:01:43 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/29 19:03:56 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/07/30 00:05:48 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ int			builtin_check(t_shell *shell)
 			return (ash_env(shell));
 		else if (ft_strcmp(shell->args[0], "exit") == 0)
 			return (ash_exit(shell));
+		else if (ft_strcmp(shell->args[0], "history") == 0)
+			return (ash_history(shell));
 	}
 	return (-1);
 }
@@ -68,9 +70,29 @@ int			ash_echo(t_shell *shell)
 	return (1);
 }
 
+int			ash_history(t_shell *shell)
+{
+	int		i;
+	int		conv;
+
+	i = 0;
+	conv = 0;
+	if (shell->args && shell->args[1])
+	{
+		conv = ft_atoi(shell->args[1]);
+		if (conv <= shell->history_length)
+			read_history(shell->history, conv);
+		else
+			read_history(shell->history, 0);
+		return (1);
+	}
+	else if (shell->args)
+		read_history(shell->history, 0);
+	return (1);
+}
+
 int			ash_exit(t_shell *shell)
 {
-	//read_history(shell->history);
 	write_history_file(shell->history);
 	if (shell)
 		exit (0);

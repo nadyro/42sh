@@ -59,6 +59,7 @@ t_node		*init_nonvoid_history(char *cmd, t_node *history)
 	if (!(new->cmd = ft_strdup(cmd)))
 		exit(1);
 	new->next = history;
+
 	new->prev = NULL;
 	free(cmd);
 	cmd = NULL;
@@ -68,7 +69,7 @@ t_node		*init_nonvoid_history(char *cmd, t_node *history)
 	return (history);
 }
 
-t_node		*fill_history_file(t_node *history)
+t_node		*fill_history_file(t_node *history, t_shell *shell)
 {
 	int		i;
 	char	*c;
@@ -80,7 +81,10 @@ t_node		*fill_history_file(t_node *history)
 	if (i >= 0)
 	{
 		while ((gnl = get_next_line(i, &c)) == 1)
+		{
+			shell->history_length++;
 			history = init_nonvoid_history(c, history);
+		}
 		close(i);
 	}
 	return (history);
@@ -95,7 +99,7 @@ void		main_loop(char *line, t_shell shell)
 	
 	head = NULL;
 	history = NULL;
-	history = fill_history_file(history);
+	history = fill_history_file(history, &shell);
 	while (1)
 	{
 		line = line_mgmt(line, history);
@@ -108,6 +112,7 @@ void		main_loop(char *line, t_shell shell)
 				{
 					history = add_to_history(line, history);
 					head = get_ast(&shell);
+					shell.history_length++;
 					shell.history = history;										
 				}
 				else
@@ -134,6 +139,7 @@ int			main(int argc, char **argv, char **env)
 	shell.list = (env && env[0]) ? env_setup(env) : env_init();
 	shell.envv = (shell.list) ? env_to_tab(shell.list) : NULL;
 	shell.error = 0;
+	shell.history_length = 0;
 	///////////////////////////////////
 	if ((name_term = getenv("TERM")) == NULL)
 	{
