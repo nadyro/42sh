@@ -29,7 +29,7 @@ static int		is_alldigit(char *str)
 	return (1);
 }
 
-int				is_fd(char *str, int len)
+int				is_fd(char *str, int len)	//receives token after redirect to check if fd or filename
 {
 	int		i;
     char	*buffer;
