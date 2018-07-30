@@ -196,3 +196,64 @@ cat catoutput
 pqwd
 pwd
 exit
+cat nop.txt 2>error.txt ; ls -l > lsoutput ; cat < lsoutput > catoutput
+cat catouput
+exit
+pwd
+ls
+history
+history 4
+lsmp
+pwd
+psd
+df
+mdr
+exit
+ls
+history
+history 5
+pwd
+exit
+ls | test.txt
+ls
+exit
+ls
+history -2
+exit
+exit
+history 1 2 3
+history 1
+history 2 3 4
+exit
+history -c
+exit
+history 1 -c -p -n
+man strstr
+man strchr
+exit
+history 1 -c -p -n
+history 1 -c -f -n
+history 1 -cfn
+history 1 -cpn
+history 1 -pn
+history 1 -p
+history 1 -f
+exit
+history 1 -cdanrwps
+exit
+history 1 -cdanrwps
+history 1 -cdanrwp
+history 1 -canrwp
+history 1 -carwp
+exit
+history 1 -cccccanrwp
+history 1 -cccccdanrwps
+exit
+history
+exit
+history
+exit
+exir
+exit
+history 1 -cccccdanrwps
+exit

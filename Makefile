@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+         #
+#    By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/07/30 07:31:30 by azybert          ###   ########.fr        #
+#    Updated: 2018/07/30 20:29:43 by kernel_pani      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -97,7 +97,7 @@ LIB_INC = -I$(LIB_DIR)/include
 
 OPTIMIZATION ?= -O0
 CC ?= gcc
-CCFLAGS ?= -g3 -fsanitize=address -fno-omit-frame-pointer 
+CCFLAGS ?= -Wall -Werror -Wextra #-g3 -fsanitize=address -fno-omit-frame-pointer 
 LDFLAGS = -L$(LIB_DIR) -lft -ltermcap
 INCLUDES = $(LOCAL_INC) $(LIB_INC)
 

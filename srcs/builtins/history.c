@@ -6,7 +6,7 @@
 /*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/29 16:17:24 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/07/30 18:03:32 by kernel_pani      ###   ########.fr       */
+/*   Updated: 2018/07/30 22:22:57 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ t_node	*get_last_cmds(t_node *history, int nbr)
     i = 0;
     while (i < y)
         ft_putendl(last_cmds[i++]);
+	clean_tabs(last_cmds, 0);
 	return (history);
 }
 
@@ -121,4 +122,71 @@ void	read_history(t_node *history, int nbr)
 			}
 		}
 	}
+}
+
+t_history	*init_hist_args(void)
+{
+	t_history	*hist_args;
+
+	if (!(hist_args = (t_history *)malloc(sizeof(t_history))))
+		return (NULL);
+	hist_args->c = 0;
+	hist_args->d = 0;
+	hist_args->a = 0;
+	hist_args->n = 0;
+	hist_args->r = 0;
+	hist_args->w = 0;
+	hist_args->p = 0;
+	hist_args->s = 0;
+	return (hist_args);
+}
+
+void		print_hist_args(t_history *hist_args)
+{
+	ft_putnbr(hist_args->c);
+	ft_putchar('\n');
+	ft_putnbr(hist_args->d);
+	ft_putchar('\n');
+	ft_putnbr(hist_args->a);
+	ft_putchar('\n');
+	ft_putnbr(hist_args->n);
+	ft_putchar('\n');
+	ft_putnbr(hist_args->r);
+	ft_putchar('\n');
+	ft_putnbr(hist_args->w);
+	ft_putchar('\n');
+	ft_putnbr(hist_args->p);
+	ft_putchar('\n');
+	ft_putnbr(hist_args->s);
+	ft_putchar('\n');
+}
+
+t_history	*check_history_args(t_shell *shell)
+{
+	int			i;
+	t_history	*hist_args;
+
+	i = 0;
+	hist_args = init_hist_args();
+	while (shell->args && shell->args[++i])
+		if (shell->args[i][0] == '-')
+		{
+			if (ft_strchr(shell->args[i], 'c') != NULL)
+				hist_args->c = 1;
+			if (ft_strchr(shell->args[i], 'd') != NULL)
+				hist_args->d = 1;
+			if (ft_strchr(shell->args[i], 'a') != NULL)
+				hist_args->a = 1;
+			if (ft_strchr(shell->args[i], 'n') != NULL)
+				hist_args->n = 1;
+			if (ft_strchr(shell->args[i], 'r') != NULL)
+				hist_args->r = 1;
+			if (ft_strchr(shell->args[i], 'w') != NULL)
+				hist_args->w = 1;
+			if (ft_strchr(shell->args[i], 'p') != NULL)
+				hist_args->p = 1;
+			if (ft_strchr(shell->args[i], 's') != NULL)
+				hist_args->s = 1;
+		}
+	return (hist_args);
 }
