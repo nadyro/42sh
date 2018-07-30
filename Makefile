@@ -35,6 +35,7 @@ SRC_FILES = main.c \
 			parser/execute.c \
 			parser/parser_validation.c \
 			parser/redirections.c \
+			parser/is_fd.c \
 			parser/ast.c \
 			\
 			builtins/add_to_mod.c \
