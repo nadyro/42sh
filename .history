@@ -178,3 +178,21 @@ lwew
 history
 history 6
 exit
+cat nop.txt 2>error.txt ; ls -l > lsoutput ; cat < lsoutput > catoutput
+ls
+cat error.txt
+cat lsoutput
+cat catoutput
+git status
+pwd
+ mkdir test ; cd test ; ls -a ; ls -l  > fifi ; cat fifi
+pwd
+ls
+cat fifi
+cd ..
+exit
+cat nop.txt 2>error.txt ; ls -l > lsoutput ; cat < lsoutput > catoutput
+cat catoutput
+pqwd
+pwd
+exit
