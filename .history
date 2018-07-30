@@ -104,8 +104,64 @@ exit
 cd ../ && cd 42sh ; ls -l || ls && pwd > test.txt
 pwd
 exit
-cat test.txt
-pwd
-history
-history 4
+lsappinfo 
+exit
+exit
+exit
+exit
+make re
+exit
+exi
+exit
+ls
+exit
+exit
+exi
+exit
+kappa ls
+kappa ls
+exir
+exit
+"
+
+
+
+
+
+
+
+
+
+
+
+
+"
+"
+
+
+
+
+
+
+
+
+
+
+
+
+"
+"
+
+
+
+
+
+
+
+
+
+
+
+"
+exit
 exit

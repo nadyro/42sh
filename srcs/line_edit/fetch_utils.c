@@ -6,7 +6,11 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/18 16:16:05 by nsehnoun          #+#    #+#             */
+<<<<<<< HEAD
+/*   Updated: 2018/07/30 05:44:03 by azybert          ###   ########.fr       */
+=======
 /*   Updated: 2018/07/29 19:59:59 by nsehnoun         ###   ########.fr       */
+>>>>>>> 6649c5d3c4e3a3dbcfc27b3f017945052f022afd
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,13 +98,12 @@ int		fetch_names_dirent(char *user_entry)
 {
 	struct stat		st;
 
-	if ((lstat(user_entry, &st) != -1)) 
+	if ((lstat(user_entry, &st) != -1))
 		if (st.st_mode & S_IFDIR)
 			return (0);
 	return (1);
 }
 
-// Fetch_names reçoit le mot et renvoie la liste correspondant à sa completion
 t_node	*fetch_names(char *user_entry)
 {
 	char	**p;
@@ -125,8 +128,7 @@ t_node	*fetch_names(char *user_entry)
 		matches = cmp_space_entry("./", 0);
 	else
 		matches = cmp_user_entry(binaries, user_entry);
-	if (matches == NULL)
-		matches = cmp_space_entry(user_entry, 1);
+	matches = (matches ? matches : cmp_space_entry(user_entry, 1));
 	free_lists(binaries_1);
 	return (matches);
 }

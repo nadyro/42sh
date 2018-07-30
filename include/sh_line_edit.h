@@ -6,7 +6,11 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
+<<<<<<< HEAD
+/*   Updated: 2018/07/30 07:32:22 by azybert          ###   ########.fr       */
+=======
 /*   Updated: 2018/07/29 23:22:42 by nsehnoun         ###   ########.fr       */
+>>>>>>> 6649c5d3c4e3a3dbcfc27b3f017945052f022afd
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +109,7 @@ void			secure_stock(t_prompt *prompt, char *to_stock);
 void			selection_mode(t_prompt *prompt, t_stat_data *stat_data);
 void			search_mode(t_prompt *prompt, t_stat_data *stat_data);
 void			auto_complete(t_prompt *prompt);
+void			prompt_clean(void);
 
 //History
 

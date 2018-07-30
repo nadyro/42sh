@@ -54,7 +54,6 @@ static void		shell_args_from_redirs(t_shell *shell, t_ast *cmd)
 	if (tmp->beg == tmp->next_re)
 	{
 		handle_prefix_syntax(shell, cmd);
-		ft_print_table(shell->args);
 		return ;
 	}
 	while (beg <= tmp->end)
@@ -70,60 +69,150 @@ static void		shell_args_from_redirs(t_shell *shell, t_ast *cmd)
 	create_arg_table(shell, tmp->beg, tmp->end);
 }
 
+static int 	get_fd(t_shell *shell, t_redirs *node)
+{
+	t_redirs	*tmp = node;
+	int 		fd;
+	char		*str;
+
+	if (shell->tok[tmp->next_re - 3] == TK_IO_NUMBER)
+	{
+		str = shell->line + shell->tok[tmp->next_re - 3 + 1];
+		fd = is_fd(str, shell->tok[tmp->next_re - 3 + 2]);
+	}
+	else
+		fd = (shell->tok[tmp->next_re] == TK_LESS ||
+			shell->tok[tmp->next_re] == TK_LESSAND) ? 0 : 1;
+	return (fd);
+}
+
+static void	implement_great(t_shell *shell, t_redirs *node, int fd)
+{
+	t_redirs	*tmp = node;
+	char		*str;
+
+	str = shell->line + shell->tok[tmp->next_re + 3 + 1];
+	if ((tmp->new_fd = is_fd(str, shell->tok[tmp->next_re + 3 + 2])) > 0)
+		dup2(tmp->new_fd, fd);
+	else if (tmp->new_fd == 0)
+	{
+		str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
+		tmp->new_fd = open(str, O_CREAT | O_TRUNC | O_WRONLY, 0666);
+		ft_strdel(&str);
+		(tmp->new_fd < 0) ? ft_putendl_fd("bad file descriptor", 2) : dup2(tmp->new_fd, fd);
+	}
+}
+
+static void	implement_dgreat(t_shell *shell, t_redirs *node, int fd)
+{
+	t_redirs	*tmp = node;
+	char		*str;
+
+	str = shell->line + shell->tok[tmp->next_re + 3 + 1];
+	if ((tmp->new_fd = is_fd(str, shell->tok[tmp->next_re + 3 + 2])) > 0)
+		dup2(tmp->new_fd, fd);
+	else if (tmp->new_fd == 0)
+	{
+		str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
+		tmp->new_fd = open(str, O_CREAT | O_APPEND | O_WRONLY, 0666);
+		ft_strdel(&str);
+		(tmp->new_fd < 0) ? ft_putendl_fd("bad file descriptor", 2) : dup2(tmp->new_fd, fd);
+	}
+}
+
+static void	implement_greatand(t_shell *shell, t_redirs *node, int fd)
+{
+	t_redirs	*tmp = node;
+	char		*str;
+
+	str = shell->line + shell->tok[tmp->next_re + 3 + 1];
+	if (shell->line[shell->tok[tmp->next_re + 3 + 1]] == '-')
+	{
+		close (fd);
+		return ;
+	}
+	if ((tmp->new_fd = is_fd(str, shell->tok[tmp->next_re + 3 + 2])) > 0)
+		dup2(tmp->new_fd, fd);
+	else if (tmp->new_fd == 0)
+	{
+		str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
+		tmp->new_fd = open(str, O_CREAT | O_APPEND | O_WRONLY, 0666);
+		ft_strdel(&str);
+		(tmp->new_fd < 0) ? ft_putendl_fd("bad file descriptor", 2) : dup2(tmp->new_fd, fd);
+	}
+}
+
+static void	implement_less(t_shell *shell, t_redirs *node, int fd)
+{
+	t_redirs	*tmp = node;
+	char		*str;
+
+	str = shell->line + shell->tok[tmp->next_re + 3 + 1];
+	if ((tmp->new_fd = is_fd(str, shell->tok[tmp->next_re + 3 + 2])) > 0)
+		dup2(tmp->new_fd, fd);
+	else if (tmp->new_fd == 0)
+	{
+		str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
+		tmp->new_fd = open(str, O_RDONLY);
+		ft_strdel(&str);
+		(tmp->new_fd < 0) ? ft_putendl_fd("bad file descriptor", 2) : dup2(tmp->new_fd, fd);
+	}
+}
+
+static void	implement_lessand(t_shell *shell, t_redirs *node, int fd)
+{
+	t_redirs	*tmp = node;
+	char		*str;
+
+	str = shell->line + shell->tok[tmp->next_re + 3 + 1];
+	if (shell->line[shell->tok[tmp->next_re + 3 + 1]] == '-')
+	{
+		close (fd);
+		return ;
+	}
+	if ((tmp->new_fd = is_fd(str, shell->tok[tmp->next_re + 3 + 2])) > 0)
+		dup2(tmp->new_fd, fd);
+	else if (tmp->new_fd == 0)
+	{
+		str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
+		tmp->new_fd = open(str, O_RDONLY);
+		ft_strdel(&str);
+		(tmp->new_fd < 0) ? ft_putendl_fd("bad file descriptor", 2) : dup2(tmp->new_fd, fd);
+	}
+}
+
 void 		implement_redirs(t_shell *shell, t_ast *cmd)
 {
 	t_redirs	*tmp = NULL;
-	int 		beg;
-	char		*str = NULL;
+	int 		fd;
+	//int 		counter = 1;
 	//int			ionum = -1;
 
 	shell_args_from_redirs(shell, cmd);
 	tmp = cmd->redirs;
-	while (tmp)	//opens and closes respective fd before launching execution
+	while (tmp->next)	//opens and closes respective fd before launching execution
 	{
-		if (tmp->prev && tmp->next)
-			close(tmp->prev->new_fd);
-		beg = tmp->beg;
-		if (tmp->next)
-		{
-			if (shell->tok[tmp->next_re] == TK_LESS || shell->tok[tmp->next_re] == TK_DLESS ||
-				shell->tok[tmp->next_re] == TK_LESSAND)
-			{
-				close (0);
-				//(ionum != -1) ? close (ionum) : close (0);
-				if (tmp->next)
-				{
-					str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
-					if ((tmp->new_fd = open(str, O_RDONLY)) < 0)
-						printf("FD ERROR in < redirection, need to handle\n");
-					ft_strdel(&str);
-				}
-			}
-			else	//should be all non less-than redirections
-			{
-			//	(ionum != -1) ? close (ionum) : close (1);			
-				close (1);
-				if (tmp->next)
-				{
-					str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
-					if (shell->tok[tmp->next_re] == TK_GREAT || shell->tok[tmp->next_re] == TK_GREATAND)
-						if ((tmp->new_fd = open(str, O_CREAT | O_TRUNC | O_WRONLY, 0644)) < 0)
-							printf("FD ERROR in > redirection, need to handle\n");
-					if (shell->tok[tmp->next_re] == TK_DGREAT)
-						if ((tmp->new_fd = open(str, O_CREAT | O_APPEND | O_WRONLY, 0644)) < 0)
-							printf("FD ERROR in >> redirection, need to handle\n");
-				//	else
-				//		printf("REDIRECTION #%d STILL NEEDS HANDLING\n", tmp->next_re), this is meant for letting other token squeek through;
-					//dup2(tmp->new_fd, 1);
-					ft_strdel(&str);
-				}
-			}
-		}
-		//still need to carefully test for how command return values work with redirections
-		if (!(tmp->next))
-			shell->new_fd = tmp->new_fd;
+		//if (tmp->prev && tmp->next)
+		//	close(tmp->prev->new_fd);	
+		fd = get_fd(shell, tmp);
+		if (shell->tok[tmp->next_re] == TK_LESS)
+			implement_less(shell, tmp, fd);
+		else if (shell->tok[tmp->next_re] == TK_LESSAND)
+			implement_lessand(shell, tmp, fd);
+		else if (shell->tok[tmp->next_re] == TK_GREAT)
+			implement_great(shell, tmp, fd);
+		else if (shell->tok[tmp->next_re] == TK_GREATAND)
+			implement_greatand(shell, tmp, fd);
+		else if (shell->tok[tmp->next_re] == TK_DGREAT)
+			implement_dgreat(shell, tmp, fd);
+		else
+			printf("need to handle following redirection : %d\n", tmp->next_re);
+	//	printf("after analyzing redir #%d, closed %d, opened %d\n", counter++, fd, tmp->new_fd);
+	//	printf("now, restoring standard fds within implement_redirs\n");
+	//	restore_std_fds(shell, 0);
 		tmp = tmp->next;	//if tmp->next, free list through tmp->prev
 	}
+	//shell->new_fd = tmp->prev->new_fd;
 	ast_execute(shell, cmd);
 }
 
@@ -184,42 +273,61 @@ int			is_redirect(t_shell *shell, t_ast *ast, int beg, int end)
 	}
 	return (-1);
 }
+/*
+void 		implement_redirs(t_shell *shell, t_ast *cmd)
+{
+	t_redirs	*tmp = NULL;
+	int 		beg;
+	char		*str = NULL;
+	//int			ionum = -1;
 
-int	        *redirect_check(t_shell *shell)
-{	
-	int		i;
-	int		fd = -1;
-	int		*result = (int *)malloc(sizeof(int) * 2);
-
-	i = 0;
-	while (shell->args && shell->args[i])
+	shell_args_from_redirs(shell, cmd);
+	tmp = cmd->redirs;
+	while (tmp)	//opens and closes respective fd before launching execution
 	{
-		if (shell->args[i] && ((!(ft_strcmp(shell->args[i], ">")) 
-			|| !(ft_strcmp(shell->args[i], "<")) || !(ft_strcmp(shell->args[i], ">>")))))
+		if (tmp->prev && tmp->next)
+			close(tmp->prev->new_fd);
+		beg = tmp->beg;
+		if (tmp->next)
 		{
-			/* in this clause bc either > or >> or < exists. If <, close 0, else close 1 for other redirections */
-			(ft_strcmp(shell->args[i], "<") == 0) ? close(0) : close(1);
-			if (ft_strcmp(shell->args[i], "<") == 0)
-				fd = open(shell->args[i + 1], O_RDONLY);
-			else
-				fd = (shell->args[i][1] && shell->args[i][1] == '>') ? open(shell->args[i + 1], O_CREAT | O_APPEND | O_WRONLY, 0644)
-				: open(shell->args[i + 1], O_CREAT | O_TRUNC | O_WRONLY, 0644);
-			if (fd < 0)
+			if (shell->tok[tmp->next_re] == TK_LESS || shell->tok[tmp->next_re] == TK_DLESS ||
+				shell->tok[tmp->next_re] == TK_LESSAND)
 			{
-				printf("manage error opening file here\n");
-				exit(EXIT_FAILURE);
+				close (0);
+				//(ionum != -1) ? close (ionum) : close (0);
+				if (tmp->next)
+				{
+					str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
+					if ((tmp->new_fd = open(str, O_RDONLY)) < 0)
+						printf("FD ERROR in < redirection, need to handle\n");
+					ft_strdel(&str);
+				}
 			}
-			shell->args[i] = 0;
-			result[1] = i;
-			result[0] = fd;
-			return (result);
+			else	//should be all non less-than redirections
+			{
+			//	(ionum != -1) ? close (ionum) : close (1);			
+				close (1);
+				if (tmp->next)
+				{
+					str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
+					if (shell->tok[tmp->next_re] == TK_GREAT || shell->tok[tmp->next_re] == TK_GREATAND)
+						if ((tmp->new_fd = open(str, O_CREAT | O_TRUNC | O_WRONLY, 0644)) < 0)
+							printf("FD ERROR in > redirection, need to handle\n");
+					if (shell->tok[tmp->next_re] == TK_DGREAT)
+						if ((tmp->new_fd = open(str, O_CREAT | O_APPEND | O_WRONLY, 0644)) < 0)
+							printf("FD ERROR in >> redirection, need to handle\n");
+				//	else
+				//		printf("REDIRECTION #%d STILL NEEDS HANDLING\n", tmp->next_re), this is meant for letting other token squeek through;
+					//dup2(tmp->new_fd, 1);
+					ft_strdel(&str);
+				}
+			}
 		}
-		i++;
+		//still need to carefully test for how command return values work with redirections
+		if (!(tmp->next))
+			shell->new_fd = tmp->new_fd;
+		tmp = tmp->next;	//if tmp->next, free list through tmp->prev
 	}
-	result[0] = 0;
-	result[1] = 0;
-	/* returns int table with tb[0] = the post-redirect fd,
-	 ** tb[1] = index of redirection location in table (redirect is replaced with NULL) */
-	return (result);
+	ast_execute(shell, cmd);
 }
-
+*/

@@ -6,7 +6,7 @@
 #    By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/07/29 19:49:26 by nsehnoun         ###   ########.fr        #
+#    Updated: 2018/07/30 07:31:30 by azybert          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ SRC_FILES = main.c \
 			parser/execute.c \
 			parser/parser_validation.c \
 			parser/redirections.c \
+			parser/is_fd.c \
 			parser/ast.c \
 			\
 			builtins/add_to_mod.c \
@@ -73,6 +74,7 @@ SRC_FILES = main.c \
 			line_edit/autocompletion.c \
 			line_edit/cmpltn_utils.c \
 			line_edit/fetch_utils.c \
+			line_edit/prompt_utils.c \
 			
 
 INC_FILES = lexer.h \
@@ -95,7 +97,7 @@ LIB_INC = -I$(LIB_DIR)/include
 
 OPTIMIZATION ?= -O0
 CC ?= gcc
-CCFLAGS ?= -g -Wall -Wextra -Werror #-fsanitize=address -fno-omit-frame-pointer 
+CCFLAGS ?= -g3 -fsanitize=address -fno-omit-frame-pointer 
 LDFLAGS = -L$(LIB_DIR) -lft -ltermcap
 INCLUDES = $(LOCAL_INC) $(LIB_INC)
 

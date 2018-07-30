@@ -7,28 +7,31 @@
 
 t_prompt	*prompt;
 
-char	*get_pwd(void)
+static char	*get_pwd(t_shell *shell)
 {
 	int		i;
-	char	pwd[1024];
+	t_shell *shell_ptr;
 	char	*ptr;
 	char	*ptr2;
 
-	if (getcwd(pwd, 1024) == NULL)
+	shell_ptr = shell;
+	while (shell_ptr->list && ft_strcmp(shell_ptr->list->var, "PWD") != 0)
+		shell_ptr->list = shell_ptr->list->next;
+	if (shell_ptr->list == NULL)
 	{
-		ft_putendl_fd("pwd error", 2);
-		return (ft_strcpy(ft_strnew(2), "> "));
+		ft_putstr("pwd error");
+		exit(1);
 	}
-	i = ft_strlen(pwd) - 1;
-	while (i > 0 && pwd[i - 1] != '/')
+	i = ft_strlen(shell_ptr->list->val) - 1;
+	while (i > 0 && (shell_ptr->list->val)[i - 1] != '/')
 		i--;
-	ptr = ft_strjoin("\x1b[36m[", pwd + i);
+	ptr = ft_strjoin("\x1b[36m[", (shell_ptr->list->val) + i);
 	ptr2 = ft_strjoin(ptr, "]\x1b[0m ");
 	free(ptr);
 	return (ptr2);
 }
 
-static char	*line_mgmt(char *line, t_node *history)
+static char	*line_mgmt(char *line, t_shell shell, t_node *history)
 {
 	char *prompt;
 	char *ret;
@@ -36,7 +39,7 @@ static char	*line_mgmt(char *line, t_node *history)
 
 	if (line == NULL)
 	{
-		prompt = get_pwd();
+		prompt = get_pwd(&shell);
 		ret = line_edit_main_loop(prompt, history);
 		free(prompt);
 	}
@@ -50,45 +53,75 @@ static char	*line_mgmt(char *line, t_node *history)
 	return (ret);
 }
 
-t_node		*init_nonvoid_history(char *cmd, t_node *history)
+/*static void	test_tokens(int *tok)
 {
-	t_node	*new;
+	int		i = 0;
 
-	if (!(new = malloc(sizeof(*new))))
-		exit(1);
-	if (!(new->cmd = ft_strdup(cmd)))
-		exit(1);
-	new->next = history;
-
-	new->prev = NULL;
-	free(cmd);
-	cmd = NULL;
-	if (history)
-		history->prev = new;
-	history = new;
-	return (history);
-}
-
-t_node		*fill_history_file(t_node *history, t_shell *shell)
-{
-	int		i;
-	char	*c;
-	int		gnl;
-
-	c = NULL;
-	gnl = 0;
-	i = open(".history", O_RDWR | S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-	if (i >= 0)
+	while (tok[i] != -1)
 	{
-		while ((gnl = get_next_line(i, &c)) == 1)
+		switch(tok[i])
 		{
-			shell->history_length++;
-			history = init_nonvoid_history(c, history);
+			case TK_WORD:
+				printf("WORD \n");
+				break;
+			case TK_FILENAME:
+				printf("FILENAME \n");
+				break;
+			case TK_CMD:
+				printf("COMMAND \n");
+				break;
+			case TK_NEWLINE:
+				printf("NEWLINE \n");
+				break;
+			case TK_IO_NUMBER:
+				printf("IO_NUMBER \n");
+				break;
+			case TK_GREAT:
+				printf("GREAT \n");
+				break;
+			case TK_DGREAT:
+				printf("DGREAT \n");
+				break;
+			case TK_GREATAND:
+				printf("GREATAND \n");
+				break;
+			case TK_LESS:
+				printf("LESS \n");
+				break;
+			case TK_DLESS:
+				printf("DLESS \n");
+				break;
+			case TK_LESSAND:
+				printf("LESSAND \n");
+				break;
+			case TK_PIPE:
+				printf("PIPE \n");
+				break;
+			case TK_SEMI:
+				printf("SEMI \n");
+				break;
+			case TK_COMMENT:
+				printf("COMMENT \n");
+				break;
+			//case TK_SPACE:
+			//	printf("SPACE ");
+			//	break;
+			//case TK_AND:
+			//	printf("AND \n");
+			//	break;
+			case TK_AND_IF:
+				printf("AND_IF \n");
+				break;
+			case TK_OR_IF:
+				printf("OR_IF \n");
+				break;
+			case TK_END:
+				printf("END \n");
+				break;
 		}
-		close(i);
+		i += 3;
 	}
-	return (history);
-}
+}*/
 
 void		main_loop(char *line, t_shell shell)
 {
@@ -96,15 +129,15 @@ void		main_loop(char *line, t_shell shell)
 	int		parser_ret;
 	t_ast	*head;
 	t_node	*history;
-	
+
 	head = NULL;
 	history = NULL;
-	history = fill_history_file(history, &shell);
 	while (1)
 	{
-		line = line_mgmt(line, history);
+		line = line_mgmt(line, shell, history);
 		if ((shell.tok = get_tokens(line)) != NULL)
 		{
+			//test_tokens(shell.tok);
 			if ((parser_ret = parser_validation(shell.tok, line)) == 1)
 			{
 				shell.line = ft_strdup(line);
@@ -112,8 +145,6 @@ void		main_loop(char *line, t_shell shell)
 				{
 					history = add_to_history(line, history);
 					head = get_ast(&shell);
-					shell.history_length++;
-					shell.history = history;										
 				}
 				else
 					printf("error: no token table was compiled in main\n");
@@ -138,8 +169,6 @@ int			main(int argc, char **argv, char **env)
 	///////////////////////////////////
 	shell.list = (env && env[0]) ? env_setup(env) : env_init();
 	shell.envv = (shell.list) ? env_to_tab(shell.list) : NULL;
-	shell.error = 0;
-	shell.history_length = 0;
 	///////////////////////////////////
 	if ((name_term = getenv("TERM")) == NULL)
 	{
@@ -153,9 +182,6 @@ int			main(int argc, char **argv, char **env)
 }
 
 //TESTS/////////////////////////////////////////////////////////////////////////
-		//print_leaf_nodes(head);
-//		printf("trying to call traverse_ast to analyze pipes\n");
-//		traverse_ast(head, 3);
 	/*	while (tab[i] != -1)
 		{
 			switch(tab[i])
