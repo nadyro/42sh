@@ -89,43 +89,40 @@ static int 	get_fd(t_shell *shell, t_redirs *node)
 static void	implement_great(t_shell *shell, t_redirs *node, int fd)
 {
 	t_redirs	*tmp = node;
-	int 		new_fd;
 	char		*str;
 
 	str = shell->line + shell->tok[tmp->next_re + 3 + 1];
-	if ((new_fd = is_fd(str, shell->tok[tmp->next_re + 3 + 2])) > 0)
-		dup2(new_fd, fd);
-	else if (new_fd == 0)
+	if ((tmp->new_fd = is_fd(str, shell->tok[tmp->next_re + 3 + 2])) > 0)
+		dup2(tmp->new_fd, fd);
+	else if (tmp->new_fd == 0)
 	{
 		str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
-		new_fd = open(str, O_CREAT | O_TRUNC | O_WRONLY, 0666);
+		tmp->new_fd = open(str, O_CREAT | O_TRUNC | O_WRONLY, 0666);
 		ft_strdel(&str);
-		(new_fd < 0) ? ft_putendl_fd("bad file descriptor", 2) : dup2(new_fd, fd);
+		(tmp->new_fd < 0) ? ft_putendl_fd("bad file descriptor", 2) : dup2(tmp->new_fd, fd);
 	}
 }
 
 static void	implement_dgreat(t_shell *shell, t_redirs *node, int fd)
 {
 	t_redirs	*tmp = node;
-	int 		new_fd;
 	char		*str;
 
 	str = shell->line + shell->tok[tmp->next_re + 3 + 1];
-	if ((new_fd = is_fd(str, shell->tok[tmp->next_re + 3 + 2])) > 0)
-		dup2(new_fd, fd);
-	else if (new_fd == 0)
+	if ((tmp->new_fd = is_fd(str, shell->tok[tmp->next_re + 3 + 2])) > 0)
+		dup2(tmp->new_fd, fd);
+	else if (tmp->new_fd == 0)
 	{
 		str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
-		new_fd = open(str, O_CREAT | O_APPEND | O_WRONLY, 0666);
+		tmp->new_fd = open(str, O_CREAT | O_APPEND | O_WRONLY, 0666);
 		ft_strdel(&str);
-		(new_fd < 0) ? ft_putendl_fd("bad file descriptor", 2) : dup2(new_fd, fd);
+		(tmp->new_fd < 0) ? ft_putendl_fd("bad file descriptor", 2) : dup2(tmp->new_fd, fd);
 	}
 }
 
 static void	implement_greatand(t_shell *shell, t_redirs *node, int fd)
 {
 	t_redirs	*tmp = node;
-	int 		new_fd;
 	char		*str;
 
 	str = shell->line + shell->tok[tmp->next_re + 3 + 1];
@@ -134,39 +131,37 @@ static void	implement_greatand(t_shell *shell, t_redirs *node, int fd)
 		close (fd);
 		return ;
 	}
-	if ((new_fd = is_fd(str, shell->tok[tmp->next_re + 3 + 2])) > 0)
-		dup2(new_fd, fd);
-	else if (new_fd == 0)
+	if ((tmp->new_fd = is_fd(str, shell->tok[tmp->next_re + 3 + 2])) > 0)
+		dup2(tmp->new_fd, fd);
+	else if (tmp->new_fd == 0)
 	{
 		str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
-		new_fd = open(str, O_CREAT | O_APPEND | O_WRONLY, 0666);
+		tmp->new_fd = open(str, O_CREAT | O_APPEND | O_WRONLY, 0666);
 		ft_strdel(&str);
-		(new_fd < 0) ? ft_putendl_fd("bad file descriptor", 2) : dup2(new_fd, fd);
+		(tmp->new_fd < 0) ? ft_putendl_fd("bad file descriptor", 2) : dup2(tmp->new_fd, fd);
 	}
 }
 
 static void	implement_less(t_shell *shell, t_redirs *node, int fd)
 {
 	t_redirs	*tmp = node;
-	int 		new_fd;
 	char		*str;
 
 	str = shell->line + shell->tok[tmp->next_re + 3 + 1];
-	if ((new_fd = is_fd(str, shell->tok[tmp->next_re + 3 + 2])) > 0)
-		dup2(new_fd, fd);
-	else if (new_fd == 0)
+	if ((tmp->new_fd = is_fd(str, shell->tok[tmp->next_re + 3 + 2])) > 0)
+		dup2(tmp->new_fd, fd);
+	else if (tmp->new_fd == 0)
 	{
 		str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
-		new_fd = open(str, O_RDONLY);
+		tmp->new_fd = open(str, O_RDONLY);
 		ft_strdel(&str);
-		(new_fd < 0) ? ft_putendl_fd("bad file descriptor", 2) : dup2(new_fd, fd);
+		(tmp->new_fd < 0) ? ft_putendl_fd("bad file descriptor", 2) : dup2(tmp->new_fd, fd);
 	}
 }
 
 static void	implement_lessand(t_shell *shell, t_redirs *node, int fd)
 {
 	t_redirs	*tmp = node;
-	int 		new_fd;
 	char		*str;
 
 	str = shell->line + shell->tok[tmp->next_re + 3 + 1];
@@ -175,29 +170,30 @@ static void	implement_lessand(t_shell *shell, t_redirs *node, int fd)
 		close (fd);
 		return ;
 	}
-	if ((new_fd = is_fd(str, shell->tok[tmp->next_re + 3 + 2])) > 0)
-		dup2(new_fd, fd);
-	else if (new_fd == 0)
+	if ((tmp->new_fd = is_fd(str, shell->tok[tmp->next_re + 3 + 2])) > 0)
+		dup2(tmp->new_fd, fd);
+	else if (tmp->new_fd == 0)
 	{
 		str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
-		new_fd = open(str, O_RDONLY);
+		tmp->new_fd = open(str, O_RDONLY);
 		ft_strdel(&str);
-		(new_fd < 0) ? ft_putendl_fd("bad file descriptor", 2) : dup2(new_fd, fd);
+		(tmp->new_fd < 0) ? ft_putendl_fd("bad file descriptor", 2) : dup2(tmp->new_fd, fd);
 	}
 }
 
 void 		implement_redirs(t_shell *shell, t_ast *cmd)
 {
 	t_redirs	*tmp = NULL;
-	int 		beg;
-	char		*str = NULL;
 	int 		fd;
+	//int 		counter = 1;
 	//int			ionum = -1;
 
 	shell_args_from_redirs(shell, cmd);
 	tmp = cmd->redirs;
 	while (tmp->next)	//opens and closes respective fd before launching execution
 	{
+		//if (tmp->prev && tmp->next)
+		//	close(tmp->prev->new_fd);	
 		fd = get_fd(shell, tmp);
 		if (shell->tok[tmp->next_re] == TK_LESS)
 			implement_less(shell, tmp, fd);
@@ -211,8 +207,12 @@ void 		implement_redirs(t_shell *shell, t_ast *cmd)
 			implement_dgreat(shell, tmp, fd);
 		else
 			printf("need to handle following redirection : %d\n", tmp->next_re);
+	//	printf("after analyzing redir #%d, closed %d, opened %d\n", counter++, fd, tmp->new_fd);
+	//	printf("now, restoring standard fds within implement_redirs\n");
+	//	restore_std_fds(shell, 0);
 		tmp = tmp->next;	//if tmp->next, free list through tmp->prev
 	}
+	//shell->new_fd = tmp->prev->new_fd;
 	ast_execute(shell, cmd);
 }
 

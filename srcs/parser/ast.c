@@ -141,7 +141,6 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		//printf("DEBUG 1 : GOING TO EXECUTE: %s, address = %s\n", ast->arg, ast->address);
 		if ((ret = is_redirect(shell, ast, ast->beg, ast->end)) != -1)
 		{
-			printf("filling redirs list\n");
 			fill_redirs(shell, ast, ast->beg, ret);
 			shell->s_in = dup(0);
 			shell->s_out = dup(1);

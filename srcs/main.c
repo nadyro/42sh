@@ -118,15 +118,6 @@ static char	*line_mgmt(char *line, t_shell shell, t_node *history)
 			case TK_END:
 				printf("END \n");
 				break;
-			case TK_PROGRAM:
-				printf("PROGRAM \n");
-				break;
-			case TK_QUOTED_WORD:
-				printf("QUOTED_WORD \n");
-				break;
-			case TK_DQUOTED_WORD:
-				printf("DQUOTED_WORD \n");
-				break;
 		}
 		i += 3;
 	}
