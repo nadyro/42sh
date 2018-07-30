@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_edit_main_loop.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2018/07/30 08:33:30 by azybert          ###   ########.fr       */
-=======
-/*   Updated: 2018/07/29 23:36:39 by nsehnoun         ###   ########.fr       */
->>>>>>> 6649c5d3c4e3a3dbcfc27b3f017945052f022afd
+/*   Updated: 2018/07/30 17:22:50 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
