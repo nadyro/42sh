@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/07/30 00:04:53 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/07/30 18:01:02 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ t_env			*env_init(void);
 void			update_old_pwd(t_shell *shell, char *new_pwd);
 int				cd_opt_check(t_shell *shell);
 void	    	cd_canon(t_shell *shell);
+t_node			*init_nonvoid_history(char *cmd, t_node *history);
 t_node			*fill_history_file(t_node *history, t_shell *shell);
 void			read_history(t_node *history, int nbr);
 int				ash_history(t_shell *shell);

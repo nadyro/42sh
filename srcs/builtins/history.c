@@ -3,14 +3,52 @@
 /*                                                        :::      ::::::::   */
 /*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/29 16:17:24 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/07/29 23:24:33 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/07/30 18:03:32 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
+
+t_node    *init_nonvoid_history(char *cmd, t_node *history) 
+{ 
+  t_node  *new; 
+ 
+  if (!(new = malloc(sizeof(*new)))) 
+    exit(1); 
+  if (!(new->cmd = ft_strdup(cmd))) 
+    exit(1); 
+  new->next = history; 
+ 
+  new->prev = NULL; 
+  free(cmd); 
+  cmd = NULL; 
+  if (history) 
+    history->prev = new; 
+  history = new; 
+  return (history); 
+} 
+
+t_node    *fill_history_file(t_node *history, t_shell *shell) 
+{ 
+  int    i; 
+  char  *c; 
+  int    gnl; 
+ 
+  c = NULL; 
+  gnl = 0; 
+  i = open(".history", O_RDWR | S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH); 
+  if (i >= 0) 
+  while ((gnl = get_next_line(i, &c)) == 1)
+  {
+	  shell->history_length++; 
+      history = init_nonvoid_history(c, history);
+  }
+  close(i);
+  return (history);
+}
 
 void	print_history(int *x, char **cmd, int to_free)
 {

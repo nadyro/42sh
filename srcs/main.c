@@ -53,6 +53,72 @@ static char	*line_mgmt(char *line, t_shell shell, t_node *history)
 	return (ret);
 }
 
+void		main_loop(char *line, t_shell shell)
+{
+	//int		*token_tab;
+	int		parser_ret;
+	t_ast	*head;
+	t_node	*history;
+
+	head = NULL;
+	history = NULL;
+	//Nadir's part! Do not touch ! >=E
+	history = fill_history_file(history, &shell);
+	//End of Nadir's part.	
+	while (1)
+	{
+		line = line_mgmt(line, shell, history);
+		if ((shell.tok = get_tokens(line)) != NULL)
+		{
+			//test_tokens(shell.tok);
+			if ((parser_ret = parser_validation(shell.tok, line)) == 1)
+			{
+				shell.line = ft_strdup(line);
+				if (shell.tok && shell.tok[0])
+				{
+					history = add_to_history(line, history);
+					head = get_ast(&shell);
+					//Nadir's part! Do not touch ! >=E					
+					shell.history_length++; 
+          			shell.history = history; 
+					//End of Nadir's part.
+				}
+				else
+					printf("error: no token table was compiled in main\n");
+				//printf("TREE COMPILED, SENDING TO printLeafNodes\n\n\n");
+				ast_loop(&shell, head);
+				ft_strdel(&line);
+				ft_strdel(&(shell.line));
+			}
+			else if (parser_ret == 0)
+				ft_strdel(&line);
+		}
+	}
+}
+
+int			main(int argc, char **argv, char **env)
+{
+	t_shell	shell;
+	char	*name_term;
+
+	(void)argc;
+	(void)argv;
+	///////////////////////////////////
+	shell.list = (env && env[0]) ? env_setup(env) : env_init();
+	shell.envv = (shell.list) ? env_to_tab(shell.list) : NULL;
+	shell.history_length = 0;
+	///////////////////////////////////
+	if ((name_term = getenv("TERM")) == NULL)
+	{
+		write(2, "Please set the environment variable TERM\n", 41);
+		return (-1);
+	}
+	if (tgetent(NULL, name_term) == ERR)
+		return (-1);
+	main_loop(NULL, shell);
+	return (0);
+}
+
 /*static void	test_tokens(int *tok)
 {
 	int		i = 0;
@@ -123,63 +189,11 @@ static char	*line_mgmt(char *line, t_shell shell, t_node *history)
 	}
 }*/
 
-void		main_loop(char *line, t_shell shell)
-{
-	//int		*token_tab;
-	int		parser_ret;
-	t_ast	*head;
-	t_node	*history;
 
-	head = NULL;
-	history = NULL;
-	while (1)
-	{
-		line = line_mgmt(line, shell, history);
-		if ((shell.tok = get_tokens(line)) != NULL)
-		{
-			//test_tokens(shell.tok);
-			if ((parser_ret = parser_validation(shell.tok, line)) == 1)
-			{
-				shell.line = ft_strdup(line);
-				if (shell.tok && shell.tok[0])
-				{
-					history = add_to_history(line, history);
-					head = get_ast(&shell);
-				}
-				else
-					printf("error: no token table was compiled in main\n");
-				//printf("TREE COMPILED, SENDING TO printLeafNodes\n\n\n");
-				ast_loop(&shell, head);
-				ft_strdel(&line);
-				ft_strdel(&(shell.line));
-			}
-			else if (parser_ret == 0)
-				ft_strdel(&line);
-		}
-	}
-}
 
-int			main(int argc, char **argv, char **env)
-{
-	t_shell	shell;
-	char	*name_term;
 
-	(void)argc;
-	(void)argv;
-	///////////////////////////////////
-	shell.list = (env && env[0]) ? env_setup(env) : env_init();
-	shell.envv = (shell.list) ? env_to_tab(shell.list) : NULL;
-	///////////////////////////////////
-	if ((name_term = getenv("TERM")) == NULL)
-	{
-		write(2, "Please set the environment variable TERM\n", 41);
-		return (-1);
-	}
-	if (tgetent(NULL, name_term) == ERR)
-		return (-1);
-	main_loop(NULL, shell);
-	return (0);
-}
+
+
 
 //TESTS/////////////////////////////////////////////////////////////////////////
 	/*	while (tab[i] != -1)
