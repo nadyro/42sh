@@ -97,7 +97,7 @@ int				g_state_to_token[29] = {
 	0, TK_WORD, TK_AND_IF, TK_OR_IF
 };
 
-int				*lexer_alloc(int *tk_arr, int *arr_size)
+static int		*lexer_alloc(int *tk_arr, int *arr_size)
 {
 	int		*new;
 	int		i;
