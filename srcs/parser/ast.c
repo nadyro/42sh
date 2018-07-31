@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/25 20:08:29 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/31 14:54:16 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void		create_arg_table(t_shell *shell, int beg, int end)
 	
 	if (end < beg)
 	{
-		printf("end is less than big in create arg table, setting shell->args to NULL\n");
+		//printf("end is less than big in create arg table, setting shell->args to NULL\n");
 		shell->args = NULL;
 		return ;
 	}

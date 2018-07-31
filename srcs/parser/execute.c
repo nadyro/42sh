@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/25 20:22:19 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/31 15:40:17 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ void		restore_std_fds(t_shell *shell, t_redirs *rd)
 	//close(shell->new_fd);
 	while (tmp)
 	{
-		close(tmp->new_fd);
+		if (fcntl(tmp->new_fd, F_GETFD) != -1)	
+			close(tmp->new_fd);
 		tmp = tmp->next;
 	}
 }
@@ -79,19 +80,22 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 		ft_strdel(&(shell->full_path));
 }
 
+static void	handle_dotdot_error(t_shell *shell, t_ast *cmd)
+{
+		ft_putstr_fd(shell->args[0], 2);
+		ft_putstr_fd(": Command not found.\n", 2);
+		ft_bzero((void *)(shell->args[0]), ft_strlen(shell->args[0]));
+		ft_strdel(&(shell->full_path));
+		cmd->cmd_ret = -1;	
+}
+
 int			ast_execute(t_shell *shell, t_ast *cmd)
 {
 	if (shell && shell->args && shell->args[0])
 	{
 		shell->full_path = (has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
 		if (ft_strcmp(shell->args[0], ".") == 0 || ft_strcmp(shell->args[0], "..") == 0)
-		{
-			ft_putstr_fd(shell->args[0], 2);
-			ft_putstr_fd(": Command not found.\n", 2);
-			ft_bzero((void *)(shell->args[0]), ft_strlen(shell->args[0]));
-			ft_strdel(&(shell->full_path));
-			cmd->cmd_ret = -1;			
-		}
+			handle_dotdot_error(shell, cmd);
 		if (builtin_check(shell) != -1)
 			cmd->cmd_ret = 0;
 		else if (shell->full_path || !(access(shell->args[0], F_OK)))	//if binary exists in PATH, fork and execute
@@ -114,7 +118,34 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 	//else
 	//	return (0);		//ie if args table doesnt exist and command line is just spaces and tabs, return 0
 }
+/*
+void		execute_command_pipe(t_exe *exe)
+{
+	int	fd[2];
+	int	pid;
+	int	builtin_id;
 
+	builtin_id = get_builtin(exe->str +
+			*(exe->current->childs[1]->childs[0]->token + 1),
+			*(exe->current->childs[1]->childs[0]->token + 2));
+	if (builtin_id == 0)
+		execute_command_builtin(exe, builtin_id, fd);
+	pipe(fd);
+	if ((pid = fork()) == -1)
+		exit(1);
+	if (pid == 0 && builtin_id != -1 && builtin_id < 10)
+		execute_command_builtin(exe, builtin_id, fd);
+	else if (pid == 0)
+		execute_command_pipe_forked(exe, fd);
+	else
+	{
+		close(fd[1]);
+		exe->io_stdin = fd[0];
+		if (exe->last->childs[2] == exe->current)
+			while ((pid = wait(&pid)) > 0);
+	}
+}
+*/
 void		ast_loop(t_shell *shell, t_ast *ast)
 {
 	int		status;
