@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/31 17:48:43 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/31 18:37:08 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 			cmd->cmd_ret = -1;
 		}
 	}
-	//printf("about to return ast_execute: cmd_ret = %d\n", cmd->cmd_ret);
+	printf("about to return ast_execute: cmd_ret = %d\n", cmd->cmd_ret);
 	return (cmd->cmd_ret);
 	//else
 	//	return (0);		//ie if args table doesnt exist and command line is just spaces and tabs, return 0

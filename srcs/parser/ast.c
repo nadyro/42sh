@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/31 17:42:39 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/31 19:20:02 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,6 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 			create_arg_table(shell, ast->beg, ast->end);
 			ast_execute(shell, ast);
 		}
-		//printf("DEBUG 3, AFTER executing %s, cmd->ret = %d\n", ast->arg, ast->cmd_ret);
 		if (shell->args)
 			free_table(shell->args);
 		//printf("DEBUG 4, ret = %d\n", ret);
@@ -160,7 +159,6 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		{
 		//	printf("DEBUG 5\n");
 		//	printf("RETURNING 0 after command execution\n");
-		//	printf("DEBUG 6\n");
 			return (ast->cmd_ret);
 		}	
 		else if (ast->cmd_ret < 0)
@@ -178,39 +176,23 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 			//printf("and if located while in %s\nSENDING left : %s to ast_evaluate\n", ast->arg, ast->left->arg);
 			v1 = ast_evaluate(ast->left, shell);
 			if (v1 != 0)
-			{
-			//	printf("v1 = %d\n, returning -1\n", v1);
-				//free_ast(ast->right);
 				return (-1);
-			}
 			else if (v1 == 0)
 			{
 			//	printf("left branch of ANDIF returned 0\n");
 				v2 = ast_evaluate(ast->right, shell);
 				if (v2 == 0)
-				{
-			//		printf("right branch RETURNING of ANDIF returned v2 = 0\n");
 					return (0);
-				}
 				else
-				{
-			//		printf("right branch of ANDIF RETURNING v2 = %d\n", v2);
 					return (-1);
-				}
 			}
 		}
 		else if (op == TK_OR_IF)
 		{
 		//	printf("ORIF found at : %s\n", ast->arg);
-		//	printf("going to calculate v1 using %s\n", ast->left->arg);
 			v1 = ast_evaluate(ast->left, shell);
 			if (v1 == 0)
-			{
-			//	printf("ENTERED v1 = 0 clause of left side of OR_IF, should return %d\n", v1);
-		//		printf("left branch of ORIF RETURNING 0\n");
-			//	free_ast(ast->right);
 				return (v1);
-			}
 			else
 			{
 		//		printf("left branch of ORIF did not return 0, v1 = %d\n, evaluate right branch\n", v1);
@@ -229,52 +211,14 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		}
 		else if (op == TK_PIPE)
 		{
-			pid_t	pid;
-			int		fd[2];
-
-			pipe(fd);
-			pid = fork();
-			if (pid == 0)
-			{
-				dup2(fd[1], STDOUT_FILENO);
-				close(fd[0]);
-				close(fd[1]);
-				v1 = ast_evaluate(ast->left, shell);
-				exit(1);
-			}
-			else
-			{
-				pid = fork();
-				if (pid == 0)
-				{
-					dup2(fd[0], STDIN_FILENO);
-					close(fd[1]);
-					close(fd[0]);
-					v2 = ast_evaluate(ast->right, shell);
-					exit (1);
-				}
-				else
-				{
-					int		status;
-					close(fd[0]);
-					close(fd[1]);
-					waitpid(pid, &status, 0);
-				}
-			}
-			//printf("PIPE found at : %s\n", ast->arg);
-			//printf("use ft_pipe_execution\n");
-	//		v1 = ast_evaluate(ast->left, shell);
-	//		v2 =ast_evaluate(ast->right, shell);
-			//printf("PIPE RETURNING 0\n");
-			return (0);
+			evaluate_pipe_node(shell, ast);
+			printf("returning %d after pipe evaluation\n", ast->right->cmd_ret);
+			return (ast->right->cmd_ret);
 		}
 		else if (op == TK_SEMI)
 		{
-			//printf("SEMI found at %s\nevaluating left node\n", ast->arg);
 			v1 = ast_evaluate(ast->left, shell);
-			//printf("SEMI found at %s\nevaluating right node\n", ast->arg);
 			v2 = ast_evaluate(ast->right, shell);
-			//printf("SEMI COMPLETELY PROCESSED, v1 = %d\nv2 = %d\nRETURNING 0\n", v1, v2);
 			return (0);
 		}
 		//printf("LEAVING IF clause 3\n");
