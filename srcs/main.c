@@ -7,31 +7,28 @@
 
 t_prompt	*prompt;
 
-static char	*get_pwd(t_shell *shell)
+static char  *get_pwd(void)
 {
-	int		i;
-	t_shell *shell_ptr;
-	char	*ptr;
-	char	*ptr2;
+	int    i;
+	char  pwd[1024];
+	char  *ptr;
+	char  *ptr2;
 
-	shell_ptr = shell;
-	while (shell_ptr->list && ft_strcmp(shell_ptr->list->var, "PWD") != 0)
-		shell_ptr->list = shell_ptr->list->next;
-	if (shell_ptr->list == NULL)
+	if (getcwd(pwd, 1024) == NULL)
 	{
-		ft_putstr("pwd error");
-		exit(1);
+		ft_putendl_fd("pwd error", 2);
+		return (ft_strcpy(ft_strnew(2), "> "));
 	}
-	i = ft_strlen(shell_ptr->list->val) - 1;
-	while (i > 0 && (shell_ptr->list->val)[i - 1] != '/')
+	i = ft_strlen(pwd) - 1;
+	while (i > 0 && pwd[i - 1] != '/')
 		i--;
-	ptr = ft_strjoin("\x1b[36m[", (shell_ptr->list->val) + i);
+	ptr = ft_strjoin("\x1b[36m[", pwd + i);
 	ptr2 = ft_strjoin(ptr, "]\x1b[0m ");
 	free(ptr);
 	return (ptr2);
 }
 
-static char	*line_mgmt(char *line, t_shell shell, t_node *history)
+static char	*line_mgmt(char *line, t_node *history)
 {
 	char *prompt;
 	char *ret;
@@ -39,7 +36,7 @@ static char	*line_mgmt(char *line, t_shell shell, t_node *history)
 
 	if (line == NULL)
 	{
-		prompt = get_pwd(&shell);
+		prompt = get_pwd();
 		ret = line_edit_main_loop(prompt, history);
 		free(prompt);
 	}
@@ -67,7 +64,7 @@ void		main_loop(char *line, t_shell shell)
 	//End of Nadir's part.	
 	while (1)
 	{
-		line = line_mgmt(line, shell, history);
+		line = line_mgmt(line, history);
 		if ((shell.tok = get_tokens(line)) != NULL)
 		{
 			//test_tokens(shell.tok);
@@ -80,7 +77,7 @@ void		main_loop(char *line, t_shell shell)
 					head = get_ast(&shell);
 					//Nadir's part! Do not touch ! >=E					
 					shell.history_length++; 
-          			shell.history = history; 
+					shell.history = history; 
 					//End of Nadir's part.
 				}
 				else
@@ -120,73 +117,73 @@ int			main(int argc, char **argv, char **env)
 }
 
 /*static void	test_tokens(int *tok)
-{
-	int		i = 0;
+  {
+  int		i = 0;
 
-	while (tok[i] != -1)
-	{
-		switch(tok[i])
-		{
-			case TK_WORD:
-				printf("WORD \n");
-				break;
-			case TK_FILENAME:
-				printf("FILENAME \n");
-				break;
-			case TK_CMD:
-				printf("COMMAND \n");
-				break;
-			case TK_NEWLINE:
-				printf("NEWLINE \n");
-				break;
-			case TK_IO_NUMBER:
-				printf("IO_NUMBER \n");
-				break;
-			case TK_GREAT:
-				printf("GREAT \n");
-				break;
-			case TK_DGREAT:
-				printf("DGREAT \n");
-				break;
-			case TK_GREATAND:
-				printf("GREATAND \n");
-				break;
-			case TK_LESS:
-				printf("LESS \n");
-				break;
-			case TK_DLESS:
-				printf("DLESS \n");
-				break;
-			case TK_LESSAND:
-				printf("LESSAND \n");
-				break;
-			case TK_PIPE:
-				printf("PIPE \n");
-				break;
-			case TK_SEMI:
-				printf("SEMI \n");
-				break;
-			case TK_COMMENT:
-				printf("COMMENT \n");
-				break;
-			//case TK_SPACE:
-			//	printf("SPACE ");
-			//	break;
-			//case TK_AND:
-			//	printf("AND \n");
-			//	break;
-			case TK_AND_IF:
-				printf("AND_IF \n");
-				break;
-			case TK_OR_IF:
-				printf("OR_IF \n");
-				break;
-			case TK_END:
-				printf("END \n");
-				break;
-		}
-		i += 3;
-	}
+  while (tok[i] != -1)
+  {
+  switch(tok[i])
+  {
+  case TK_WORD:
+  printf("WORD \n");
+  break;
+  case TK_FILENAME:
+  printf("FILENAME \n");
+  break;
+  case TK_CMD:
+  printf("COMMAND \n");
+  break;
+  case TK_NEWLINE:
+  printf("NEWLINE \n");
+  break;
+  case TK_IO_NUMBER:
+  printf("IO_NUMBER \n");
+  break;
+  case TK_GREAT:
+  printf("GREAT \n");
+  break;
+  case TK_DGREAT:
+  printf("DGREAT \n");
+  break;
+  case TK_GREATAND:
+  printf("GREATAND \n");
+  break;
+  case TK_LESS:
+  printf("LESS \n");
+  break;
+  case TK_DLESS:
+  printf("DLESS \n");
+  break;
+  case TK_LESSAND:
+  printf("LESSAND \n");
+  break;
+  case TK_PIPE:
+  printf("PIPE \n");
+  break;
+  case TK_SEMI:
+  printf("SEMI \n");
+  break;
+  case TK_COMMENT:
+  printf("COMMENT \n");
+  break;
+//case TK_SPACE:
+//	printf("SPACE ");
+//	break;
+//case TK_AND:
+//	printf("AND \n");
+//	break;
+case TK_AND_IF:
+printf("AND_IF \n");
+break;
+case TK_OR_IF:
+printf("OR_IF \n");
+break;
+case TK_END:
+printf("END \n");
+break;
+}
+i += 3;
+}
 }*/
 
 
@@ -196,76 +193,76 @@ int			main(int argc, char **argv, char **env)
 
 
 //TESTS/////////////////////////////////////////////////////////////////////////
-	/*	while (tab[i] != -1)
-		{
-			switch(tab[i])
-			{
-				case TK_WORD:
-					printf("WORD \n");
-					break;
-				case TK_NEWLINE:
-					printf("NEWLINE \n");
-					break;
-				case TK_IO_NUMBER:
-					printf("IO_NUMBER \n");
-					break;
-				case TK_GREAT:
-					printf("GREAT \n");
-					break;
-				case TK_DGREAT:
-					printf("DGREAT \n");
-					break;
-				case TK_GREATAND:
-					printf("GREATAND \n");
-					break;
-				case TK_LESS:
-					printf("LESS \n");
-					break;
-				case TK_DLESS:
-					printf("DLESS \n");
-					break;
-				case TK_LESSAND:
-					printf("LESSAND \n");
-					break;
-				case TK_PIPE:
-					printf("PIPE \n");
-					break;
-				case TK_SEMI:
-					printf("SEMI \n");
-					break;
-				case TK_COMMENT:
-					printf("COMMENT \n");
-					break;
-				//case TK_SPACE:
-				//	printf("SPACE ");
-				//	break;
-				case TK_AND:
-					printf("AND \n");
-					break;
-				case TK_AND_IF:
-					printf("AND_IF \n");
-					break;
-				case TK_OR_IF:
-					printf("OR_IF \n");
-					break;
-				case TK_END:
-					printf("END \n");
-					break;
-				case TK_PROGRAM:
-					printf("PROGRAM \n");
-					break;
-				case TK_QUOTED_WORD:
-					printf("QUOTED_WORD \n");
-					break;
-				case TK_DQUOTED_WORD:
-					printf("DQUOTED_WORD \n");
-					break;
-			}
-			i += 3;
-		}
-		*/
-	//if (ac >= 1 && av)
-	//		ash_loop(&shell);
-	//if (shell.list && shell->var && shell->var[0])
-	//		free_env(shell.list);
+/*	while (tab[i] != -1)
+	{
+	switch(tab[i])
+	{
+	case TK_WORD:
+	printf("WORD \n");
+	break;
+	case TK_NEWLINE:
+	printf("NEWLINE \n");
+	break;
+	case TK_IO_NUMBER:
+	printf("IO_NUMBER \n");
+	break;
+	case TK_GREAT:
+	printf("GREAT \n");
+	break;
+	case TK_DGREAT:
+	printf("DGREAT \n");
+	break;
+	case TK_GREATAND:
+	printf("GREATAND \n");
+	break;
+	case TK_LESS:
+	printf("LESS \n");
+	break;
+	case TK_DLESS:
+	printf("DLESS \n");
+	break;
+	case TK_LESSAND:
+	printf("LESSAND \n");
+	break;
+	case TK_PIPE:
+	printf("PIPE \n");
+	break;
+	case TK_SEMI:
+	printf("SEMI \n");
+	break;
+	case TK_COMMENT:
+	printf("COMMENT \n");
+	break;
+//case TK_SPACE:
+//	printf("SPACE ");
+//	break;
+case TK_AND:
+printf("AND \n");
+break;
+case TK_AND_IF:
+printf("AND_IF \n");
+break;
+case TK_OR_IF:
+printf("OR_IF \n");
+break;
+case TK_END:
+printf("END \n");
+break;
+case TK_PROGRAM:
+printf("PROGRAM \n");
+break;
+case TK_QUOTED_WORD:
+printf("QUOTED_WORD \n");
+break;
+case TK_DQUOTED_WORD:
+printf("DQUOTED_WORD \n");
+break;
+}
+i += 3;
+}
+*/
+//if (ac >= 1 && av)
+//		ash_loop(&shell);
+//if (shell.list && shell->var && shell->var[0])
+//		free_env(shell.list);
 ///////////////////////////////////////////////////////////////////////////////
