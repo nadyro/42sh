@@ -118,34 +118,7 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 	//else
 	//	return (0);		//ie if args table doesnt exist and command line is just spaces and tabs, return 0
 }
-/*
-void		execute_command_pipe(t_exe *exe)
-{
-	int	fd[2];
-	int	pid;
-	int	builtin_id;
 
-	builtin_id = get_builtin(exe->str +
-			*(exe->current->childs[1]->childs[0]->token + 1),
-			*(exe->current->childs[1]->childs[0]->token + 2));
-	if (builtin_id == 0)
-		execute_command_builtin(exe, builtin_id, fd);
-	pipe(fd);
-	if ((pid = fork()) == -1)
-		exit(1);
-	if (pid == 0 && builtin_id != -1 && builtin_id < 10)
-		execute_command_builtin(exe, builtin_id, fd);
-	else if (pid == 0)
-		execute_command_pipe_forked(exe, fd);
-	else
-	{
-		close(fd[1]);
-		exe->io_stdin = fd[0];
-		if (exe->last->childs[2] == exe->current)
-			while ((pid = wait(&pid)) > 0);
-	}
-}
-*/
 void		ast_loop(t_shell *shell, t_ast *ast)
 {
 	int		status;

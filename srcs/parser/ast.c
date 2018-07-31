@@ -176,15 +176,15 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 			//printf("and if located while in %s\nSENDING left : %s to ast_evaluate\n", ast->arg, ast->left->arg);
 			v1 = ast_evaluate(ast->left, shell);
 			if (v1 != 0)
-				return (-1);
+				return (ast->cmd_ret = -1);
 			else if (v1 == 0)
 			{
 			//	printf("left branch of ANDIF returned 0\n");
 				v2 = ast_evaluate(ast->right, shell);
 				if (v2 == 0)
-					return (0);
+					return (ast->cmd_ret = 0);
 				else
-					return (-1);
+					return (ast->cmd_ret = -1);
 			}
 		}
 		else if (op == TK_OR_IF)
@@ -192,7 +192,7 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		//	printf("ORIF found at : %s\n", ast->arg);
 			v1 = ast_evaluate(ast->left, shell);
 			if (v1 == 0)
-				return (v1);
+				return (ast->cmd_ret = v1);
 			else
 			{
 		//		printf("left branch of ORIF did not return 0, v1 = %d\n, evaluate right branch\n", v1);
@@ -200,19 +200,19 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 				if (v2 == 0)
 				{
 		//			printf("right side of OR_IF RETURNING 0, v2 = %d\n", v2);
-					return (0);
+					return (ast->cmd_ret = 0);
 				}
 				else
 				{
 		//			printf("right side of OR_IF RETURNING v2 = %d\n", v2);
-					return (-1);
+					return (ast->cmd_ret = -1);
 				}
 			}
 		}
 		else if (op == TK_PIPE)
 		{
 			evaluate_pipe_node(shell, ast);
-			printf("returning %d after pipe evaluation\n", ast->right->cmd_ret);
+			printf("returning %d after pipe evaluation.\n", ast->cmd_ret);
 			return (ast->right->cmd_ret);
 		}
 		else if (op == TK_SEMI)
