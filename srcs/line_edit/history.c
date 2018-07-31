@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:20:53 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/28 18:14:07 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/31 14:35:05 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void		history_next(t_prompt *prompt, t_stat_data *stat_data)
 	if (prompt->current == NULL)
 	{
 		prompt->current = prompt->history;
-		if (ft_strlen(prompt->line))
+		if (prompt->line && ft_strlen(prompt->line))
 		{
 			free(stat_data->old_line);
 			((stat_data->old_line = ft_strdup(prompt->line)) ? 0 : exit(0));
