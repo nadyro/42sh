@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/31 15:40:17 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/31 17:48:43 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void		restore_std_fds(t_shell *shell, t_redirs *rd)
 {
 	t_redirs *tmp = rd;
 
-	dup2(shell->s_in, 0);
+	dup2(shell->s_in, 0);	//essentially replaces fd 0 with fd shell->s_in
 	close(shell->s_in);
 	dup2(shell->s_out, 1);
 	close(shell->s_out);

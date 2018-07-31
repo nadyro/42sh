@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/31 14:54:16 by arohani          ###   ########.fr       */
+/*   Updated: 2018/07/31 17:42:39 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,10 +229,42 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		}
 		else if (op == TK_PIPE)
 		{
+			pid_t	pid;
+			int		fd[2];
+
+			pipe(fd);
+			pid = fork();
+			if (pid == 0)
+			{
+				dup2(fd[1], STDOUT_FILENO);
+				close(fd[0]);
+				close(fd[1]);
+				v1 = ast_evaluate(ast->left, shell);
+				exit(1);
+			}
+			else
+			{
+				pid = fork();
+				if (pid == 0)
+				{
+					dup2(fd[0], STDIN_FILENO);
+					close(fd[1]);
+					close(fd[0]);
+					v2 = ast_evaluate(ast->right, shell);
+					exit (1);
+				}
+				else
+				{
+					int		status;
+					close(fd[0]);
+					close(fd[1]);
+					waitpid(pid, &status, 0);
+				}
+			}
 			//printf("PIPE found at : %s\n", ast->arg);
 			//printf("use ft_pipe_execution\n");
-			v1 = ast_evaluate(ast->left, shell);
-			v2 =ast_evaluate(ast->right, shell);
+	//		v1 = ast_evaluate(ast->left, shell);
+	//		v2 =ast_evaluate(ast->right, shell);
 			//printf("PIPE RETURNING 0\n");
 			return (0);
 		}
