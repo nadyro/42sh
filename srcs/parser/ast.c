@@ -80,7 +80,7 @@ void		create_arg_table(t_shell *shell, int beg, int end)
 	
 	if (end < beg)
 	{
-		//printf("end is less than big in create arg table, setting shell->args to NULL\n");
+		printf("end is less than big in create arg table, setting shell->args to NULL\n");
 		shell->args = NULL;
 		return ;
 	}

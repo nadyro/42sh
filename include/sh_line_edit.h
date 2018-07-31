@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_line_edit.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/29 23:22:42 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/07/30 17:22:12 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ typedef struct	s_stat_data
 	t_node		*current;
 }				t_stat_data;
 
-char			*get_pwd(void);
+//char			*get_pwd(void);
 void			termanip(int sig);
 char			*line_edit_main_loop(char *d_prompt, t_node *history);
 void			get_cursor_pos(t_coord *actualize, t_prompt *prompt);
@@ -105,6 +105,7 @@ void			secure_stock(t_prompt *prompt, char *to_stock);
 void			selection_mode(t_prompt *prompt, t_stat_data *stat_data);
 void			search_mode(t_prompt *prompt, t_stat_data *stat_data);
 void			auto_complete(t_prompt *prompt);
+void			prompt_clean(void);
 
 //History
 

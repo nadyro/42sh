@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fetch_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/18 16:16:05 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/07/29 19:59:59 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/07/30 17:23:13 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,13 +94,12 @@ int		fetch_names_dirent(char *user_entry)
 {
 	struct stat		st;
 
-	if ((lstat(user_entry, &st) != -1)) 
+	if ((lstat(user_entry, &st) != -1))
 		if (st.st_mode & S_IFDIR)
 			return (0);
 	return (1);
 }
 
-// Fetch_names reçoit le mot et renvoie la liste correspondant à sa completion
 t_node	*fetch_names(char *user_entry)
 {
 	char	**p;
@@ -125,8 +124,7 @@ t_node	*fetch_names(char *user_entry)
 		matches = cmp_space_entry("./", 0);
 	else
 		matches = cmp_user_entry(binaries, user_entry);
-	if (matches == NULL)
-		matches = cmp_space_entry(user_entry, 1);
+	matches = (matches ? matches : cmp_space_entry(user_entry, 1));
 	free_lists(binaries_1);
 	return (matches);
 }

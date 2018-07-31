@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/24 13:39:16 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/29 19:49:42 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/07/30 08:33:29 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,7 @@ void		secure_stock(t_prompt *prompt, char *to_stock)
 	int		mem;
 
 	if (to_stock == NULL || to_stock[0] == '\0')
-	{
-		if (!(prompt->line = ft_strdup("\0")))
-			exit(1);
 		return ;
-	}
 	mem = 0;
 	while (to_stock[mem])
 		prompt_stock(prompt, &to_stock[mem++]);
@@ -69,7 +65,7 @@ static void	esc_react_aux(t_prompt *prompt, int nb_user_entry, char *user_entry,
 	else if (nb_user_entry == 2 && user_entry[0] == 27 &&
 			user_entry[1] == 'S' && prompt->total > 0)
 		selection_mode(prompt, stat_data);
-	else if (nb_user_entry == 1 && user_entry[0] == 27 &&
+	else if (nb_user_entry == 2 && user_entry[0] == 27 &&
 			user_entry[1] == 'V' && stat_data->copied != NULL)
 		secure_stock(prompt, stat_data->copied);
 	else if (nb_user_entry == 2 && user_entry[0] == 27 &&
@@ -82,7 +78,6 @@ static void	esc_react_aux(t_prompt *prompt, int nb_user_entry, char *user_entry,
 void		esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry,
 				t_stat_data *stat_data)
 {
-	
 	if (nb_user_entry == 1 && user_entry[0] == 127 && prompt->pos > 0)
 		prompt_delete(prompt);
 	else if (nb_user_entry == 4 && user_entry[3] == 126 &&

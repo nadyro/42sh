@@ -17,15 +17,22 @@
 #include "builtins.h"
 #include <stdio.h>
 
-static void	restore_std_fds(t_shell *shell)
+void		restore_std_fds(t_shell *shell, t_redirs *rd)
 {
+	t_redirs *tmp = rd;
+
 	dup2(shell->s_in, 0);
 	close(shell->s_in);
 	dup2(shell->s_out, 1);
 	close(shell->s_out);
 	dup2(shell->s_err, 2);
 	close(shell->s_err);
-	close(shell->new_fd);
+	//close(shell->new_fd);
+	while (tmp)
+	{
+		close(tmp->new_fd);
+		tmp = tmp->next;
+	}
 }
 
 static void	launch_exec(t_shell *shell, char *full_path, t_ast *cmd)
@@ -65,7 +72,7 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 			wpid = waitpid(pid, &status, WUNTRACED);
 		}
 		if (cmd->redirs)
-			restore_std_fds(shell);
+			restore_std_fds(shell, cmd->redirs);
 		//printf("should be returning from PARENT process, command = %s, pid = %d\n", shell->args[0], pid);
 	}
 	if (shell->full_path)
@@ -98,7 +105,7 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 			ft_putstr_fd(shell->args[0], 2);
 			ft_putstr_fd(": Command not found.\n", 2);
 			if (cmd->redirs)
-				restore_std_fds(shell);
+				restore_std_fds(shell, cmd->redirs);
 			cmd->cmd_ret = -1;
 		}
 	}

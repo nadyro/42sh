@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bin.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 12:01:43 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/30 00:05:48 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/07/30 22:21:53 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ int			ash_history(t_shell *shell)
 
 	i = 0;
 	conv = 0;
+	check_history_args(shell);
 	if (shell->args && shell->args[1])
 	{
 		conv = ft_atoi(shell->args[1]);
