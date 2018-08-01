@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/10 17:23:30 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/25 02:42:36 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/01 11:05:11 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ void	get_cursor_pos(t_coord *actualize, t_prompt *prompt)
 
 	ft_flush(prompt);
 	ft_bzero(buf, 50);
-	while (buf[0] != 27 || ft_strrchr(buf, 'R') == NULL ||
-		*(ft_strrchr(buf, 'R') + 1) != '\0')
+	while (buf[0] != 27)
 	{
 		write(0, "\033[6n", 4);
 		ft_bzero(buf, 50);

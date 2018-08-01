@@ -65,7 +65,7 @@ void		main_loop(char *line, t_shell shell)
 	while (1)
 	{
 		line = line_mgmt(line, history);
-		if ((shell.tok = get_tokens(line)) != NULL)
+		/*if ((shell.tok = get_tokens(line)) != NULL)
 		{
 			//test_tokens(shell.tok);
 			if ((parser_ret = parser_validation(shell.tok, line)) == 1)
@@ -73,8 +73,8 @@ void		main_loop(char *line, t_shell shell)
 				shell.line = ft_strdup(line);
 				if (shell.tok && shell.tok[0])
 				{
-					history = add_to_history(line, history);
-					head = get_ast(&shell);
+				*/	history = add_to_history(line, history);
+				/*	head = get_ast(&shell);
 					//Nadir's part! Do not touch ! >=E					
 					shell.history_length++; 
 					shell.history = history; 
@@ -88,8 +88,8 @@ void		main_loop(char *line, t_shell shell)
 				ft_strdel(&(shell.line));
 			}
 			else if (parser_ret == 0)
-				ft_strdel(&line);
-		}
+			*/	ft_strdel(&line);
+		//}
 	}
 }
 

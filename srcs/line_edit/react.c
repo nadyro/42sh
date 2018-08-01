@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/24 13:39:16 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/30 08:33:29 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/01 02:06:48 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@ void		secure_stock(t_prompt *prompt, char *to_stock)
 {
 	int		mem;
 
+	if (prompt->line == NULL)
+		if (!(prompt->line = ft_strdup("\0")))
+			exit(1);
 	if (to_stock == NULL || to_stock[0] == '\0')
 		return ;
 	mem = 0;

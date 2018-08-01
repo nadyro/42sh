@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 03:46:15 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/30 02:40:20 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/01 11:02:07 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,6 @@ static void	handle_int(int sig)
 	free(prompt->line);
 	if (!(prompt->line = ft_strdup("\0")))
 		exit(1);
-	free(prompt->buf);
-	prompt->buf = NULL;
 	prompt->total = 0;
 	prompt->pos = 0;
 	prompt->current = NULL;

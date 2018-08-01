@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/08 06:09:10 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/24 03:22:22 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/01 11:06:07 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,12 @@ static int	search_react(t_prompt *prompt)
 	nb_user_entry = read(1, user_entry, 6);
 	if (user_entry[0] == 27 || prompt->end == 1)
 		return (-1);
+	else if (user_entry[0] == 12)
+	{
+		tputs(tgetstr("cl", NULL), 0, ft_putshit);
+		write(1, prompt->disp, ft_strlen(prompt->disp));
+		prompt->origin->y = 0;
+	}
 	else if (user_entry[0] == 127 && prompt->total > 0)
 		prompt_delete(prompt);
 	else

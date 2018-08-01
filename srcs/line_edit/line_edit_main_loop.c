@@ -6,7 +6,7 @@
 /*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/30 17:22:50 by kernel_pani      ###   ########.fr       */
+/*   Updated: 2018/08/01 07:14:53 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,7 @@ static char	*line_edit_main_loop_aux(t_prompt *prompt, t_stat_data *stat_data,
 {
 	char	user_entry[7];
 	int		nb_user_entry;
-	int		y;
 
-	y = 0;
 	while (to_return == NULL)
 		if (prompt->buf != NULL && data_react(prompt))
 			((to_return = ft_strdup(prompt->line)) ? 0 : exit(0));
@@ -59,7 +57,6 @@ char		*line_edit_main_loop(char *d_prompt, t_node *history)
 	static t_stat_data	*stat_data = NULL;
 
 	termanip(0);
-	termanip(34);
 	write(1, d_prompt, ft_strlen(d_prompt));
 	stat_data = (stat_data ? stat_data : malloc_stat());
 	prompt = malloc_prompt(prompt, stat_data, d_prompt);
