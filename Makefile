@@ -6,7 +6,7 @@
 #    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/07/31 17:58:35 by arohani          ###   ########.fr        #
+#    Updated: 2018/08/01 15:01:37 by arohani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ SRC_FILES = main.c \
 			parser/redirections.c \
 			parser/is_fd.c \
 			parser/pipes.c \
+			parser/token2str.c \
 			parser/ast.c \
 			\
 			builtins/add_to_mod.c \

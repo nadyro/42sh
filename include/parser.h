@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:27:44 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/01 14:53:09 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/01 14:57:10 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,17 @@
 # define PARSER_H
 
 # include <builtins.h>
+#define T2S_BLOCK 0xFF
+#define T2S_CUR 0
+#define T2S_OLD 1
+ typedef struct	s_t2s
+{
+	char	*buffer[2];
+	int		i[2];
+	int		m[2];
+	int		cursor[2];
+	int		stat[2];
+}				t_t2s;
 
 typedef struct	s_redirs
 {
@@ -38,6 +49,7 @@ typedef struct	s_ast
 	struct s_ast			*right;
 }				t_ast;
 
+char		*token2str(int *token, char *str, char **env);
 int			parser_validation(int *tk_arr, char *ine);
 void		create_arg_table(t_shell *shell, int beg, int end);
 int 		get_tk_end_pos(t_shell *shell);

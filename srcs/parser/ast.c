@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/01 14:44:55 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/01 15:02:30 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ void		create_arg_table(t_shell *shell, int beg, int end)
 {
 	int		i = beg;
 	int		last = 0;
-	char	*str = NULL;
 	
 	if (end < beg)
 	{
@@ -110,10 +109,9 @@ void		create_arg_table(t_shell *shell, int beg, int end)
 					i += 3;
 				if (shell->tok[i] != TK_SPACE && shell->tok[i] != TK_NEWLINE && shell->tok[i] != TK_END)
 				{
-					str = shell->line + shell->tok[i+1];
-					//printf("before filling shell->args, str = %s\ni = %d\ntok[i] = %d\ntok[i+1] = %d\ntok[i+2] = %d\n", str, i, shell->tok[i], shell->tok[i+1], shell->tok[i+2]);
-					shell->args[last++] = ft_strndup(str, shell->tok[i+2]);
-					//printf("in shell->args table, args[%d] = %s\n", last - 1, shell->args[last-1]);
+					//str = shell->line + shell->tok[i+1];			remove for thibaud feature
+					//shell->args[last++] = ft_strndup(str, shell->tok[i+2]);	remove for thibaud feature
+					shell->args[last++] = token2str(&shell->tok[i], shell->line, shell->envv);
 					i += 3;
 				}
 			//	printf("shell->args[%d] = %s\n", last - 1, shell->args[last - 1]);
