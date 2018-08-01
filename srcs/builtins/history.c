@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/29 16:17:24 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/07/30 22:22:57 by kernel_pani      ###   ########.fr       */
+/*   Updated: 2018/07/31 15:22:15 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	read_history(t_node *history, int nbr)
 	i = open(".history", O_RDONLY);
 	c = NULL;
 	x = 0;
-	if (i >= 0)
+	if (i >= 0 && history)
 	{
         if (nbr > 0)
 			get_last_cmds(history, nbr);		

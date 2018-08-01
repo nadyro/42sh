@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/07/30 22:22:52 by kernel_pani      ###   ########.fr       */
+/*   Updated: 2018/07/31 15:26:09 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct s_history
 	int		a;
 	int		n;
 	int		r;
-	//-w forces the shell to write into the history stored in memory into the .history file.
+	//-w forces the shell to write the history stored in memory into the .history file.
 	int		w;
 	int		p;
 	int		s;
@@ -113,6 +113,7 @@ t_env			*env_init(void);
 void			update_old_pwd(t_shell *shell, char *new_pwd);
 int				cd_opt_check(t_shell *shell);
 void	    	cd_canon(t_shell *shell);
+//History
 t_node			*init_nonvoid_history(char *cmd, t_node *history);
 t_node			*fill_history_file(t_node *history, t_shell *shell);
 void			read_history(t_node *history, int nbr);
@@ -120,5 +121,7 @@ int				ash_history(t_shell *shell);
 t_history		*init_hist_args(void);
 void			print_hist_args(t_history *hist_args);
 t_history		*check_history_args(t_shell *shell);
+t_node			*dispatch_history_queries(t_history *hist_args, t_node *history);
+t_node			*clear_history_mem(t_node *history);
 
 #endif

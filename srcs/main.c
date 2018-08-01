@@ -64,6 +64,7 @@ void		main_loop(char *line, t_shell shell)
 	history = NULL;
 	//Nadir's part! Do not touch ! >=E
 	history = fill_history_file(history, &shell);
+	shell.history = history;         				
 	//End of Nadir's part.	
 	while (1)
 	{
@@ -79,8 +80,7 @@ void		main_loop(char *line, t_shell shell)
 					history = add_to_history(line, history);
 					head = get_ast(&shell);
 					//Nadir's part! Do not touch ! >=E					
-					shell.history_length++; 
-          			shell.history = history; 
+					shell.history_length++;
 					//End of Nadir's part.
 				}
 				else

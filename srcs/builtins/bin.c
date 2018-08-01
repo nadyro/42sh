@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bin.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 12:01:43 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/30 22:21:53 by kernel_pani      ###   ########.fr       */
+/*   Updated: 2018/07/31 15:25:34 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,14 @@ int			ash_echo(t_shell *shell)
 
 int			ash_history(t_shell *shell)
 {
-	int		i;
-	int		conv;
+	int			i;
+	int			conv;
+	t_history	*hist_args;
 
 	i = 0;
 	conv = 0;
-	check_history_args(shell);
+	hist_args = check_history_args(shell);
+	shell->history = dispatch_history_queries(hist_args, shell->history);
 	if (shell->args && shell->args[1])
 	{
 		conv = ft_atoi(shell->args[1]);
