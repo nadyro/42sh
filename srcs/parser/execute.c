@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/25 20:22:19 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/01 14:37:30 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void		restore_std_fds(t_shell *shell, t_redirs *rd)
 {
 	t_redirs *tmp = rd;
 
-	dup2(shell->s_in, 0);
+	dup2(shell->s_in, 0);	//essentially replaces fd 0 with fd shell->s_in
 	close(shell->s_in);
 	dup2(shell->s_out, 1);
 	close(shell->s_out);
@@ -30,7 +30,8 @@ void		restore_std_fds(t_shell *shell, t_redirs *rd)
 	//close(shell->new_fd);
 	while (tmp)
 	{
-		close(tmp->new_fd);
+		if (fcntl(tmp->new_fd, F_GETFD) != -1)	
+			close(tmp->new_fd);
 		tmp = tmp->next;
 	}
 }
@@ -58,7 +59,12 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 	if (pid == 0)
 	{
 		//printf("pid == 0 i.e. child process: %s\n", shell->args[0]);
-		launch_exec(shell, shell->full_path, cmd);
+	/*	if (shell->redir_error == 1)
+		{
+			restore_std_fds(shell, cmd->redirs);
+			exit (1);
+		}
+	*/	launch_exec(shell, shell->full_path, cmd);
 	}
 	else if (pid < 0)
 		ft_putstr_fd("error pid less than 0 in lsh launch", 2);
@@ -79,19 +85,28 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 		ft_strdel(&(shell->full_path));
 }
 
+static void	handle_dotdot_error(t_shell *shell, t_ast *cmd)
+{
+		ft_putstr_fd(shell->args[0], 2);
+		ft_putstr_fd(": Command not found.\n", 2);
+		ft_bzero((void *)(shell->args[0]), ft_strlen(shell->args[0]));
+		ft_strdel(&(shell->full_path));
+		cmd->cmd_ret = -1;	
+}
+
 int			ast_execute(t_shell *shell, t_ast *cmd)
 {
+	if (cmd->redirs && shell->redir_error == 1)
+	{
+		ft_putendl_fd("Ambiguous output redirect.", 2);
+		cmd->cmd_ret = -1;
+		restore_std_fds(shell, cmd->redirs);
+	}
 	if (shell && shell->args && shell->args[0])
 	{
 		shell->full_path = (has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
 		if (ft_strcmp(shell->args[0], ".") == 0 || ft_strcmp(shell->args[0], "..") == 0)
-		{
-			ft_putstr_fd(shell->args[0], 2);
-			ft_putstr_fd(": Command not found.\n", 2);
-			ft_bzero((void *)(shell->args[0]), ft_strlen(shell->args[0]));
-			ft_strdel(&(shell->full_path));
-			cmd->cmd_ret = -1;			
-		}
+			handle_dotdot_error(shell, cmd);
 		if (builtin_check(shell) != -1)
 			cmd->cmd_ret = 0;
 		else if (shell->full_path || !(access(shell->args[0], F_OK)))	//if binary exists in PATH, fork and execute
@@ -100,7 +115,7 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 			//printf("launched fork, returning : cmd_ret = %d\n", cmd->cmd_ret);
 			return (cmd->cmd_ret);
 		}
-		else if (shell->args[0][0] != '\0' && access(shell->args[0], F_OK))
+		else if ((shell->args[0][0] != '\0' && access(shell->args[0], F_OK)))
 		{
 			ft_putstr_fd(shell->args[0], 2);
 			ft_putstr_fd(": Command not found.\n", 2);

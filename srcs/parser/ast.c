@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/31 14:52:33 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/01 15:02:30 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ void		create_arg_table(t_shell *shell, int beg, int end)
 {
 	int		i = beg;
 	int		last = 0;
-	char	*str = NULL;
 	
 	if (end < beg)
 	{
@@ -110,10 +109,9 @@ void		create_arg_table(t_shell *shell, int beg, int end)
 					i += 3;
 				if (shell->tok[i] != TK_SPACE && shell->tok[i] != TK_NEWLINE && shell->tok[i] != TK_END)
 				{
-					str = shell->line + shell->tok[i+1];
-					//printf("before filling shell->args, str = %s\ni = %d\ntok[i] = %d\ntok[i+1] = %d\ntok[i+2] = %d\n", str, i, shell->tok[i], shell->tok[i+1], shell->tok[i+2]);
-					shell->args[last++] = ft_strndup(str, shell->tok[i+2]);
-					//printf("in shell->args table, args[%d] = %s\n", last - 1, shell->args[last-1]);
+					//str = shell->line + shell->tok[i+1];			remove for thibaud feature
+					//shell->args[last++] = ft_strndup(str, shell->tok[i+2]);	remove for thibaud feature
+					shell->args[last++] = token2str(&shell->tok[i], shell->line, shell->envv);
 					i += 3;
 				}
 			//	printf("shell->args[%d] = %s\n", last - 1, shell->args[last - 1]);
@@ -141,6 +139,7 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		//printf("DEBUG 1 : GOING TO EXECUTE: %s, address = %s\n", ast->arg, ast->address);
 		if ((ret = is_redirect(shell, ast, ast->beg, ast->end)) != -1)
 		{
+			shell->redir_error = 0;
 			fill_redirs(shell, ast, ast->beg, ret);
 			shell->s_in = dup(0);
 			shell->s_out = dup(1);
@@ -152,7 +151,6 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 			create_arg_table(shell, ast->beg, ast->end);
 			ast_execute(shell, ast);
 		}
-		//printf("DEBUG 3, AFTER executing %s, cmd->ret = %d\n", ast->arg, ast->cmd_ret);
 		if (shell->args)
 			free_table(shell->args);
 		//printf("DEBUG 4, ret = %d\n", ret);
@@ -160,7 +158,6 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		{
 		//	printf("DEBUG 5\n");
 		//	printf("RETURNING 0 after command execution\n");
-		//	printf("DEBUG 6\n");
 			return (ast->cmd_ret);
 		}	
 		else if (ast->cmd_ret < 0)
@@ -178,39 +175,23 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 			//printf("and if located while in %s\nSENDING left : %s to ast_evaluate\n", ast->arg, ast->left->arg);
 			v1 = ast_evaluate(ast->left, shell);
 			if (v1 != 0)
-			{
-			//	printf("v1 = %d\n, returning -1\n", v1);
-				//free_ast(ast->right);
-				return (-1);
-			}
+				return (ast->cmd_ret = -1);
 			else if (v1 == 0)
 			{
 			//	printf("left branch of ANDIF returned 0\n");
 				v2 = ast_evaluate(ast->right, shell);
 				if (v2 == 0)
-				{
-			//		printf("right branch RETURNING of ANDIF returned v2 = 0\n");
-					return (0);
-				}
+					return (ast->cmd_ret = 0);
 				else
-				{
-			//		printf("right branch of ANDIF RETURNING v2 = %d\n", v2);
-					return (-1);
-				}
+					return (ast->cmd_ret = -1);
 			}
 		}
 		else if (op == TK_OR_IF)
 		{
 		//	printf("ORIF found at : %s\n", ast->arg);
-		//	printf("going to calculate v1 using %s\n", ast->left->arg);
 			v1 = ast_evaluate(ast->left, shell);
 			if (v1 == 0)
-			{
-			//	printf("ENTERED v1 = 0 clause of left side of OR_IF, should return %d\n", v1);
-		//		printf("left branch of ORIF RETURNING 0\n");
-			//	free_ast(ast->right);
-				return (v1);
-			}
+				return (ast->cmd_ret = v1);
 			else
 			{
 		//		printf("left branch of ORIF did not return 0, v1 = %d\n, evaluate right branch\n", v1);
@@ -218,31 +199,23 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 				if (v2 == 0)
 				{
 		//			printf("right side of OR_IF RETURNING 0, v2 = %d\n", v2);
-					return (0);
+					return (ast->cmd_ret = 0);
 				}
 				else
 				{
 		//			printf("right side of OR_IF RETURNING v2 = %d\n", v2);
-					return (-1);
+					return (ast->cmd_ret = -1);
 				}
 			}
 		}
 		else if (op == TK_PIPE)
 		{
-			//printf("PIPE found at : %s\n", ast->arg);
-			//printf("use ft_pipe_execution\n");
-			v1 = ast_evaluate(ast->left, shell);
-			v2 =ast_evaluate(ast->right, shell);
-			//printf("PIPE RETURNING 0\n");
-			return (0);
+			return (evaluate_pipe_node(shell, ast));
 		}
 		else if (op == TK_SEMI)
 		{
-			//printf("SEMI found at %s\nevaluating left node\n", ast->arg);
 			v1 = ast_evaluate(ast->left, shell);
-			//printf("SEMI found at %s\nevaluating right node\n", ast->arg);
 			v2 = ast_evaluate(ast->right, shell);
-			//printf("SEMI COMPLETELY PROCESSED, v1 = %d\nv2 = %d\nRETURNING 0\n", v1, v2);
 			return (0);
 		}
 		//printf("LEAVING IF clause 3\n");

@@ -6,7 +6,7 @@
 /*   By: antoipom <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 12:45:57 by antoipom          #+#    #+#             */
-/*   Updated: 2018/07/31 14:58:04 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/07/19 18:27:09 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,7 @@ static int		convert_token(int token)
 static void		parsing_error(int *tk_arr, int i, char *line)
 {
 	ft_putstr_fd("parse error near '", 2);
-	if (tk_arr[i] == TK_NEWLINE)
-		ft_putstr_fd("\\n", 2);
-	else
-		write(2, line + tk_arr[i + 1], tk_arr[i + 2]);
+	write(2, line + tk_arr[i + 1], tk_arr[i + 2]);
 	write(2, "'\n", 2);
 }
 

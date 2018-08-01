@@ -443,3 +443,6 @@ pwd
 history -c
 history 3
 exit
+foo1 | foo2 && echo dont print
+foo1 | ls && echo print
+exit

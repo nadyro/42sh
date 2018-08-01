@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+         #
+#    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/07/31 14:24:30 by nsehnoun         ###   ########.fr        #
+#    Updated: 2018/08/01 15:21:43 by arohani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,8 @@ SRC_FILES = main.c \
 			parser/parser_validation.c \
 			parser/redirections.c \
 			parser/is_fd.c \
+			parser/pipes.c \
+			parser/token2str.c \
 			parser/ast.c \
 			\
 			builtins/add_to_mod.c \
