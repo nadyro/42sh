@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/01 12:13:31 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/01 14:53:18 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ typedef struct	s_shell
 	char					*line;
 	int 					*tok;
 	int						new_fd;
-	int						pipe_ret;
 	int						redir_error;
 	int						i;
 	int						p;

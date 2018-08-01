@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:27:44 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/01 14:45:30 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/01 14:53:09 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ typedef struct	s_redirs
 	int						next_re;
 	int 					new_fd;
 	int 					ionum; // ft_atoi(str) with str = ft_strndup(shell->line + shell->tok[beg + 1], shell->tok[beg + 2]);
-	int						handled;
 	struct s_redirs			*prev;
 	struct s_redirs			*next;
 }				t_redirs;
