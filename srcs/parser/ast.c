@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/31 19:20:02 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/01 12:52:37 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		//printf("DEBUG 1 : GOING TO EXECUTE: %s, address = %s\n", ast->arg, ast->address);
 		if ((ret = is_redirect(shell, ast, ast->beg, ast->end)) != -1)
 		{
+			shell->redir_error = 0;
 			fill_redirs(shell, ast, ast->beg, ret);
 			shell->s_in = dup(0);
 			shell->s_out = dup(1);

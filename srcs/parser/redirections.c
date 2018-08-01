@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/19 12:59:04 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/25 20:16:49 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/01 12:52:11 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,10 @@ static void	implement_great(t_shell *shell, t_redirs *node, int fd)
 		str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
 		tmp->new_fd = open(str, O_CREAT | O_TRUNC | O_WRONLY, 0666);
 		ft_strdel(&str);
-		(tmp->new_fd < 0) ? ft_putendl_fd("bad file descriptor", 2) : dup2(tmp->new_fd, fd);
+		if (tmp->new_fd < 0)
+			shell->redir_error = 1;
+		else
+			dup2(tmp->new_fd, fd);
 	}
 }
 
@@ -116,7 +119,10 @@ static void	implement_dgreat(t_shell *shell, t_redirs *node, int fd)
 		str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
 		tmp->new_fd = open(str, O_CREAT | O_APPEND | O_WRONLY, 0666);
 		ft_strdel(&str);
-		(tmp->new_fd < 0) ? ft_putendl_fd("bad file descriptor", 2) : dup2(tmp->new_fd, fd);
+		if (tmp->new_fd < 0)
+			shell->redir_error = 1;
+		else
+			dup2(tmp->new_fd, fd);
 	}
 }
 
@@ -138,7 +144,10 @@ static void	implement_greatand(t_shell *shell, t_redirs *node, int fd)
 		str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
 		tmp->new_fd = open(str, O_CREAT | O_APPEND | O_WRONLY, 0666);
 		ft_strdel(&str);
-		(tmp->new_fd < 0) ? ft_putendl_fd("bad file descriptor", 2) : dup2(tmp->new_fd, fd);
+		if (tmp->new_fd < 0)
+			shell->redir_error = 1;
+		else
+			dup2(tmp->new_fd, fd);
 	}
 }
 
@@ -155,7 +164,10 @@ static void	implement_less(t_shell *shell, t_redirs *node, int fd)
 		str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
 		tmp->new_fd = open(str, O_RDONLY);
 		ft_strdel(&str);
-		(tmp->new_fd < 0) ? ft_putendl_fd("bad file descriptor", 2) : dup2(tmp->new_fd, fd);
+		if (tmp->new_fd < 0)
+			shell->redir_error = 1;
+		else
+			dup2(tmp->new_fd, fd);
 	}
 }
 
@@ -177,7 +189,10 @@ static void	implement_lessand(t_shell *shell, t_redirs *node, int fd)
 		str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
 		tmp->new_fd = open(str, O_RDONLY);
 		ft_strdel(&str);
-		(tmp->new_fd < 0) ? ft_putendl_fd("bad file descriptor", 2) : dup2(tmp->new_fd, fd);
+		if (tmp->new_fd < 0)
+			shell->redir_error = 1;
+		else
+			dup2(tmp->new_fd, fd);
 	}
 }
 
@@ -195,18 +210,17 @@ void 		implement_redirs(t_shell *shell, t_ast *cmd)
 		//if (tmp->prev && tmp->next)
 		//	close(tmp->prev->new_fd);	
 		fd = get_fd(shell, tmp);
-		if (shell->tok[tmp->next_re] == TK_LESS)
+		if (shell->tok[tmp->next_re] == TK_LESS && shell->redir_error != 1)
 			implement_less(shell, tmp, fd);
-		else if (shell->tok[tmp->next_re] == TK_LESSAND)
+		else if (shell->tok[tmp->next_re] == TK_LESSAND && shell->redir_error != 1)
 			implement_lessand(shell, tmp, fd);
-		else if (shell->tok[tmp->next_re] == TK_GREAT)
+		else if (shell->tok[tmp->next_re] == TK_GREAT && shell->redir_error != 1)
 			implement_great(shell, tmp, fd);
-		else if (shell->tok[tmp->next_re] == TK_GREATAND)
+		else if (shell->tok[tmp->next_re] == TK_GREATAND && shell->redir_error != 1)
 			implement_greatand(shell, tmp, fd);
-		else if (shell->tok[tmp->next_re] == TK_DGREAT)
+		else if (shell->tok[tmp->next_re] == TK_DGREAT && shell->redir_error != 1)
 			implement_dgreat(shell, tmp, fd);
-		else
-			printf("need to handle following redirection : %d\n", tmp->next_re);
+		// potentially need one last IF for HEREDOC here
 	//	printf("after analyzing redir #%d, closed %d, opened %d\n", counter++, fd, tmp->new_fd);
 	//	printf("now, restoring standard fds within implement_redirs\n");
 	//	restore_std_fds(shell, 0);
