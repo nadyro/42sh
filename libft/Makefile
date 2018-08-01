@@ -6,7 +6,7 @@
 #    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/08 19:33:52 by azybert           #+#    #+#              #
-#    Updated: 2018/06/11 13:19:21 by antoipom         ###   ########.fr        #
+#    Updated: 2018/08/01 15:50:12 by arohani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = libft.a
 
 FILES = ft_memset.c \
 		ft_bzero.c \
-		ft_get_next_line.c \
+		get_next_line.c \
 		ft_memcpy.c \
 		ft_memccpy.c \
 		ft_memmove.c \
@@ -82,10 +82,11 @@ FILES = ft_memset.c \
 		ft_realloc.c \
 		ft_strmerge.c \
 		ft_strcmerge.c \
+		ft_fusion_sort.c \
 
 OBJ = $(FILES:.c=.o)
 
-FLAG = -Wall -Wextra -Werror
+FLAG = -g3 -Wall -Wextra -Werror
 
 all: $(NAME)
 
