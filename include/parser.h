@@ -15,6 +15,19 @@
 
 # include <builtins.h>
 
+#define T2S_BLOCK 0xFF
+#define T2S_CUR 0
+#define T2S_OLD 1
+
+typedef struct	s_t2s
+{
+	char	*buffer[2];
+	int		i[2];
+	int		m[2];
+	int		cursor[2];
+	int		stat[2];
+}				t_t2s;
+
 typedef struct	s_redirs
 {
 	int						beg;
@@ -55,5 +68,5 @@ int			is_fd(char *str, int len);
 void		fill_redirs(t_shell *shell, t_ast *ast, int beg, int redir);
 void 		implement_redirs(t_shell *shell, t_ast *cmd);
 void		restore_std_fds(t_shell *shell, t_redirs *rd);
-
+char		*token2str(int *token, char *str, char **env);
 #endif

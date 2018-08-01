@@ -37,6 +37,7 @@ SRC_FILES = main.c \
 			parser/redirections.c \
 			parser/is_fd.c \
 			parser/ast.c \
+			parser/token2str.c \
 			\
 			builtins/add_to_mod.c \
 			builtins/ash_exec.c \

@@ -443,3 +443,8 @@ pwd
 history -c
 history 3
 exit
+hello
+test
+echo 'hi here'
+exit
+exit

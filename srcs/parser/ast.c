@@ -1,7 +1,6 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ast.c                                              :+:      :+:    :+:   */
+/*                                                        :::      ::::::::   */ /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -76,7 +75,6 @@ void		create_arg_table(t_shell *shell, int beg, int end)
 {
 	int		i = beg;
 	int		last = 0;
-	char	*str = NULL;
 	
 	if (end < beg)
 	{
@@ -110,9 +108,9 @@ void		create_arg_table(t_shell *shell, int beg, int end)
 					i += 3;
 				if (shell->tok[i] != TK_SPACE && shell->tok[i] != TK_NEWLINE && shell->tok[i] != TK_END)
 				{
-					str = shell->line + shell->tok[i+1];
 					//printf("before filling shell->args, str = %s\ni = %d\ntok[i] = %d\ntok[i+1] = %d\ntok[i+2] = %d\n", str, i, shell->tok[i], shell->tok[i+1], shell->tok[i+2]);
-					shell->args[last++] = ft_strndup(str, shell->tok[i+2]);
+					//shell->args[last++] = ft_strndup(str, shell->tok[i+2]);
+					shell->args[last++] = token2str(&shell->tok[i], shell->line, shell->envv);
 					//printf("in shell->args table, args[%d] = %s\n", last - 1, shell->args[last-1]);
 					i += 3;
 				}
