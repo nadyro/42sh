@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/01 12:58:58 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/01 14:37:30 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,12 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 	if (pid == 0)
 	{
 		//printf("pid == 0 i.e. child process: %s\n", shell->args[0]);
-		if (shell->redir_error == 1)
+	/*	if (shell->redir_error == 1)
 		{
 			restore_std_fds(shell, cmd->redirs);
 			exit (1);
 		}
-		launch_exec(shell, shell->full_path, cmd);
+	*/	launch_exec(shell, shell->full_path, cmd);
 	}
 	else if (pid < 0)
 		ft_putstr_fd("error pid less than 0 in lsh launch", 2);

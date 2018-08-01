@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:27:44 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/31 18:59:21 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/01 14:45:30 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,6 @@ int			is_fd(char *str, int len);
 void		fill_redirs(t_shell *shell, t_ast *ast, int beg, int redir);
 void 		implement_redirs(t_shell *shell, t_ast *cmd);
 void		restore_std_fds(t_shell *shell, t_redirs *rd);
-void        evaluate_pipe_node(t_shell *shell, t_ast *cmd);
+int       	evaluate_pipe_node(t_shell *shell, t_ast *cmd);
 
 #endif

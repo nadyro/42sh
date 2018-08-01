@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/01 12:52:37 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/01 14:44:55 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,9 +212,7 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		}
 		else if (op == TK_PIPE)
 		{
-			evaluate_pipe_node(shell, ast);
-			printf("returning %d after pipe evaluation.\n", ast->cmd_ret);
-			return (ast->right->cmd_ret);
+			return (evaluate_pipe_node(shell, ast));
 		}
 		else if (op == TK_SEMI)
 		{

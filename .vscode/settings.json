@@ -1,6 +1,9 @@
 {
     "files.associations": {
         "ios": "c",
-        "lexer.h": "c"
+        "lexer.h": "c",
+        "fstream": "c",
+        "locale": "c",
+        "iterator": "c"
     }
 }
