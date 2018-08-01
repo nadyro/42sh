@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/07/31 15:26:09 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/01 15:57:59 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef struct s_history
 	int		c;
 	//-d deletes a specific line number in the history file.
 	int		d;
+	int		d_arg;
 	int		a;
 	int		n;
 	int		r;
@@ -121,7 +122,7 @@ int				ash_history(t_shell *shell);
 t_history		*init_hist_args(void);
 void			print_hist_args(t_history *hist_args);
 t_history		*check_history_args(t_shell *shell);
-t_node			*dispatch_history_queries(t_history *hist_args, t_node *history);
+t_node			*dispatch_history_queries(t_history *hist_args, t_shell *shell);
 t_node			*clear_history_mem(t_node *history);
-
+t_node			*delete_history_line(t_node *history, int to_del);
 #endif
