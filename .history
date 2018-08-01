@@ -435,3 +435,11 @@ Nam nec metus sit amet nisi eleifend mattis eget at lorem. Ut cursus purus non l
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tristique eros nisi, at feugiat dui sagittis auctor. Morbi sapien turpis, varius ac fermentum et, tempus non ante. Maecenas eu consequat libero, ac tincidunt augue. Donec accumsan vestibulum ultrices. In blandit, turpis in porttitor pellentesque, lacus arcu euismod nulla, sed laoreet augue lacus vitae turpis. Phasellus pharetra vehicula leo non hendrerit. Praesent in elit quis augue fringilla volutpat. Curabitur non orci sed nibh auctor egestas non sed nisl.
 Integer eu accumsan sapien. Nulla tristique magna sit amet orci congue iaculis. In ut feugiat nibh. Maecenas consequat orci ac nunc efficitur, ut commodo magna scelerisque. Cras maximus accumsan turpis, nec ultrices ligula. Fusce porta malesuada felis, vitae molestie enim posuere ultrices. Phasellus bibendum eu arcu eu posuere. Aenean vitae tellus varius, iaculis mi ut, cursus arcu. Ut vel fringilla elit. Sed auctor nec felis id auctor. Vestibulum ante ipsum primis in faucibus orci luctus et exit
 exit
+ls
+pwd
+xD
+history
+pwd
+history -c
+history 3
+exit
