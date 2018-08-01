@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   react.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/24 13:39:16 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/21 15:19:39 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/01 02:06:48 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,22 @@ void		secure_stock(t_prompt *prompt, char *to_stock)
 {
 	int		mem;
 
-	if (to_stock == NULL || to_stock[0] == '\0')
-	{
+	if (prompt->line == NULL)
 		if (!(prompt->line = ft_strdup("\0")))
 			exit(1);
+	if (to_stock == NULL || to_stock[0] == '\0')
 		return ;
-	}
 	mem = 0;
 	while (to_stock[mem])
 		prompt_stock(prompt, &to_stock[mem++]);
+}
+
+void		sig_react(t_prompt *prompt, char c)
+{
+	if (c == 4 && prompt->total == 0)
+		termanip(42);
+	else if (c == 12)
+		term_clear();
 }
 
 int			data_react(t_prompt *prompt)
@@ -46,7 +53,6 @@ int			data_react(t_prompt *prompt)
 		tputs(tgetstr("ce", NULL), 1, ft_putshit);
 		return (1);
 	}
-	(prompt->buf[0] == 4 && prompt->total == 0 ? termanip(42) : 0);
 	free(prompt->buf);
 	prompt->buf = NULL;
 	return (0);
@@ -68,6 +74,8 @@ static void	esc_react_aux(t_prompt *prompt, int nb_user_entry, char *user_entry,
 	else if (nb_user_entry == 2 && user_entry[0] == 27 &&
 			user_entry[1] == 'R' && prompt->history)
 		search_mode(prompt, stat_data);
+	else if (nb_user_entry == 1 && user_entry[0] == 9)
+		auto_complete(prompt);
 }
 
 void		esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry,

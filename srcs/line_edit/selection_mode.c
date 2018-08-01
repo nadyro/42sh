@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/04 22:38:46 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/21 15:16:23 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/01 11:02:01 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,22 +66,20 @@ static int	selection_tree_aux(t_prompt *prompt, t_stat_data *stat_data,
 					start_pos - prompt->pos + 1) :
 				ft_strndup(prompt->line + start_pos,
 					prompt->pos - start_pos + 1));
+		selection_write(prompt, prompt->pos);
 		if (user_entry[0] == 'x')
 			selection_delete(prompt, start_pos);
-		return (1);
 	}
 	else if (user_entry[0] == 127)
-	{
 		selection_delete(prompt, start_pos);
-		return (1);
-	}
-	else if (user_entry[0] == 27)
-	{
+	else if (user_entry[0] == 27 || prompt->end == 1)
 		selection_write(prompt, prompt->pos);
-		handle_sig();
-		return (1);
-	}
-	return (0);
+	else
+		return (0);
+	handle_sig();
+	termanip(33);
+	prompt->end = 0;
+	return (1);
 }
 
 static int	selection_tree(t_prompt *prompt, int nb_user_entry,
@@ -91,11 +89,12 @@ static int	selection_tree(t_prompt *prompt, int nb_user_entry,
 		ft_cursor_up(prompt);
 	else if (nb_user_entry == 3 && user_entry[2] == 66)
 		ft_cursor_down(prompt);
-	else if (nb_user_entry == 3 && user_entry[2] == 68 && prompt->pos > 0)
-		move_cursor(prompt, prompt->pos - 1, true);
+	else if (nb_user_entry == 3 && user_entry[2] == 68)
+		(prompt->pos > 0 ? move_cursor(prompt, prompt->pos - 1, true) : 0);
 	else if (nb_user_entry == 3 && user_entry[2] == 67 &&
 			prompt->pos < prompt->total)
-		move_cursor(prompt, prompt->pos + 1, true);
+		(prompt->pos < prompt->total - 1 ?
+		move_cursor(prompt, prompt->pos + 1, true) : 0);
 	else if (nb_user_entry == 3 && user_entry[2] == 72)
 		move_cursor(prompt, 0, true);
 	else if (nb_user_entry == 3 && user_entry[2] == 70)
@@ -120,20 +119,23 @@ void		selection_mode(t_prompt *prompt, t_stat_data *stat_data)
 	int		nb_user_entry;
 
 	ignore_handle();
-	if (prompt->pos == prompt->total)
-		prompt->pos--;
+	prompt->pos += (prompt->pos == prompt->total ? -1 : 0);
 	start_pos = prompt->pos;
+	termanip(36);
 	while (1)
 	{
-		if (prompt->pos == prompt->total)
-			prompt->pos--;
 		selection_write(prompt, start_pos);
 		ft_bzero(user_entry, 7);
 		nb_user_entry = read(1, user_entry, 6);
-		if (nb_user_entry == 6)
-			ft_flush(prompt);
-		if (selection_tree(prompt, nb_user_entry, user_entry) &&
-				nb_user_entry == 1)
+		if (user_entry[0] == 12)
+		{
+			tputs(tgetstr("cl", NULL), 0, ft_putshit);
+			write(1, prompt->disp, ft_strlen(prompt->disp));
+			prompt->origin->y = 0;
+		}
+		(nb_user_entry == 6 ? ft_flush(prompt) : 0);
+		(prompt->buf ? ft_strdel(&prompt->buf) : 0);
+		if (selection_tree(prompt, nb_user_entry, user_entry))
 			if (selection_tree_aux(prompt, stat_data, user_entry, start_pos))
 				return ;
 	}

@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 01:45:43 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/21 13:31:49 by azybert          ###   ########.fr       */
+/*   Updated: 2018/07/24 06:50:21 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void		free_prompt(t_prompt *prompt)
 	prompt = NULL;
 }
 
-void		prompt_origin(t_prompt *prompt, t_stat_data *stat_data)
+static void	prompt_origin(t_prompt *prompt, t_stat_data *stat_data)
 {
 	long int	nbr;
 
@@ -69,6 +69,7 @@ t_prompt	*malloc_prompt(t_prompt *prompt, t_stat_data *stat_data,
 	prompt->size->y = w.ws_row;
 	prompt_origin(prompt, stat_data);
 	prompt->current = NULL;
+	prompt->end = 0;
 	return (prompt);
 }
 

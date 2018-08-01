@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/01 14:53:18 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/01 15:16:24 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # define C11 "\033[43m\033[30m"
 
 # include "../libft/libft.h"
+# include "sh_line_edit.h"
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/dir.h>
@@ -51,6 +52,21 @@ typedef struct	s_env
 	struct s_env			*mod;
 }				t_env;
 
+typedef struct s_history
+{
+	//-c clears the history in memory, not the file.
+	int		c;
+	//-d deletes a specific line number in the history file.
+	int		d;
+	int		a;
+	int		n;
+	int		r;
+	//-w forces the shell to write into the history stored in memory into the .history file.
+	int		w;
+	int		p;
+	int		s;
+}				t_history;
+
 typedef struct	s_shell
 {
 	char					**envv;
@@ -68,7 +84,9 @@ typedef struct	s_shell
 	int						s_out;
 	int						s_in;
 	int						s_err;
+	int						history_length;
 	t_env					*list;
+	t_node					*history;
 }				t_shell;
 
 t_env			*env_setup(char **env);
@@ -96,5 +114,12 @@ t_env			*env_init(void);
 void			update_old_pwd(t_shell *shell, char *new_pwd);
 int				cd_opt_check(t_shell *shell);
 void	    	cd_canon(t_shell *shell);
-
+//History
+t_node			*init_nonvoid_history(char *cmd, t_node *history);
+t_node			*fill_history_file(t_node *history, t_shell *shell);
+void			read_history(t_node *history, int nbr);
+int				ash_history(t_shell *shell);
+t_history		*init_hist_args(void);
+void			print_hist_args(t_history *hist_args);
+t_history		*check_history_args(t_shell *shell);
 #endif

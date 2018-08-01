@@ -6,7 +6,7 @@
 #    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/01 15:01:37 by arohani          ###   ########.fr        #
+#    Updated: 2018/08/01 15:21:43 by arohani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,6 +57,7 @@ SRC_FILES = main.c \
 			builtins/setenv.c \
 			builtins/shell.c \
 			builtins/unsetenv.c \
+			builtins/history.c \
 			\
 			line_edit/line_edit_main_loop.c \
 			line_edit/termanip.c \
@@ -69,7 +70,14 @@ SRC_FILES = main.c \
 			line_edit/struct_alloc.c \
 			line_edit/signals_le.c \
 			line_edit/signals_le_mode.c \
-			line_edit/search_mode.c 
+			line_edit/search_mode.c \
+			line_edit/implem_complet.c \
+			line_edit/write_data.c\
+			line_edit/autocompletion.c \
+			line_edit/cmpltn_utils.c \
+			line_edit/fetch_utils.c \
+			line_edit/prompt_utils.c \
+			
 
 INC_FILES = lexer.h \
 			parser.h \
