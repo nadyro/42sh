@@ -6,7 +6,7 @@
 #    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/01 15:21:43 by arohani          ###   ########.fr        #
+#    Updated: 2018/08/02 18:32:19 by tcanaud          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,12 +77,15 @@ SRC_FILES = main.c \
 			line_edit/cmpltn_utils.c \
 			line_edit/fetch_utils.c \
 			line_edit/prompt_utils.c \
+			\
+			heredoc/heredoc.c
 			
 
 INC_FILES = lexer.h \
 			parser.h \
 			builtins.h \
-			sh_line_edit.h
+			sh_line_edit.h\
+			heredoc.h
 
 NAME ?= 42sh
 
@@ -99,7 +102,7 @@ LIB_INC = -I$(LIB_DIR)/include
 
 OPTIMIZATION ?= -O0
 CC ?= gcc
-CCFLAGS ?= -g -Wall -Wextra -Werror -fsanitize=address -fno-omit-frame-pointer 
+CCFLAGS ?= -g -Wall -Wextra -Werror #-fsanitize=address -fno-omit-frame-pointer 
 LDFLAGS = -L$(LIB_DIR) -lft -ltermcap
 INCLUDES = $(LOCAL_INC) $(LIB_INC)
 
@@ -131,6 +134,7 @@ $(OBJ_DIR):
 	@/bin/mkdir -p $(OBJ_DIR)/parser
 	@/bin/mkdir -p $(OBJ_DIR)/builtins
 	@/bin/mkdir -p $(OBJ_DIR)/line_edit
+	@/bin/mkdir -p $(OBJ_DIR)/heredoc
 
 clean:
 	@make -C $(LIB_DIR) clean
