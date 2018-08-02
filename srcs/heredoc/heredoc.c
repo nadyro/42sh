@@ -6,7 +6,7 @@
 /*   By: tcanaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/02 18:57:54 by tcanaud           #+#    #+#             */
-/*   Updated: 2018/08/02 19:08:07 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/02 19:15:51 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ static t_dirdoc		g_dir;
 ** opt:
 ** 	0	-> heredoc_init
 **	1	-> heredoc_isopen
+**	2	-> heredoc_clear
 */
 
 int					heredoc_manager(int opt)
