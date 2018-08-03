@@ -79,7 +79,7 @@ void		main_loop(char *line, t_shell shell)
 				{
 					shell.history = add_to_history(line, shell.history);
 					head = get_ast(&shell);
-					//Nadir's part! Do not touch ! >=E					
+					//Nadir's part! Do not touch ! >=E
 					shell.history_length++;
 					//End of Nadir's part.
 				}
@@ -107,6 +107,7 @@ int			main(int argc, char **argv, char **env)
 	shell.list = (env && env[0]) ? env_setup(env) : env_init();
 	shell.envv = (shell.list) ? env_to_tab(shell.list) : NULL;
 	shell.history_length = 0;
+	shell.hl_append = 0;
 	///////////////////////////////////
 	if ((name_term = getenv("TERM")) == NULL)
 	{
