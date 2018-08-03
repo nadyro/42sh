@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/08/03 06:59:59 by nsehnoun          #+#    #+#             */
+/*   Updated: 2018/08/03 07:04:13 by nsehnoun         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lexer.h"
 #include "parser.h"
 #include "libft.h"
@@ -61,6 +73,7 @@ void		main_loop(char *line, t_shell shell)
 	history = NULL;
 	//Nadir's part! Do not touch ! >=E
 	history = fill_history_file(history, &shell);
+	shell.history = history;
 	//End of Nadir's part.	
 	while (1)
 	{
@@ -73,11 +86,10 @@ void		main_loop(char *line, t_shell shell)
 				shell.line = ft_strdup(line);
 				if (shell.tok && shell.tok[0])
 				{
-					history = add_to_history(line, history);
+					shell.history = add_to_history(line, shell.history);
 					head = get_ast(&shell);
-					//Nadir's part! Do not touch ! >=E					
-					shell.history_length++; 
-					shell.history = history; 
+					//Nadir's part! Do not touch ! >=E
+					shell.history_length++;
 					//End of Nadir's part.
 				}
 				else
@@ -104,6 +116,7 @@ int			main(int argc, char **argv, char **env)
 	shell.list = (env && env[0]) ? env_setup(env) : env_init();
 	shell.envv = (shell.list) ? env_to_tab(shell.list) : NULL;
 	shell.history_length = 0;
+	shell.hl_append = 0;
 	///////////////////////////////////
 	if ((name_term = getenv("TERM")) == NULL)
 	{

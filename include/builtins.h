@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/01 15:16:24 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/03 07:04:58 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,11 @@ typedef struct s_history
 	int		c;
 	//-d deletes a specific line number in the history file.
 	int		d;
+	int		d_arg;
 	int		a;
 	int		n;
 	int		r;
-	//-w forces the shell to write into the history stored in memory into the .history file.
+	//-w forces the shell to write the history stored in memory into the .history file.
 	int		w;
 	int		p;
 	int		s;
@@ -85,8 +86,10 @@ typedef struct	s_shell
 	int						s_in;
 	int						s_err;
 	int						history_length;
+	int						hl_append;
 	t_env					*list;
 	t_node					*history;
+	char					*home_env;
 }				t_shell;
 
 t_env			*env_setup(char **env);
@@ -115,11 +118,22 @@ void			update_old_pwd(t_shell *shell, char *new_pwd);
 int				cd_opt_check(t_shell *shell);
 void	    	cd_canon(t_shell *shell);
 //History
-t_node			*init_nonvoid_history(char *cmd, t_node *history);
-t_node			*fill_history_file(t_node *history, t_shell *shell);
-void			read_history(t_node *history, int nbr);
 int				ash_history(t_shell *shell);
-t_history		*init_hist_args(void);
 void			print_hist_args(t_history *hist_args);
+void			write_history_mem_to_file(t_shell *shell);
+void			write_history_file(t_shell *shell);
+void			print_history(int *x, char **cmd, int to_free);
+void			read_history(t_node *history, int nbr);
+void			dispatch_history_print(t_shell *shell);
+void			dispatch_history_d(t_shell *shell, t_history *hist_args);
+void			append_history_mem_to_file(t_shell *shell);
+t_node			*init_nonvoid_history(char *cmd, t_node *history);
+t_node			*dispatch_history_queries(t_history *hist_args, t_shell *shell);
+t_node			*clear_history_mem(t_shell *history);
+t_node			*delete_history_line(t_shell *shell, int to_del);
+t_node			*get_last_cmds(t_node *history, int nbr);
+t_node			*fill_history_file(t_node *history, t_shell *shell);
+t_node			*append_history_file_to_mem_1(t_node *history, t_shell *shell);
+t_history		*init_hist_args(void);
 t_history		*check_history_args(t_shell *shell);
 #endif

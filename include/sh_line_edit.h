@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_line_edit.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/30 17:22:12 by kernel_pani      ###   ########.fr       */
+/*   Updated: 2018/08/03 02:04:32 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void			esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry,
 				t_stat_data *stat_data);
 void			history_next(t_prompt *prompt, t_stat_data *stat_data);
 void			history_prev(t_prompt *prompt, t_stat_data *stat_data);
-t_node			*add_to_history(char *cmd, t_node *node);
+t_node			*add_to_history(char *cmd, t_node *history);
 int				data_react(t_prompt *prompt);
 char			*prompt_stock(t_prompt *prompt, char *user_entry);
 void			prompt_delete(t_prompt *prompt);
@@ -106,10 +106,6 @@ void			selection_mode(t_prompt *prompt, t_stat_data *stat_data);
 void			search_mode(t_prompt *prompt, t_stat_data *stat_data);
 void			auto_complete(t_prompt *prompt);
 void			prompt_clean(void);
-
-//History
-
-void			write_history_file(t_node *history);
 
 // Autocompletion
 char			**fetch_from_env_o(void);
