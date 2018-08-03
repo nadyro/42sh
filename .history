@@ -446,3 +446,7 @@ exit
 foo1 | foo2 && echo dont print
 foo1 | ls && echo print
 exit
+history
+history | ls
+history | xD
+exit
