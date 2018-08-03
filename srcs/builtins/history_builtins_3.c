@@ -6,13 +6,13 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 02:11:49 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/03 02:58:07 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/03 06:56:50 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-void		dispatch_history_d(t_shell *shell, t_history *hist_args)
+void	dispatch_history_d(t_shell *shell, t_history *hist_args)
 {
 	if (hist_args->d_arg > 0)
 	{
@@ -29,7 +29,7 @@ void		dispatch_history_d(t_shell *shell, t_history *hist_args)
 		ft_putendl("Undefined offset.");
 }
 
-void		dispatch_history_print(t_shell *shell)
+void	dispatch_history_print(t_shell *shell)
 {
 	int		conv;
 
@@ -44,4 +44,35 @@ void		dispatch_history_print(t_shell *shell)
 	}
 	else if (shell->args)
 		read_history(shell->history, 0);
+}
+
+void	append_history_mem_to_file(t_shell *shell)
+{
+	int		i;
+	int		y;
+	t_node	*history;
+
+	y = 0;
+	history = shell->history;
+	i = open(shell->home_env, O_APPEND | O_RDWR);
+	if (i > 0)
+	{
+		while (history->next != NULL)
+			history = history->next;
+		while (history != NULL)
+		{
+			if (y >= shell->hl_append)
+				ft_putendl_fd(history->cmd, i);
+			history = history->prev;
+			y++;
+		}
+	}
+}
+
+t_node	*append_history_file_to_mem_1(t_node *history, t_shell *shell)
+{
+	while (history->next != NULL)
+		history = history->next;
+	history = fill_history_file(history, shell);
+	return (history);
 }
