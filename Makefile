@@ -6,7 +6,11 @@
 #    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
+<<<<<<< HEAD
 #    Updated: 2018/08/01 15:21:43 by arohani          ###   ########.fr        #
+=======
+#    Updated: 2018/08/04 22:42:55 by nsehnoun         ###   ########.fr        #
+>>>>>>> bt_history
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,7 +61,16 @@ SRC_FILES = main.c \
 			builtins/setenv.c \
 			builtins/shell.c \
 			builtins/unsetenv.c \
+<<<<<<< HEAD
 			builtins/history.c \
+=======
+			builtins/history_builtins_0.c \
+			builtins/history_builtins_1.c \
+			builtins/history_builtins_2.c \
+			builtins/history_builtins_3.c \
+			builtins/history_builtins_4.c \
+			builtins/history_options.c \
+>>>>>>> bt_history
 			\
 			line_edit/line_edit_main_loop.c \
 			line_edit/termanip.c \
@@ -99,7 +112,7 @@ LIB_INC = -I$(LIB_DIR)/include
 
 OPTIMIZATION ?= -O0
 CC ?= gcc
-CCFLAGS ?= -g -Wall -Wextra -Werror -fsanitize=address -fno-omit-frame-pointer 
+CCFLAGS ?= -g -Wall -Wextra -Werror -g3 -fsanitize=address -fno-omit-frame-pointer
 LDFLAGS = -L$(LIB_DIR) -lft -ltermcap
 INCLUDES = $(LOCAL_INC) $(LIB_INC)
 
