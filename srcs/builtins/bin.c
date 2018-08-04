@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 12:01:43 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/05 00:35:27 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/05 01:10:24 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ int			ash_history(t_shell *shell)
 	else if (shell->args && !shell->args[1])
 		hist_args->vide = 2;
 	shell->history = dispatch_history_queries(hist_args, shell);
+	free(hist_args);
 	return (1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/29 16:17:24 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/04 23:32:26 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/05 01:17:40 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,18 +55,12 @@ t_node		*fill_history_file(t_node *history, t_shell *shell)
 {
 	int		i;
 	char	*c;
-	int		gnl;
-	char	*tmp;
 
 	c = NULL;
-	gnl = 0;
-	tmp = getenv("HOME");
-	if (tmp != NULL)
-		shell->home_env = ft_strjoin(tmp, "/.42sh_history");
 	i = open(shell->home_env, O_RDWR | S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	if (i >= 0)
 	{
-		while ((gnl = get_next_line(i, &c)) == 1)
+		while ((get_next_line(i, &c)) == 1)
 		{
 			shell->history_length++;
 			history = init_nonvoid_history(c, history);

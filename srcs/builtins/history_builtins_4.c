@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/04 22:41:58 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/05 00:42:34 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/05 00:59:12 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,20 @@ t_history	*check_if_flag_2(t_shell *shell, t_history *hist_args)
 	int		y;
 
 	y = 1;
-	i = 1;
+	i = 0;
 	while (shell->args[y])
 	{
-		while (shell->args[y][i] != '\0')
+		while (shell->args[y][++i] != '\0')
 		{
 			if (shell->args[y][i] != 'd' && shell->args[y][i] != 'c'
 			&& shell->args[y][i] != 'a' && shell->args[y][i] != 'n'
 			&& shell->args[y][i] != 'r' && shell->args[y][i] != 'w'
-			&& shell->args[y][i] != 'p' && shell->args[y][i] != 's')
+			&& shell->args[y][i] != 'p' && shell->args[y][i] != 's'
+			&& shell->args[y][i] != 'h')
 			{
 				hist_args->vide = 1;
 				break ;
 			}
-			i++;
 		}
 		if (hist_args->vide == 1)
 			break ;
@@ -74,12 +74,10 @@ t_history	*fill_hist_args(t_shell *shell, t_history *hist_args, int *i)
 	}
 	hist_args->c = (ft_strchr(shell->args[*i], 'c') != NULL) ? 1 : 0;
 	hist_args->a = (ft_strchr(shell->args[*i], 'a') != NULL) ? 1 : 0;
-	if (ft_strchr(shell->args[*i], 'n') != NULL)
-		hist_args->n = 1;
-	if (ft_strchr(shell->args[*i], 'r') != NULL)
-		hist_args->r = 1;
-	if (ft_strchr(shell->args[*i], 'w') != NULL)
-		hist_args->w = 1;
+	hist_args->n = (ft_strchr(shell->args[*i], 'n') != NULL) ? 1 : 0;
+	hist_args->r = (ft_strchr(shell->args[*i], 'r') != NULL) ? 1 : 0;
+	hist_args->w = (ft_strchr(shell->args[*i], 'w') != NULL) ? 1 : 0;
+	hist_args->h = (ft_strchr(shell->args[*i], 'h') != NULL) ? 1 : 0;
 	if (ft_strchr(shell->args[*i], 'p') != NULL)
 		hist_args->p = 1;
 	if (ft_strchr(shell->args[*i], 's') != NULL)

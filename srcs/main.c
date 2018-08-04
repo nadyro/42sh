@@ -56,10 +56,15 @@ void		main_loop(char *line, t_shell shell)
 	int		parser_ret;
 	t_ast	*head;
 	t_node	*history;
+	char	*tmp;
 
 	head = NULL;
 	history = NULL;
 	//Nadir's part! Do not touch ! >=E
+
+	tmp = getenv("HOME");
+	if (tmp != NULL)
+		shell.home_env = ft_strjoin(tmp, "/.42sh_history");
 	history = fill_history_file(history, &shell);
 	shell.history = history;
 	//End of Nadir's part.	

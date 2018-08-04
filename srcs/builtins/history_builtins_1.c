@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/31 14:53:44 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/05 00:33:34 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/05 00:58:22 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ t_history	*init_hist_args(void)
 	hist_args->n = 0;
 	hist_args->r = 0;
 	hist_args->w = 0;
+	hist_args->h = 0;
 	hist_args->p = 0;
 	hist_args->s = 0;
 	hist_args->vide = 0;
@@ -63,7 +64,20 @@ t_node		*dispatch_history_queries(t_history *hist_args, t_shell *shell)
 		append_history_mem_to_file(shell);
 	if (hist_args->w == 1)
 		write_history_mem_to_file(shell);
+	if (hist_args->h == 1)
+		history_helper();
 	if (hist_args->vide == 2)
 		dispatch_history_print(shell);
 	return (shell->history);
+}
+
+void		history_helper(void)
+{
+	ft_putendl("usage : history\n");
+	ft_putendl("n : Writes the last 'n' lines written to history session.\n");
+	ft_putendl("-w : Writes the history session to history file.\n");
+	ft_putendl("-a : Appends the history session to history file.\n");
+	ft_putendl("-r : Overwrite the history session with the history file.\n");
+	ft_putendl("-c : Flushes history session.\n");
+	ft_putendl("-d offset : Deletes offset line from history session.");
 }

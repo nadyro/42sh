@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/05 00:33:29 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/05 00:53:40 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ typedef struct s_history
 	int		w;
 	int		p;
 	int		s;
+	int		h;
 	int		vide;
 }				t_history;
 
@@ -128,6 +129,7 @@ void			read_history(t_node *history, int nbr);
 void			dispatch_history_print(t_shell *shell);
 void			dispatch_history_d(t_shell *shell, t_history *hist_args);
 void			append_history_mem_to_file(t_shell *shell);
+void			history_helper(void);
 char			*filter_args_2(char **args);
 t_node			*append_history_to_mem(t_node *history, t_shell *shell);
 t_node			*init_nonvoid_history(char *cmd, t_node *history);
@@ -141,24 +143,5 @@ t_history		*check_history_args(t_shell *shell);
 t_history		*check_if_flag(t_shell *shell, t_history *hist_args);
 t_history		*check_if_flag_2(t_shell *shell, t_history *hist_args);
 t_history		*fill_hist_args(t_shell *shell, t_history *hist_args, int *i);
-/*int				ash_history(t_shell *shell);
-void			print_hist_args(t_history *hist_args);
-void			write_history_mem_to_file(t_shell *shell);
-void			write_history_file(t_shell *shell);
-void			print_history(int *x, char **cmd, int to_free);
-void			read_history(t_node *history, int nbr);
-void			dispatch_history_print(t_shell *shell);
-void			dispatch_history_d(t_shell *shell, t_history *hist_args);
-void			append_history_mem_to_file(t_shell *shell);
-t_node			*append_history_to_mem(t_node *history, t_shell *shell);
-t_node			*init_nonvoid_history(char *cmd, t_node *history);
-t_node			*fill_history_file(t_node *history, t_shell *shell);
-t_history		*init_hist_args(void);
-t_history		*check_history_args(t_shell *shell);
-t_history		*check_if_flag(t_shell *shell, t_history *hist_args);
-t_history		*check_if_flag_2(t_shell *shell, t_history *hist_args);
-t_history		*fill_hist_args(t_shell *shell, t_history *hist_args, int *i);
 
-
-*/
 #endif
