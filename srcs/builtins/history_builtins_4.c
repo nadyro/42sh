@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/04 22:41:58 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/05 00:59:12 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/05 01:24:48 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_history	*check_if_flag_2(t_shell *shell, t_history *hist_args)
 		}
 		if (hist_args->vide == 1)
 			break ;
-		i = 1;
+		i = 0;
 		y++;
 	}
 	return (hist_args);
