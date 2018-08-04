@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/29 16:17:24 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/04 05:00:05 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/04 21:50:26 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void		write_history_file(t_shell *shell)
 	t_node	*history;
 
 	history = shell->history;
-	while (history->next != NULL)
+	while (history && history->next != NULL)
 		history = history->next;
 	if ((i = open(shell->home_env, O_CREAT | O_RDWR, S_IRUSR |
 					S_IWUSR | S_IRGRP | S_IROTH)) != -1)

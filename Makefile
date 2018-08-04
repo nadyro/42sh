@@ -6,7 +6,7 @@
 #    By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/04 05:10:43 by nsehnoun         ###   ########.fr        #
+#    Updated: 2018/08/04 22:42:55 by nsehnoun         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,6 +59,7 @@ SRC_FILES = main.c \
 			builtins/history_builtins_1.c \
 			builtins/history_builtins_2.c \
 			builtins/history_builtins_3.c \
+			builtins/history_builtins_4.c \
 			builtins/history_options.c \
 			\
 			line_edit/line_edit_main_loop.c \

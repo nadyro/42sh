@@ -6,13 +6,13 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 02:11:12 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/03 03:07:50 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/04 23:16:09 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-t_node		*get_last_cmds(t_node *history, int nbr)
+t_node	*get_last_cmds(t_node *history, int nbr)
 {
 	int		i;
 	char	**last_cmds;

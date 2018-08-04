@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/04 05:12:33 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/04 23:15:24 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ typedef struct s_history
 	int		w;
 	int		p;
 	int		s;
+	int		vide;
 }				t_history;
 
 typedef struct	s_shell
@@ -126,7 +127,8 @@ void			read_history(t_node *history, int nbr);
 void			dispatch_history_print(t_shell *shell);
 void			dispatch_history_d(t_shell *shell, t_history *hist_args);
 void			append_history_mem_to_file(t_shell *shell);
-t_node			*append_history_file_to_mem_1(t_node *history, t_shell *shell);
+char			*filter_args_2(char **args);
+t_node			*append_history_to_mem(t_node *history, t_shell *shell);
 t_node			*init_nonvoid_history(char *cmd, t_node *history);
 t_node			*dispatch_history_queries(t_history *hist_args, t_shell *shell);
 t_node			*clear_history_mem(t_shell *history);
@@ -135,4 +137,10 @@ t_node			*get_last_cmds(t_node *history, int nbr);
 t_node			*fill_history_file(t_node *history, t_shell *shell);
 t_history		*init_hist_args(void);
 t_history		*check_history_args(t_shell *shell);
+t_history		*check_if_flag(t_shell *shell, t_history *hist_args);
+t_history		*check_if_flag_2(t_shell *shell, t_history *hist_args);
+t_history		*fill_hist_args(t_shell *shell, t_history *hist_args, int *i);
+
+
+
 #endif
