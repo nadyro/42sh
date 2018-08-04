@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/31 14:53:44 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/04 23:33:42 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/05 00:33:34 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,17 +53,17 @@ t_node		*dispatch_history_queries(t_history *hist_args, t_shell *shell)
 
 	i = 0;
 	conv = 0;
-	if (hist_args->c == 1 && hist_args->vide != 1)
+	if (hist_args->c == 1)
 		shell->history = clear_history_mem(shell);
-	if (hist_args->d == 1 && hist_args->vide != 1)
+	if (hist_args->d == 1)
 		dispatch_history_d(shell, hist_args);
-	if (hist_args->r == 1 && hist_args->vide != 1)
+	if (hist_args->r == 1)
 		shell->history = append_history_to_mem(shell->history, shell);
-	if (hist_args->a == 1 && hist_args->vide != 1)
+	if (hist_args->a == 1)
 		append_history_mem_to_file(shell);
-	if (hist_args->w == 1 && hist_args->vide != 1)
+	if (hist_args->w == 1)
 		write_history_mem_to_file(shell);
-	if (hist_args->vide == 0)
+	if (hist_args->vide == 2)
 		dispatch_history_print(shell);
 	return (shell->history);
 }

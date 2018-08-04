@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sh_line_edit.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/30 17:22:12 by kernel_pani      ###   ########.fr       */
+/*   Updated: 2018/08/04 23:36:49 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,10 +106,6 @@ void			selection_mode(t_prompt *prompt, t_stat_data *stat_data);
 void			search_mode(t_prompt *prompt, t_stat_data *stat_data);
 void			auto_complete(t_prompt *prompt);
 void			prompt_clean(void);
-
-//History
-
-void			write_history_file(t_node *history);
 
 // Autocompletion
 char			**fetch_from_env_o(void);

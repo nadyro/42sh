@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2018/08/01 15:16:24 by arohani          ###   ########.fr       */
-=======
-/*   Updated: 2018/08/04 23:15:24 by nsehnoun         ###   ########.fr       */
->>>>>>> bt_history
+/*   Updated: 2018/08/05 00:33:29 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +140,7 @@ t_history		*init_hist_args(void);
 t_history		*check_history_args(t_shell *shell);
 t_history		*check_if_flag(t_shell *shell, t_history *hist_args);
 t_history		*check_if_flag_2(t_shell *shell, t_history *hist_args);
-t_history *fill_hist_args(t_shell *shell, t_history *hist_args, int *i);
+t_history		*fill_hist_args(t_shell *shell, t_history *hist_args, int *i);
 /*int				ash_history(t_shell *shell);
 void			print_hist_args(t_history *hist_args);
 void			write_history_mem_to_file(t_shell *shell);

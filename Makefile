@@ -3,14 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
+#    By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-<<<<<<< HEAD
-#    Updated: 2018/08/01 15:21:43 by arohani          ###   ########.fr        #
-=======
-#    Updated: 2018/08/04 22:42:55 by nsehnoun         ###   ########.fr        #
->>>>>>> bt_history
+#    Updated: 2018/08/04 23:35:52 by nsehnoun         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,16 +57,12 @@ SRC_FILES = main.c \
 			builtins/setenv.c \
 			builtins/shell.c \
 			builtins/unsetenv.c \
-<<<<<<< HEAD
-			builtins/history.c \
-=======
 			builtins/history_builtins_0.c \
 			builtins/history_builtins_1.c \
 			builtins/history_builtins_2.c \
 			builtins/history_builtins_3.c \
 			builtins/history_builtins_4.c \
 			builtins/history_options.c \
->>>>>>> bt_history
 			\
 			line_edit/line_edit_main_loop.c \
 			line_edit/termanip.c \

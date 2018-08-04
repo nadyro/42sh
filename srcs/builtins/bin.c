@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bin.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 12:01:43 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/30 22:21:53 by kernel_pani      ###   ########.fr       */
+/*   Updated: 2018/08/05 00:35:27 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,29 +72,25 @@ int			ash_echo(t_shell *shell)
 
 int			ash_history(t_shell *shell)
 {
-	int		i;
-	int		conv;
+	int			i;
+	t_history	*hist_args;
 
 	i = 0;
-	conv = 0;
-	check_history_args(shell);
+	hist_args = check_history_args(shell);
 	if (shell->args && shell->args[1])
 	{
-		conv = ft_atoi(shell->args[1]);
-		if (conv <= shell->history_length)
-			read_history(shell->history, conv);
-		else
-			read_history(shell->history, 0);
-		return (1);
+		if (ft_atoi(shell->args[1]) > 0)
+			hist_args->vide = 2;
 	}
-	else if (shell->args)
-		read_history(shell->history, 0);
+	else if (shell->args && !shell->args[1])
+		hist_args->vide = 2;
+	shell->history = dispatch_history_queries(hist_args, shell);
 	return (1);
 }
 
 int			ash_exit(t_shell *shell)
 {
-	write_history_file(shell->history);
+	write_history_file(shell);
 	if (shell)
 		exit (0);
 	return (1);
