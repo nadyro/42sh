@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 02:13:00 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/03 06:56:25 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/04 05:27:08 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ t_node	*clear_history_mem(t_shell *shell)
 	}
 	history = NULL;
 	shell->history_length = 0;
-	shell->hl_append = 0;
 	ft_putstr("finished clear\n");
 	return (history);
 }

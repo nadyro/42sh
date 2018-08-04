@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/29 16:17:24 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/03 03:34:11 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/04 05:00:05 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,7 @@ void		write_history_file(t_shell *shell)
 			history = history->prev;
 		}
 	if (i < 0)
-	{
-		ft_putstr("Error");
-		exit(0);
-	}
+		ft_putstr("Error. Couldn't write into file. Check your rights. \n");
 	else
 		close(i);
 }
@@ -78,7 +75,7 @@ t_node		*fill_history_file(t_node *history, t_shell *shell)
 		close(i);
 	}
 	else
-		return (NULL);
+		ft_putendl("Couldn't open file. Check your rights.");
 	return (history);
 }
 
