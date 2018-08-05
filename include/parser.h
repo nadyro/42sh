@@ -3,21 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:27:44 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/01 14:57:10 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/05 16:55:33 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
 
+# define T2S_BLOCK 0xFF
+# define T2S_CUR 0
+# define T2S_OLD 1
 # include <builtins.h>
-#define T2S_BLOCK 0xFF
-#define T2S_CUR 0
-#define T2S_OLD 1
- typedef struct	s_t2s
+
+typedef struct	s_t2s
 {
 	char	*buffer[2];
 	int		i[2];
@@ -25,18 +26,16 @@
 	int		cursor[2];
 	int		stat[2];
 }				t_t2s;
-
 typedef struct	s_redirs
 {
 	int						beg;
 	int						end;
 	int						next_re;
-	int 					new_fd;
+	int						new_fd;
 	int 					ionum; // ft_atoi(str) with str = ft_strndup(shell->line + shell->tok[beg + 1], shell->tok[beg + 2]);
 	struct s_redirs			*prev;
 	struct s_redirs			*next;
 }				t_redirs;
-
 typedef struct	s_ast
 {
 	int 					beg;	//relevant start token in token table for ast node
@@ -48,24 +47,23 @@ typedef struct	s_ast
 	t_redirs				*redirs;
 	struct s_ast			*right;
 }				t_ast;
-
-char		*token2str(int *token, char *str, char **env);
-int			parser_validation(int *tk_arr, char *ine);
-void		create_arg_table(t_shell *shell, int beg, int end);
-int 		get_tk_end_pos(t_shell *shell);
-t_ast	    *get_ast(t_shell *shell);
-int         ast_evaluate(t_ast *ast, t_shell *shell);
-t_ast		*fill_leftast(t_ast *parent);
-t_ast		*fill_rightast(t_ast *parent);
-t_ast		*init_ast(t_shell *shell);
-void		ast_loop(t_shell *shell, t_ast *ast);
-int			ast_execute(t_shell *shell, t_ast *cmd);
-int	        *redirect_check(t_shell *shell);
-int			is_redirect(t_shell *shell, t_ast *ast, int beg, int end);
-int			is_fd(char *str, int len);
-void		fill_redirs(t_shell *shell, t_ast *ast, int beg, int redir);
-void 		implement_redirs(t_shell *shell, t_ast *cmd);
-void		restore_std_fds(t_shell *shell, t_redirs *rd);
-int       	evaluate_pipe_node(t_shell *shell, t_ast *cmd);
+char			*token2str(int *token, char *str, char **env);
+int				parser_validation(int *tk_arr, char *ine);
+void			create_arg_table(t_shell *shell, int beg, int end);
+int				get_tk_end_pos(t_shell *shell);
+t_ast			*get_ast(t_shell *shell);
+int				ast_evaluate(t_ast *ast, t_shell *shell);
+t_ast			*fill_leftast(t_ast *parent);
+t_ast			*fill_rightast(t_ast *parent);
+t_ast			*init_ast(t_shell *shell);
+void			ast_loop(t_shell *shell, t_ast *ast);
+int				ast_execute(t_shell *shell, t_ast *cmd);
+int				*redirect_check(t_shell *shell);
+int				is_redirect(t_shell *shell, t_ast *ast, int beg, int end);
+int				is_fd(char *str, int len);
+void			fill_redirs(t_shell *shell, t_ast *ast, int beg, int redir);
+void			implement_redirs(t_shell *shell, t_ast *cmd);
+void			restore_std_fds(t_shell *shell, t_redirs *rd);
+int				evaluate_pipe_node(t_shell *shell, t_ast *cmd);
 
 #endif
