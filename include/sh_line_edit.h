@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/05 16:10:13 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/05 17:06:47 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,6 @@ void			selection_mode(t_prompt *prompt, t_stat_data *stat_data);
 void			search_mode(t_prompt *prompt, t_stat_data *stat_data);
 void			auto_complete(t_prompt *prompt);
 void			prompt_clean(void);
-
-// Autocompletion
 char			**fetch_from_env_o(void);
 char			**fetch_from_env_a(char **all_paths);
 t_node			*fetch_binaries(char **all_paths);
