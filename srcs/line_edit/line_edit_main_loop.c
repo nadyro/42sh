@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/05 17:06:19 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/05 17:12:24 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,7 @@ static char	*line_edit_main_loop_aux(t_prompt *prompt, t_stat_data *stat_data,
 		{
 			(prompt->origin->y == 0xffffffffffffffff ? prompt_clean() : 0);
 			ft_bzero(user_entry, 7);
-			while (!(nb_user_entry = read(1, user_entry, 6)))
-				if (prompt->end == 1)
-					return (NULL);
+			nb_user_entry = read(1, user_entry, 6);
 			if (user_entry[0] == 27 || user_entry[0] == 127
 					|| user_entry[0] == 9)
 				esc_react(prompt, nb_user_entry, user_entry, stat_data);

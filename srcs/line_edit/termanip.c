@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/14 22:21:10 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/05 16:57:31 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/05 17:11:06 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ void		termanip(int sig)
 		shell.c_oflag &= ~(OPOST);
 		shell.c_lflag &= ~(ICANON);
 		shell.c_lflag &= ~(ECHO);
-		shell.c_cc[VMIN] = 0;
-		shell.c_cc[VTIME] = 1;
+		shell.c_cc[VMIN] = 1;
+		shell.c_cc[VTIME] = 0;
 		tcsetattr(0, TCSADRAIN, &shell);
 	}
 	else if (sig == -1)
