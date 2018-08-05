@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 03:46:15 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/01 11:02:07 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/05 14:41:35 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,15 @@ void		reverse_handle(void)
 {
 	signal(SIGINT, NULL);
 	signal(SIGWINCH, NULL);
+	signal(SIGHUP, NULL);
+	signal(SIGQUIT, NULL);
+	signal(SIGILL, NULL);
+	signal(SIGABRT, NULL);
+	signal(SIGKILL, NULL);
+	signal(SIGSEGV, NULL);
+	signal(SIGPIPE, NULL);
+	signal(SIGTERM, NULL);
+	signal(SIGSTOP, NULL);
 }
 
 void		term_clear(void)
@@ -38,7 +47,7 @@ static void	handle_resize(int sig)
 	term_clear();
 }
 
-static void	handle_int(int sig)
+void	handle_int(int sig)
 {
 	UNUSED(sig);
 	if (prompt->size->y - 1 <= prompt->origin->y +
@@ -53,11 +62,13 @@ static void	handle_int(int sig)
 			(ft_add_nl(prompt, prompt->total +
 			prompt->origin->x) % prompt->size->x), false);
 	tputs(tgetstr("cd", NULL), 1, ft_putshit);
+	ft_strdel(&prompt->disp);
+	prompt->disp = get_pwd();
+	ft_strdel(prompt->fp_cmd);
 	write(1, prompt->disp, ft_strlen(prompt->disp));
 	get_cursor_pos(prompt->origin, prompt);
 	free(prompt->line);
-	if (!(prompt->line = ft_strdup("\0")))
-		exit(1);
+	(!(prompt->line = ft_strdup("\0")) ? termanip(42) : 0);
 	prompt->total = 0;
 	prompt->pos = 0;
 	prompt->current = NULL;
@@ -76,5 +87,4 @@ void		handle_sig(void)
 	signal(SIGPIPE, termanip);
 	signal(SIGTERM, termanip);
 	signal(SIGSTOP, termanip);
-	signal(SIGTSTP, termanip);
 }

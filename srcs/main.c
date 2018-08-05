@@ -7,7 +7,7 @@
 
 t_prompt	*prompt;
 
-static char  *get_pwd(void)
+char  *get_pwd(void)
 {
 	int    i;
 	char  pwd[1024];
@@ -37,12 +37,12 @@ static char	*line_mgmt(char *line, t_node *history)
 	if (line == NULL)
 	{
 		prompt = get_pwd();
-		ret = line_edit_main_loop(prompt, history);
+		ret = line_edit_main_loop(prompt, history, NULL);
 		free(prompt);
 	}
 	else
 	{
-		tmp = line_edit_main_loop("> ", history);
+		tmp = line_edit_main_loop("> ", history, &line);
 		ret = ft_strjoin(line, tmp);
 		free(tmp);
 		free(line);
