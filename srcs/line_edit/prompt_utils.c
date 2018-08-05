@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/30 07:30:34 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/05 12:42:54 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/05 16:57:13 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ void	ft_flush(t_prompt *prompt)
 
 	termanip(33);
 	ft_bzero(user_entry, 4096);
-	signal(SIGINT, NULL);
-	while (read(1, user_entry, 4095) > 0)
+	while (read(1, user_entry, 4095) > 0 && prompt->end == 0)
 	{
 		to_free = prompt->buf;
 		prompt->buf = ft_strjoin(prompt->buf, user_entry);
@@ -28,7 +27,8 @@ void	ft_flush(t_prompt *prompt)
 		ft_bzero(user_entry, 4095);
 		termanip(34);
 	}
-	signal(SIGINT, handle_int);
+	if (prompt->end == 1)
+		ft_strdel(&prompt->buf);
 	termanip(33);
 }
 
@@ -41,7 +41,4 @@ void	prompt_clean(void)
 	prompt->total = 0;
 	prompt->current = NULL;
 	term_clear();
-	write(1, "Your line was full, ", 20);
-	write(1, "usually you don't need these, ", 30);
-	write(1, "are you maybe sleeping on your keyboard?", 40);
 }

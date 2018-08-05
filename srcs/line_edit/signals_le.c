@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 03:46:15 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/05 14:41:35 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/05 16:47:54 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static void	handle_resize(int sig)
 
 void	handle_int(int sig)
 {
-	UNUSED(sig);
+	/*UNUSED(sig);
 	if (prompt->size->y - 1 <= prompt->origin->y +
 			(prompt->origin->x + ft_add_nl(prompt, prompt->total))
 			/ prompt->size->x)
@@ -62,16 +62,15 @@ void	handle_int(int sig)
 			(ft_add_nl(prompt, prompt->total +
 			prompt->origin->x) % prompt->size->x), false);
 	tputs(tgetstr("cd", NULL), 1, ft_putshit);
-	ft_strdel(&prompt->disp);
-	prompt->disp = get_pwd();
-	ft_strdel(prompt->fp_cmd);
 	write(1, prompt->disp, ft_strlen(prompt->disp));
 	get_cursor_pos(prompt->origin, prompt);
 	free(prompt->line);
 	(!(prompt->line = ft_strdup("\0")) ? termanip(42) : 0);
 	prompt->total = 0;
 	prompt->pos = 0;
-	prompt->current = NULL;
+	prompt->current = NULL;*/
+	UNUSED(sig);
+	prompt->end = 1;
 }
 
 void		handle_sig(void)

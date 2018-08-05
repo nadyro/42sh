@@ -6,7 +6,7 @@
 /*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/05 14:41:23 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/05 16:54:54 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,9 @@ static char	*line_edit_main_loop_aux(t_prompt *prompt, t_stat_data *stat_data,
 		{
 			(prompt->origin->y == 0xffffffffffffffff ? prompt_clean() : 0);
 			ft_bzero(user_entry, 7);
-			nb_user_entry = read(1, user_entry, 6);
+			while (!(nb_user_entry = read(1, user_entry, 6)))
+				if (prompt->end == 1)
+					return (NULL);
 			if (user_entry[0] == 27 || user_entry[0] == 127
 					|| user_entry[0] == 9)
 				esc_react(prompt, nb_user_entry, user_entry, stat_data);
@@ -51,7 +53,7 @@ static char	*line_edit_main_loop_aux(t_prompt *prompt, t_stat_data *stat_data,
 	return (to_return);
 }
 
-char		*line_edit_main_loop(char *d_prompt, t_node *history, char **fp_cmd)
+char		*line_edit_main_loop(char *d_prompt, t_node *history)
 {
 	char				*to_return;
 	static t_stat_data	*stat_data = NULL;
@@ -61,17 +63,11 @@ char		*line_edit_main_loop(char *d_prompt, t_node *history, char **fp_cmd)
 	stat_data = (stat_data ? stat_data : malloc_stat());
 	prompt = malloc_prompt(prompt, stat_data, d_prompt);
 	prompt->history = history;
-	prompt->fp_cmd = fp_cmd;
 	handle_sig();
 	prompt->buf = stat_data->overage;
 	to_return = NULL;
 	to_return = line_edit_main_loop_aux(prompt, stat_data, to_return);
 	stat_data->overage = (prompt->buf ? ft_strdup(prompt->buf) : NULL);
-	free(stat_data->old_line);
-	stat_data->old_line = NULL;
-	//if (!(to_return[0] != '\n' || to_return[1] != '\0'))
-	//	stat_data->old_line =
-	//		ft_itoa(prompt->origin->x + (prompt->origin->y + 1) * 100000);
 	free_prompt(prompt);
 	reverse_handle();
 	termanip(35);

@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 01:45:43 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/05 13:37:48 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/05 16:10:52 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ t_prompt	*malloc_prompt(t_prompt *prompt, t_stat_data *stat_data,
 		exit(1);
 	if (!(prompt->disp = ft_strdup(d_prompt)))
 		exit(1);
-	prompt->fp_cmd = NULL;
 	prompt->buf = NULL;
 	prompt->pos = 0;
 	prompt->total = 0;

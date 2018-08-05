@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/05 14:40:37 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/05 16:10:13 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,7 @@ typedef struct	s_stat_data
 
 char			*get_pwd(void);
 void			termanip(int sig);
-char			*line_edit_main_loop(char *d_prompt, t_node *history,
-				char **fp_cmd);
+char			*line_edit_main_loop(char *d_prompt, t_node *history);
 void			get_cursor_pos(t_coord *actualize, t_prompt *prompt);
 int				ft_putshit(int c);
 void			esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry,
