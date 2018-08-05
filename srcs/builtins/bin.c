@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 12:01:43 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/05 01:10:24 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/05 05:18:03 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int			ash_history(t_shell *shell)
 
 int			ash_exit(t_shell *shell)
 {
-	write_history_file(shell);
+	write_history_file(shell, 0);
 	if (shell)
 		exit (0);
 	return (1);

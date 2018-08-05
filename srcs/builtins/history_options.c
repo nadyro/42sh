@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 02:13:00 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/05 03:03:30 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/05 05:17:48 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ t_node	*clear_history_mem(t_shell *shell)
 	history = NULL;
 	shell->history_length = 0;
 	shell->o_history = 0;
+	shell->to_add = 0;
 	ft_putstr("finished clear\n");
 	return (history);
 }
@@ -88,9 +89,9 @@ void	write_history_mem_to_file(t_shell *shell)
 	i = open(shell->home_env, O_TRUNC);
 	if (i < 0)
 	{
-		write_history_file(shell);
+		write_history_file(shell, 0);
 		return ;
 	}
 	else
-		write_history_file(shell);
+		write_history_file(shell, 0);
 }

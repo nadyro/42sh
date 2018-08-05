@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/05 02:42:12 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/05 05:43:17 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,14 @@ typedef struct s_history
 	int		d;
 	int		d_arg;
 	int		a;
+	int		a_to_f;
 	int		n;
+	int		n_to_f;
 	int		r;
+	int		r_to_f;
 	//-w forces the shell to write into the history stored in memory into the .history file.
 	int		w;
+	int		w_to_f;
 	int		p;
 	int		s;
 	int		h;
@@ -124,25 +128,31 @@ void	    	cd_canon(t_shell *shell);
 int				ash_history(t_shell *shell);
 void			print_hist_args(t_history *hist_args);
 void			write_history_mem_to_file(t_shell *shell);
-void			write_history_file(t_shell *shell);
+void			write_history_file(t_shell *shell, int to_f);
 void			print_history(int *x, char **cmd, int to_free);
 void			read_history(t_node *history, int nbr);
 void			dispatch_history_print(t_shell *shell);
 void			dispatch_history_d(t_shell *shell, t_history *hist_args);
 void			append_history_mem_to_file(t_shell *shell);
+void			append_history_mem_to_arg(t_shell *shell);
+void			write_history_mem_to_arg(t_shell *shell);
+void			lighten_dispatching(t_history *hist_args, t_shell *shell);
 void			history_helper(void);
 char			*filter_args_2(char **args);
-t_node			*append_history_to_mem(t_node *history, t_shell *shell);
+t_node			*append_history_to_mem(t_node *history, t_shell *shell, int to_f);
 t_node			*init_nonvoid_history(char *cmd, t_node *history);
 t_node			*dispatch_history_queries(t_history *hist_args, t_shell *shell);
 t_node			*clear_history_mem(t_shell *history);
 t_node			*delete_history_line(t_shell *shell, int to_del);
 t_node			*get_last_cmds(t_node *history, int nbr);
 t_node			*fill_history_file(t_node *history, t_shell *shell);
+t_node			*fill_arg_file(t_node *history, t_shell *shell);
 t_history		*init_hist_args(void);
 t_history		*check_history_args(t_shell *shell);
 t_history		*check_if_flag(t_shell *shell, t_history *hist_args);
 t_history		*check_if_flag_2(t_shell *shell, t_history *hist_args);
 t_history		*fill_hist_args(t_shell *shell, t_history *hist_args, int *i);
+t_history		*handle_args(t_history *hist_args, t_shell *shell, int *i);
+
 
 #endif

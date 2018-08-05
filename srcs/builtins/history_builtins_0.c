@@ -6,22 +6,28 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/29 16:17:24 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/05 02:45:36 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/05 05:27:18 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-void		write_history_file(t_shell *shell)
+void		write_history_file(t_shell *shell, int to_f)
 {
 	int		i;
 	t_node	*history;
 
+	i = 0;
 	history = shell->history;
 	while (history && history->next != NULL)
 		history = history->next;
-	if ((i = open(shell->home_env, O_CREAT | O_RDWR, S_IRUSR |
-					S_IWUSR | S_IRGRP | S_IROTH)) != -1)
+	if (to_f == 1 && shell->args[2] != NULL)
+		i = open(shell->args[2], O_CREAT | O_RDWR, S_IRUSR | S_IWUSR
+		| S_IRGRP | S_IROTH);
+	else
+		i = open(shell->home_env, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR
+		| S_IRGRP | S_IROTH);
+	if (i > 0)
 		while (history)
 		{
 			ft_putendl_fd(history->cmd, i);
@@ -66,7 +72,6 @@ t_node		*fill_history_file(t_node *history, t_shell *shell)
 			history = init_nonvoid_history(c, history);
 		}
 		shell->o_history = shell->history_length;
-		ft_putnbr(shell->history_length);
 		close(i);
 	}
 	else

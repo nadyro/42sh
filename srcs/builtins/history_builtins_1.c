@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/31 14:53:44 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/05 00:58:22 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/05 05:43:02 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,13 @@ t_history	*init_hist_args(void)
 	hist_args->d = 0;
 	hist_args->d_arg = 0;
 	hist_args->a = 0;
+	hist_args->a_to_f = 0;
 	hist_args->n = 0;
+	hist_args->n_to_f = 0;
 	hist_args->r = 0;
+	hist_args->r_to_f = 0;
 	hist_args->w = 0;
+	hist_args->w_to_f = 0;
 	hist_args->h = 0;
 	hist_args->p = 0;
 	hist_args->s = 0;
@@ -47,6 +51,22 @@ t_history	*check_history_args(t_shell *shell)
 	return (hist_args);
 }
 
+void		lighten_dispatching(t_history *hist_args, t_shell *shell)
+{
+	if (hist_args->a == 1 && hist_args->a_to_f != 1)
+		append_history_mem_to_file(shell);
+	if (hist_args->a == 1 && hist_args->a_to_f == 1)
+		append_history_mem_to_arg(shell);
+	if (hist_args->w == 1 && hist_args->w_to_f != 1)
+		write_history_mem_to_file(shell);
+	if (hist_args->w == 1 && hist_args->w_to_f == 1)
+		write_history_mem_to_arg(shell);
+	if (hist_args->h == 1)
+		history_helper();
+	if (hist_args->vide == 2)
+		dispatch_history_print(shell);
+}
+
 t_node		*dispatch_history_queries(t_history *hist_args, t_shell *shell)
 {
 	int		i;
@@ -58,16 +78,11 @@ t_node		*dispatch_history_queries(t_history *hist_args, t_shell *shell)
 		shell->history = clear_history_mem(shell);
 	if (hist_args->d == 1)
 		dispatch_history_d(shell, hist_args);
-	if (hist_args->r == 1)
-		shell->history = append_history_to_mem(shell->history, shell);
-	if (hist_args->a == 1)
-		append_history_mem_to_file(shell);
-	if (hist_args->w == 1)
-		write_history_mem_to_file(shell);
-	if (hist_args->h == 1)
-		history_helper();
-	if (hist_args->vide == 2)
-		dispatch_history_print(shell);
+	if (hist_args->r == 1 && hist_args->r_to_f != 1)
+		shell->history = append_history_to_mem(shell->history, shell, 0);
+	if (hist_args->r == 1 && hist_args->r_to_f == 1)
+		shell->history = append_history_to_mem(shell->history, shell, 1);
+	lighten_dispatching(hist_args, shell);
 	return (shell->history);
 }
 
