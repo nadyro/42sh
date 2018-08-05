@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 02:11:49 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/05 01:16:57 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/05 03:06:27 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,13 @@ void	append_history_mem_to_file(t_shell *shell)
 			history = history->next;
 		while (history != NULL)
 		{
-			if (y >= shell->hl_append)
+			if (y >= shell->o_history)
 				ft_putendl_fd(history->cmd, i);
 			history = history->prev;
 			y++;
 		}
+		shell->o_history += shell->to_add;
+		shell->to_add = 0;
 	}
 }
 
@@ -77,6 +79,8 @@ t_node	*append_history_to_mem(t_node *history, t_shell *shell)
 {
 	while (history)
 		history = history->next;
+	shell->history_length = 0;
+	shell->to_add = 0;
 	history = fill_history_file(history, shell);
 	return (history);
 }

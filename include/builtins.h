@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/05 00:53:40 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/05 02:42:12 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,8 @@ typedef struct	s_shell
 	int						s_in;
 	int						s_err;
 	int						history_length;
-	int						hl_append;
+	int						o_history;
+	int						to_add;
 	char					*home_env;	
 	t_env					*list;
 	t_node					*history;
