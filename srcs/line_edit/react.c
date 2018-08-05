@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/24 13:39:16 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/01 02:06:48 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/05 13:09:25 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void		secure_stock(t_prompt *prompt, char *to_stock)
 void		sig_react(t_prompt *prompt, char c)
 {
 	if (c == 4 && prompt->total == 0)
-		termanip(42);
+		termanip(-1);
 	else if (c == 12)
 		term_clear();
 }

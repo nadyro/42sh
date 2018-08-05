@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/04 23:36:49 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/05 14:40:37 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # include <dirent.h>
 # include <sys/stat.h>
 
-# define BUFFER 4
+# define BUFFER 512
 # define UNUSED(x) (void)(x)
 
 extern struct s_prompt		*prompt;
@@ -51,6 +51,7 @@ typedef struct	s_prompt
 	char		*line;
 	char		*buf;
 	char		*disp;
+	char		**fp_cmd;
 	int			end;
 	size_t		pos;
 	size_t		total;
@@ -70,9 +71,10 @@ typedef struct	s_stat_data
 	t_node		*current;
 }				t_stat_data;
 
-//char			*get_pwd(void);
+char			*get_pwd(void);
 void			termanip(int sig);
-char			*line_edit_main_loop(char *d_prompt, t_node *history);
+char			*line_edit_main_loop(char *d_prompt, t_node *history,
+				char **fp_cmd);
 void			get_cursor_pos(t_coord *actualize, t_prompt *prompt);
 int				ft_putshit(int c);
 void			esc_react(t_prompt *prompt, int nb_user_entry, char *user_entry,
@@ -95,6 +97,7 @@ void			sig_react(t_prompt *prompt, char c);
 void			handle_sig(void);
 void			ignore_handle(void);
 void			reverse_handle(void);
+void			handle_int(int sig);
 void			term_clear(void);
 t_prompt		*malloc_prompt(t_prompt *prompt, t_stat_data *data,
 				char *d_prompt);
