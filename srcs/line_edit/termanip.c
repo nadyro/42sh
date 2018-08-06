@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/14 22:21:10 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/05 17:11:06 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/06 04:18:00 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	termanip_aux(int sig, struct termios shell, struct termios old)
 	else if (sig == 34)
 	{
 		tcgetattr(0, &shell);
-		shell.c_cc[VTIME] += 1;
+		shell.c_cc[VTIME] += (shell.c_cc[VTIME] > 2 ? 0 : 1);
 		tcsetattr(0, TCSADRAIN, &shell);
 	}
 	else if (sig == 35)

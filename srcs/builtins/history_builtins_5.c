@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/05 18:27:37 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/06 03:46:56 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/06 05:27:03 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,6 @@ void	write_arg_p(t_shell *shell)
 	if (shell->args[2] != NULL)
 	{
 		ft_putendl(shell->args[2]);
-		shell->history = delete_history_line(shell, shell->history_length);
+		delete_history_line(shell, shell->history_length);
 	}
 }
