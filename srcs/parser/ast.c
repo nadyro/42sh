@@ -19,7 +19,6 @@ static void		free_redirs(t_redirs *list)
 {
 	t_redirs	*next;
 	t_redirs	*tmp;
-	int 		counter = 0;
 
 	next = NULL;
 	tmp = list;
@@ -27,32 +26,20 @@ static void		free_redirs(t_redirs *list)
 	{
 		next = tmp->next;
 		if (tmp)
-		{
-			counter++;
 			free(tmp);
-		}
 		tmp = next;
 	}
 	tmp = NULL;
-	printf("while freeing redirs, freed: %d nodes\n", counter);
 }
-
-/*static void		free_ast_elem(t_ast *node)
-{
-	if (node)
-		free(node);
-}*/
 
 void			free_ast(t_ast *head)
 {
 	t_ast	*tmp = head;
-	static int 	counter = 0;
 
 	if (!tmp)
 		return ;
 	else if (!(tmp->left) && !(tmp->right))
 	{
-		printf("freeing ast node #%d\n", ++counter);
 		free(tmp);
 		return ;
 	}
@@ -62,7 +49,6 @@ void			free_ast(t_ast *head)
 			free_ast(tmp->left);	
 		if (tmp->right)
 			free_ast(tmp->right);
-		printf("freeing ast node #%d\n", ++counter);
 		free(tmp);
 	}
 }
@@ -178,7 +164,6 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 			shell->s_out = dup(1);
 			shell->s_err = dup(2);
 			implement_redirs(shell, ast);
-			printf("about to free redirs\n");
 			free_redirs(ast->redirs);
 		}
 		else
