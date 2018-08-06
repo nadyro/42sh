@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/31 14:53:44 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/05 23:46:02 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/06 03:41:27 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ void		lighten_dispatching(t_history *hist_args, t_shell *shell)
 		write_history_mem_to_file(shell);
 	if (hist_args->w == 1 && hist_args->w_to_f == 1)
 		write_history_mem_to_arg(shell);
+	if (hist_args->p == 1)
+		write_arg_p(shell);
 	if (hist_args->h == 1)
 		history_helper();
 	if (hist_args->vide == 2)
