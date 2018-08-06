@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/08 06:09:10 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/01 11:06:07 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/06 06:38:20 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ static void	search_mode_aux(t_prompt *prompt, t_stat_data *stat_data)
 void		search_mode(t_prompt *prompt, t_stat_data *stat_data)
 {
 	ignore_handle();
-	termanip(36);
 	if (stat_data->old_line)
 	{
 		free(stat_data->old_line);
@@ -108,7 +107,7 @@ void		search_mode(t_prompt *prompt, t_stat_data *stat_data)
 	stat_data->old_line = prompt->line;
 	((prompt->line = ft_strdup("\0")) ? 0 : exit(1));
 	search_mode_aux(prompt, stat_data);
-	termanip(33);
+	(prompt->end ? termanip(33) : 0);
 	handle_sig();
 	prompt->end = 0;
 }
