@@ -6,12 +6,13 @@
 /*   By: antoipom <antoipom@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/04 13:13:10 by antoipom          #+#    #+#             */
-/*   Updated: 2018/07/19 16:13:28 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/08/06 13:51:28 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "lexer.h"
+#include "heredoc.h"
 #include <stdlib.h>
 
 int				g_tk_states[2][28][15] = {
@@ -137,6 +138,9 @@ static int		*token_loop(int *tk_arr, char *line, int arr_size, int i)
 		{
 			tk_arr[tk_i] = prev;
 			tk_arr[tk_i + 2] = i - tk_arr[tk_i + 1];
+			if (tk_i > 2 && g_state_to_token[tk_arr[tk_i]] == TK_WORD
+					&& g_state_to_token[tk_arr[tk_i - 3]] == TK_DLESS)
+				heredoc_add(&tk_arr[tk_i], line);
 			tk_i += 3;
 		}
 	}
@@ -217,5 +221,6 @@ int				*get_tokens(char *line)
 		tk_arr = check_filename_token(tk_arr);
 		tk_arr = check_cmd_token(tk_arr);
 	}
+	(heredoc_manager(1)) ? heredoc_fill() : (void)tk_arr;
 	return (tk_arr);
 }
