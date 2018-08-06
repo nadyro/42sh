@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 02:13:00 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/05 05:17:48 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/06 05:14:47 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,11 @@ t_node	*switch_history_cmds(t_node *history)
 		tmp_next->next = tmp_prev;
 	if (history->next)
 		tmp_prev->prev = tmp_next;
+
+	/*if (history->next)
+		history->next->prev = history->prev;
+	if (history->prev)
+		history->prev->next = history->next;*/
 	return (history);
 }
 
@@ -69,9 +74,11 @@ t_node	*delete_history_line(t_shell *shell, int to_del)
 		if (i == to_del)
 		{
 			history = switch_history_cmds(history);
+			shell->history = shell->history->next;
 			ft_bzero(history->cmd, ft_strlen(history->cmd));
 			free(history->cmd);
 			free(history);
+			history = NULL;
 			break ;
 		}
 		history = history->prev;

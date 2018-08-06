@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 02:11:49 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/06 00:27:18 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/06 04:28:59 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	dispatch_history_d(t_shell *shell, t_history *hist_args)
 {
 	if (hist_args->d_arg > 0)
 	{
-		if (hist_args->d_arg <= shell->history_length - 1)
+		if (hist_args->d_arg <= shell->history_length)
 			delete_history_line(shell, hist_args->d_arg);
 		else
 		{
