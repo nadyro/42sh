@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/04 22:41:58 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/06 03:43:19 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/06 06:12:37 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,6 @@ t_history	*fill_hist_args(t_shell *shell, t_history *hist_args, int *i)
 	hist_args->c = (ft_strchr(shell->args[*i], 'c') != NULL) ? 1 : 0;
 	hist_args->p = (ft_strchr(shell->args[*i], 'p') != NULL) ? 1 : 0;
 	hist_args->h = (ft_strchr(shell->args[*i], 'h') != NULL) ? 1 : 0;
-	if (ft_strchr(shell->args[*i], 'p') != NULL)
-		hist_args->p = 1;
 	if (ft_strchr(shell->args[*i], 's') != NULL)
 		hist_args->s = 1;
 	return (hist_args);

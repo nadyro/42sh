@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/06 03:41:53 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/06 06:13:14 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ void			append_history_mem_to_arg(t_shell *shell);
 void			write_history_mem_to_arg(t_shell *shell);
 void			lighten_dispatching(t_history *hist_args, t_shell *shell);
 void			write_arg_p(t_shell *shell);
+void			write_arg_s(t_shell *shell);
 void			history_helper(void);
 char			*filter_args_2(char **args);
 t_node			*append_history_to_mem(t_node *hstry, t_shell *shell, int to_f);

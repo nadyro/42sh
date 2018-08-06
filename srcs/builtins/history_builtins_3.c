@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 02:11:49 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/06 04:28:59 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/06 06:40:53 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ t_node	*lighten_append_hst(int *index, int fd, t_shell *shell, t_node *history)
 {
 	char	*tmp;
 	int		y;
-
 
 	y = *index;
 	tmp = NULL;
