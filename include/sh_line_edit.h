@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/05 17:06:47 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/06 18:19:53 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,4 +122,6 @@ void			free_lists(t_node *lst);
 void			print_nudes(t_node *matches);
 char			**lst_to_array(t_node *matches);
 int				write_completion(t_prompt *prompt, int *y);
+void			sig_ignore(int s);
+
 #endif

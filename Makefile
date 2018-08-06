@@ -6,7 +6,7 @@
 #    By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/06 16:50:17 by nsehnoun         ###   ########.fr        #
+#    Updated: 2018/08/06 18:24:02 by antoipom         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,7 +83,7 @@ SRC_FILES = main.c \
 			line_edit/cmpltn_utils.c \
 			line_edit/fetch_utils.c \
 			line_edit/prompt_utils.c \
-			
+			line_edit/sig_ignore.c
 
 INC_FILES = lexer.h \
 			parser.h \

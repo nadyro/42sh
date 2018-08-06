@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/01 14:37:30 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/06 17:30:10 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 		wpid = waitpid(pid, &status, WUNTRACED);
 		if (status)	//necessary as status !=0 means command return value was non-zero
 			cmd->cmd_ret = -1;
-		while (!WIFEXITED(status) && !WIFSIGNALED(status))
+		while (!WIFEXITED(status) && !WIFSIGNALED(status) && !WIFSTOPPED(status))
 		{
 			wpid = waitpid(pid, &status, WUNTRACED);
 		}
