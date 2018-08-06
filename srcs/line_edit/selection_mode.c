@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/04 22:38:46 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/01 11:02:01 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/06 06:38:19 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static int	selection_tree_aux(t_prompt *prompt, t_stat_data *stat_data,
 	else
 		return (0);
 	handle_sig();
-	termanip(33);
+	(prompt->end ? termanip(33) : 0);
 	prompt->end = 0;
 	return (1);
 }
@@ -121,7 +121,6 @@ void		selection_mode(t_prompt *prompt, t_stat_data *stat_data)
 	ignore_handle();
 	prompt->pos += (prompt->pos == prompt->total ? -1 : 0);
 	start_pos = prompt->pos;
-	termanip(36);
 	while (1)
 	{
 		selection_write(prompt, start_pos);
