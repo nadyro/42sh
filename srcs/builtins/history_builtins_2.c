@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 02:11:12 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/05 16:24:09 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/05 23:53:09 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_node	*get_last_cmds(t_node *history, int nbr)
 	return (history);
 }
 
-t_node		*fill_arg_file(t_node *history, t_shell *shell)
+t_node	*fill_arg_file(t_node *history, t_shell *shell)
 {
 	int		i;
 	char	*c;
@@ -45,7 +45,8 @@ t_node		*fill_arg_file(t_node *history, t_shell *shell)
 	c = NULL;
 	i = 0;
 	if (shell->args[2])
-		i = open(shell->args[2], O_RDWR | S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+		i = open(shell->args[2], O_RDWR | S_IRUSR
+		| S_IWUSR | S_IRGRP | S_IROTH);
 	if (i >= 0)
 	{
 		while ((get_next_line(i, &c)) == 1)
@@ -71,8 +72,8 @@ void	append_history_mem_to_arg(t_shell *shell)
 	i = 0;
 	history = shell->history;
 	if (shell->args[2] != NULL)
-	i = open(shell->args[2], O_CREAT | O_APPEND | O_RDWR 
-		, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+		i = open(shell->args[2], O_CREAT | O_APPEND |
+		O_RDWR, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	if (i > 0)
 	{
 		while (history->next != NULL)

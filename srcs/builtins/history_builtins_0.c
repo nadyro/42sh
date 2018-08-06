@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/29 16:17:24 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/05 05:27:18 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/05 22:33:34 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void		read_history(t_node *history, int nbr)
 			get_last_cmds(history, nbr);
 		else
 		{
-			while (history->next != NULL)
+			while (history && history->next != NULL)
 				history = history->next;
 			while (history)
 			{

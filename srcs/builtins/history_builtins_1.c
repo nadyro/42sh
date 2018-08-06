@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/31 14:53:44 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/05 05:43:02 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/05 23:46:02 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ t_node		*dispatch_history_queries(t_history *hist_args, t_shell *shell)
 		shell->history = append_history_to_mem(shell->history, shell, 0);
 	if (hist_args->r == 1 && hist_args->r_to_f == 1)
 		shell->history = append_history_to_mem(shell->history, shell, 1);
+	if (hist_args->n == 1 && shell->is_a == 1)
+		shell->history = write_history_to_mem(shell->history, shell);
 	lighten_dispatching(hist_args, shell);
 	return (shell->history);
 }

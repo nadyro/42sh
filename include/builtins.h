@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/05 16:52:18 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/06 00:12:16 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,13 @@ typedef struct	s_shell
 	int						s_err;
 	int						history_length;
 	int						o_history;
+	int						is_a;
+	int						last_added;
 	int						to_add;
 	char					*home_env;
 	t_env					*list;
 	t_node					*history;
+	t_node					*appnd_hst;
 }				t_shell;
 
 t_env			*env_setup(char **env);
@@ -143,11 +146,14 @@ t_node			*delete_history_line(t_shell *shell, int to_del);
 t_node			*get_last_cmds(t_node *history, int nbr);
 t_node			*fill_history_file(t_node *history, t_shell *shell);
 t_node			*fill_arg_file(t_node *history, t_shell *shell);
+t_node			*write_history_to_mem(t_node *history, t_shell *shell);
+t_node			*lighten_append_hst(int *index, int fd, t_shell *shell, t_node *history);
 t_history		*init_hist_args(void);
 t_history		*check_history_args(t_shell *shell);
 t_history		*check_if_flag(t_shell *shell, t_history *hist_args);
 t_history		*check_if_flag_2(t_shell *shell, t_history *hist_args);
 t_history		*fill_hist_args(t_shell *shell, t_history *hist_args, int *i);
 t_history		*handle_args(t_history *hist_args, t_shell *shell, int *i);
+
 
 #endif
