@@ -99,7 +99,7 @@ LIB_INC = -I$(LIB_DIR)/include
 
 OPTIMIZATION ?= -O0
 CC ?= gcc
-CCFLAGS ?= -g -Wall -Wextra -Werror -fsanitize=address -fno-omit-frame-pointer 
+CCFLAGS ?= -g -Wall -Wextra -Werror ##-fsanitize=address -fno-omit-frame-pointer 
 LDFLAGS = -L$(LIB_DIR) -lft -ltermcap
 INCLUDES = $(LOCAL_INC) $(LIB_INC)
 

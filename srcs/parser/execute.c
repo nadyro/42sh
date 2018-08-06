@@ -98,11 +98,10 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 {
 	if (cmd->redirs && shell->redir_error == 1)
 	{
-		ft_putendl_fd("Ambiguous output redirect.", 2);
 		cmd->cmd_ret = -1;
 		restore_std_fds(shell, cmd->redirs);
 	}
-	if (shell && shell->args && shell->args[0])
+	else if (shell && shell->args && shell->args[0])
 	{
 		shell->full_path = (has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
 		if (ft_strcmp(shell->args[0], ".") == 0 || ft_strcmp(shell->args[0], "..") == 0)
@@ -140,6 +139,8 @@ void		ast_loop(t_shell *shell, t_ast *ast)
 	{
 		//printf("DEBUG 2: entering ast_evaluate FROM ast_loop\n");
 		ast_evaluate(ast, shell);
+		printf("sending to free_ast after execution complete\n");
+		free_ast(ast);
 	//	printf("exiting ast_evaluate FROM ast_loop after completion\n");
 	}
 }

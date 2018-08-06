@@ -67,5 +67,6 @@ void		fill_redirs(t_shell *shell, t_ast *ast, int beg, int redir);
 void 		implement_redirs(t_shell *shell, t_ast *cmd);
 void		restore_std_fds(t_shell *shell, t_redirs *rd);
 int       	evaluate_pipe_node(t_shell *shell, t_ast *cmd);
+void		free_ast(t_ast *head);
 
 #endif
