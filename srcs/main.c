@@ -112,6 +112,9 @@ int			main(int argc, char **argv, char **env)
 	shell.history_length = 0;
 	shell.o_history = 0;
 	shell.to_add = 0;
+	shell.last_added = 0;
+	shell.is_a = 0;
+	shell.appnd_hst = NULL;
 	///////////////////////////////////
 	if ((name_term = getenv("TERM")) == NULL)
 	{

@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 02:11:49 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/05 03:38:02 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/06 00:27:18 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,32 @@ void	append_history_mem_to_file(t_shell *shell)
 			history = history->next;
 		while (history != NULL)
 		{
-			if (y >= shell->o_history)
-				ft_putendl_fd(history->cmd, i);
+			shell->appnd_hst = lighten_append_hst(&y, i, shell, history);
 			history = history->prev;
-			y++;
 		}
 		shell->o_history += shell->to_add;
+		shell->is_a = 1;
 		shell->to_add = 0;
+		close(i);
 	}
+}
+
+t_node	*lighten_append_hst(int *index, int fd, t_shell *shell, t_node *history)
+{
+	char	*tmp;
+	int		y;
+
+
+	y = *index;
+	tmp = NULL;
+	if (y++ >= shell->o_history)
+	{
+		ft_putendl_fd(history->cmd, fd);
+		tmp = ft_strdup(history->cmd);
+		shell->appnd_hst = init_nonvoid_history(tmp, shell->appnd_hst);
+	}
+	*index = y;
+	return (shell->appnd_hst);
 }
 
 t_node	*append_history_to_mem(t_node *history, t_shell *shell, int to_f)
