@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/30 07:30:34 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/05 17:14:28 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/06 03:32:16 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,20 @@ void	ft_flush(t_prompt *prompt)
 	char	user_entry[4096];
 	char	*to_free;
 
+	ignore_handle();
 	termanip(33);
 	ft_bzero(user_entry, 4096);
-	while (read(1, user_entry, 4095) > 0)
+	while (read(1, user_entry, 4095) > 0 && !(prompt->end))
 	{
 		to_free = prompt->buf;
-		prompt->buf = ft_strjoin(prompt->buf, user_entry);
+		if (!(prompt->buf = ft_strjoin(prompt->buf, user_entry)))
+			exit(1);
 		free(to_free);
 		ft_bzero(user_entry, 4095);
 		termanip(34);
 	}
 	termanip(33);
+	handle_sig();
 }
 
 void	prompt_clean(void)

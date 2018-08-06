@@ -34,16 +34,17 @@ static char	*line_mgmt(char *line, t_node *history)
 	char *ret;
 	char *tmp;
 
+	ret = NULL;
 	if (line == NULL)
 	{
 		prompt = get_pwd();
 		ret = line_edit_main_loop(prompt, history);
-		free(prompt);
 	}
 	else
 	{
 		tmp = line_edit_main_loop("> ", history);
-		ret = ft_strjoin(line, tmp);
+		if (tmp != NULL)
+			ret = ft_strjoin(line, tmp);
 		free(tmp);
 		free(line);
 	}
@@ -71,7 +72,7 @@ void		main_loop(char *line, t_shell shell)
 	while (1)
 	{
 		line = line_mgmt(line, shell.history);
-		if ((shell.tok = get_tokens(line)) != NULL)
+		if (line && (shell.tok = get_tokens(line)) != NULL)
 		{
 			//test_tokens(shell.tok);
 			if ((parser_ret = parser_validation(shell.tok, line)) == 1)

@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 03:46:15 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/05 17:56:50 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/06 03:17:23 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,14 +61,9 @@ void	handle_int(int sig)
 	move_cursor(prompt, prompt->total + prompt->size->x -
 			(ft_add_nl(prompt, prompt->total +
 			prompt->origin->x) % prompt->size->x), false);
-	tputs(tgetstr("cd", NULL), 1, ft_putshit);
-	write(1, prompt->disp, ft_strlen(prompt->disp));
-	get_cursor_pos(prompt->origin, prompt);
-	free(prompt->line);
-	(!(prompt->line = ft_strdup("\0")) ? termanip(42) : 0);
-	prompt->total = 0;
-	prompt->pos = 0;
-	prompt->current = NULL;
+	tputs(tgetstr("ce", NULL), 1, ft_putshit);
+	prompt->end = 1;
+	termanip(33);
 }
 
 void		handle_sig(void)
