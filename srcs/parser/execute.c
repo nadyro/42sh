@@ -99,7 +99,7 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 	if (cmd->redirs && shell->redir_error == 1)
 	{
 		cmd->cmd_ret = -1;
-		restore_std_fds(shell, cmd->redirs);
+	//	restore_std_fds(shell, cmd->redirs);
 	}
 	else if (shell && shell->args && shell->args[0])
 	{
@@ -111,17 +111,15 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 		else if (shell->full_path || !(access(shell->args[0], F_OK)))	//if binary exists in PATH, fork and execute
 		{
 			ast_launch(shell, cmd);
-			//printf("launched fork, returning : cmd_ret = %d\n", cmd->cmd_ret);
-			return (cmd->cmd_ret);
 		}
 		else if ((shell->args[0][0] != '\0' && access(shell->args[0], F_OK)))
 		{
 			ft_putstr_fd(shell->args[0], 2);
 			ft_putstr_fd(": Command not found.\n", 2);
-			if (cmd->redirs)
-				restore_std_fds(shell, cmd->redirs);
 			cmd->cmd_ret = -1;
 		}
+		//if (cmd->redirs)
+		//	restore_std_fds(shell, cmd->redirs);
 	}
 	//printf("about to return ast_execute: cmd_ret = %d\n", cmd->cmd_ret);
 	return (cmd->cmd_ret);

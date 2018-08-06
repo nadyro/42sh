@@ -164,6 +164,8 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 			shell->s_out = dup(1);
 			shell->s_err = dup(2);
 			implement_redirs(shell, ast);
+			printf("should be restoring std fds now after implementing commands\n");
+			restore_std_fds(shell, ast->redirs);
 			free_redirs(ast->redirs);
 		}
 		else
