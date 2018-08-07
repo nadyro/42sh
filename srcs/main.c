@@ -51,7 +51,78 @@ static char	*line_mgmt(char *line, t_node *history)
 	}
 	return (ret);
 }
+/*
+static void	test_tokens(int *tok)
+  {
+  int		i = 0;
 
+  while (tok[i] != -1)
+  {
+  switch(tok[i])
+  {
+  case TK_WORD:
+  printf("WORD \n");
+  break;
+  case TK_FILENAME:
+  printf("FILENAME \n");
+  break;
+  case TK_CMD:
+  printf("COMMAND \n");
+  break;
+  case TK_NEWLINE:
+  printf("NEWLINE \n");
+  break;
+  case TK_IO_NUMBER:
+  printf("IO_NUMBER \n");
+  break;
+  case TK_GREAT:
+  printf("GREAT \n");
+  break;
+  case TK_DGREAT:
+  printf("DGREAT \n");
+  break;
+  case TK_GREATAND:
+  printf("GREATAND \n");
+  break;
+  case TK_LESS:
+  printf("LESS \n");
+  break;
+  case TK_DLESS:
+  printf("DLESS \n");
+  break;
+  case TK_LESSAND:
+  printf("LESSAND \n");
+  break;
+  case TK_PIPE:
+  printf("PIPE \n");
+  break;
+  case TK_SEMI:
+  printf("SEMI \n");
+  break;
+  case TK_COMMENT:
+  printf("COMMENT \n");
+  break;
+//case TK_SPACE:
+//	printf("SPACE ");
+//	break;
+//case TK_AND:
+//	printf("AND \n");
+//	break;
+case TK_AND_IF:
+printf("AND_IF \n");
+break;
+case TK_OR_IF:
+printf("OR_IF \n");
+break;
+case TK_END:
+printf("END \n");
+break;
+}
+printf("%d,%d\n", tok[i+1], tok[i+2]);
+i += 3;
+}
+}
+*/
 void		main_loop(char *line, t_shell shell)
 {
 	//int		*token_tab;
@@ -129,7 +200,8 @@ int			main(int argc, char **argv, char **env)
 	return (0);
 }
 
-/*static void	test_tokens(int *tok)
+/*
+static void	test_tokens(int *tok)
   {
   int		i = 0;
 
@@ -197,8 +269,8 @@ break;
 }
 i += 3;
 }
-}*/
-
+}
+*/
 
 
 
