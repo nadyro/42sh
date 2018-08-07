@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/07 11:06:21 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/07 13:46:58 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ char		*line_edit_main_loop(char *d_prompt, t_node *history)
 	write(1, d_prompt, ft_strlen(d_prompt));
 	prompt->history = history;
 	handle_sig();
-	prompt->origin->x = 7;
+	prompt->origin->x = (ft_strlen(prompt->disp) > 10 ?
+		ft_strlen(prompt->disp) - 9 : ft_strlen(prompt->disp));
 	prompt->buf = stat_data->overage;
 	to_return = NULL;
 	to_return = line_edit_main_loop_aux(prompt, stat_data, to_return);
