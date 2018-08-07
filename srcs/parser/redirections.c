@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/19 12:59:04 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/01 12:52:11 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/07 13:31:23 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,15 @@
 #include "builtins.h"
 #include <stdio.h>
 
-/*
-**	Basically, to perform > or >>, first close stdout, then open file to the
-**	right of > or >>, then execute command to the left of > or >>, then close
-**	the fd used for file on the right of > or >>. To preform <, do same as >,
-**	except for 2 things: 1) close(0) instead of close(1) to obviously close
-**	stdin instead of stdout, and 2) when opening file based on argument that
-**	comes after "<", open as READONLY instead of WRITEONLY
-*/
+static void		redir_error(t_shell *shell, char *filename, int new_fd)
+{
+	shell->redir_error = (new_fd < 0) ? 1 : 0;
+	if (shell->redir_error == 1 && filename)
+	{
+		ft_putstr_fd(filename, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+	}
+}
 
 static void		handle_prefix_syntax(t_shell *shell, t_ast *cmd)
 {
@@ -98,9 +99,10 @@ static void	implement_great(t_shell *shell, t_redirs *node, int fd)
 	{
 		str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
 		tmp->new_fd = open(str, O_CREAT | O_TRUNC | O_WRONLY, 0666);
+		redir_error(shell, str, tmp->new_fd);
 		ft_strdel(&str);
-		if (tmp->new_fd < 0)
-			shell->redir_error = 1;
+		if (shell->redir_error == 1)
+			return ;
 		else
 			dup2(tmp->new_fd, fd);
 	}
@@ -118,9 +120,10 @@ static void	implement_dgreat(t_shell *shell, t_redirs *node, int fd)
 	{
 		str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
 		tmp->new_fd = open(str, O_CREAT | O_APPEND | O_WRONLY, 0666);
+		redir_error(shell, str, tmp->new_fd);
 		ft_strdel(&str);
-		if (tmp->new_fd < 0)
-			shell->redir_error = 1;
+		if (shell->redir_error == 1)
+			return ;
 		else
 			dup2(tmp->new_fd, fd);
 	}
@@ -143,9 +146,10 @@ static void	implement_greatand(t_shell *shell, t_redirs *node, int fd)
 	{
 		str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
 		tmp->new_fd = open(str, O_CREAT | O_APPEND | O_WRONLY, 0666);
+		redir_error(shell, str, tmp->new_fd);
 		ft_strdel(&str);
-		if (tmp->new_fd < 0)
-			shell->redir_error = 1;
+		if (shell->redir_error == 1)
+			return ;
 		else
 			dup2(tmp->new_fd, fd);
 	}
@@ -163,9 +167,10 @@ static void	implement_less(t_shell *shell, t_redirs *node, int fd)
 	{
 		str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
 		tmp->new_fd = open(str, O_RDONLY);
+		redir_error(shell, str, tmp->new_fd);
 		ft_strdel(&str);
-		if (tmp->new_fd < 0)
-			shell->redir_error = 1;
+		if (shell->redir_error == 1)
+			return ;
 		else
 			dup2(tmp->new_fd, fd);
 	}
@@ -188,9 +193,10 @@ static void	implement_lessand(t_shell *shell, t_redirs *node, int fd)
 	{
 		str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
 		tmp->new_fd = open(str, O_RDONLY);
+		redir_error(shell, str, tmp->new_fd);
 		ft_strdel(&str);
-		if (tmp->new_fd < 0)
-			shell->redir_error = 1;
+		if (shell->redir_error == 1)
+			return ;
 		else
 			dup2(tmp->new_fd, fd);
 	}
@@ -205,7 +211,7 @@ void 		implement_redirs(t_shell *shell, t_ast *cmd)
 
 	shell_args_from_redirs(shell, cmd);
 	tmp = cmd->redirs;
-	while (tmp->next)	//opens and closes respective fd before launching execution
+	while (tmp->next && shell->redir_error != 1)	//opens and closes respective fd before launching execution
 	{
 		//if (tmp->prev && tmp->next)
 		//	close(tmp->prev->new_fd);	
