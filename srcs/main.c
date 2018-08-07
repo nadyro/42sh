@@ -88,6 +88,8 @@ void		main_loop(char *line, t_shell shell)
 					shell.history_length++; 
 					//End of Nadir's part.
 				}
+				else
+					printf("error: no token table was compiled in main\n");
 				//printf("TREE COMPILED, SENDING TO printLeafNodes\n\n\n");
 				ast_loop(&shell, head);
 				ft_strdel(&line);
