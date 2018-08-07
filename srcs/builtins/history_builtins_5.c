@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/05 18:27:37 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/06 06:55:13 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/07 02:17:04 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	write_arg_p(t_shell *shell)
 	int		i;
 
 	i = 2;
-	while (shell->args[i])
+	while (shell->args && shell->args[i])
 	{
 		if (shell->args[1] && ft_strchr(shell->args[1], 's') == NULL)
 			ft_putendl(shell->args[i]);
@@ -52,11 +52,13 @@ void	write_arg_s(t_shell *shell)
 {
 	int		i;
 	char	*tmp;
+	t_node	*history;
 
 	i = 2;
 	tmp = NULL;
+	history = NULL;
 	delete_history_line(shell, shell->history_length);
-	while (shell->args[i] != NULL)
+	while (shell->args && shell->args[i] != NULL)
 	{
 		tmp = ft_strdup(shell->args[i]);
 		shell->history_length++;

@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/06 06:13:14 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/07 07:06:01 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct	s_history
 	int		s;
 	int		h;
 	int		vide;
+	int		no_write;
 }				t_history;
 
 typedef struct	s_shell
@@ -125,6 +126,11 @@ void			update_old_pwd(t_shell *shell, char *new_pwd);
 int				cd_opt_check(t_shell *shell);
 void			cd_canon(t_shell *shell);
 int				ash_history(t_shell *shell);
+int				check_warn(t_shell *shell, t_history *hist_args, int y);
+int				check_warn_w(t_history *hist_args, t_shell *shell, int y);
+int				check_warn_a(t_history *hist_args, t_shell *shell, int y);
+int				check_warn_r(t_history *hist_args, t_shell *shell, int y);
+int				check_warn_n(t_history *hist_args, t_shell *shell, int y);
 void			print_hist_args(t_history *hist_args);
 void			write_history_mem_to_file(t_shell *shell);
 void			write_history_file(t_shell *shell, int to_f);
@@ -139,6 +145,8 @@ void			lighten_dispatching(t_history *hist_args, t_shell *shell);
 void			write_arg_p(t_shell *shell);
 void			write_arg_s(t_shell *shell);
 void			history_helper(void);
+void			history_errors(t_history *hist_args);
+void			free_after_del(t_node *to_free, t_shell *shell);
 char			*filter_args_2(char **args);
 t_node			*append_history_to_mem(t_node *hstry, t_shell *shell, int to_f);
 t_node			*init_nonvoid_history(char *cmd, t_node *history);
@@ -156,5 +164,6 @@ t_history		*check_if_flag(t_shell *shell, t_history *hist_args);
 t_history		*check_if_flag_2(t_shell *shell, t_history *hist_args);
 t_history		*fill_hist_args(t_shell *shell, t_history *hist_args, int *i);
 t_history		*handle_args(t_history *hist_args, t_shell *shell, int *i);
+t_history		*check_d_arg(int y, t_shell *shell, t_history *hist_args);
 
 #endif

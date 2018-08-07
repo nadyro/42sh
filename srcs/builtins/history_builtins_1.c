@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/31 14:53:44 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/06 06:12:05 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/07 02:19:14 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ t_history	*init_hist_args(void)
 	hist_args->p = 0;
 	hist_args->s = 0;
 	hist_args->vide = 0;
+	hist_args->no_write = 0;
 	return (hist_args);
 }
 
@@ -44,7 +45,8 @@ t_history	*check_history_args(t_shell *shell)
 	i = 0;
 	hist_args = init_hist_args();
 	hist_args = check_if_flag(shell, hist_args);
-	i = 0;
+	if (hist_args->vide >= 1)
+		return (hist_args);
 	while (shell->args && shell->args[++i])
 		if (shell->args[i][0] == '-')
 			hist_args = fill_hist_args(shell, hist_args, &i);
@@ -55,19 +57,19 @@ void		lighten_dispatching(t_history *hist_args, t_shell *shell)
 {
 	if (hist_args->a == 1 && hist_args->a_to_f != 1)
 		append_history_mem_to_file(shell);
-	if (hist_args->a == 1 && hist_args->a_to_f == 1)
+	else if (hist_args->a == 1 && hist_args->a_to_f == 1)
 		append_history_mem_to_arg(shell);
-	if (hist_args->w == 1 && hist_args->w_to_f != 1)
+	else if (hist_args->w == 1 && hist_args->w_to_f != 1)
 		write_history_mem_to_file(shell);
-	if (hist_args->w == 1 && hist_args->w_to_f == 1)
+	else if (hist_args->w == 1 && hist_args->w_to_f == 1)
 		write_history_mem_to_arg(shell);
 	if (hist_args->p == 1)
 		write_arg_p(shell);
 	if (hist_args->s == 1)
 		write_arg_s(shell);
-	if (hist_args->h == 1)
+	else if (hist_args->h == 1)
 		history_helper();
-	if (hist_args->vide == 2)
+	else if (hist_args->no_write != 1)
 		dispatch_history_print(shell);
 }
 
@@ -84,9 +86,9 @@ t_node		*dispatch_history_queries(t_history *hist_args, t_shell *shell)
 		dispatch_history_d(shell, hist_args);
 	if (hist_args->r == 1 && hist_args->r_to_f != 1)
 		shell->history = append_history_to_mem(shell->history, shell, 0);
-	if (hist_args->r == 1 && hist_args->r_to_f == 1)
+	else if (hist_args->r == 1 && hist_args->r_to_f == 1)
 		shell->history = append_history_to_mem(shell->history, shell, 1);
-	if (hist_args->n == 1 && shell->is_a == 1)
+	else if (hist_args->n == 1 && shell->is_a == 1)
 		shell->history = write_history_to_mem(shell->history, shell);
 	lighten_dispatching(hist_args, shell);
 	return (shell->history);
@@ -100,5 +102,9 @@ void		history_helper(void)
 	ft_putendl("-a : Appends the history session to history file.\n");
 	ft_putendl("-r : Overwrite the history session with the history file.\n");
 	ft_putendl("-c : Flushes history session.\n");
-	ft_putendl("-d offset : Deletes offset line from history session.");
+	ft_putendl("-d offset : Deletes offset line from history session.\n");
+	ft_putendl("-n : Appends the last appended lines to the history file.\n");
+	ft_putstr("-p : Prints history arguments to stdout ");
+	ft_putendl("without storing it to history file.\n");
+	ft_putendl("-s : Saves the history args to the history session.");
 }
