@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/07 13:27:04 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/07 13:32:20 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,11 +98,9 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 {
 	if (cmd->redirs && shell->redir_error == 1)
 	{
-		ft_putendl_fd("Ambiguous output redirect.", 2);
-		cmd->cmd_ret = -1;
 		restore_std_fds(shell, cmd->redirs);
 	}
-	if (shell && shell->args && shell->args[0])
+	else if (shell && shell->args && shell->args[0])
 	{
 		shell->full_path = (has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
 		if (ft_strcmp(shell->args[0], ".") == 0 || ft_strcmp(shell->args[0], "..") == 0)
