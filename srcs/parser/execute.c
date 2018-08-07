@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/07 16:39:01 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/07 16:42:08 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ void		ast_loop(t_shell *shell, t_ast *ast)
 	{
 		//printf("DEBUG 2: entering ast_evaluate FROM ast_loop\n");
 		ast_evaluate(ast, shell);
+		free_ast(ast);
 	//	printf("exiting ast_evaluate FROM ast_loop after completion\n");
 	}
 }
