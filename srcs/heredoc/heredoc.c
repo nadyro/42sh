@@ -74,24 +74,17 @@ char				*heredoc_get(int id)
 	int		i;
 	t_doc	*tmp;
 
-	printf("DEBUG 1, id = %d, n_doc = %d\n", id, g_dir.n_doc);
 	if (id >= g_dir.n_doc)
 		return (NULL);
-	printf("DEBUG 2\n");
 	i = 0;
-	printf("DEBUG 3\n");
 	tmp = g_dir.first;
-	printf("DEBUG 4\n");
 	while (tmp && i < id)
 	{
-		printf("DEBUG 5\n");
 		tmp = tmp->next;
 		i++;
 	}
-	printf("in heredoc_get, i = %d\n", i);
 	if (i != id)
 		return (NULL);
-	printf("returning : ->%s<- from heredoc_get\n", tmp->doc);
 	return (tmp->doc);
 }
 

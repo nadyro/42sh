@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/07 17:17:24 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/07 19:59:10 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,6 +177,13 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		{
 			shell->redir_error = 0;
 			fill_redirs(shell, ast, ast->beg, ret);
+			t_redirs *tmp = ast->redirs;
+			while (tmp)
+			{
+			//	fprintf(stderr, "tmp->beg = %d, tmp->end = %d\n", tmp->beg, tmp->end);
+				tmp = tmp->next;
+			}
+		//	fprintf(stderr, "FINISHED COMPILING REDIRS LIST\n");
 			shell->s_in = dup(0);
 			shell->s_out = dup(1);
 			shell->s_err = dup(2);
@@ -260,33 +267,3 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 	//printf("end of entire ast_evaluate function, tmp = %s\nv1 = %d\nv2 = %d\n", ast->arg, v1, v2);
 	return (-10);
 }
-/*
-static void		print_leaf_nodes(t_ast *head)
-{
-	t_ast	*tmp = head;
-	static int	order = 1;
-	static int	split_by = 0;
-	t_ast	*parent = NULL;
-
-	if (!tmp)
-		return ;
-	if (!(tmp->left) && !(tmp->right))
-	{
-		printf("EXECUTE CMD %d with depth %d: %s\n", order++, tmp->depth, tmp->arg);
-		(tmp->parent->split_by == TK_SEMI) ? printf("process with semi\n") :
-		(tmp->parent->split_by == TK_AND_IF) ? printf("process with AND_IF\n") :
-		(tmp->parent->split_by == TK_OR_IF) ? printf("process with OR_IF\n") :
-		(tmp->parent->split_by == TK_PIPE) ? printf("process with PIPE\n") :
-		printf("\n");
-		return ;
-	}
-	if (tmp->left)
-		print_leaf_nodes(tmp->left);
-	if (tmp->split_by == TK_AND_IF)
-		printf("verify all previous commands returned 0 before continuing, else STOP\nAlso verify all following commands NOT split by SEMI execute successfully or else stop");
-	else if (tmp->split_by == TK_OR_IF)
-		printf("if previous command return value != 0, execute other OR_IF commands until success, else stop\n");		
-	if (tmp->right)
-		print_leaf_nodes(tmp->right);
-}
-*/

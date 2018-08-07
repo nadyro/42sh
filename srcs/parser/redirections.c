@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/19 12:59:04 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/07 19:07:15 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/07 20:01:56 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,8 @@ static int 	get_fd(t_shell *shell, t_redirs *node)
 	}
 	else
 		fd = (shell->tok[tmp->next_re] == TK_LESS ||
-			shell->tok[tmp->next_re] == TK_LESSAND) ? 0 : 1;
+			shell->tok[tmp->next_re] == TK_LESSAND ||
+			shell->tok[tmp->next_re] == TK_DLESS) ? 0 : 1;
 	return (fd);
 }
 
@@ -202,25 +203,33 @@ static void	implement_lessand(t_shell *shell, t_redirs *node, int fd)
 			dup2(tmp->new_fd, fd);
 	}
 }
-/*
-static void	implement_heredoc(t_shell *shell, t_redirs *node, int fd)
-{
-	t_redirs	*tmp = node
 
+
+static void	implement_heredoc(t_redirs *node, int fd, int id)
+{
+	t_redirs	*tmp = node;
+	char		*heredoc = NULL;
+
+	heredoc = heredoc_get(id);
+	write(fd, heredoc, ft_strlen(heredoc));
+	tmp->new_fd = 100000000;
 }
-*/
+
 void 		implement_redirs(t_shell *shell, t_ast *cmd)
 {
 	t_redirs	*tmp = NULL;
 	int 		fd;
 	int 		counter = 0;
-	char		*heredoc;
 	//int			ionum = -1;
 
+	//fprintf(stderr, "entering implement_redirs\n");
 	shell_args_from_redirs(shell, cmd);
+	fprintf(stdout, "here is the arg table in redirectory list : \n");
+	ft_print_table(shell->args);
 	tmp = cmd->redirs;
 	while (tmp->next && shell->redir_error != 1)	//opens and closes respective fd before launching execution
 	{
+	//	fprintf(stderr, "tmp->beg = %d\n", tmp->beg);
 		//if (tmp->prev && tmp->next)
 		//	close(tmp->prev->new_fd);	
 		fd = get_fd(shell, tmp);
@@ -236,8 +245,8 @@ void 		implement_redirs(t_shell *shell, t_ast *cmd)
 			implement_dgreat(shell, tmp, fd);
 		else if (shell->tok[tmp->next_re] == TK_DLESS)
 		{
-			printf("sending id: %d to heredoc_get\n", counter);
-			heredoc = heredoc_get(counter++);
+	//		printf("sending id: %d to heredoc_get\n", counter);
+			implement_heredoc(tmp, fd, counter++);
 		}
 		// potentially need one last IF for HEREDOC here
 	//	printf("after analyzing redir #%d, closed %d, opened %d\n", counter++, fd, tmp->new_fd);
@@ -247,6 +256,7 @@ void 		implement_redirs(t_shell *shell, t_ast *cmd)
 	}
 	if (shell->redir_error == 1)
 		cmd->cmd_ret = -1;
+//	fprintf(stderr, "exiting implement redirs for execution\n");
 	//shell->new_fd = tmp->prev->new_fd;
 	ast_execute(shell, cmd);
 }
