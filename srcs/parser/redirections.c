@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/19 12:59:04 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/07 18:58:52 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/07 19:07:15 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,7 +202,13 @@ static void	implement_lessand(t_shell *shell, t_redirs *node, int fd)
 			dup2(tmp->new_fd, fd);
 	}
 }
+/*
+static void	implement_heredoc(t_shell *shell, t_redirs *node, int fd)
+{
+	t_redirs	*tmp = node
 
+}
+*/
 void 		implement_redirs(t_shell *shell, t_ast *cmd)
 {
 	t_redirs	*tmp = NULL;

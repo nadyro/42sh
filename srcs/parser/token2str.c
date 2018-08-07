@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 15:00:16 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/07 17:21:47 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/07 19:06:51 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,7 +211,7 @@ static unsigned char	g_otm[12][6][3] = {
 		if (t2s->stat[T2S_CUR] == 9 || t2s->stat[T2S_CUR] == 11)
 			check_variable(t2s, env);
 	}
-	if (t2s->i[1] != 0)
+	if (t2s->stat[T2S_CUR] == 8)
 		check_variable(t2s, env);
 	ret = buffa2str(t2s);
 	t2s_free(t2s);
