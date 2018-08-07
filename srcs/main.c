@@ -39,6 +39,7 @@ static char	*line_mgmt(char *line, t_node *history)
 	{
 		prompt = get_pwd();
 		ret = line_edit_main_loop(prompt, history);
+		free(prompt);
 	}
 	else
 	{

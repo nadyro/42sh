@@ -6,11 +6,13 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/07 02:31:43 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/07 11:06:21 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
+
+extern	t_prompt *prompt;
 
 static char	*overbuf(t_prompt *prompt, int nb_user_entry, char *user_entry)
 {
@@ -39,7 +41,7 @@ static char	*line_edit_main_loop_aux(t_prompt *prompt, t_stat_data *stat_data,
 		{
 			(prompt->origin->y == 0xffffffffffffffff ? prompt_clean() : 0);
 			ft_bzero(user_entry, 7);
-			nb_user_entry = read(1, user_entry, 6);
+			nb_user_entry = read(0, user_entry, 6);
 			if (prompt->end == 1)
 				return (NULL);
 			if (user_entry[0] == 27 || user_entry[0] == 127
@@ -59,17 +61,18 @@ char		*line_edit_main_loop(char *d_prompt, t_node *history)
 	static t_stat_data	*stat_data = NULL;
 
 	termanip(0);
-	write(1, d_prompt, ft_strlen(d_prompt));
 	stat_data = (stat_data ? stat_data : malloc_stat());
 	prompt = malloc_prompt(prompt, stat_data, d_prompt);
+	write(1, d_prompt, ft_strlen(d_prompt));
 	prompt->history = history;
 	handle_sig();
+	prompt->origin->x = 7;
 	prompt->buf = stat_data->overage;
 	to_return = NULL;
 	to_return = line_edit_main_loop_aux(prompt, stat_data, to_return);
 	stat_data->overage = (prompt->buf ? ft_strdup(prompt->buf) : NULL);
-	free_prompt(prompt);
 	reverse_handle();
 	termanip(35);
+	free_prompt(prompt);
 	return (to_return);
 }

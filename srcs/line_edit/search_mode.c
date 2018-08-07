@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/08 06:09:10 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/06 06:38:20 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/07 13:09:16 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static int	search_react(t_prompt *prompt)
 	int		nb_user_entry;
 
 	ft_bzero(user_entry, 7);
-	nb_user_entry = read(1, user_entry, 6);
+	nb_user_entry = read(0, user_entry, 6);
 	if (user_entry[0] == 27 || prompt->end == 1)
 		return (-1);
 	else if (user_entry[0] == 12)
