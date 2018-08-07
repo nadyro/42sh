@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/06 18:19:53 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/08/07 06:20:04 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct	s_prompt
 	char		*disp;
 	char		**fp_cmd;
 	int			end;
+	int			fd;
 	size_t		pos;
 	size_t		total;
 	t_coord		*origin;

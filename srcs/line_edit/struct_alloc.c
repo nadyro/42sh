@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 01:45:43 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/05 16:10:52 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/07 07:30:41 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,14 @@ static void	prompt_origin(t_prompt *prompt, t_stat_data *stat_data)
 		get_cursor_pos(prompt->origin, prompt);
 }
 
+static int	get_fd()
+{
+	int fd;
+
+	fd = open(ttyname(0), O_RDWR | O_NOCTTY);
+	return fd;
+}
+
 t_prompt	*malloc_prompt(t_prompt *prompt, t_stat_data *stat_data,
 		char *d_prompt)
 {
@@ -65,6 +73,7 @@ t_prompt	*malloc_prompt(t_prompt *prompt, t_stat_data *stat_data,
 	prompt->buf = NULL;
 	prompt->pos = 0;
 	prompt->total = 0;
+	prompt->fd = get_fd();
 	prompt->size->x = w.ws_col;
 	prompt->size->y = w.ws_row;
 	prompt_origin(prompt, stat_data);

@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/04 22:38:46 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/06 06:38:19 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/07 13:09:23 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ void		selection_mode(t_prompt *prompt, t_stat_data *stat_data)
 	{
 		selection_write(prompt, start_pos);
 		ft_bzero(user_entry, 7);
-		nb_user_entry = read(1, user_entry, 6);
+		nb_user_entry = read(0, user_entry, 6);
 		if (user_entry[0] == 12)
 		{
 			tputs(tgetstr("cl", NULL), 0, ft_putshit);

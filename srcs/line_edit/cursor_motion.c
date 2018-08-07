@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/10 17:23:30 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/07 03:48:40 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/07 14:40:55 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,35 @@
 
 void	get_cursor_pos(t_coord *actualize, t_prompt *prompt)
 {
-	char	buf[15];
+	char	buf[80];
 	int		loop;
 
-	ft_flush(prompt);
-	termanip(-2);
-	fflush(stdin);
-	write(0, "\033[6n", 4);
-	ft_bzero(buf, 14);
-	read(0, buf, 14);
+	ft_bzero(buf, 80);
+	while (buf[0] != 27)
+	{
+		ft_flush(prompt);
+		write(0, "\033[6n", 4);
+		ft_bzero(buf, 80);
+		read(0, buf, 79);
+	}
 	actualize->y = ft_atol(&buf[2]) - 1;
 	loop = 2;
-	while (buf[loop] != ';')
+	while (buf[loop] != '\0' && buf[loop] != ';')
 		loop++;
 	actualize->x = ft_atol(&buf[loop + 1]) - 1;
-	termanip(-2);
 	if (actualize->x > prompt->size->x || actualize->y > prompt->size->y)
-		get_cursor_pos(actualize, prompt);
+	{
+		actualize->x = 0;
+		actualize->y = 0;
+	}
+	if (actualize->x != 0)
+	{
+		actualize->x = 0;
+		write(1, "%", 1);
+		actualize->y++;
+		tputs(tgetstr("sf", NULL), 1, ft_putshit);
+		tputs(tgoto(tgetstr("cm", NULL), 0, actualize->y), 1, ft_putshit);
+	}
 }
 
 int		ft_putshit(int c)
