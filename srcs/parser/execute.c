@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/07 14:17:04 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/07 15:14:43 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,37 +97,25 @@ static void	handle_dotdot_error(t_shell *shell, t_ast *cmd)
 int			ast_execute(t_shell *shell, t_ast *cmd)
 {
 	if (cmd->redirs && shell->redir_error == 1)
-	{
-		restore_std_fds(shell, cmd->redirs);
-	}
+		cmd->cmd_ret = -1;
 	else if (shell && shell->args && shell->args[0])
 	{
 		shell->full_path = (has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
 		if (ft_strcmp(shell->args[0], ".") == 0 || ft_strcmp(shell->args[0], "..") == 0)
 			handle_dotdot_error(shell, cmd);
-		if (builtin_check(shell) != -1)
-		{
-			if (cmd->redirs)
-				restore_std_fds(shell, cmd->redirs);
+		else if (builtin_check(shell) != -1)
 			cmd->cmd_ret = 0;
-		}
 		else if (shell->full_path || !(access(shell->args[0], F_OK)))	//if binary exists in PATH, fork and execute
-		{
 			ast_launch(shell, cmd);
-			if (cmd->redirs)
-				restore_std_fds(shell, cmd->redirs);
-			//printf("launched fork, returning : cmd_ret = %d\n", cmd->cmd_ret);
-			return (cmd->cmd_ret);
-		}
 		else if ((shell->args[0][0] != '\0' && access(shell->args[0], F_OK)))
 		{
 			ft_putstr_fd(shell->args[0], 2);
 			ft_putstr_fd(": Command not found.\n", 2);
-			if (cmd->redirs)
-				restore_std_fds(shell, cmd->redirs);
 			cmd->cmd_ret = -1;
-		}
+		}		
 	}
+	if (cmd && cmd->redirs)
+			restore_std_fds(shell, cmd->redirs);	
 	//printf("about to return ast_execute: cmd_ret = %d\n", cmd->cmd_ret);
 	return (cmd->cmd_ret);
 	//else
