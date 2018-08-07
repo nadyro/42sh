@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/07 16:41:57 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/07 17:17:24 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,7 +184,7 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 			free_redirs(ast->redirs);
 		}
 		else
-		{	
+		{
 			create_arg_table(shell, ast->beg, ast->end);
 			ast_execute(shell, ast);
 		}

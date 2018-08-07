@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/07 16:42:08 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/07 17:21:35 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,9 +103,9 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 			handle_dotdot_error(shell, cmd);
 		if (builtin_check(shell) != -1)
 			cmd->cmd_ret = 0;
-		else if (shell->full_path || !(access(shell->args[0], F_OK)))	//if binary exists in PATH, fork and execute
+		else if (ft_strlen(shell->args[0]) != 0 && (shell->full_path || !(access(shell->args[0], F_OK))))	//if binary exists in PATH, fork and execute
 			ast_launch(shell, cmd);
-		else if ((shell->args[0][0] != '\0' && access(shell->args[0], F_OK)))
+		else if (ft_strlen(shell->args[0]) == 0 || (shell->args[0][0] != '\0' && access(shell->args[0], F_OK)))
 		{
 			ft_putstr_fd(shell->args[0], 2);
 			ft_putstr_fd(": Command not found.\n", 2);
