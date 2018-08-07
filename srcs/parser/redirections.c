@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/19 12:59:04 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/07 13:31:23 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/07 16:38:41 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static int 	get_fd(t_shell *shell, t_redirs *node)
 	int 		fd;
 	char		*str;
 
-	if (shell->tok[tmp->next_re - 3] == TK_IO_NUMBER)
+	if (tmp->next_re >= 3 && shell->tok[tmp->next_re - 3] == TK_IO_NUMBER)
 	{
 		str = shell->line + shell->tok[tmp->next_re - 3 + 1];
 		fd = is_fd(str, shell->tok[tmp->next_re - 3 + 2]);
@@ -232,6 +232,8 @@ void 		implement_redirs(t_shell *shell, t_ast *cmd)
 	//	restore_std_fds(shell, 0);
 		tmp = tmp->next;	//if tmp->next, free list through tmp->prev
 	}
+	if (shell->redir_error == 1)
+		cmd->cmd_ret = -1;
 	//shell->new_fd = tmp->prev->new_fd;
 	ast_execute(shell, cmd);
 }
