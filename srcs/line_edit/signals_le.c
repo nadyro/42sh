@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 03:46:15 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/06 18:30:42 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/08/07 02:40:11 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void		handle_sig(void)
 	signal(SIGILL, termanip);
 	signal(SIGABRT, termanip);
 	signal(SIGKILL, termanip);
-	signal(SIGSEGV, termanip);
+	//signal(SIGSEGV, termanip);
 	signal(SIGPIPE, termanip);
 	signal(SIGTERM, sig_ignore);
 	signal(SIGSTOP, termanip);

@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/14 22:21:10 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/06 18:32:27 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/08/07 03:42:11 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,12 @@ void		termanip(int sig)
 	{
 		tcsetattr(0, TCSADRAIN, &old);
 		exit(0);
+	}
+	else if (sig == -2)
+	{
+		tcgetattr(0, &shell);
+		shell.c_cflag &= ~CREAD;
+		tcsetattr(0, TCSADRAIN, &shell);
 	}
 	else
 	{
