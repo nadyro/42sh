@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/07 13:43:14 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/07 14:17:04 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,12 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 		{
 			wpid = waitpid(pid, &status, WUNTRACED);
 		}
+		if (shell->full_path)
+			ft_strdel(&(shell->full_path));	
 		if (cmd->redirs)
 			restore_std_fds(shell, cmd->redirs);
 		//printf("should be returning from PARENT process, command = %s, pid = %d\n", shell->args[0], pid);
 	}
-	if (shell->full_path)
-		ft_strdel(&(shell->full_path));
 }
 
 static void	handle_dotdot_error(t_shell *shell, t_ast *cmd)
