@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/07 15:14:43 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/07 15:46:58 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ static void	launch_exec(t_shell *shell, char *full_path, t_ast *cmd)
 	{
 		if (execve(full_path, shell->args, shell->envv) == -1)
 		{
-			printf("both execve calls didn't work properly!!!!\n");
 			cmd->cmd_ret = -1;
 		}
 	}
@@ -97,16 +96,24 @@ static void	handle_dotdot_error(t_shell *shell, t_ast *cmd)
 int			ast_execute(t_shell *shell, t_ast *cmd)
 {
 	if (cmd->redirs && shell->redir_error == 1)
+	{
 		cmd->cmd_ret = -1;
+	}
 	else if (shell && shell->args && shell->args[0])
 	{
 		shell->full_path = (has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
 		if (ft_strcmp(shell->args[0], ".") == 0 || ft_strcmp(shell->args[0], "..") == 0)
+		{	
 			handle_dotdot_error(shell, cmd);
+		}
 		else if (builtin_check(shell) != -1)
+		{
 			cmd->cmd_ret = 0;
+		}
 		else if (shell->full_path || !(access(shell->args[0], F_OK)))	//if binary exists in PATH, fork and execute
+		{	
 			ast_launch(shell, cmd);
+		}
 		else if ((shell->args[0][0] != '\0' && access(shell->args[0], F_OK)))
 		{
 			ft_putstr_fd(shell->args[0], 2);
@@ -130,7 +137,6 @@ void		ast_loop(t_shell *shell, t_ast *ast)
 	//printf("DEBUG 1: in ast_loop, shell->line = %s\n, shell->tok[0] = %d\n", shell->line, shell->tok[0]);
 	if (ast)
 	{
-		//printf("DEBUG 2: entering ast_evaluate FROM ast_loop\n");
 		ast_evaluate(ast, shell);
 		free_ast(ast);
 	//	printf("exiting ast_evaluate FROM ast_loop after completion\n");

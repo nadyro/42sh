@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/07 13:42:22 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/07 15:52:55 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,22 +89,13 @@ t_ast		*init_ast(t_shell *shell)
 {
 	t_ast	*head;
 	
-	//printf("entered init_ast\n");
 	if (!(head = (t_ast *)malloc(sizeof(t_ast))))
 			return (NULL);	
 	head->parent = NULL;
 	head->split = 0;
 	head->beg = 0;
 	head->end = get_tk_end_pos(shell) - 3;
-	//head->address = ft_strdup("P");
-	//printf("tab[0] = %s\n", tab[0]);
-	//head->arg = (argv) ? ft_strdup(argv) : NULL;
-	//(head->arg) ? printf("ast initialized with arg = %s\n", head->arg) : printf("ast initialized with a NULL arg\n");
-	//printf("head->arg initialised to : %s\n", head->arg);
-	//head->tok = get_tokens(head->arg);
-	//printf("initialised ast, with token table\n");
-	//if (head->tok[0])
-	//	printf("head->tok[0] = %d\n", head->tok[0]);
+	//printf("in PARENT, beg = %d, end = %d\n", head->beg, head->end);
 	head->left = NULL;
 	head->right = NULL;	
 	return (head);
@@ -192,16 +183,12 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		}
 		if (shell->args)
 			free_table(shell->args);
-		//printf("DEBUG 4, ret = %d\n", ret);
 		if (ast->cmd_ret == 0 || ast->cmd_ret == -1)
 		{
-		//	printf("DEBUG 5\n");
-		//	printf("RETURNING 0 after command execution\n");
 			return (ast->cmd_ret);
 		}	
 		else if (ast->cmd_ret < 0)
 		{
-			printf("ERROR: cmd->cmd_ret = %d when cmd = \n", ast->cmd_ret);
 			ft_print_table(shell->args);
 			return (-1);
 		}
@@ -253,42 +240,15 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		}
 		else if (op == TK_SEMI)
 		{
+			ft_putstr_fd("about to evaluate left node of semi\n", 1);
 			v1 = ast_evaluate(ast->left, shell);
+			ft_putstr_fd("just executed left node, about to evaluate right node\n", 1);
 			v2 = ast_evaluate(ast->right, shell);
+			ft_putstr_fd("finished evaluating right node, returning from ast_evaluate\n", 1);
 			return (0);
 		}
 		//printf("LEAVING IF clause 3\n");
 	}
-	//printf("end of entire ast_evaluate function, tmp = %s\nv1 = %d\nv2 = %d\n", ast->arg, v1, v2);
+	ft_putstr_fd("finished evaluating entire ast, returning to ast_loop\n", 1);
 	return (-10);
 }
-/*
-static void		print_leaf_nodes(t_ast *head)
-{
-	t_ast	*tmp = head;
-	static int	order = 1;
-	static int	split_by = 0;
-	t_ast	*parent = NULL;
-
-	if (!tmp)
-		return ;
-	if (!(tmp->left) && !(tmp->right))
-	{
-		printf("EXECUTE CMD %d with depth %d: %s\n", order++, tmp->depth, tmp->arg);
-		(tmp->parent->split_by == TK_SEMI) ? printf("process with semi\n") :
-		(tmp->parent->split_by == TK_AND_IF) ? printf("process with AND_IF\n") :
-		(tmp->parent->split_by == TK_OR_IF) ? printf("process with OR_IF\n") :
-		(tmp->parent->split_by == TK_PIPE) ? printf("process with PIPE\n") :
-		printf("\n");
-		return ;
-	}
-	if (tmp->left)
-		print_leaf_nodes(tmp->left);
-	if (tmp->split_by == TK_AND_IF)
-		printf("verify all previous commands returned 0 before continuing, else STOP\nAlso verify all following commands NOT split by SEMI execute successfully or else stop");
-	else if (tmp->split_by == TK_OR_IF)
-		printf("if previous command return value != 0, execute other OR_IF commands until success, else stop\n");		
-	if (tmp->right)
-		print_leaf_nodes(tmp->right);
-}
-*/
