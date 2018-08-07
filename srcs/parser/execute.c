@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/06 17:30:10 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/08/07 13:27:04 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,10 +108,16 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 		if (ft_strcmp(shell->args[0], ".") == 0 || ft_strcmp(shell->args[0], "..") == 0)
 			handle_dotdot_error(shell, cmd);
 		if (builtin_check(shell) != -1)
+		{
+			if (cmd->redirs)
+				restore_std_fds(shell, cmd->redirs);
 			cmd->cmd_ret = 0;
+		}
 		else if (shell->full_path || !(access(shell->args[0], F_OK)))	//if binary exists in PATH, fork and execute
 		{
 			ast_launch(shell, cmd);
+			if (cmd->redirs)
+				restore_std_fds(shell, cmd->redirs);
 			//printf("launched fork, returning : cmd_ret = %d\n", cmd->cmd_ret);
 			return (cmd->cmd_ret);
 		}
