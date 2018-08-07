@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_edit_main_loop.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/01 07:14:53 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/07 02:31:43 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ static char	*line_edit_main_loop_aux(t_prompt *prompt, t_stat_data *stat_data,
 			(prompt->origin->y == 0xffffffffffffffff ? prompt_clean() : 0);
 			ft_bzero(user_entry, 7);
 			nb_user_entry = read(1, user_entry, 6);
+			if (prompt->end == 1)
+				return (NULL);
 			if (user_entry[0] == 27 || user_entry[0] == 127
 					|| user_entry[0] == 9)
 				esc_react(prompt, nb_user_entry, user_entry, stat_data);
@@ -66,11 +68,6 @@ char		*line_edit_main_loop(char *d_prompt, t_node *history)
 	to_return = NULL;
 	to_return = line_edit_main_loop_aux(prompt, stat_data, to_return);
 	stat_data->overage = (prompt->buf ? ft_strdup(prompt->buf) : NULL);
-	free(stat_data->old_line);
-	stat_data->old_line = NULL;
-	if (!(to_return[0] != '\n' || to_return[1] != '\0'))
-		stat_data->old_line =
-			ft_itoa(prompt->origin->x + (prompt->origin->y + 1) * 100000);
 	free_prompt(prompt);
 	reverse_handle();
 	termanip(35);

@@ -7,7 +7,7 @@
 
 t_prompt	*prompt;
 
-static char  *get_pwd(void)
+char  *get_pwd(void)
 {
 	int    i;
 	char  pwd[1024];
@@ -34,16 +34,17 @@ static char	*line_mgmt(char *line, t_node *history)
 	char *ret;
 	char *tmp;
 
+	ret = NULL;
 	if (line == NULL)
 	{
 		prompt = get_pwd();
 		ret = line_edit_main_loop(prompt, history);
-		free(prompt);
 	}
 	else
 	{
 		tmp = line_edit_main_loop("> ", history);
-		ret = ft_strjoin(line, tmp);
+		if (tmp != NULL)
+			ret = ft_strjoin(line, tmp);
 		free(tmp);
 		free(line);
 	}
@@ -56,16 +57,22 @@ void		main_loop(char *line, t_shell shell)
 	int		parser_ret;
 	t_ast	*head;
 	t_node	*history;
+	char	*tmp;
 
 	head = NULL;
 	history = NULL;
 	//Nadir's part! Do not touch ! >=E
+
+	tmp = getenv("HOME");
+	if (tmp != NULL)
+		shell.home_env = ft_strjoin(tmp, "/.42sh_history");
 	history = fill_history_file(history, &shell);
+	shell.history = history;
 	//End of Nadir's part.	
 	while (1)
 	{
-		line = line_mgmt(line, history);
-		if ((shell.tok = get_tokens(line)) != NULL)
+		line = line_mgmt(line, shell.history);
+		if (line && (shell.tok = get_tokens(line)) != NULL)
 		{
 			//test_tokens(shell.tok);
 			if ((parser_ret = parser_validation(shell.tok, line)) == 1)
@@ -73,11 +80,11 @@ void		main_loop(char *line, t_shell shell)
 				shell.line = ft_strdup(line);
 				if (shell.tok && shell.tok[0])
 				{
-					history = add_to_history(line, history);
+					shell.history = add_to_history(line, shell.history);
 					head = get_ast(&shell);
-					//Nadir's part! Do not touch ! >=E					
+					//Nadir's part! Do not touch ! >=E
+					shell.to_add++;
 					shell.history_length++; 
-					shell.history = history; 
 					//End of Nadir's part.
 				}
 				else
@@ -104,6 +111,11 @@ int			main(int argc, char **argv, char **env)
 	shell.list = (env && env[0]) ? env_setup(env) : env_init();
 	shell.envv = (shell.list) ? env_to_tab(shell.list) : NULL;
 	shell.history_length = 0;
+	shell.o_history = 0;
+	shell.to_add = 0;
+	shell.last_added = 0;
+	shell.is_a = 0;
+	shell.appnd_hst = NULL;
 	///////////////////////////////////
 	if ((name_term = getenv("TERM")) == NULL)
 	{

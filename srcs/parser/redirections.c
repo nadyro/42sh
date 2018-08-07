@@ -26,16 +26,6 @@
 **	comes after "<", open as READONLY instead of WRITEONLY
 */
 
-static void		redir_error(t_shell *shell, char *filename, int new_fd)
-{
-	shell->redir_error = (new_fd < 0) ? 1 : 0;
-	if (shell->redir_error == 1 && filename)
-	{
-		ft_putstr_fd(filename, 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
-	}
-}
-
 static void		handle_prefix_syntax(t_shell *shell, t_ast *cmd)
 {
 	t_redirs	*tmp = NULL;
@@ -108,10 +98,9 @@ static void	implement_great(t_shell *shell, t_redirs *node, int fd)
 	{
 		str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
 		tmp->new_fd = open(str, O_CREAT | O_TRUNC | O_WRONLY, 0666);
-		redir_error(shell, str, tmp->new_fd);
 		ft_strdel(&str);
-		if (shell->redir_error == 1)
-			return ;
+		if (tmp->new_fd < 0)
+			shell->redir_error = 1;
 		else
 			dup2(tmp->new_fd, fd);
 	}
@@ -129,10 +118,9 @@ static void	implement_dgreat(t_shell *shell, t_redirs *node, int fd)
 	{
 		str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
 		tmp->new_fd = open(str, O_CREAT | O_APPEND | O_WRONLY, 0666);
-		redir_error(shell, str, tmp->new_fd);
 		ft_strdel(&str);
-		if (shell->redir_error == 1)
-			return ;
+		if (tmp->new_fd < 0)
+			shell->redir_error = 1;
 		else
 			dup2(tmp->new_fd, fd);
 	}
@@ -155,10 +143,9 @@ static void	implement_greatand(t_shell *shell, t_redirs *node, int fd)
 	{
 		str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
 		tmp->new_fd = open(str, O_CREAT | O_APPEND | O_WRONLY, 0666);
-		redir_error(shell, str, tmp->new_fd);
 		ft_strdel(&str);
-		if (shell->redir_error == 1)
-			return ;
+		if (tmp->new_fd < 0)
+			shell->redir_error = 1;
 		else
 			dup2(tmp->new_fd, fd);
 	}
@@ -176,10 +163,9 @@ static void	implement_less(t_shell *shell, t_redirs *node, int fd)
 	{
 		str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
 		tmp->new_fd = open(str, O_RDONLY);
-		redir_error(shell, str, tmp->new_fd);
 		ft_strdel(&str);
-		if (shell->redir_error == 1)
-			return ;
+		if (tmp->new_fd < 0)
+			shell->redir_error = 1;
 		else
 			dup2(tmp->new_fd, fd);
 	}
@@ -202,10 +188,9 @@ static void	implement_lessand(t_shell *shell, t_redirs *node, int fd)
 	{
 		str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
 		tmp->new_fd = open(str, O_RDONLY);
-		redir_error(shell, str, tmp->new_fd);
 		ft_strdel(&str);
-		if (shell->redir_error == 1)
-			return ;
+		if (tmp->new_fd < 0)
+			shell->redir_error = 1;
 		else
 			dup2(tmp->new_fd, fd);
 	}
@@ -220,20 +205,20 @@ void 		implement_redirs(t_shell *shell, t_ast *cmd)
 
 	shell_args_from_redirs(shell, cmd);
 	tmp = cmd->redirs;
-	while (tmp->next && shell->redir_error != 1)	//opens and closes respective fd before launching execution
+	while (tmp->next)	//opens and closes respective fd before launching execution
 	{
 		//if (tmp->prev && tmp->next)
 		//	close(tmp->prev->new_fd);	
 		fd = get_fd(shell, tmp);
-		if (shell->tok[tmp->next_re] == TK_LESS)
+		if (shell->tok[tmp->next_re] == TK_LESS && shell->redir_error != 1)
 			implement_less(shell, tmp, fd);
-		else if (shell->tok[tmp->next_re] == TK_LESSAND)
+		else if (shell->tok[tmp->next_re] == TK_LESSAND && shell->redir_error != 1)
 			implement_lessand(shell, tmp, fd);
-		else if (shell->tok[tmp->next_re] == TK_GREAT)
+		else if (shell->tok[tmp->next_re] == TK_GREAT && shell->redir_error != 1)
 			implement_great(shell, tmp, fd);
-		else if (shell->tok[tmp->next_re] == TK_GREATAND)
+		else if (shell->tok[tmp->next_re] == TK_GREATAND && shell->redir_error != 1)
 			implement_greatand(shell, tmp, fd);
-		else if (shell->tok[tmp->next_re] == TK_DGREAT)
+		else if (shell->tok[tmp->next_re] == TK_DGREAT && shell->redir_error != 1)
 			implement_dgreat(shell, tmp, fd);
 		// potentially need one last IF for HEREDOC here
 	//	printf("after analyzing redir #%d, closed %d, opened %d\n", counter++, fd, tmp->new_fd);
@@ -241,8 +226,8 @@ void 		implement_redirs(t_shell *shell, t_ast *cmd)
 	//	restore_std_fds(shell, 0);
 		tmp = tmp->next;	//if tmp->next, free list through tmp->prev
 	}
-	if (shell->redir_error != 1)
-		ast_execute(shell, cmd);
+	//shell->new_fd = tmp->prev->new_fd;
+	ast_execute(shell, cmd);
 }
 
 void		fill_redirs(t_shell *shell, t_ast *ast, int beg, int redir)

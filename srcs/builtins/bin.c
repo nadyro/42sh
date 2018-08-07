@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bin.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 12:01:43 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/14 13:43:17 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/05 05:18:03 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ int			builtin_check(t_shell *shell)
 			return (ash_env(shell));
 		else if (ft_strcmp(shell->args[0], "exit") == 0)
 			return (ash_exit(shell));
+		else if (ft_strcmp(shell->args[0], "history") == 0)
+			return (ash_history(shell));
 	}
 	return (-1);
 }
@@ -68,8 +70,28 @@ int			ash_echo(t_shell *shell)
 	return (1);
 }
 
+int			ash_history(t_shell *shell)
+{
+	int			i;
+	t_history	*hist_args;
+
+	i = 0;
+	hist_args = check_history_args(shell);
+	if (shell->args && shell->args[1])
+	{
+		if (ft_atoi(shell->args[1]) > 0)
+			hist_args->vide = 2;
+	}
+	else if (shell->args && !shell->args[1])
+		hist_args->vide = 2;
+	shell->history = dispatch_history_queries(hist_args, shell);
+	free(hist_args);
+	return (1);
+}
+
 int			ash_exit(t_shell *shell)
 {
+	write_history_file(shell, 0);
 	if (shell)
 		exit (0);
 	return (1);

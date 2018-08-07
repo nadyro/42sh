@@ -15,44 +15,6 @@
 #include "libft.h"
 #include <stdio.h>
 
-static void		free_redirs(t_redirs *list)
-{
-	t_redirs	*next;
-	t_redirs	*tmp;
-
-	next = NULL;
-	tmp = list;
-	while (tmp)
-	{
-		next = tmp->next;
-		if (tmp)
-			free(tmp);
-		tmp = next;
-	}
-	tmp = NULL;
-}
-
-void			free_ast(t_ast *head)
-{
-	t_ast	*tmp = head;
-
-	if (!tmp)
-		return ;
-	else if (!(tmp->left) && !(tmp->right))
-	{
-		free(tmp);
-		return ;
-	}
-	else
-	{
-		if (tmp->left)
-			free_ast(tmp->left);	
-		if (tmp->right)
-			free_ast(tmp->right);
-		free(tmp);
-	}
-}
-
 t_ast		*fill_leftast(t_ast *parent)
 {
 	t_ast	*left = NULL;
@@ -61,8 +23,6 @@ t_ast		*fill_leftast(t_ast *parent)
 		return (NULL);
 	left->parent = parent;
 	left->split = 0;
-	left->cmd_ret = 0;
-	left->redirs = NULL;
 	left->beg = parent->beg;
 	left->end = parent->split - 3;
 	left->left = NULL;
@@ -79,8 +39,6 @@ t_ast		*fill_rightast(t_ast *parent)
 		return (NULL);
 	right->parent = parent;
 	right->split = 0;
-	right->cmd_ret = 0;
-	right->redirs = NULL;
 	right->beg = parent->split + 3;
 	right->end = parent->end;
 	right->left = NULL;
@@ -93,14 +51,22 @@ t_ast		*init_ast(t_shell *shell)
 {
 	t_ast	*head;
 	
+	//printf("entered init_ast\n");
 	if (!(head = (t_ast *)malloc(sizeof(t_ast))))
 			return (NULL);	
 	head->parent = NULL;
 	head->split = 0;
 	head->beg = 0;
 	head->end = get_tk_end_pos(shell) - 3;
-	head->cmd_ret = 0;
-	head->redirs = NULL;
+	//head->address = ft_strdup("P");
+	//printf("tab[0] = %s\n", tab[0]);
+	//head->arg = (argv) ? ft_strdup(argv) : NULL;
+	//(head->arg) ? printf("ast initialized with arg = %s\n", head->arg) : printf("ast initialized with a NULL arg\n");
+	//printf("head->arg initialised to : %s\n", head->arg);
+	//head->tok = get_tokens(head->arg);
+	//printf("initialised ast, with token table\n");
+	//if (head->tok[0])
+	//	printf("head->tok[0] = %d\n", head->tok[0]);
 	head->left = NULL;
 	head->right = NULL;	
 	return (head);
@@ -112,7 +78,11 @@ void		create_arg_table(t_shell *shell, int beg, int end)
 	int		last = 0;
 	
 	if (end < beg)
+	{
+		//printf("end is less than big in create arg table, setting shell->args to NULL\n");
 		shell->args = NULL;
+		return ;
+	}
 	else
 	{
 		while (i <= end)
@@ -126,6 +96,8 @@ void		create_arg_table(t_shell *shell, int beg, int end)
 		}
 		if (last)
 		{
+			//printf("going to malloc for last = %d strings\n", last+1);
+			//printf("trying to create table from start: %d, end: %d of :\n->%s<-\n", shell->tok[cmd->beg + 1], shell->tok[cmd->end + 1], shell->line);
 			if (!(shell->args = (char **)malloc(sizeof(char *) * (last + 1))))
 				return ;
 			shell->args[last] = 0;
@@ -137,9 +109,12 @@ void		create_arg_table(t_shell *shell, int beg, int end)
 					i += 3;
 				if (shell->tok[i] != TK_SPACE && shell->tok[i] != TK_NEWLINE && shell->tok[i] != TK_END)
 				{
+					//str = shell->line + shell->tok[i+1];			remove for thibaud feature
+					//shell->args[last++] = ft_strndup(str, shell->tok[i+2]);	remove for thibaud feature
 					shell->args[last++] = token2str(&shell->tok[i], shell->line, shell->envv);
 					i += 3;
 				}
+			//	printf("shell->args[%d] = %s\n", last - 1, shell->args[last - 1]);
 			}
 		}
 	}
@@ -153,9 +128,15 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 	int 		ret = 0;
 
 	if (ast == NULL)
-		return (0);
-	else if (!(ast->left) && !(ast->right))
 	{
+		//printf("error, AST is null, nothing to evaluate\n");
+		return (0);
+	}
+	if (!(ast->left) && !(ast->right))
+	{
+		ast->cmd_ret = 0;
+		ast->redirs = NULL;
+		//printf("DEBUG 1 : GOING TO EXECUTE: %s, address = %s\n", ast->arg, ast->address);
 		if ((ret = is_redirect(shell, ast, ast->beg, ast->end)) != -1)
 		{
 			shell->redir_error = 0;
@@ -164,9 +145,6 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 			shell->s_out = dup(1);
 			shell->s_err = dup(2);
 			implement_redirs(shell, ast);
-			printf("should be restoring std fds now after implementing commands\n");
-			restore_std_fds(shell, ast->redirs);
-			free_redirs(ast->redirs);
 		}
 		else
 		{	
@@ -176,9 +154,6 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		if (shell->args)
 			free_table(shell->args);
 		//printf("DEBUG 4, ret = %d\n", ret);
-	//	ret = ast->cmd_ret;
-	//	printf("about to free ast command\n");
-	//	free_ast_elem(ast);
 		if (ast->cmd_ret == 0 || ast->cmd_ret == -1)
 		{
 		//	printf("DEBUG 5\n");
@@ -188,6 +163,7 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		else if (ast->cmd_ret < 0)
 		{
 			printf("ERROR: cmd->cmd_ret = %d when cmd = \n", ast->cmd_ret);
+			ft_print_table(shell->args);
 			return (-1);
 		}
 	}
@@ -199,21 +175,15 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 			//printf("and if located while in %s\nSENDING left : %s to ast_evaluate\n", ast->arg, ast->left->arg);
 			v1 = ast_evaluate(ast->left, shell);
 			if (v1 != 0)
-			{
-	//			free_ast_elem(ast);
-	//			printf("about to free ast node after handling token: %d\n", op);
-				return (-1);
-			}
+				return (ast->cmd_ret = -1);
 			else if (v1 == 0)
 			{
 			//	printf("left branch of ANDIF returned 0\n");
 				v2 = ast_evaluate(ast->right, shell);
-	//			printf("about to free ast node after handling token: %d\n", op);
-	//			free_ast_elem(ast);
 				if (v2 == 0)
-					return (0);
+					return (ast->cmd_ret = 0);
 				else
-					return (-1);
+					return (ast->cmd_ret = -1);
 			}
 		}
 		else if (op == TK_OR_IF)
@@ -221,41 +191,31 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 		//	printf("ORIF found at : %s\n", ast->arg);
 			v1 = ast_evaluate(ast->left, shell);
 			if (v1 == 0)
-			{
-	//			printf("about to free ast node after handling token: %d\n", op);
-	//			free_ast_elem(ast);
-				return (v1);
-			}
+				return (ast->cmd_ret = v1);
 			else
 			{
 		//		printf("left branch of ORIF did not return 0, v1 = %d\n, evaluate right branch\n", v1);
 				v2 = ast_evaluate(ast->right, shell);
-	//			printf("about to free ast node after handling token: %d\n", op);
-	//			free_ast_elem(ast);
 				if (v2 == 0)
 				{
 		//			printf("right side of OR_IF RETURNING 0, v2 = %d\n", v2);
-					return (0);
+					return (ast->cmd_ret = 0);
 				}
 				else
 				{
 		//			printf("right side of OR_IF RETURNING v2 = %d\n", v2);
-					return (-1);
+					return (ast->cmd_ret = -1);
 				}
 			}
 		}
 		else if (op == TK_PIPE)
 		{
 			return (evaluate_pipe_node(shell, ast));
-	//		printf("about to free ast node after handling token: %d\n", op);
-	//		free_ast_elem(ast);
 		}
 		else if (op == TK_SEMI)
 		{
 			v1 = ast_evaluate(ast->left, shell);
 			v2 = ast_evaluate(ast->right, shell);
-	//		printf("about to free ast node after handling token: %d\n", op);
-	//		free_ast_elem(ast);
 			return (0);
 		}
 		//printf("LEAVING IF clause 3\n");
