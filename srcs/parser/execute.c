@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/08 16:20:48 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/08 17:03:09 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,10 @@ static void	launch_exec(t_shell *shell, char *full_path, t_ast *cmd)
 	{
 		if (execve(full_path, shell->args, shell->envv) == -1)
 		{
-			printf("both execve calls didn't work properly!!!!\n");
+			ft_putstr_fd(shell->args[0], 2);
+			ft_putstr_fd(": Permission denied.\n", 2);
 			cmd->cmd_ret = -1;
+			exit (1);
 		}
 	}
 }
@@ -105,7 +107,7 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 {
 	if (shell && shell->args && shell->args[0] && shell->redir_error != 1)
 	{
-		shell->full_path = (has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
+		shell->full_path = (shell->args[0][0] != '/' && has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
 		if (ft_strcmp(shell->args[0], ".") == 0 || ft_strcmp(shell->args[0], "..") == 0)
 			handle_dotdot_error(shell, cmd);
 		if (builtin_check(shell) != -1)
@@ -115,6 +117,7 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 		else if (ft_strlen(shell->args[0]) == 0 || (shell->args[0][0] != '\0' && access(shell->args[0], F_OK)))
 		{
 			ft_putstr_fd(shell->args[0], 2);
+			(shell->args[0][0] == '/') ? ft_putstr_fd(": No such file or directory\n", 2) :
 			ft_putstr_fd(": Command not found.\n", 2);
 			cmd->cmd_ret = -1;
 		}
