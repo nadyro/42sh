@@ -6,7 +6,7 @@
 #    By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/06 18:24:02 by antoipom         ###   ########.fr        #
+#    Updated: 2018/08/08 15:01:38 by tcanaud          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,12 +83,15 @@ SRC_FILES = main.c \
 			line_edit/cmpltn_utils.c \
 			line_edit/fetch_utils.c \
 			line_edit/prompt_utils.c \
-			line_edit/sig_ignore.c
+			line_edit/sig_ignore.c \
+			\
+			heredoc/heredoc.c
 
 INC_FILES = lexer.h \
 			parser.h \
 			builtins.h \
-			sh_line_edit.h
+			sh_line_edit.h \
+			heredoc.h
 
 NAME ?= 42sh
 
@@ -137,6 +140,7 @@ $(OBJ_DIR):
 	@/bin/mkdir -p $(OBJ_DIR)/parser
 	@/bin/mkdir -p $(OBJ_DIR)/builtins
 	@/bin/mkdir -p $(OBJ_DIR)/line_edit
+	@/bin/mkdir -p $(OBJ_DIR)/heredoc
 
 clean:
 	@make -C $(LIB_DIR) clean
