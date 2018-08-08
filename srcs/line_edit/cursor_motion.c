@@ -6,7 +6,7 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/10 17:23:30 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/07 14:40:55 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/08 21:39:12 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ void	get_cursor_pos(t_coord *actualize, t_prompt *prompt)
 	ft_bzero(buf, 80);
 	while (buf[0] != 27)
 	{
+		ft_bzero(buf, 80);
 		ft_flush(prompt);
 		write(0, "\033[6n", 4);
-		ft_bzero(buf, 80);
 		read(0, buf, 79);
 	}
 	actualize->y = ft_atol(&buf[2]) - 1;
@@ -38,10 +38,19 @@ void	get_cursor_pos(t_coord *actualize, t_prompt *prompt)
 	if (actualize->x != 0)
 	{
 		actualize->x = 0;
+		tputs(tgetstr("mr", NULL), 1, ft_putshit);
 		write(1, "%", 1);
+		tputs(tgetstr("me", NULL), 1, ft_putshit);
+		sleep(1);
 		actualize->y++;
-		tputs(tgetstr("sf", NULL), 1, ft_putshit);
-		tputs(tgoto(tgetstr("cm", NULL), 0, actualize->y), 1, ft_putshit);
+		if (actualize->y >= prompt->size->y)
+		{
+			tputs(tgoto(tgetstr("cm", NULL), 0, prompt->size->y), 1, ft_putshit);
+			tputs(tgetstr("sf", NULL), 1, ft_putshit);
+			actualize->y--;
+			tputs(tgoto(tgetstr("cm", NULL), 0, actualize->y), 1, ft_putshit);
+		}
+		move_cursor(prompt, 0, true);
 	}
 }
 

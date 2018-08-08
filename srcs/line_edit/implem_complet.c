@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/27 03:07:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/07/30 06:12:41 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/08 21:46:55 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	final_display(t_prompt *prompt, char *to_display)
 	rline = prompt->line;
 	prompt->line = to_display;
 	prompt->total = ft_strlen(prompt->line);
+	tputs(tgetstr("cd", NULL), 0, ft_putshit);
 	write_data(prompt, prompt->line, prompt->total);
 	prompt->line = rline;
 	prompt->total = ft_strlen(prompt->line);

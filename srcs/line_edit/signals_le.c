@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 03:46:15 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/07 10:16:20 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/08 21:40:42 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,15 @@ void		reverse_handle(void)
 void		term_clear(void)
 {
 	tputs(tgetstr("cl", NULL), 0, ft_putshit);
-	write(1, prompt->disp, ft_strlen(prompt->disp));
 	get_cursor_pos(prompt->origin, prompt);
+	write(1, prompt->disp, ft_strlen(prompt->disp));
+	prompt->origin->x = (ft_strlen(prompt->disp) > 10 ?
+			ft_strlen(prompt->disp) - 9 : ft_strlen(prompt->disp));
 	write_data(prompt, prompt->line, prompt->total);
 	move_cursor(prompt, prompt->pos, true);
 }
 
- void	handle_resize(int sig)
+void	handle_resize(int sig)
 {
 	struct winsize	w;
 
@@ -61,7 +63,7 @@ void	handle_int(int sig)
 	}
 	move_cursor(prompt, prompt->total + prompt->size->x -
 			(ft_add_nl(prompt, prompt->total +
-			prompt->origin->x) % prompt->size->x), false);
+					   prompt->origin->x) % prompt->size->x), false);
 	tputs(tgetstr("ce", NULL), 1, ft_putshit);
 	prompt->end = 1;
 	termanip(33);
@@ -76,7 +78,7 @@ void		handle_sig(void)
 	signal(SIGILL, termanip);
 	signal(SIGABRT, termanip);
 	signal(SIGKILL, termanip);
-	//signal(SIGSEGV, termanip);
+	signal(SIGSEGV, termanip);
 	signal(SIGPIPE, termanip);
 	signal(SIGTERM, sig_ignore);
 	signal(SIGSTOP, termanip);

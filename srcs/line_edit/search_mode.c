@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/08 06:09:10 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/07 13:09:16 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/08 21:45:08 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ static void	search_display(t_prompt *prompt, char *cmd_found)
 	cmd_search = prompt->line;
 	prompt->line = to_display;
 	prompt->total = ft_strlen(prompt->line);
+	tputs(tgetstr("cd", NULL), 0, ft_putshit);
 	write_data(prompt, prompt->line, prompt->total);
 	free(to_free);
 	to_free = NULL;
