@@ -6,13 +6,14 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 15:00:16 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/07 19:01:41 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/07 19:06:51 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "lexer.h"
 #include "libft.h"
+#include <stdio.h>
 
 static unsigned char	g_otm[12][6][3] = {
 	{
@@ -65,8 +66,7 @@ static unsigned char	g_otm[12][6][3] = {
 			{1, 0, 0}
 	}
 };
-
-static unsigned int	g_grp[256] = {
+ static unsigned int	g_grp[256] = {
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 5, 0, 1, 0, 4,
@@ -90,8 +90,7 @@ static unsigned int	g_grp[256] = {
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0
 };
-
-int		t2s_init(t_t2s  **t2s)
+ int		t2s_init(t_t2s  **t2s)
 {
 	if ((*t2s = (t_t2s*)malloc(sizeof(t_t2s))) == NULL)
 		return (1);
@@ -119,12 +118,11 @@ int		t2s_init(t_t2s  **t2s)
 	bzero((*t2s)->buffer[1], (*t2s)->m[1]);
 	return (0);
 }
-
-int		t2s_realloc(t_t2s *t2s, char buffer)
+ int		t2s_realloc(t_t2s *t2s, char buffer)
 {
 	char	*buff;
 	int		x;
-	if ((buff = (char*)malloc(t2s->m[buffer - 'A'] + T2S_BLOCK)) == NULL)
+ 	if ((buff = (char*)malloc(t2s->m[buffer - 'A'] + T2S_BLOCK)) == NULL)
 		return (1);
 	t2s->m[buffer - 'A'] += T2S_BLOCK;
 	bzero(buff, t2s->m[buffer - 'A']);
@@ -135,8 +133,7 @@ int		t2s_realloc(t_t2s *t2s, char buffer)
 	t2s->buffer[buffer - 'A'] = buff;
 	return (0);
 }
-
-int		t2s_init_b(t_t2s *t2s)
+ int		t2s_init_b(t_t2s *t2s)
 {
 	free(t2s->buffer[1]);
 	if ((t2s->buffer[1] = (char*)malloc(t2s->m[1])) == NULL)
@@ -145,8 +142,7 @@ int		t2s_init_b(t_t2s *t2s)
 	t2s->i[1] = 0;
 	return (0);
 }
-
-int		t2s_add(t_t2s *t2s, char *str, int cursor, char buffer)
+ int		t2s_add(t_t2s *t2s, char *str, int cursor, char buffer)
 {
 	if (t2s->i[buffer - 'A'] + 1 > t2s->m[buffer - 'A'])
 		if (t2s_realloc(t2s, buffer))
@@ -155,20 +151,17 @@ int		t2s_add(t_t2s *t2s, char *str, int cursor, char buffer)
 	t2s->i[buffer - 'A'] += 1;
 	return (0);
 }
-
-void	t2s_free(t_t2s *t2s)
+ void	t2s_free(t_t2s *t2s)
 {
 	free(t2s->buffer[0]);
 	free(t2s->buffer[1]);
 	free(t2s);
 }
-
-int	check_variable(t_t2s *t2s, char **env)
+ int	check_variable(t_t2s *t2s, char **env)
 {
 	void		*ptr;
 	size_t		x;
-
-	while (*env != NULL)
+ 	while (*env != NULL)
 	{
 		if ((ptr = ft_memchr(*env, '=', ft_strlen(*env))) == NULL && env++)
 			continue ;
@@ -188,23 +181,20 @@ int	check_variable(t_t2s *t2s, char **env)
 		t2s_add(t2s, t2s->buffer[1], x++, 'A');
 	return (t2s_init_b(t2s));
 }
-
-char	*buffa2str(t_t2s *t2s)
+ char	*buffa2str(t_t2s *t2s)
 {
 	char	*str;
-	if ((str = (char*)malloc(t2s->i[0] + 1)) == NULL)
+ 	if ((str = (char*)malloc(t2s->i[0] + 1)) == NULL)
 		return (NULL);
 	ft_memcpy(str, t2s->buffer[0], t2s->i[0]);
 	str[t2s->i[0]] = 0;
 	return (str);
 }
-
-char	*token2str(int *token, char *str, char **env)
+ char	*token2str(int *token, char *str, char **env)
 {
 	char	*ret;
 	t_t2s	*t2s;
-
-	t2s_init(&t2s);
+ 	t2s_init(&t2s);
 	while (t2s != NULL && t2s->cursor[T2S_CUR] < token[2])
 	{
 		t2s->stat[T2S_OLD] = t2s->stat[T2S_CUR];
@@ -218,7 +208,7 @@ char	*token2str(int *token, char *str, char **env)
 			t2s_add(t2s, str + token[1], t2s->cursor[T2S_OLD],
 					g_otm[t2s->stat[T2S_OLD]]
 					[g_grp[(int)*(str + token[1] + t2s->cursor[T2S_OLD])]][2]);
-		if ((t2s->stat[T2S_CUR] == 9 || t2s->stat[T2S_CUR] == 11))
+		if (t2s->stat[T2S_CUR] == 9 || t2s->stat[T2S_CUR] == 11)
 			check_variable(t2s, env);
 	}
 	if (t2s->stat[T2S_CUR] == 8)

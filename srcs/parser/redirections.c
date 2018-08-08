@@ -6,13 +6,14 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/19 12:59:04 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/07 16:38:41 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/08 16:23:08 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "lexer.h"
 #include "libft.h"
+#include "heredoc.h"
 #include <stdio.h>
 #include "builtins.h"
 #include <stdio.h>
@@ -52,7 +53,7 @@ static void		shell_args_from_redirs(t_shell *shell, t_ast *cmd)
 
 	tmp = cmd->redirs;
 	beg = tmp->beg;
-	if (tmp->beg == tmp->next_re)
+	if (tmp->beg == tmp->next_re) //&& shell->tok[tmp->next_re] != TK_DLESS)
 	{
 		handle_prefix_syntax(shell, cmd);
 		return ;
@@ -83,7 +84,8 @@ static int 	get_fd(t_shell *shell, t_redirs *node)
 	}
 	else
 		fd = (shell->tok[tmp->next_re] == TK_LESS ||
-			shell->tok[tmp->next_re] == TK_LESSAND) ? 0 : 1;
+			shell->tok[tmp->next_re] == TK_LESSAND ||
+			shell->tok[tmp->next_re] == TK_DLESS) ? 0 : 1;
 	return (fd);
 }
 
@@ -202,30 +204,60 @@ static void	implement_lessand(t_shell *shell, t_redirs *node, int fd)
 	}
 }
 
+
+static void	implement_heredoc(t_redirs *node, int id)
+{
+	char		*heredoc = NULL;
+
+	if (node)
+	{
+		heredoc = heredoc_get(id);
+		if (heredoc)
+		{
+			pipe(node->hfd);
+			write(node->hfd[1], heredoc, ft_strlen(heredoc));
+			close(node->hfd[1]);
+			dup2(node->hfd[0], 0);
+			close(node->hfd[0]);
+		}
+	}
+	//write(fd, heredoc, ft_strlen(heredoc));
+	//tmp->new_fd = 100000000;
+}
+
 void 		implement_redirs(t_shell *shell, t_ast *cmd)
 {
 	t_redirs	*tmp = NULL;
 	int 		fd;
-	//int 		counter = 1;
+	int 		counter = 0;
 	//int			ionum = -1;
 
+	//fprintf(stderr, "entering implement_redirs\n");
 	shell_args_from_redirs(shell, cmd);
+//	fprintf(stdout, "here is the arg table in redirectory list : \n");
+//	ft_print_table(shell->args);
 	tmp = cmd->redirs;
 	while (tmp->next && shell->redir_error != 1)	//opens and closes respective fd before launching execution
 	{
+	//	fprintf(stderr, "tmp->beg = %d\n", tmp->beg);
 		//if (tmp->prev && tmp->next)
 		//	close(tmp->prev->new_fd);	
 		fd = get_fd(shell, tmp);
-		if (shell->tok[tmp->next_re] == TK_LESS && shell->redir_error != 1)
+		if (shell->tok[tmp->next_re] == TK_LESS)
 			implement_less(shell, tmp, fd);
-		else if (shell->tok[tmp->next_re] == TK_LESSAND && shell->redir_error != 1)
+		else if (shell->tok[tmp->next_re] == TK_LESSAND)
 			implement_lessand(shell, tmp, fd);
-		else if (shell->tok[tmp->next_re] == TK_GREAT && shell->redir_error != 1)
+		else if (shell->tok[tmp->next_re] == TK_GREAT)
 			implement_great(shell, tmp, fd);
-		else if (shell->tok[tmp->next_re] == TK_GREATAND && shell->redir_error != 1)
+		else if (shell->tok[tmp->next_re] == TK_GREATAND)
 			implement_greatand(shell, tmp, fd);
-		else if (shell->tok[tmp->next_re] == TK_DGREAT && shell->redir_error != 1)
+		else if (shell->tok[tmp->next_re] == TK_DGREAT)
 			implement_dgreat(shell, tmp, fd);
+		else if (shell->tok[tmp->next_re] == TK_DLESS)
+		{
+	//		printf("sending id: %d to heredoc_get\n", counter);
+			implement_heredoc(tmp, counter++);
+		}
 		// potentially need one last IF for HEREDOC here
 	//	printf("after analyzing redir #%d, closed %d, opened %d\n", counter++, fd, tmp->new_fd);
 	//	printf("now, restoring standard fds within implement_redirs\n");
@@ -234,6 +266,7 @@ void 		implement_redirs(t_shell *shell, t_ast *cmd)
 	}
 	if (shell->redir_error == 1)
 		cmd->cmd_ret = -1;
+//	fprintf(stderr, "exiting implement redirs for execution\n");
 	//shell->new_fd = tmp->prev->new_fd;
 	ast_execute(shell, cmd);
 }
@@ -295,61 +328,3 @@ int			is_redirect(t_shell *shell, t_ast *ast, int beg, int end)
 	}
 	return (-1);
 }
-/*
-void 		implement_redirs(t_shell *shell, t_ast *cmd)
-{
-	t_redirs	*tmp = NULL;
-	int 		beg;
-	char		*str = NULL;
-	//int			ionum = -1;
-
-	shell_args_from_redirs(shell, cmd);
-	tmp = cmd->redirs;
-	while (tmp)	//opens and closes respective fd before launching execution
-	{
-		if (tmp->prev && tmp->next)
-			close(tmp->prev->new_fd);
-		beg = tmp->beg;
-		if (tmp->next)
-		{
-			if (shell->tok[tmp->next_re] == TK_LESS || shell->tok[tmp->next_re] == TK_DLESS ||
-				shell->tok[tmp->next_re] == TK_LESSAND)
-			{
-				close (0);
-				//(ionum != -1) ? close (ionum) : close (0);
-				if (tmp->next)
-				{
-					str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
-					if ((tmp->new_fd = open(str, O_RDONLY)) < 0)
-						printf("FD ERROR in < redirection, need to handle\n");
-					ft_strdel(&str);
-				}
-			}
-			else	//should be all non less-than redirections
-			{
-			//	(ionum != -1) ? close (ionum) : close (1);			
-				close (1);
-				if (tmp->next)
-				{
-					str = ft_strndup(shell->line + shell->tok[tmp->next->beg + 1], shell->tok[tmp->next->beg + 2]);
-					if (shell->tok[tmp->next_re] == TK_GREAT || shell->tok[tmp->next_re] == TK_GREATAND)
-						if ((tmp->new_fd = open(str, O_CREAT | O_TRUNC | O_WRONLY, 0644)) < 0)
-							printf("FD ERROR in > redirection, need to handle\n");
-					if (shell->tok[tmp->next_re] == TK_DGREAT)
-						if ((tmp->new_fd = open(str, O_CREAT | O_APPEND | O_WRONLY, 0644)) < 0)
-							printf("FD ERROR in >> redirection, need to handle\n");
-				//	else
-				//		printf("REDIRECTION #%d STILL NEEDS HANDLING\n", tmp->next_re), this is meant for letting other token squeek through;
-					//dup2(tmp->new_fd, 1);
-					ft_strdel(&str);
-				}
-			}
-		}
-		//still need to carefully test for how command return values work with redirections
-		if (!(tmp->next))
-			shell->new_fd = tmp->new_fd;
-		tmp = tmp->next;	//if tmp->next, free list through tmp->prev
-	}
-	ast_execute(shell, cmd);
-}
-*/
