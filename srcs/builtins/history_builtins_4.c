@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/04 22:41:58 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/07 06:58:30 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/08 00:36:39 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,11 @@ t_history	*check_if_flag(t_shell *shell, t_history *hist_args)
 	{
 		if (shell->args[y][i] == '-' && shell->args[y][i + 1] == '\0')
 			hist_args->vide = 5;
-		else if (shell->args[y][i] != '-' && shell->args[y + 1] == '\0')
-			hist_args->vide = 5;
+		else if (shell->args[y][i] != '-')
+		{
+			if (ft_atoi(shell->args[y]) == 0)
+				hist_args->vide = 5;
+		}
 		else
 			hist_args = check_if_flag_2(shell, hist_args);
 	}

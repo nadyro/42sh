@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 02:11:49 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/07 02:13:58 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/08 01:46:13 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,19 @@ t_node	*lighten_append_hst(int *index, int fd, t_shell *shell, t_node *history)
 
 t_node	*append_history_to_mem(t_node *history, t_shell *shell, int to_f)
 {
-	while (history)
-		history = history->next;
+	t_node	*tmp;
+	t_node	*tmp_1;
+
+	tmp = history;
+	while (tmp)
+	{
+		tmp_1 = tmp;
+		tmp = tmp_1->next;
+		free(tmp_1->cmd);
+		free(tmp_1);
+		tmp_1 = NULL;
+	}
+	history = NULL;
 	shell->history_length = 0;
 	shell->to_add = 0;
 	if (to_f == 0)

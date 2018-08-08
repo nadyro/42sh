@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 12:01:43 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/07 00:42:51 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/08 01:56:39 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,20 +78,13 @@ int			ash_history(t_shell *shell)
 	i = 0;
 	hist_args = check_history_args(shell);
 	if (hist_args->vide == 0)
-	{
-		/*if (shell->args && shell->args[1])
-		{
-			if (ft_atoi(shell->args[1]) > 0)
-				hist_args->vide = 0;
-		}
-		else if (shell->args && !shell->args[1])
-			hist_args->vide = 0;*/
 		shell->history = dispatch_history_queries(hist_args, shell);
-	}
 	else
 	{
+		i = hist_args->vide;
 		history_errors(hist_args);
-		return (hist_args->vide);
+		free(hist_args);
+		return (i);
 	}
 	free(hist_args);
 	return (1);
