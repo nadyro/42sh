@@ -6,7 +6,7 @@
 #    By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/08 15:04:10 by nsehnoun         ###   ########.fr        #
+#    Updated: 2018/08/08 15:04:47 by nsehnoun         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -109,7 +109,7 @@ LIB_INC = -I$(LIB_DIR)/include
 
 OPTIMIZATION ?= -O0
 CC ?= gcc
-CCFLAGS ?= -g -Wall -Wextra -Werror -g3 #-fsanitize=address -fno-omit-frame-pointer
+CCFLAGS ?= -g -Wall -Wextra -Werror -g3 -fsanitize=address -fno-omit-frame-pointer
 LDFLAGS = -L$(LIB_DIR) -lft -ltermcap
 INCLUDES = $(LOCAL_INC) $(LIB_INC)
 
