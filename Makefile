@@ -6,7 +6,7 @@
 #    By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/08 15:01:38 by tcanaud          ###   ########.fr        #
+#    Updated: 2018/08/08 15:04:10 by nsehnoun         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,6 +64,7 @@ SRC_FILES = main.c \
 			builtins/history_builtins_4.c \
 			builtins/history_builtins_5.c \
 			builtins/history_options.c \
+			builtins/history_flags.c \
 			\
 			line_edit/line_edit_main_loop.c \
 			line_edit/termanip.c \
@@ -108,7 +109,7 @@ LIB_INC = -I$(LIB_DIR)/include
 
 OPTIMIZATION ?= -O0
 CC ?= gcc
-CCFLAGS ?= -g -Wall -Wextra -Werror -g3 -fsanitize=address -fno-omit-frame-pointer
+CCFLAGS ?= -g -Wall -Wextra -Werror -g3 #-fsanitize=address -fno-omit-frame-pointer
 LDFLAGS = -L$(LIB_DIR) -lft -ltermcap
 INCLUDES = $(LOCAL_INC) $(LIB_INC)
 

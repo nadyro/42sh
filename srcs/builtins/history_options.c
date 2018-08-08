@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 02:13:00 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/06 05:47:03 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/08 01:06:00 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,23 +58,23 @@ t_node	*switch_history_cmds(t_node *history)
 t_node	*delete_history_line(t_shell *shell, int to_del)
 {
 	t_node	*history;
+	t_node	*to_free;
 	int		i;
 
 	i = 1;
+	to_free = NULL;
 	history = shell->history;
-	while (history->next != NULL)
+	while (history && history->next != NULL)
 		history = history->next;
 	while (history != NULL)
 	{
 		if (i == to_del)
 		{
+			to_free = history;
 			history = switch_history_cmds(history);
-			shell->history = shell->history->next;
-			free(history->cmd);
-			free(history);
-			history = NULL;
-			shell->history_length -= 2;
-			shell->o_history--;
+			if (shell->history == to_free)
+				shell->history = shell->history->next;
+			free_after_del(to_free, shell);
 			break ;
 		}
 		history = history->prev;
@@ -95,4 +95,20 @@ void	write_history_mem_to_file(t_shell *shell)
 	}
 	else
 		write_history_file(shell, 0);
+}
+
+int		check_warn(t_shell *shell, t_history *hist_args, int y)
+{
+	int		x;
+
+	x = 0;
+	if ((x = check_warn_w(hist_args, shell, y)) >= 1)
+		return (x);
+	else if ((x = check_warn_a(hist_args, shell, y)) >= 1)
+		return (x);
+	else if ((x = check_warn_r(hist_args, shell, y)) >= 1)
+		return (x);
+	else if ((x = check_warn_n(hist_args, shell, y)) >= 1)
+		return (x);
+	return (x);
 }
