@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/07 17:21:35 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/08 16:20:48 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,13 @@ void		restore_std_fds(t_shell *shell, t_redirs *rd)
 	{
 		if (fcntl(tmp->new_fd, F_GETFD) != -1)	
 			close(tmp->new_fd);
+		if (tmp->next_re == TK_DLESS)		//closes pipe fd in parent node
+		{
+			if (fcntl(tmp->hfd[0], F_GETFD) != -1)
+				close(tmp->hfd[0]);
+			if (fcntl(tmp->hfd[1], F_GETFD) != -1)	
+				close(tmp->hfd[1]);
+		}
 		tmp = tmp->next;
 	}
 }
