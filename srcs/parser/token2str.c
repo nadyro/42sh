@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/01 15:00:16 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/07 19:06:51 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/08 19:36:32 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,7 @@ static unsigned char	g_otm[12][6][3] = {
 		t2s->cursor[T2S_OLD] = t2s->cursor[T2S_CUR];
 		t2s->stat[T2S_CUR] = g_otm[t2s->stat[T2S_OLD]]
 			[g_grp[(int)*(str + token[1] + t2s->cursor[T2S_OLD])]][0];
-		t2s->cursor[T2S_CUR] += g_otm[t2s->stat[T2S_OLD]]
+		t2s->cursor[T2S_CUR] += (char)g_otm[t2s->stat[T2S_OLD]]
 			[g_grp[(int)*(str + token[1] + t2s->cursor[T2S_OLD])]][1];
 		if (g_otm[t2s->stat[T2S_OLD]]
 				[g_grp[(int)*(str + token[1] + t2s->cursor[T2S_OLD])]][2] != 0)
