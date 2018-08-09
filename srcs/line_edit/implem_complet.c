@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/27 03:07:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/09 09:19:44 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/09 09:51:35 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,11 @@ void		auto_complete(t_prompt *prompt)
 
 	arg = ft_strndup(prompt->line, prompt->pos);
 	halp = (ft_strrchr(arg, ' ') ? ft_strrchr(arg, ' ') : 0);
+	if (halp && halp != arg && is_pre_binary(*(halp - 1)) == 1)
+		halp = halp + 1;
 	to_free = arg;
+	printf("[%s]\n", halp);
+	sleep(2);
 	if (halp == NULL)
 		arg = ft_strndup(prompt->line, prompt->pos);
 	else
