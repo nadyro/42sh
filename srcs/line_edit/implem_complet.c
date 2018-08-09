@@ -6,13 +6,13 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/27 03:07:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/08 21:46:55 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/09 09:19:44 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
 
-void	final_display(t_prompt *prompt, char *to_display)
+void		final_display(t_prompt *prompt, char *to_display)
 {
 	size_t	rpos;
 	char	*rline;
@@ -29,7 +29,7 @@ void	final_display(t_prompt *prompt, char *to_display)
 	move_cursor(prompt, rpos, true);
 }
 
-void	completion_display_aux(t_prompt *prompt,
+void		completion_display_aux(t_prompt *prompt,
 		t_node *complete, int nb, int max)
 {
 	char	*to_display;
@@ -58,7 +58,7 @@ void	completion_display_aux(t_prompt *prompt,
 	free(to_display);
 }
 
-void	completion_display(t_prompt *prompt, t_node *complete)
+void		completion_display(t_prompt *prompt, t_node *complete)
 {
 	t_node	*loop;
 	size_t	max;
@@ -80,7 +80,17 @@ void	completion_display(t_prompt *prompt, t_node *complete)
 	free(loop);
 }
 
-void	auto_complete(t_prompt *prompt)
+static void	auto_complete_aux(t_prompt *prompt, t_node *complete)
+{
+	while (prompt->pos > 0 && prompt->line[prompt->pos - 1] != '/'
+			&& prompt->line[prompt->pos - 1] != ' ')
+		prompt_delete(prompt);
+	secure_stock(prompt, complete->cmd);
+	free(complete->cmd);
+	free(complete);
+}
+
+void		auto_complete(t_prompt *prompt)
 {
 	t_node	*complete;
 	char	*arg;
@@ -94,17 +104,13 @@ void	auto_complete(t_prompt *prompt)
 		arg = ft_strndup(prompt->line, prompt->pos);
 	else
 		arg = ft_strdup(halp);
-	free(to_free);
 	complete = fetch_names(arg);
 	while (complete && complete->prev)
 		complete = complete->prev;
 	if (complete && complete->next == NULL)
-	{
-		secure_stock(prompt, complete->cmd + ft_strlen(arg));
-		free(complete->cmd);
-		free(complete);
-	}
+		auto_complete_aux(prompt, complete);
 	else if (complete)
 		completion_display(prompt, complete);
 	free(arg);
+	free(to_free);
 }

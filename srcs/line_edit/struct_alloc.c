@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 01:45:43 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/08 23:37:22 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/09 08:41:30 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,9 @@ t_prompt	*malloc_prompt(t_prompt *prompt, t_stat_data *stat_data,
 	prompt->total = 0;
 	prompt->size->x = w.ws_col;
 	prompt->size->y = w.ws_row;
-	prompt_origin(prompt, stat_data);
-	prompt->current = NULL;
 	prompt->end = 0;
+	prompt->current = NULL;
+	prompt_origin(prompt, stat_data);
 	return (prompt);
 }
 

@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/12 10:04:15 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/07/30 05:41:50 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/09 07:10:39 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,21 +67,24 @@ t_node	*cmp_space_entry(char *a_name, int is_null)
 	t_node			*matches;
 	DIR				*directory;
 	struct dirent	*elements;
-	struct stat		st;
+	char			*entry;
+	char			*path;
 
+	UNUSED(is_null);
 	matches = NULL;
-	if (is_null == 1 && (directory = opendir("./")))
+	path = (a_name[0] == ' ' ? a_name + 1 : a_name);
+	entry = ft_strrchr(a_name, '/');
+	if (entry)
+		*(entry++) = '\0';
+	if ((directory = opendir((entry ? path : "./"))))
 	{
+		entry = (entry ? entry : path);
 		while ((elements = readdir(directory)) != NULL)
-			if ((ft_strncmp(elements->d_name, a_name, ft_strlen(a_name))) == 0)
+		{
+			if ((ft_strncmp(elements->d_name, entry,
+							ft_strlen(entry))) == 0)
 				matches = add_elements(matches, elements->d_name);
-		closedir(directory);
-	}
-	else if (is_null == 0 && (lstat(a_name, &st) != -1)
-			&& (directory = opendir(a_name)))
-	{
-		while ((elements = readdir(directory)) != NULL)
-			matches = add_elements(matches, elements->d_name);
+		}
 		closedir(directory);
 	}
 	return (matches);
