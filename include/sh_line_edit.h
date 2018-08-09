@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/07 06:20:04 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/09 02:31:35 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,7 @@ typedef struct	s_prompt
 	char		*line;
 	char		*buf;
 	char		*disp;
-	char		**fp_cmd;
 	int			end;
-	int			fd;
 	size_t		pos;
 	size_t		total;
 	t_coord		*origin;
@@ -67,9 +65,7 @@ typedef struct	s_stat_data
 	char		*overage;
 	char		*old_line;
 	char		*copied;
-	t_node		*history;
 	t_node		*matches;
-	t_node		*current;
 }				t_stat_data;
 
 char			*get_pwd(void);

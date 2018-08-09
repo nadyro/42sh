@@ -6,11 +6,27 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/10 17:23:30 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/08 21:39:12 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/08 23:45:43 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
+
+void	get_cursor_pos_aux(t_coord *actualize)
+{
+	actualize->x = 0;
+	tputs(tgetstr("mr", NULL), 1, ft_putshit);
+	write(1, "%", 1);
+	tputs(tgetstr("me", NULL), 1, ft_putshit);
+	actualize->y++;
+	if (actualize->y >= prompt->size->y)
+	{
+		tputs(tgoto(tgetstr("cm", NULL), 0, prompt->size->y), 1, ft_putshit);
+		tputs(tgetstr("sf", NULL), 1, ft_putshit);
+		actualize->y--;
+		tputs(tgoto(tgetstr("cm", NULL), 0, actualize->y), 1, ft_putshit);
+	}
+}
 
 void	get_cursor_pos(t_coord *actualize, t_prompt *prompt)
 {
@@ -36,22 +52,9 @@ void	get_cursor_pos(t_coord *actualize, t_prompt *prompt)
 		actualize->y = 0;
 	}
 	if (actualize->x != 0)
-	{
-		actualize->x = 0;
-		tputs(tgetstr("mr", NULL), 1, ft_putshit);
-		write(1, "%", 1);
-		tputs(tgetstr("me", NULL), 1, ft_putshit);
-		sleep(1);
-		actualize->y++;
-		if (actualize->y >= prompt->size->y)
-		{
-			tputs(tgoto(tgetstr("cm", NULL), 0, prompt->size->y), 1, ft_putshit);
-			tputs(tgetstr("sf", NULL), 1, ft_putshit);
-			actualize->y--;
-			tputs(tgoto(tgetstr("cm", NULL), 0, actualize->y), 1, ft_putshit);
-		}
-		move_cursor(prompt, 0, true);
-	}
+		get_cursor_pos_aux(actualize);
+	move_cursor(prompt, 0, true);
+	tputs(tgetstr("cd", NULL), 0, ft_putshit);
 }
 
 int		ft_putshit(int c)

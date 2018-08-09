@@ -6,13 +6,13 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 03:46:15 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/08 21:40:42 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/08 23:26:49 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
 
-void		reverse_handle(void)
+void	reverse_handle(void)
 {
 	signal(SIGINT, sig_ignore);
 	signal(SIGWINCH, SIG_DFL);
@@ -28,7 +28,7 @@ void		reverse_handle(void)
 	signal(SIGTSTP, SIG_DFL);
 }
 
-void		term_clear(void)
+void	term_clear(void)
 {
 	tputs(tgetstr("cl", NULL), 0, ft_putshit);
 	get_cursor_pos(prompt->origin, prompt);
@@ -63,13 +63,13 @@ void	handle_int(int sig)
 	}
 	move_cursor(prompt, prompt->total + prompt->size->x -
 			(ft_add_nl(prompt, prompt->total +
-					   prompt->origin->x) % prompt->size->x), false);
+				prompt->origin->x) % prompt->size->x), false);
 	tputs(tgetstr("ce", NULL), 1, ft_putshit);
 	prompt->end = 1;
 	termanip(33);
 }
 
-void		handle_sig(void)
+void	handle_sig(void)
 {
 	signal(SIGINT, handle_int);
 	signal(SIGWINCH, handle_resize);

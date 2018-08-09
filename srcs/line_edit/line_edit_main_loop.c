@@ -6,13 +6,11 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/08 21:01:21 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/08 23:37:45 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
-
-extern	t_prompt *prompt;
 
 static char	*overbuf(t_prompt *prompt, int nb_user_entry, char *user_entry)
 {
