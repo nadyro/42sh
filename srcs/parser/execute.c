@@ -110,7 +110,7 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 		shell->full_path = (shell->args[0][0] != '/' && has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
 		if (ft_strcmp(shell->args[0], ".") == 0 || ft_strcmp(shell->args[0], "..") == 0)
 			handle_dotdot_error(shell, cmd);
-		if (builtin_check(shell) != -1)
+		else if (builtin_check(shell) != -1)
 			cmd->cmd_ret = 0;
 		else if (ft_strlen(shell->args[0]) != 0 && (shell->full_path || !(access(shell->args[0], F_OK))))	//if binary exists in PATH, fork and execute
 			ast_launch(shell, cmd);

@@ -129,13 +129,10 @@ int			has_paths(t_shell *shell, int cdpath)
 	tmp = shell->list;
 	while (tmp)
 	{
-		if (cdpath == 0 && ft_strcmp(tmp->var, "PATH") == 0)
+		if (cdpath == 0 && ft_strcmp(tmp->var, "PATH") == 0)	
 			return (1);
 		if (cdpath == 1 && ft_strcmp(tmp->var, "CDPATH") == 0)
-		{
-	//		printf("about to return 2 from has_paths\n");
 			return (2);
-		}
 		tmp = tmp->next;
 	}
 	return (0);
