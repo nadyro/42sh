@@ -45,12 +45,15 @@ void		restore_std_fds(t_shell *shell, t_redirs *rd)
 
 static void	launch_exec(t_shell *shell, char *full_path, t_ast *cmd)
 {
+	struct 		stat tmp;
+
 	if (execve(shell->args[0], shell->args, shell->envv) == -1)
 	{
 		if (execve(full_path, shell->args, shell->envv) == -1)
 		{
 			ft_putstr_fd(shell->args[0], 2);
-			ft_putstr_fd(": Permission denied.\n", 2);
+			(full_path) ? stat(full_path, &tmp) : stat(shell->args[0], &tmp);
+			(S_ISDIR(tmp.st_mode)) ? ft_putstr_fd(": is a directory\n", 2) : ft_putstr_fd(": Permission denied\n", 2);
 			cmd->cmd_ret = -1;
 			exit (1);
 		}
