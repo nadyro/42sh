@@ -165,10 +165,9 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 
 	if (ast == NULL)
 	{
-		//printf("error, AST is null, nothing to evaluate\n");
 		return (0);
 	}
-	if (!(ast->left) && !(ast->right))
+	else if (!(ast->left) && !(ast->right))
 	{
 		ast->cmd_ret = 0;
 		ast->redirs = NULL;
