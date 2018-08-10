@@ -5,8 +5,6 @@
 #include "sh_line_edit.h"
 #include <stdio.h>
 
-t_prompt	*prompt;
-
 char  *get_pwd(void)
 {
 	int    i;

@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/05 16:46:34 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/10 14:38:54 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/10 16:56:05 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,10 +123,8 @@ t_node	*fetch_names(char *user_entry)
 				|| ft_strcmp(user_entry, "") == 0))
 		matches = cmp_space_entry(user_entry, 0);
 	else
-	{
 		matches = cmp_user_entry(binaries, user_entry);
-		matches = (matches ? matches : cmp_space_entry(user_entry, 0));
-	}
+	matches = (matches ? matches : cmp_space_entry(user_entry, 0));
 	free_lists(binaries_1);
 	return (matches);
 }

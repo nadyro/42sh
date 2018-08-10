@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   prompt_utils.c                                     :+:      :+:    :+:   */
+/*   g_prpt_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/30 07:30:34 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/07 11:36:15 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/10 16:50:35 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
 
-void	ft_flush(t_prompt *prompt)
+void	ft_flush(t_g_prpt *g_prpt)
 {
 	char	user_entry[4096];
 	char	*to_free;
@@ -20,14 +20,14 @@ void	ft_flush(t_prompt *prompt)
 	ignore_handle();
 	termanip(33);
 	ft_bzero(user_entry, 4096);
-	while (read(0, user_entry, 4095) > 0 && !(prompt->end))
+	while (read(0, user_entry, 4095) > 0 && !(g_prpt->end))
 	{
-		to_free = prompt->buf;
-		prompt->buf = ft_strjoin(prompt->buf, user_entry);
-		if (prompt->buf == NULL)
+		to_free = g_prpt->buf;
+		g_prpt->buf = ft_strjoin(g_prpt->buf, user_entry);
+		if (g_prpt->buf == NULL)
 		{
-			prompt->buf = to_free;
-			prompt->end = 1;
+			g_prpt->buf = to_free;
+			g_prpt->end = 1;
 		}
 		else
 		{
@@ -40,13 +40,13 @@ void	ft_flush(t_prompt *prompt)
 	handle_sig();
 }
 
-void	prompt_clean(void)
+void	g_prpt_clean(void)
 {
-	free(prompt->line);
-	if (!(prompt->line = ft_strdup("\0")))
+	free(g_prpt->line);
+	if (!(g_prpt->line = ft_strdup("\0")))
 		exit(1);
-	prompt->pos = 0;
-	prompt->total = 0;
-	prompt->current = NULL;
+	g_prpt->pos = 0;
+	g_prpt->total = 0;
+	g_prpt->current = NULL;
 	term_clear();
 }

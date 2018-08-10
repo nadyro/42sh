@@ -6,29 +6,29 @@
 /*   By: azybert <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/10 17:23:30 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/10 13:02:07 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/10 16:50:35 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
 
-void	get_cursor_pos_aux(t_coord *actualize, t_prompt *prompt)
+static void	get_cursor_pos_aux(t_coord *actualize, t_g_prpt *g_prpt)
 {
 	actualize->x = 0;
 	tputs(tgetstr("mr", NULL), 1, ft_putshit);
 	write(1, "%", 1);
 	tputs(tgetstr("me", NULL), 1, ft_putshit);
 	actualize->y = actualize->y + 1;
-	if (actualize->y >= prompt->size->y)
+	if (actualize->y >= g_prpt->size->y)
 	{
-		tputs(tgoto(tgetstr("cm", NULL), 0, prompt->size->y), 1, ft_putshit);
+		tputs(tgoto(tgetstr("cm", NULL), 0, g_prpt->size->y), 1, ft_putshit);
 		tputs(tgetstr("sf", NULL), 1, ft_putshit);
 		actualize->y--;
 		tputs(tgoto(tgetstr("cm", NULL), 0, actualize->y), 1, ft_putshit);
 	}
 }
 
-void	get_cursor_pos(t_coord *actualize, t_prompt *prompt)
+void		get_cursor_pos(t_coord *actualize, t_g_prpt *g_prpt)
 {
 	char	buf[80];
 	int		loop;
@@ -37,7 +37,7 @@ void	get_cursor_pos(t_coord *actualize, t_prompt *prompt)
 	while (buf[0] != 27)
 	{
 		ft_bzero(buf, 80);
-		ft_flush(prompt);
+		ft_flush(g_prpt);
 		write(0, "\033[6n", 4);
 		read(0, buf, 79);
 	}
@@ -46,37 +46,37 @@ void	get_cursor_pos(t_coord *actualize, t_prompt *prompt)
 	while (buf[loop] != '\0' && buf[loop] != ';')
 		loop++;
 	actualize->x = ft_atol(&buf[loop + 1]) - 1;
-	if (actualize->x > prompt->size->x || actualize->y > prompt->size->y)
+	if (actualize->x > g_prpt->size->x || actualize->y > g_prpt->size->y)
 	{
 		actualize->x = 0;
 		actualize->y = 0;
 	}
 	if (actualize->x != 0)
-		get_cursor_pos_aux(actualize, prompt);
-	move_cursor(prompt, 0, true);
+		get_cursor_pos_aux(actualize, g_prpt);
+	move_cursor(g_prpt, 0, true);
 	tputs(tgetstr("cd", NULL), 0, ft_putshit);
 }
 
-int		ft_putshit(int c)
+int			ft_putshit(int c)
 {
 	return (write(0, &c, 1));
 }
 
-size_t	ft_add_nl(t_prompt *prompt, size_t new_pos)
+size_t		ft_add_nl(t_g_prpt *g_prpt, size_t new_pos)
 {
 	size_t loop;
 	size_t to_add;
 
 	loop = 0;
 	to_add = 0;
-	if (prompt->line == NULL)
+	if (g_prpt->line == NULL)
 		return (0);
 	while (loop < new_pos)
 	{
-		if (loop < prompt->total && prompt->line[loop] == '\n')
+		if (loop < g_prpt->total && g_prpt->line[loop] == '\n')
 		{
-			to_add += prompt->size->x -
-				((loop + to_add + prompt->origin->x) % prompt->size->x);
+			to_add += g_prpt->size->x -
+				((loop + to_add + g_prpt->origin->x) % g_prpt->size->x);
 		}
 		loop++;
 	}
@@ -85,16 +85,16 @@ size_t	ft_add_nl(t_prompt *prompt, size_t new_pos)
 	return (new_pos + to_add);
 }
 
-void	move_cursor(t_prompt *prompt, size_t new_pos, bool save)
+void		move_cursor(t_g_prpt *g_prpt, size_t new_pos, bool save)
 {
 	size_t	x;
 	size_t	y;
 
 	if (save == true)
-		prompt->pos = new_pos;
-	if (prompt->line != NULL && ft_strchr(prompt->line, '\n') != NULL)
-		new_pos = ft_add_nl(prompt, new_pos);
-	x = (prompt->origin->x + new_pos) % prompt->size->x;
-	y = prompt->origin->y + (prompt->origin->x + new_pos) / prompt->size->x;
+		g_prpt->pos = new_pos;
+	if (g_prpt->line != NULL && ft_strchr(g_prpt->line, '\n') != NULL)
+		new_pos = ft_add_nl(g_prpt, new_pos);
+	x = (g_prpt->origin->x + new_pos) % g_prpt->size->x;
+	y = g_prpt->origin->y + (g_prpt->origin->x + new_pos) / g_prpt->size->x;
 	tputs(tgoto(tgetstr("cm", NULL), x, y), 1, ft_putshit);
 }

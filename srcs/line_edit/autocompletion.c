@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/12 10:04:15 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/10 14:46:46 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/10 17:01:40 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,12 @@ t_node	*cmp_user_entry(t_node *lst, char *user_entry)
 	return (matches);
 }
 
+static	void	ft_norme(char *entry)
+{
+	if (entry != NULL)
+		*(entry - 1) = '/';
+}
+
 t_node	*cmp_space_entry(char *a_name, int is_null)
 {
 	t_node			*matches;
@@ -80,13 +86,12 @@ t_node	*cmp_space_entry(char *a_name, int is_null)
 	{
 		entry = (entry ? entry : path);
 		while ((elements = readdir(directory)) != NULL)
-		{
 			if ((ft_strncmp(elements->d_name, entry,
 							ft_strlen(entry))) == 0)
 				matches = add_elements(matches, elements->d_name);
-		}
 		closedir(directory);
 	}
+	(entry != path && entry != a_name ? ft_norme(entry) : 0);
 	return (matches);
 }
 

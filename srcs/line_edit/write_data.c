@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/28 17:19:56 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/07 10:15:59 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/10 16:50:31 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,18 @@ static void	ft_writenl(char *to_display, size_t tmp)
 	write(1, "\r", 1);
 }
 
-static void	write_data_aux(t_prompt *prompt, char *to_display, size_t size)
+static void	write_data_aux(t_g_prpt *g_prpt, char *to_display, size_t size)
 {
 	size_t	tmp;
 	size_t	displayed;
 
-	displayed = prompt->total - ft_strlen(to_display);
+	displayed = g_prpt->total - ft_strlen(to_display);
 	while (size != 0)
 	{
-		move_cursor(prompt, displayed, false);
+		move_cursor(g_prpt, displayed, false);
 		tputs(tgetstr("ce", NULL), 1, ft_putshit);
-		tmp = prompt->size->x - (ft_add_nl(prompt, displayed) +
-				prompt->origin->x) % prompt->size->x;
+		tmp = g_prpt->size->x - (ft_add_nl(g_prpt, displayed) +
+				g_prpt->origin->x) % g_prpt->size->x;
 		tmp = ((tmp > size) ? size : tmp);
 		ft_writenl(to_display, tmp);
 		displayed = displayed + tmp;
@@ -55,20 +55,20 @@ static void	write_data_aux(t_prompt *prompt, char *to_display, size_t size)
 	}
 }
 
-void		write_data(t_prompt *prompt, char *to_display, size_t size)
+void		write_data(t_g_prpt *g_prpt, char *to_display, size_t size)
 {
-	if (prompt->origin->y == 0xffffffffffffffff)
+	if (g_prpt->origin->y == 0xffffffffffffffff)
 		return ;
-	move_cursor(prompt, prompt->pos, true);
-	while (prompt->size->y <= prompt->origin->y + (prompt->origin->x +
-				ft_add_nl(prompt, prompt->pos + size)) / prompt->size->x)
+	move_cursor(g_prpt, g_prpt->pos, true);
+	while (g_prpt->size->y <= g_prpt->origin->y + (g_prpt->origin->x +
+				ft_add_nl(g_prpt, g_prpt->pos + size)) / g_prpt->size->x)
 	{
-		move_cursor(prompt, (prompt->size->y - prompt->origin->y) *
-				prompt->size->x, false);
+		move_cursor(g_prpt, (g_prpt->size->y - g_prpt->origin->y) *
+				g_prpt->size->x, false);
 		tputs(tgetstr("sf", NULL), 1, ft_putshit);
-		prompt->origin->y--;
+		g_prpt->origin->y--;
 	}
-	if (prompt->origin->y == 0xffffffffffffffff)
+	if (g_prpt->origin->y == 0xffffffffffffffff)
 		return ;
-	write_data_aux(prompt, to_display, size);
+	write_data_aux(g_prpt, to_display, size);
 }
