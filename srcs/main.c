@@ -193,6 +193,7 @@ int			main(int argc, char **argv, char **env)
 	shell.last_added = 0;
 	shell.is_a = 0;
 	shell.appnd_hst = NULL;
+	shell.redir_error = 0;
 	///////////////////////////////////
 	if ((name_term = getenv("TERM")) == NULL)
 	{
