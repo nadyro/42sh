@@ -6,13 +6,13 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/12 10:04:15 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/10 17:01:40 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/10 17:03:42 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
 
-t_node	*add_elements(t_node *lst, char *file_bin)
+t_node			*add_elements(t_node *lst, char *file_bin)
 {
 	t_node	*first;
 	t_node	*elements;
@@ -36,7 +36,7 @@ t_node	*add_elements(t_node *lst, char *file_bin)
 	return (first);
 }
 
-t_node	*cmp_user_entry(t_node *lst, char *user_entry)
+t_node			*cmp_user_entry(t_node *lst, char *user_entry)
 {
 	t_node			*directories;
 	t_node			*matches;
@@ -68,7 +68,7 @@ static	void	ft_norme(char *entry)
 		*(entry - 1) = '/';
 }
 
-t_node	*cmp_space_entry(char *a_name, int is_null)
+t_node			*cmp_space_entry(char *a_name, int is_null)
 {
 	t_node			*matches;
 	DIR				*directory;
@@ -95,7 +95,7 @@ t_node	*cmp_space_entry(char *a_name, int is_null)
 	return (matches);
 }
 
-char	**lst_to_array(t_node *matches)
+char			**lst_to_array(t_node *matches)
 {
 	t_node	*lst;
 	char	**matches_tab;
