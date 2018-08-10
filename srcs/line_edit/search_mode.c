@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/08 06:09:10 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/09 02:30:49 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/10 12:23:50 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static t_node	*find_in_history(char *cmd, t_node *history, int *depth)
 	check_depth = NULL;
 	if (history == NULL)
 		return (NULL);
-	else if (strstr(history->cmd, cmd) != NULL)
+	else if (ft_strstr(history->cmd, cmd) != NULL)
 	{
 		if (*depth > 1)
 		{
