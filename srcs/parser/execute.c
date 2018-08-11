@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/08 17:03:09 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/11 18:23:59 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,14 @@ void		restore_std_fds(t_shell *shell, t_redirs *rd)
 	{
 		if (fcntl(tmp->new_fd, F_GETFD) != -1)	
 			close(tmp->new_fd);
-		if (tmp->next_re == TK_DLESS)
+/*		if (tmp->next_re == TK_DLESS)
 		{
 			if (fcntl(tmp->hfd[0], F_GETFD) != -1)
 				close(tmp->hfd[0]);
 			if (fcntl(tmp->hfd[1], F_GETFD) != -1)	
 				close(tmp->hfd[1]);
 		}
-		tmp = tmp->next;
+*/		tmp = tmp->next;
 	}
 }
 
@@ -70,7 +70,10 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 	if (pid == 0)
 		launch_exec(shell, shell->full_path, cmd);
 	else if (pid < 0)
+	{
+		cmd->cmd_ret = -1;	
 		ft_putstr_fd("error pid less than 0 in lsh launch", 2);
+	}
 	else
 	{
 		wpid = waitpid(pid, &status, WUNTRACED);

@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:27:44 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/08 16:13:29 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/11 17:50:17 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ typedef struct	s_redirs
 	int						beg;
 	int						end;
 	int						next_re;
-	int						hfd[2];
 	int						new_fd;
 	int 					ionum; // ft_atoi(str) with str = ft_strndup(shell->line + shell->tok[beg + 1], shell->tok[beg + 2]);
 	struct s_redirs			*prev;
@@ -43,6 +42,8 @@ typedef struct	s_ast
 	int 					end;	//relevant end token in token table for ast node
 	int 					split;	//relevant position where split operator token was found in token table
 	int						cmd_ret;
+	int						hfd[2];
+	int						hd_check;
 	struct s_ast			*parent;
 	struct s_ast			*left;
 	t_redirs				*redirs;
