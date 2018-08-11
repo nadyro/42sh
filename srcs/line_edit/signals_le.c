@@ -6,13 +6,13 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 03:46:15 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/07 10:16:20 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/10 16:50:35 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
 
-void		reverse_handle(void)
+void	reverse_handle(void)
 {
 	signal(SIGINT, sig_ignore);
 	signal(SIGWINCH, SIG_DFL);
@@ -28,46 +28,48 @@ void		reverse_handle(void)
 	signal(SIGTSTP, SIG_DFL);
 }
 
-void		term_clear(void)
+void	term_clear(void)
 {
 	tputs(tgetstr("cl", NULL), 0, ft_putshit);
-	write(1, prompt->disp, ft_strlen(prompt->disp));
-	get_cursor_pos(prompt->origin, prompt);
-	write_data(prompt, prompt->line, prompt->total);
-	move_cursor(prompt, prompt->pos, true);
+	get_cursor_pos(g_prpt->origin, g_prpt);
+	write(1, g_prpt->disp, ft_strlen(g_prpt->disp));
+	g_prpt->origin->x = (ft_strlen(g_prpt->disp) > 10 ?
+			ft_strlen(g_prpt->disp) - 9 : ft_strlen(g_prpt->disp));
+	write_data(g_prpt, g_prpt->line, g_prpt->total);
+	move_cursor(g_prpt, g_prpt->pos, true);
 }
 
- void	handle_resize(int sig)
+void	handle_resize(int sig)
 {
 	struct winsize	w;
 
 	UNUSED(sig);
 	ioctl(0, TIOCGWINSZ, &w);
-	prompt->size->x = w.ws_col;
-	prompt->size->y = w.ws_row;
+	g_prpt->size->x = w.ws_col;
+	g_prpt->size->y = w.ws_row;
 	term_clear();
 }
 
 void	handle_int(int sig)
 {
 	UNUSED(sig);
-	if (prompt && prompt->size->y - 1 <= prompt->origin->y +
-			(prompt->origin->x + ft_add_nl(prompt, prompt->total))
-			/ prompt->size->x)
+	if (g_prpt && g_prpt->size->y - 1 <= g_prpt->origin->y +
+			(g_prpt->origin->x + ft_add_nl(g_prpt, g_prpt->total))
+			/ g_prpt->size->x)
 	{
-		move_cursor(prompt, (prompt->size->y - prompt->origin->y) *
-				prompt->size->x, false);
+		move_cursor(g_prpt, (g_prpt->size->y - g_prpt->origin->y) *
+				g_prpt->size->x, false);
 		tputs(tgetstr("sf", NULL), 1, ft_putshit);
 	}
-	move_cursor(prompt, prompt->total + prompt->size->x -
-			(ft_add_nl(prompt, prompt->total +
-			prompt->origin->x) % prompt->size->x), false);
+	move_cursor(g_prpt, g_prpt->total + g_prpt->size->x -
+			(ft_add_nl(g_prpt, g_prpt->total +
+				g_prpt->origin->x) % g_prpt->size->x), false);
 	tputs(tgetstr("ce", NULL), 1, ft_putshit);
-	prompt->end = 1;
+	g_prpt->end = 1;
 	termanip(33);
 }
 
-void		handle_sig(void)
+void	handle_sig(void)
 {
 	signal(SIGINT, handle_int);
 	signal(SIGWINCH, handle_resize);
@@ -76,7 +78,7 @@ void		handle_sig(void)
 	signal(SIGILL, termanip);
 	signal(SIGABRT, termanip);
 	signal(SIGKILL, termanip);
-	//signal(SIGSEGV, termanip);
+	signal(SIGSEGV, termanip);
 	signal(SIGPIPE, termanip);
 	signal(SIGTERM, sig_ignore);
 	signal(SIGSTOP, termanip);

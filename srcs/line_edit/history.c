@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:20:53 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/04 23:40:33 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/10 16:50:35 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,59 +38,59 @@ t_node		*add_to_history(char *cmd, t_node *history)
 	return (history);
 }
 
-static void	ft_norme(t_prompt *prompt)
+static void	ft_norme(t_g_prpt *g_prpt)
 {
-	free(prompt->line);
-	prompt->line = NULL;
-	prompt->total = 0;
-	move_cursor(prompt, 0, true);
+	free(g_prpt->line);
+	g_prpt->line = NULL;
+	g_prpt->total = 0;
+	move_cursor(g_prpt, 0, true);
 	tputs(tgetstr("cd", NULL), 1, ft_putshit);
 }
 
-void		history_next(t_prompt *prompt, t_stat_data *stat_data)
+void		history_next(t_g_prpt *g_prpt, t_stat_data *stat_data)
 {
-	if (prompt->history == NULL)
+	if (g_prpt->history == NULL)
 		return ;
-	if (prompt->current == NULL)
+	if (g_prpt->current == NULL)
 	{
-		prompt->current = prompt->history;
-		if (prompt->line && ft_strlen(prompt->line))
+		g_prpt->current = g_prpt->history;
+		if (g_prpt->line && ft_strlen(g_prpt->line))
 		{
 			free(stat_data->old_line);
-			((stat_data->old_line = ft_strdup(prompt->line)) ? 0 : exit(0));
+			((stat_data->old_line = ft_strdup(g_prpt->line)) ? 0 : exit(0));
 		}
 	}
-	else if (prompt->current->next != NULL)
+	else if (g_prpt->current->next != NULL)
 	{
-		if (ft_strcmp(prompt->line, prompt->current->cmd))
+		if (ft_strcmp(g_prpt->line, g_prpt->current->cmd))
 		{
 			free(stat_data->old_line);
-			((stat_data->old_line = ft_strdup(prompt->line)) ? 0 : exit(0));
+			((stat_data->old_line = ft_strdup(g_prpt->line)) ? 0 : exit(0));
 		}
-		prompt->current = prompt->current->next;
+		g_prpt->current = g_prpt->current->next;
 	}
 	else
 		return ;
-	ft_norme(prompt);
-	secure_stock(prompt, prompt->current->cmd);
+	ft_norme(g_prpt);
+	secure_stock(g_prpt, g_prpt->current->cmd);
 }
 
-void		history_prev(t_prompt *prompt, t_stat_data *stat_data)
+void		history_prev(t_g_prpt *g_prpt, t_stat_data *stat_data)
 {
-	if (prompt->current == NULL)
+	if (g_prpt->current == NULL)
 		return ;
-	if (ft_strcmp(prompt->line, prompt->current->cmd))
+	if (ft_strcmp(g_prpt->line, g_prpt->current->cmd))
 	{
 		free(stat_data->old_line);
-		((stat_data->old_line = ft_strdup(prompt->line)) ? 0 : exit(0));
+		((stat_data->old_line = ft_strdup(g_prpt->line)) ? 0 : exit(0));
 	}
-	prompt->current = prompt->current->prev;
-	ft_norme(prompt);
-	if (prompt->current)
-		secure_stock(prompt, prompt->current->cmd);
+	g_prpt->current = g_prpt->current->prev;
+	ft_norme(g_prpt);
+	if (g_prpt->current)
+		secure_stock(g_prpt, g_prpt->current->cmd);
 	else
 	{
-		secure_stock(prompt, stat_data->old_line);
+		secure_stock(g_prpt, stat_data->old_line);
 		free(stat_data->old_line);
 		stat_data->old_line = NULL;
 	}

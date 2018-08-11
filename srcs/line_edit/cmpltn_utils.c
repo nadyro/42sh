@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/18 13:45:18 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/07/19 17:34:16 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/10 16:38:07 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,11 @@ void	print_nudes(t_node *matches)
 			matches = matches->prev;
 		free_lists(matches);
 	}
+}
+
+int		is_pre_binary(char c)
+{
+	if (c == '&' || c == '|' || c == '>' || c == '<')
+		return (1);
+	return (0);
 }

@@ -6,80 +6,71 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 01:45:43 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/07 07:30:41 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/10 16:50:35 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
 
-void		free_prompt(t_prompt *prompt)
+void		free_g_prpt(t_g_prpt *g_prpt)
 {
-	free(prompt->line);
-	prompt->line = NULL;
-	free(prompt->buf);
-	prompt->buf = NULL;
-	free(prompt->disp);
-	prompt->disp = NULL;
-	free(prompt->origin);
-	prompt->origin = NULL;
-	free(prompt->size);
-	prompt->size = NULL;
-	free(prompt);
-	prompt = NULL;
+	free(g_prpt->line);
+	g_prpt->line = NULL;
+	free(g_prpt->buf);
+	g_prpt->buf = NULL;
+	free(g_prpt->disp);
+	g_prpt->disp = NULL;
+	free(g_prpt->origin);
+	g_prpt->origin = NULL;
+	free(g_prpt->size);
+	g_prpt->size = NULL;
+	free(g_prpt);
+	g_prpt = NULL;
 }
 
-static void	prompt_origin(t_prompt *prompt, t_stat_data *stat_data)
+static void	g_prpt_origin(t_g_prpt *g_prpt, t_stat_data *stat_data)
 {
 	long int	nbr;
 
 	if (stat_data != NULL && stat_data->old_line != NULL)
 	{
 		nbr = atol(stat_data->old_line);
-		prompt->origin->x = nbr % 100000;
-		prompt->origin->y = nbr / 100000;
-		prompt->origin->y += (prompt->origin->y == prompt->size->y ? -1 : 0);
-		move_cursor(prompt, 0, true);
+		g_prpt->origin->x = nbr % 100000;
+		g_prpt->origin->y = nbr / 100000;
+		g_prpt->origin->y += (g_prpt->origin->y == g_prpt->size->y ? -1 : 0);
+		move_cursor(g_prpt, 0, true);
 		free(stat_data->old_line);
 		stat_data->old_line = NULL;
 	}
 	else
-		get_cursor_pos(prompt->origin, prompt);
+		get_cursor_pos(g_prpt->origin, g_prpt);
 }
 
-static int	get_fd()
-{
-	int fd;
-
-	fd = open(ttyname(0), O_RDWR | O_NOCTTY);
-	return fd;
-}
-
-t_prompt	*malloc_prompt(t_prompt *prompt, t_stat_data *stat_data,
-		char *d_prompt)
+t_g_prpt	*malloc_g_prpt(t_g_prpt *g_prpt, t_stat_data *stat_data,
+		char *d_g_prpt)
 {
 	struct winsize	w;
 
-	if (!(prompt = malloc(sizeof(*prompt))))
+	if (!(g_prpt = malloc(sizeof(*g_prpt))))
 		exit(1);
-	if (!(prompt->origin = malloc(sizeof(t_coord))))
+	if (!(g_prpt->origin = malloc(sizeof(t_coord))))
 		exit(1);
-	if (!(prompt->size = malloc(sizeof(t_coord))))
+	if (!(g_prpt->size = malloc(sizeof(t_coord))))
 		exit(1);
 	ioctl(0, TIOCGWINSZ, &w);
-	if (!(prompt->line = ft_strdup("\0")))
+	if (!(g_prpt->line = ft_strdup("\0")))
 		exit(1);
-	if (!(prompt->disp = ft_strdup(d_prompt)))
+	if (!(g_prpt->disp = ft_strdup(d_g_prpt)))
 		exit(1);
-	prompt->buf = NULL;
-	prompt->pos = 0;
-	prompt->total = 0;
-	prompt->fd = get_fd();
-	prompt->size->x = w.ws_col;
-	prompt->size->y = w.ws_row;
-	prompt_origin(prompt, stat_data);
-	prompt->current = NULL;
-	prompt->end = 0;
-	return (prompt);
+	g_prpt->buf = NULL;
+	g_prpt->pos = 0;
+	g_prpt->total = 0;
+	g_prpt->size->x = w.ws_col;
+	g_prpt->size->y = w.ws_row;
+	g_prpt->end = 0;
+	g_prpt->current = NULL;
+	g_prpt_origin(g_prpt, stat_data);
+	return (g_prpt);
 }
 
 t_stat_data	*malloc_stat(void)

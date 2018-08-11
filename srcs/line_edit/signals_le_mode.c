@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/10 06:10:10 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/06 06:19:50 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/10 16:50:35 by azybert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	ignore_sig(int sig)
 static void	quit_mode(int sig)
 {
 	UNUSED(sig);
-	prompt->end = 1;
+	g_prpt->end = 1;
 	termanip(33);
 }
 
