@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/11 19:06:46 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/11 19:27:28 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,6 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 			cmd->cmd_ret = -1;
 		while (!WIFEXITED(status) && !WIFSIGNALED(status) && !WIFSTOPPED(status))
 			wpid = waitpid(pid, &status, WUNTRACED);
-		if (cmd->redirs)
-			restore_std_fds(shell, cmd->redirs);
 	}
 	if (shell->full_path)
 		ft_strdel(&(shell->full_path));
