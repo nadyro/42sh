@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/07 19:59:10 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/11 19:01:54 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,27 +148,42 @@ int         ast_evaluate(t_ast *ast, t_shell *shell)
 	}
 	else if (!(ast->left) && !(ast->right))
 	{
+		fprintf(stderr, "ast_evaluate DEBUG 1\n");
 		ast->cmd_ret = 0;
 		ast->redirs = NULL;
+		fprintf(stderr, "ast_evaluate DEBUG 2\n");
 		if ((ret = is_redirect(shell, ast, ast->beg, ast->end)) != -1)
 		{
+			fprintf(stderr, "ast_evaluate DEBUG 3\n");
 			shell->redir_error = 0;
+			fprintf(stderr, "ast_evaluate DEBUG 4\n");
 			fill_redirs(shell, ast, ast->beg, ret);
+			fprintf(stderr, "ast_evaluate DEBUG 5\n");
 			shell->s_in = dup(0);
 			shell->s_out = dup(1);
 			shell->s_err = dup(2);
+			fprintf(stderr, "ast_evaluate DEBUG 6\n");
 			implement_redirs(shell, ast);
+			fprintf(stderr, "ast_evaluate DEBUG 7\n");
 			free_redirs(ast->redirs);
+			fprintf(stderr, "ast_evaluate DEBUG 8\n");
 		}
 		else
 		{
 			create_arg_table(shell, ast->beg, ast->end);
 			ast_execute(shell, ast);
 		}
+		fprintf(stderr, "ast_evaluate DEBUG 9\n");
 		if (shell->args)
+		{
+			fprintf(stderr, "ast_evaluate DEBUG 10\n");
 			free_table(shell->args);
+		}
 		if (ast->cmd_ret == 0 || ast->cmd_ret == -1)
+		{
+			fprintf(stderr, "ast_evaluate DEBUG 11\n");
 			return (ast->cmd_ret);
+		}
 	}
 	else if (ast)
 	{

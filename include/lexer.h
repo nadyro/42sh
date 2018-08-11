@@ -6,7 +6,7 @@
 /*   By: antoipom <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/07 14:13:58 by antoipom          #+#    #+#             */
-/*   Updated: 2018/07/19 17:05:06 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/08/08 17:00:00 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ enum
 	SEMI,
 	COMMENT,
 	AND,
-	END
+	END,
+	BANG
 };
 
 enum
@@ -53,9 +54,10 @@ enum
 	TK_OR_IF,
 	TK_END,
 	TK_CMD,
-	TK_FILENAME
+	TK_FILENAME,
+	TK_HISTORY
 };
 
-int						*get_tokens(char *line);
+int						*get_tokens(char **line);
 
 #endif

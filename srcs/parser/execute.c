@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/11 18:23:59 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/11 19:06:46 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,9 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 	status = 0;
 	pid = fork();
 	if (pid == 0)
+	{
 		launch_exec(shell, shell->full_path, cmd);
+	}
 	else if (pid < 0)
 	{
 		cmd->cmd_ret = -1;	
@@ -118,8 +120,14 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 	}
 	else if (shell->redir_error == 1)
 		shell->redir_error = 0;
+	fprintf(stderr, "ast_execute post-built-in, pre-fd restore\n");
 	if (cmd && cmd->redirs)
+	{
+		fprintf(stderr, "ast_execute, redirs found, restoring standard fds\n");
 		restore_std_fds(shell, cmd->redirs);
+		fprintf(stderr, "standard fds restored\n");
+	}
+	fprintf(stderr, "ast_execute fds restored, returning back to ast_evaluate\n");	
 	return (cmd->cmd_ret);
 
 }

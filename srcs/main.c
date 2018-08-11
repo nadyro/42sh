@@ -108,6 +108,8 @@ int			main(int argc, char **argv, char **env)
 	///////////////////////////////////
 	shell.list = (env && env[0]) ? env_setup(env) : env_init();
 	shell.envv = (shell.list) ? env_to_tab(shell.list) : NULL;
+	shell.redir_error = 0;
+	shell.last_hd = -1;
 	shell.history_length = 0;
 	shell.o_history = 0;
 	shell.to_add = 0;
