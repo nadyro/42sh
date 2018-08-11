@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/19 12:59:04 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/11 18:53:11 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/11 19:30:31 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,7 +249,6 @@ void 		implement_redirs(t_shell *shell, t_ast *cmd)
 	while (tmp->next && shell->redir_error != 1)
 	{	
 		fd = get_fd(shell, tmp);
-		fprintf(stderr, "DEBUG 1, fd = %d\n", fd);
 		if (shell->tok[tmp->next_re] == TK_LESS)
 			implement_less(shell, tmp, fd);
 		else if (shell->tok[tmp->next_re] == TK_LESSAND)
@@ -259,21 +258,16 @@ void 		implement_redirs(t_shell *shell, t_ast *cmd)
 		else if (shell->tok[tmp->next_re] == TK_GREATAND)
 			implement_greatand(shell, tmp, fd);
 		else if (shell->tok[tmp->next_re] == TK_DGREAT)
-			implement_dgreat(shell, tmp, fd);
-		fprintf(stderr, "DEBUG 2\n");	
+			implement_dgreat(shell, tmp, fd);	
 	//	else if (shell->tok[tmp->next_re] == TK_DLESS)
 	//		implement_heredoc(tmp, counter++);
 		tmp = tmp->next;
 	}
-	fprintf(stderr, "DEBUG 3\n");
 	if (last_id >= 0)
 		implement_heredoc(cmd, shell->last_hd);
-	fprintf(stderr, "DEBUG 4\n");
 	if (shell->redir_error == 1)
 		cmd->cmd_ret = -1;
-	fprintf(stderr, "DEBUG 5\n");
 	ast_execute(shell, cmd);
-	fprintf(stderr, "DEBUG 6\n");
 }
 
 void		fill_redirs(t_shell *shell, t_ast *ast, int beg, int redir)

@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/11 19:27:28 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/11 19:45:48 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "builtins.h"
 #include <stdio.h>
 
-void		restore_std_fds(t_shell *shell, t_redirs *rd)
+void		restore_std_fds(t_shell *shell, t_ast *cmd, t_redirs *rd)
 {
 	t_redirs *tmp = rd;
 
@@ -27,10 +27,17 @@ void		restore_std_fds(t_shell *shell, t_redirs *rd)
 	close(shell->s_out);
 	dup2(shell->s_err, 2);
 	close(shell->s_err);
+	if (cmd->hd_check)
+	{
+		if (fcntl(cmd->hfd[0], F_GETFD) != -1)
+			close(cmd->hfd[0]);
+		if (fcntl(cmd->hfd[1], F_GETFD) != -1)	
+			close(cmd->hfd[1]);
+	}
 	while (tmp)
 	{
 		if (fcntl(tmp->new_fd, F_GETFD) != -1)	
-			close(tmp->new_fd);
+			close(tmp->new_fd);	
 /*		if (tmp->next_re == TK_DLESS)
 		{
 			if (fcntl(tmp->hfd[0], F_GETFD) != -1)
@@ -118,14 +125,8 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 	}
 	else if (shell->redir_error == 1)
 		shell->redir_error = 0;
-	fprintf(stderr, "ast_execute post-built-in, pre-fd restore\n");
 	if (cmd && cmd->redirs)
-	{
-		fprintf(stderr, "ast_execute, redirs found, restoring standard fds\n");
-		restore_std_fds(shell, cmd->redirs);
-		fprintf(stderr, "standard fds restored\n");
-	}
-	fprintf(stderr, "ast_execute fds restored, returning back to ast_evaluate\n");	
+		restore_std_fds(shell, cmd, cmd->redirs);
 	return (cmd->cmd_ret);
 
 }
