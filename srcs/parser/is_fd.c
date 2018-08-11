@@ -14,7 +14,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 static int		is_alldigit(char *str, int len)
 {
@@ -30,7 +29,7 @@ static int		is_alldigit(char *str, int len)
 	return (1);
 }
 
-int				is_fd(char *str, int len)	//receives token after redirect to check if fd or filename
+int				is_fd(char *str, int len)
 {
 	int		i;
     char	*buffer;
@@ -42,7 +41,6 @@ int				is_fd(char *str, int len)	//receives token after redirect to check if fd 
 	buffer = (char*)malloc(sizeof(char) * (ft_strlen(str) + 1));
 	ft_bzero(buffer, ft_strlen(str) + 1);
 	ft_strncpy(buffer, str, len);
-	//printf("in is_fd, buffer = %s\n", buffer);
 	if (fcntl(ft_atoi(buffer), F_GETFD) == -1)
 	{
 		free(buffer);

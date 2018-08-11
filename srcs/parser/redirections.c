@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/19 12:59:04 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/08 16:23:08 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/11 19:30:31 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 #include "lexer.h"
 #include "libft.h"
 #include "heredoc.h"
-#include <stdio.h>
 #include "builtins.h"
-#include <stdio.h>
 
 static void		redir_error(t_shell *shell, char *filename, int new_fd)
 {
@@ -32,11 +30,9 @@ static void		handle_prefix_syntax(t_shell *shell, t_ast *cmd)
 {
 	t_redirs	*tmp = NULL;
 
-	//for handling : > FILENAME CMD WORD WORD WORD into CMD WORD WORD WORD > FILENAME ..... IO
 	tmp = cmd->redirs;
 	if (tmp->next && (tmp->next->beg + 3) <= tmp->next->end)
 	{
-		/* here we presume that shell considers everything that follows FILENAME to be CMD + WORDS when written in prefix syntax */
 		tmp->beg = tmp->next->beg + 3;
 		tmp->end = tmp->next->end;
 		tmp->next->end = tmp->next->beg;
@@ -53,7 +49,7 @@ static void		shell_args_from_redirs(t_shell *shell, t_ast *cmd)
 
 	tmp = cmd->redirs;
 	beg = tmp->beg;
-	if (tmp->beg == tmp->next_re) //&& shell->tok[tmp->next_re] != TK_DLESS)
+	if (tmp->beg == tmp->next_re)
 	{
 		handle_prefix_syntax(shell, cmd);
 		return ;
@@ -205,43 +201,53 @@ static void	implement_lessand(t_shell *shell, t_redirs *node, int fd)
 }
 
 
-static void	implement_heredoc(t_redirs *node, int id)
+static void	implement_heredoc(t_ast *cmd, int id)
 {
 	char		*heredoc = NULL;
 
-	if (node)
+	if (cmd && id >= 0)
 	{
 		heredoc = heredoc_get(id);
 		if (heredoc)
 		{
-			pipe(node->hfd);
-			write(node->hfd[1], heredoc, ft_strlen(heredoc));
-			close(node->hfd[1]);
-			dup2(node->hfd[0], 0);
-			close(node->hfd[0]);
+			pipe(cmd->hfd);
+			write(cmd->hfd[1], heredoc, ft_strlen(heredoc));
+			close(cmd->hfd[1]);
+			dup2(cmd->hfd[0], 0);
+			close(cmd->hfd[0]);
 		}
 	}
-	//write(fd, heredoc, ft_strlen(heredoc));
-	//tmp->new_fd = 100000000;
+}
+
+static int	last_heredoc_id(t_shell *shell, t_redirs *node)
+{
+	t_redirs	*tmp;
+	int			id;
+
+	tmp = node;
+	id = (shell->last_hd < 0) ? -1 : 0;
+	while (tmp)
+	{
+		if (shell->tok[tmp->next_re] == TK_DLESS)
+			id++;
+		tmp = tmp->next;
+	}
+	shell->last_hd = (shell->last_hd < 0) ? id : shell->last_hd + id;
+	return (id);
 }
 
 void 		implement_redirs(t_shell *shell, t_ast *cmd)
 {
 	t_redirs	*tmp = NULL;
 	int 		fd;
-	int 		counter = 0;
-	//int			ionum = -1;
+	int			last_id;
 
-	//fprintf(stderr, "entering implement_redirs\n");
+	last_id = last_heredoc_id(shell, cmd->redirs);
+	cmd->hd_check = (last_id >= 0) ? 1 : 0;
 	shell_args_from_redirs(shell, cmd);
-//	fprintf(stdout, "here is the arg table in redirectory list : \n");
-//	ft_print_table(shell->args);
 	tmp = cmd->redirs;
-	while (tmp->next && shell->redir_error != 1)	//opens and closes respective fd before launching execution
-	{
-	//	fprintf(stderr, "tmp->beg = %d\n", tmp->beg);
-		//if (tmp->prev && tmp->next)
-		//	close(tmp->prev->new_fd);	
+	while (tmp->next && shell->redir_error != 1)
+	{	
 		fd = get_fd(shell, tmp);
 		if (shell->tok[tmp->next_re] == TK_LESS)
 			implement_less(shell, tmp, fd);
@@ -252,22 +258,15 @@ void 		implement_redirs(t_shell *shell, t_ast *cmd)
 		else if (shell->tok[tmp->next_re] == TK_GREATAND)
 			implement_greatand(shell, tmp, fd);
 		else if (shell->tok[tmp->next_re] == TK_DGREAT)
-			implement_dgreat(shell, tmp, fd);
-		else if (shell->tok[tmp->next_re] == TK_DLESS)
-		{
-	//		printf("sending id: %d to heredoc_get\n", counter);
-			implement_heredoc(tmp, counter++);
-		}
-		// potentially need one last IF for HEREDOC here
-	//	printf("after analyzing redir #%d, closed %d, opened %d\n", counter++, fd, tmp->new_fd);
-	//	printf("now, restoring standard fds within implement_redirs\n");
-	//	restore_std_fds(shell, 0);
-		tmp = tmp->next;	//if tmp->next, free list through tmp->prev
+			implement_dgreat(shell, tmp, fd);	
+	//	else if (shell->tok[tmp->next_re] == TK_DLESS)
+	//		implement_heredoc(tmp, counter++);
+		tmp = tmp->next;
 	}
+	if (last_id >= 0)
+		implement_heredoc(cmd, shell->last_hd);
 	if (shell->redir_error == 1)
 		cmd->cmd_ret = -1;
-//	fprintf(stderr, "exiting implement redirs for execution\n");
-	//shell->new_fd = tmp->prev->new_fd;
 	ast_execute(shell, cmd);
 }
 

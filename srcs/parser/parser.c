@@ -13,7 +13,6 @@
 #include "parser.h"
 #include "lexer.h"
 #include "libft.h"
-#include <stdio.h>
 
 int 			get_tk_end_pos(t_shell *shell)
 {
@@ -23,7 +22,6 @@ int 			get_tk_end_pos(t_shell *shell)
 	{
 		if (shell->tok[last] != TK_END && shell->tok[last] != -1)
 			last += 3;
-		//printf("last = %d\ntok[last] = %d\n", last, shell->tok[last]);
 		if (shell->tok[last] == TK_END)
 		{
 			if (shell->tok[last-3] == TK_NEWLINE)
@@ -40,22 +38,18 @@ int 			get_tk_end_pos(t_shell *shell)
 
 static int 		split_next_operator(t_shell *shell, t_ast *ast, int check_pipe)
 {
-	// check_pipe = 1 if searching for pipe token, 0 if searching for && or ||
 	int 	beg = ast->beg;
 	int 	end = ast->end;
 
-	//printf("entered split next operator, beg = %d, end = %d\n", beg, end);
 	while (end > beg)
 	{
-		//printf("end = %d, tok[end] = %d\n", end, shell->tok[end]);
 		if (shell->tok[end] == TK_PIPE && check_pipe == 1)
 			return (1);
 		else if ((shell->tok[end] == TK_AND_IF || shell->tok[end] == TK_OR_IF)
 			&& check_pipe == 0)
 			return (1);
 		end -= 3;
-	}
-	//printf("returning 0 instead of 1\n");
+	};
 	return (0);
 }
 
@@ -71,9 +65,6 @@ static void		ast_loop_pipe(t_ast *head, t_shell *shell)
 		if (shell->tok[i] == TK_PIPE)
 		{
 			tmp->split = i;
-			//i += 3;
-			//while (shell->tok[i] == TK_SPACE)
-			//	i += 3;
 			if (shell->tok[i] != TK_END && shell->tok[i] != -1)
 				tmp->right = fill_rightast(tmp);
 			if (tmp->split > 0)
@@ -124,14 +115,7 @@ static void		ast_loop_semi(t_ast *head, t_shell *shell)
 	int		i;
 	t_ast	*tmp = head;
 
-/*	if (tmp->parent)
-	{
-		if (tmp == tmp->parent->left)
-			printf("starting ast_loop_semi with LEFT, beg = %d, end = %d\n", tmp->beg, tmp->end);
-		else
-			printf("starting ast_loop_semi with RIGHT, beg = %d, end = %d\n", tmp->beg, tmp->end);
-	}
-*/	if ((i = tmp->end) <= 0)
+	if ((i = tmp->end) <= 0)
 		return ;
 	while (i > tmp->beg)
 	{
@@ -140,16 +124,9 @@ static void		ast_loop_semi(t_ast *head, t_shell *shell)
 			tmp->split = i;
 			tmp->right = fill_rightast(tmp);
 			if (split_next_operator(shell, tmp->right, 0) == 1)
-			{
-				//printf("sending tmp->right from semi to and_or split function\n");
 				ast_loop_and_or(tmp->right, shell);
-			}
 			else if (split_next_operator(shell, tmp->right, 1) == 1)
-			{
-				//printf("sending tmp->right from semi to pipe function\n");
 				ast_loop_pipe(tmp->right, shell);
-			}
-			//printf("tmp->split = %d\n", tmp->split);
 			if (tmp->split > 0)
 			{
 				tmp->left = fill_leftast(tmp);
