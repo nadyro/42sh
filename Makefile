@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+         #
+#    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/08 15:04:47 by nsehnoun         ###   ########.fr        #
+#    Updated: 2018/08/12 15:22:31 by arohani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,10 +35,16 @@ SRC_FILES = main.c \
 			parser/execute.c \
 			parser/parser_validation.c \
 			parser/redirections.c \
+			parser/redirect_implementation.c \
+			parser/redirect_construct.c \
+			parser/redirect_heredoc.c \
+			parser/arg_table.c \
 			parser/is_fd.c \
 			parser/pipes.c \
 			parser/token2str.c \
-			parser/ast.c \
+			parser/ast_evaluate.c \
+			parser/ast_construct.c \
+			parser/ast_free.c \
 			\
 			builtins/add_to_mod.c \
 			builtins/ash_exec.c \
@@ -64,7 +70,6 @@ SRC_FILES = main.c \
 			builtins/history_builtins_4.c \
 			builtins/history_builtins_5.c \
 			builtins/history_options.c \
-			builtins/history_flags.c \
 			\
 			line_edit/line_edit_main_loop.c \
 			line_edit/termanip.c \

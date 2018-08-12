@@ -88,7 +88,8 @@ void		main_loop(char *line, t_shell shell)
 				else
 					printf("error: no token table was compiled in main\n");
 				//printf("TREE COMPILED, SENDING TO printLeafNodes\n\n\n");
-				ast_loop(&shell, head);
+				ast_evaluate(head, &shell);
+				free_ast(head);
 				ft_strdel(&line);
 				ft_strdel(&(shell.line));
 			}

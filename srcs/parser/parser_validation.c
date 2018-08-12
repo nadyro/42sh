@@ -6,7 +6,7 @@
 /*   By: antoipom <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 12:45:57 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/02 16:39:49 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/08/12 13:29:29 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ static void		parsing_error(int *tk_arr, int i, char *line)
 {
 	ft_putstr_fd("parse error near '", 2);
 	if (tk_arr[i] == TK_NEWLINE)
-		ft_putstr_fd("\\n", 2); 
-	else 
-		write(2, line + tk_arr[i + 1], tk_arr[i + 2]); 
+		ft_putstr_fd("\\n", 2);
+	else
+		write(2, line + tk_arr[i + 1], tk_arr[i + 2]);
 	write(2, "'\n", 2);
 }
 
