@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/12 16:36:42 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/12 16:52:32 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void	evaluate_redirs(t_shell *shell, t_ast *ast, int ret)
 	shell->s_err = dup(2);
 	implement_redirs(shell, ast);
 	if (ast && ast->redirs)
-		restore_std_fds(shell, ast, ast->redirs);	
+		restore_std_fds(shell, ast, ast->redirs);
 	free_redirs(ast->redirs);
 }
 
