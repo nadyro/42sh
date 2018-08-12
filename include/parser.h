@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:27:44 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/12 16:21:48 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/12 16:34:27 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct	s_ast
 	t_redirs				*redirs;
 	struct s_ast			*right;
 }				t_ast;
+
 char			*token2str(int *token, char *str, char **env);
 int				parser_validation(int *tk_arr, char *ine);
 void			ast_loop_semi(t_ast *head, t_shell *shell, int i);
@@ -61,7 +62,6 @@ int				ast_evaluate(t_ast *ast, t_shell *shell);
 t_ast			*fill_leftast(t_ast *parent);
 t_ast			*fill_rightast(t_ast *parent);
 t_ast			*init_ast(t_shell *shell);
-void			ast_loop(t_shell *shell, t_ast *ast);
 int				ast_execute(t_shell *shell, t_ast *cmd);
 int				*redirect_check(t_shell *shell);
 int				is_redirect(t_shell *shell, t_ast *ast, int beg, int end);
