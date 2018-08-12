@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/11 19:29:06 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/12 13:42:58 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,45 +93,6 @@ t_ast		*init_ast(t_shell *shell)
 	head->left = NULL;
 	head->right = NULL;	
 	return (head);
-}
-
-void		create_arg_table(t_shell *shell, int beg, int end)
-{
-	int		i = beg;
-	int		last = 0;
-	
-	if (end < beg)
-		shell->args = NULL;
-	else
-	{
-		while (i <= end)
-		{
-			while (shell->tok[i] == TK_SPACE || shell->tok[i] == TK_NEWLINE)
-				i += 3;
-			if (shell->tok[i] != TK_END && shell->tok[i] != TK_SPACE && shell->tok[i] != TK_NEWLINE)
-				last++;
-			if (shell->tok[i] != TK_END)
-				i += 3;
-		}
-		if (last)
-		{
-			if (!(shell->args = (char **)malloc(sizeof(char *) * (last + 1))))
-				return ;
-			shell->args[last] = 0;
-			last = 0;
-			i = beg;
-			while (i <= end)
-			{
-				while (shell->tok[i] == TK_SPACE || shell->tok[i] == TK_NEWLINE)
-					i += 3;
-				if (shell->tok[i] != TK_SPACE && shell->tok[i] != TK_NEWLINE && shell->tok[i] != TK_END)
-				{
-					shell->args[last++] = token2str(&shell->tok[i], shell->line, shell->envv);
-					i += 3;
-				}
-			}
-		}
-	}
 }
 
 int         ast_evaluate(t_ast *ast, t_shell *shell)

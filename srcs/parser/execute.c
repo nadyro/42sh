@@ -6,14 +6,13 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/11 19:45:48 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/12 14:13:29 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "lexer.h"
 #include "libft.h"
-#include <stdio.h>
 #include "builtins.h"
 #include <stdio.h>
 
@@ -21,12 +20,6 @@ void		restore_std_fds(t_shell *shell, t_ast *cmd, t_redirs *rd)
 {
 	t_redirs *tmp = rd;
 
-	dup2(shell->s_in, 0);
-	close(shell->s_in);
-	dup2(shell->s_out, 1);
-	close(shell->s_out);
-	dup2(shell->s_err, 2);
-	close(shell->s_err);
 	if (cmd->hd_check)
 	{
 		if (fcntl(cmd->hfd[0], F_GETFD) != -1)
@@ -37,16 +30,15 @@ void		restore_std_fds(t_shell *shell, t_ast *cmd, t_redirs *rd)
 	while (tmp)
 	{
 		if (fcntl(tmp->new_fd, F_GETFD) != -1)	
-			close(tmp->new_fd);	
-/*		if (tmp->next_re == TK_DLESS)
-		{
-			if (fcntl(tmp->hfd[0], F_GETFD) != -1)
-				close(tmp->hfd[0]);
-			if (fcntl(tmp->hfd[1], F_GETFD) != -1)	
-				close(tmp->hfd[1]);
-		}
-*/		tmp = tmp->next;
+			close(tmp->new_fd);
+		tmp = tmp->next;
 	}
+	dup2(shell->s_in, 0);
+	close(shell->s_in);
+	dup2(shell->s_out, 1);
+	close(shell->s_out);
+	dup2(shell->s_err, 2);
+	close(shell->s_err);
 }
 
 static void	launch_exec(t_shell *shell, char *full_path, t_ast *cmd)

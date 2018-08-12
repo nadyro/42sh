@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/25 17:13:07 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/01 12:05:19 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/12 13:24:37 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 static int		is_alldigit(char *str, int len)
 {
-	int i;
+	int		i;
 
 	i = 0;
 	while (i < len)
@@ -32,8 +32,8 @@ static int		is_alldigit(char *str, int len)
 int				is_fd(char *str, int len)
 {
 	int		i;
-    char	*buffer;
-    int     fd;
+	char	*buffer;
+	int		fd;
 
 	i = 0;
 	if (is_alldigit(str, len) == 0)
@@ -46,8 +46,8 @@ int				is_fd(char *str, int len)
 		free(buffer);
 		ft_putendl_fd("Bad file descriptor", 2);
 		return (-1);
-    }
-    fd = ft_atoi(buffer);
+	}
+	fd = ft_atoi(buffer);
 	free(buffer);
 	return (fd);
 }

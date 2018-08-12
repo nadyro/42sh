@@ -4,6 +4,9 @@
         "lexer.h": "c",
         "fstream": "c",
         "locale": "c",
-        "iterator": "c"
+        "iterator": "c",
+        "parser.h": "c",
+        "builtins.h": "c",
+        "stdio.h": "c"
     }
 }

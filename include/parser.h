@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:27:44 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/11 19:46:23 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/12 13:45:30 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,15 @@ void			fill_redirs(t_shell *shell, t_ast *ast, int beg, int redir);
 void			implement_redirs(t_shell *shell, t_ast *cmd);
 void			restore_std_fds(t_shell *shell, t_ast *cmd, t_redirs *rd);
 int				evaluate_pipe_node(t_shell *shell, t_ast *cmd);
+void			implement_great(t_shell *shell, t_redirs *node, int fd);
+void			implement_dgreat(t_shell *shell, t_redirs *node, int fd);
+void			implement_greatand(t_shell *shell, t_redirs *node, int fd);
+void			implement_less(t_shell *shell, t_redirs *node, int fd);
+void			implement_lessand(t_shell *shell, t_redirs *node, int fd);
+void			implement_heredoc(t_ast *cmd, int id);
+int     		last_heredoc_id(t_shell *shell, t_redirs *node);
+void			redir_error(t_shell *shell, char *filename, int new_fd);
+void			shell_args_from_redirs(t_shell *shell, t_ast *cmd);
 void			free_ast(t_ast *head);
 
 #endif

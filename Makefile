@@ -6,7 +6,7 @@
 #    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/11 20:03:21 by arohani          ###   ########.fr        #
+#    Updated: 2018/08/12 13:43:43 by arohani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,10 @@ SRC_FILES = main.c \
 			parser/execute.c \
 			parser/parser_validation.c \
 			parser/redirections.c \
+			parser/redirect_implementation.c \
+			parser/redirect_construct.c \
+			parser/redirect_heredoc.c \
+			parser/arg_table.c \
 			parser/is_fd.c \
 			parser/pipes.c \
 			parser/token2str.c \
