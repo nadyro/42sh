@@ -6,7 +6,7 @@
 #    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/12 13:43:43 by arohani          ###   ########.fr        #
+#    Updated: 2018/08/12 15:22:31 by arohani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,9 @@ SRC_FILES = main.c \
 			parser/is_fd.c \
 			parser/pipes.c \
 			parser/token2str.c \
-			parser/ast.c \
+			parser/ast_evaluate.c \
+			parser/ast_construct.c \
+			parser/ast_free.c \
 			\
 			builtins/add_to_mod.c \
 			builtins/ash_exec.c \

@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:27:44 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/12 13:45:30 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/12 15:18:24 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,6 @@ int     		last_heredoc_id(t_shell *shell, t_redirs *node);
 void			redir_error(t_shell *shell, char *filename, int new_fd);
 void			shell_args_from_redirs(t_shell *shell, t_ast *cmd);
 void			free_ast(t_ast *head);
+void		    free_redirs(t_redirs *list);
 
 #endif
