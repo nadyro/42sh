@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:27:44 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/12 15:18:24 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/12 16:21:48 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,9 @@ typedef struct	s_ast
 }				t_ast;
 char			*token2str(int *token, char *str, char **env);
 int				parser_validation(int *tk_arr, char *ine);
+void			ast_loop_semi(t_ast *head, t_shell *shell, int i);
+void			ast_loop_and_or(t_ast *head, t_shell *shell, int i);
+void			ast_loop_pipe(t_ast *head, t_shell *shell, int i);
 void			create_arg_table(t_shell *shell, int beg, int end);
 int				get_tk_end_pos(t_shell *shell);
 t_ast			*get_ast(t_shell *shell);

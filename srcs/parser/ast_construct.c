@@ -6,13 +6,36 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/12 15:11:52 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/12 15:16:41 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/12 16:22:16 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "lexer.h"
 #include "libft.h"
+
+int			get_tk_end_pos(t_shell *shell)
+{
+	int		last;
+
+	last = 0;
+	while (shell->tok[last] != -1 && shell->tok[last] != TK_END)
+	{
+		if (shell->tok[last] != TK_END && shell->tok[last] != -1)
+			last += 3;
+		if (shell->tok[last] == TK_END)
+		{
+			if (shell->tok[last - 3] == TK_NEWLINE)
+			{
+				shell->tok[last - 3] = TK_END;
+				return (last - 3);
+			}
+			return (last);
+		}
+	}
+	ft_putstr_fd("Error : No end token found\n", 2);
+	return (-1);
+}
 
 t_ast		*fill_leftast(t_ast *parent)
 {
@@ -56,5 +79,23 @@ t_ast		*init_ast(t_shell *shell)
 	head->end = get_tk_end_pos(shell) - 3;
 	head->left = NULL;
 	head->right = NULL;
+	return (head);
+}
+
+t_ast		*get_ast(t_shell *shell)
+{
+	t_ast	*head;
+	t_ast	*tmp;
+
+	if (shell->line[ft_strlen(shell->line) - 1] == '\n')
+		shell->line[ft_strlen(shell->line) - 1] = '\0';
+	head = init_ast(shell);
+	tmp = head;
+	if (ft_strchr(shell->line, ';'))
+		ast_loop_semi(tmp, shell, 0);
+	else if (ft_strstr(shell->line, "&&") || ft_strstr(shell->line, "||"))
+		ast_loop_and_or(tmp, shell, 0);
+	else if (ft_strchr(shell->line, '|'))
+		ast_loop_pipe(tmp, shell, 0);
 	return (head);
 }
