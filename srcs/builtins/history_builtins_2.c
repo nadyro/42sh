@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history_builtins_2.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 02:11:12 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/08 01:06:09 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/12 21:28:00 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,11 @@ t_node	*get_last_cmds(t_node *history, int nbr)
 	}
 	i = 0;
 	while (i < y)
-		ft_putendl(last_cmds[i++]);
+	{
+		ft_putnbr(i + 1);
+		ft_putchar(' ');
+		ft_putendl(last_cmds[i++]);		
+	}
 	clean_tabs(last_cmds, 0);
 	return (history);
 }

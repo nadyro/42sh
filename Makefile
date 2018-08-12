@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
+#    By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/12 15:22:31 by arohani          ###   ########.fr        #
+#    Updated: 2018/08/12 23:30:09 by kernel_pani      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,6 +70,7 @@ SRC_FILES = main.c \
 			builtins/history_builtins_4.c \
 			builtins/history_builtins_5.c \
 			builtins/history_options.c \
+			builtins/history_flags.c \
 			\
 			line_edit/line_edit_main_loop.c \
 			line_edit/termanip.c \
