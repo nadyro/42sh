@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/12 13:38:32 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/12 13:39:01 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/12 14:51:38 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 void		fill_redirs(t_shell *shell, t_ast *ast, int beg, int redir)
 {
 	t_redirs	*tmp;
-	int 		ret;
+	int			ret;
 
 	if (!(tmp = (t_redirs *)malloc(sizeof(t_redirs))))
 		return ;
@@ -47,7 +47,7 @@ void		fill_redirs(t_shell *shell, t_ast *ast, int beg, int redir)
 
 int			is_redirect(t_shell *shell, t_ast *ast, int beg, int end)
 {
-	t_redirs		*tmp = NULL;
+	t_redirs		*tmp;
 
 	while (beg <= end)
 	{

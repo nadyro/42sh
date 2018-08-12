@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/12 13:40:15 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/12 14:05:58 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/12 14:50:13 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@
 
 void	implement_heredoc(t_ast *cmd, int id)
 {
-	char		*heredoc = NULL;
+	char		*heredoc;
 
+	heredoc = NULL;
 	if (cmd && id >= 0)
 	{
 		heredoc = heredoc_get(id);
@@ -34,7 +35,7 @@ void	implement_heredoc(t_ast *cmd, int id)
 	}
 }
 
-int     last_heredoc_id(t_shell *shell, t_redirs *node)
+int		last_heredoc_id(t_shell *shell, t_redirs *node)
 {
 	t_redirs	*tmp;
 	int			id;
