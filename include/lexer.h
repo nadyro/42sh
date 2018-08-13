@@ -6,7 +6,7 @@
 /*   By: antoipom <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/07 14:13:58 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/08 17:00:00 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/08/12 23:30:11 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LEXER_H
 
 # include <stddef.h>
+# include "sh_line_edit.h"
 
 enum
 {
@@ -59,5 +60,15 @@ enum
 };
 
 int						*get_tokens(char **line);
+
+/*
+**	HISTORY PART
+*/
+
+/*
+**	Save list history
+*/
+void					*history_ptr(int cmd, void *ptr);
+char					*bang_replace(int *token, char *line);
 
 #endif

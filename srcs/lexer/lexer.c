@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/04 13:13:10 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/08 18:15:20 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/08/13 02:48:08 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,19 +219,14 @@ static int		*check_cmd_token(int *tk_arr)
 	return (tk_arr);
 }
 
-char			*history_by_nadir(int *token, char *line)
-{
-	(void)token;
-	(void)line;
-	return (ft_strdup("STRING\n"));
-}
-
 int				*get_tokens(char **line)
 {
 	int		arr_size;
 	int		*tk_arr;
 	int		i;
+	char	*tmp;
 
+	tmp = NULL;
 	i = 0;
 	arr_size = 1024;
 	tk_arr = (int*)malloc(sizeof(int) * arr_size);
@@ -247,9 +242,26 @@ int				*get_tokens(char **line)
 				heredoc_add(&tk_arr[i], *line);
 			if (tk_arr[i] == TK_HISTORY)
 			{
-				*line = history_by_nadir(&tk_arr[i], *line);
-				free(tk_arr);
-				return (get_tokens(line));
+				//sleep(1);
+				if ((tmp = bang_replace(&tk_arr[i], *line)) != NULL && tk_arr[i] == TK_HISTORY)
+				{
+					free(*line);
+					*line = tmp;
+					free(tk_arr);
+					return (get_tokens(line));
+				}
+				else if (!tmp && tk_arr[i] == TK_WORD)
+				{
+					printf("token word\n");
+					//history_ptr(4, NULL);			
+				}
+				else if (!tmp)
+				{
+					free(*line);
+					*line = NULL;
+					free(tk_arr);
+					return (NULL);
+				}
 			}
 			i += 3;
 		}

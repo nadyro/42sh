@@ -6,7 +6,7 @@
 #    By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/08 19:33:52 by azybert           #+#    #+#              #
-#    Updated: 2018/07/30 04:02:07 by azybert          ###   ########.fr        #
+#    Updated: 2018/08/12 20:00:16 by tcanaud          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,6 +83,9 @@ FILES = ft_memset.c \
 		ft_strmerge.c \
 		ft_strcmerge.c \
 		ft_fusion_sort.c \
+		ft_strnstr2.c \
+		ft_natoi.c \
+		ft_putbyte.c
 
 OBJ = $(FILES:.c=.o)
 

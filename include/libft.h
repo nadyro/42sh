@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/14 11:26:13 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/05 16:52:54 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/12 19:59:51 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,9 @@ char			**ft_split_whitespaces(char *str);
 char			*ft_strmerge(char **to_merge);
 char			*ft_strcmerge(char **to_merge, char c);
 char			*ft_strndup(const char *s1, size_t n);
+char			*ft_strnstr2(const char *big, const char *little, size_t len);
+int				ft_natoi(char *s, int len);
+void			ft_putbyte(void *s, size_t len);
 
 typedef struct	s_list
 {
