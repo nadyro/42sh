@@ -71,6 +71,7 @@ void		main_loop(char *line, t_shell shell)
 	while (1)
 	{
 		line = line_mgmt(line, shell.history);
+		history_m(0, shell.history);
 		if (line && (shell.tok = get_tokens(&line)) != NULL)
 		{
 			if ((parser_ret = parser_validation(shell.tok, line)) == 1)

@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/04 13:13:10 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/08 18:15:20 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/08/13 06:05:31 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,24 +101,24 @@ int				g_tk_states[2][39][16] = {
 };
 
 int				g_ascii[128] = {
-	END, 0, 0, 0, 0, 0, 0, 0, 0, TAB, NEWLINE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,\
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, SPACE, BANG, DQUOTE, COMMENT, ANY, ANY, AND,\
-	QUOTE, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, IO_NUMBER, IO_NUMBER,\
-	IO_NUMBER, IO_NUMBER, IO_NUMBER, IO_NUMBER, IO_NUMBER, IO_NUMBER,\
-	IO_NUMBER, IO_NUMBER, ANY, SEMI, LESS, ANY, GREAT, ANY, ANY, ANY, ANY, ANY,\
-	ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY,\
-	ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ESCAPE, ANY, ANY, ANY, ANY,\
-	ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY,\
-	ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, PIPE, ANY, ANY,\
+	END, 0, 0, 0, 0, 0, 0, 0, 0, TAB, NEWLINE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, SPACE, BANG, DQUOTE, COMMENT, ANY, ANY, AND,
+	QUOTE, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, IO_NUMBER, IO_NUMBER,
+	IO_NUMBER, IO_NUMBER, IO_NUMBER, IO_NUMBER, IO_NUMBER, IO_NUMBER,
+	IO_NUMBER, IO_NUMBER, ANY, SEMI, LESS, ANY, GREAT, ANY, ANY, ANY, ANY, ANY,
+	ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY,
+	ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ESCAPE, ANY, ANY, ANY, ANY,
+	ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY,
+	ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, ANY, PIPE, ANY, ANY,
 	ANY
 };
 
 int				g_state_to_token[40] = {
-	0, 0, TK_END, TK_WORD, 0, TK_WORD, 0, TK_WORD, 0, TK_WORD, \
-	0, TK_NEWLINE, TK_IO_NUMBER, TK_WORD, TK_GREAT, TK_DGREAT, TK_GREATAND, \
-	TK_LESS, TK_DLESS, TK_LESSAND, TK_PIPE, TK_SEMI, TK_COMMENT, TK_SPACE, 0, \
-	0, TK_WORD, TK_AND_IF, TK_OR_IF, TK_HISTORY, 0, 0, TK_HISTORY, 0, 0, TK_HISTORY,
-	0, TK_HISTORY, 0, TK_HISTORY
+	0, 0, TK_END, TK_WORD, 0, TK_WORD, 0, TK_WORD, 0, TK_WORD,
+	0, TK_NEWLINE, TK_IO_NUMBER, TK_WORD, TK_GREAT, TK_DGREAT, TK_GREATAND,
+	TK_LESS, TK_DLESS, TK_LESSAND, TK_PIPE, TK_SEMI, TK_COMMENT, TK_SPACE, 0,
+	0, TK_WORD, TK_AND_IF, TK_OR_IF, TK_HISTORY, 0, 0, TK_HISTORY, 0, 0,
+	TK_HISTORY, 0, TK_HISTORY, 0, TK_HISTORY
 };
 
 static int		*lexer_alloc(int *tk_arr, int *arr_size)
@@ -129,7 +129,7 @@ static int		*lexer_alloc(int *tk_arr, int *arr_size)
 	i = 0;
 	*arr_size = *arr_size * 2;
 	new = (int*)malloc(sizeof(int) * (*arr_size));
-	(new == NULL) ? exit(1) : 0; //error handling?
+	(new == NULL) ? exit(1) : 0;
 	ft_memset(new, -1, *arr_size * sizeof(int));
 	while (tk_arr[i] != -1)
 	{
@@ -156,7 +156,6 @@ static int		*token_loop(int *tk_arr, char *line, int arr_size, int i)
 		prev = tk_arr[tk_i];
 		tk_arr[tk_i] = g_tk_states[0][tk_arr[tk_i] - 1][g_ascii[(int)line[i]]];
 		i += (g_tk_states[1][prev - 1][g_ascii[(int)line[i]]]);
-//		(tk_arr[tk_i] == 0) ? main_loop(line) : 0; //////////////
 		if (tk_arr[tk_i] == 1 && prev != 22 && prev != 23)
 		{
 			tk_arr[tk_i] = prev;
@@ -164,66 +163,8 @@ static int		*token_loop(int *tk_arr, char *line, int arr_size, int i)
 			tk_i += 3;
 		}
 	}
-	if (tk_arr[tk_i] == 0)
-	{
-		free(tk_arr);
-		tk_arr = NULL;
-	}
+	tk_arr[tk_i] == 0 ? ft_ptrclear((void*)&tk_arr) : 0;
 	return (tk_arr);
-}
-
-static int		*check_filename_token(int *tk_arr)
-{
-	int i;
-	int is_file;
-
-	i = 0;
-	is_file = 0;
-	while (tk_arr[i] != -1)
-	{
-		if (tk_arr[i] == TK_WORD && is_file == 1)
-		{
-			tk_arr[i] = TK_FILENAME;
-			is_file = 0;
-		}
-		else if (is_file == 0 && (tk_arr[i] == TK_GREAT || \
-					tk_arr[i] == TK_DGREAT || tk_arr[i] == TK_GREATAND || \
-					tk_arr[i] == TK_LESS || tk_arr[i] == TK_DLESS || \
-					tk_arr[i] == TK_LESSAND))
-			is_file = 1;
-		i += 3;
-	}
-	return (tk_arr);
-}
-
-static int		*check_cmd_token(int *tk_arr)
-{
-	int i;
-	int	is_first_word;
-
-	i = 0;
-	is_first_word = 1;
-	while (tk_arr[i] != -1)
-	{
-		if (tk_arr[i] == TK_WORD && is_first_word == 1)
-		{
-			tk_arr[i] = TK_CMD;
-			is_first_word = 0;
-		}
-		else if (is_first_word == 0 && (tk_arr[i] == TK_PIPE || \
-				tk_arr[i] == TK_SEMI || tk_arr[i] == TK_AND_IF || \
-				tk_arr[i] == TK_OR_IF || tk_arr[i] == TK_NEWLINE))
-			is_first_word = 1;
-		i += 3;
-	}
-	return (tk_arr);
-}
-
-char			*history_by_nadir(int *token, char *line)
-{
-	(void)token;
-	(void)line;
-	return (ft_strdup("STRING\n"));
 }
 
 int				*get_tokens(char **line)
@@ -231,31 +172,20 @@ int				*get_tokens(char **line)
 	int		arr_size;
 	int		*tk_arr;
 	int		i;
+	int		r;
 
 	i = 0;
 	arr_size = 1024;
 	tk_arr = (int*)malloc(sizeof(int) * arr_size);
-	(tk_arr == NULL || !line || !(*line)) ? exit(1) : heredoc_manager(0); //error handling?
+	(tk_arr == NULL || !line || !(*line)) ? exit(1) : heredoc_manager(0);
 	memset(tk_arr, -1, arr_size * sizeof(int));
 	tk_arr = token_loop(tk_arr, *line, arr_size, 0);
 	if (tk_arr != NULL)
-	{
-		while (tk_arr[i] != -1)
-		{
-			tk_arr[i] = g_state_to_token[tk_arr[i]];
-			if (i > 2 && tk_arr[i] == TK_WORD && tk_arr[i - 3] == TK_DLESS)
-				heredoc_add(&tk_arr[i], *line);
-			if (tk_arr[i] == TK_HISTORY)
-			{
-				*line = history_by_nadir(&tk_arr[i], *line);
-				free(tk_arr);
-				return (get_tokens(line));
-			}
-			i += 3;
-		}
-		tk_arr = check_filename_token(tk_arr);
-		tk_arr = check_cmd_token(tk_arr);
-	}
+		get_tokens_loop(tk_arr, i, line, g_state_to_token);
+	if ((r = precheck_history_token(tk_arr, line)) == 1)
+		return (get_tokens(line));
+	else if (r == 2)
+		return (NULL);
 	(heredoc_manager(1)) ? heredoc_fill() : 0;
 	return (tk_arr);
 }

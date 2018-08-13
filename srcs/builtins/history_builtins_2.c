@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history_builtins_2.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 02:11:12 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/05 23:53:09 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/12 21:28:00 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,21 @@ t_node	*get_last_cmds(t_node *history, int nbr)
 	}
 	i = 0;
 	while (i < y)
-		ft_putendl(last_cmds[i++]);
+	{
+		ft_putnbr(i + 1);
+		ft_putchar(' ');
+		ft_putendl(last_cmds[i++]);		
+	}
 	clean_tabs(last_cmds, 0);
 	return (history);
+}
+
+void	free_after_del(t_node *to_free, t_shell *shell)
+{
+	free(to_free->cmd);
+	free(to_free);
+	shell->history_length--;
+	shell->o_history--;
 }
 
 t_node	*fill_arg_file(t_node *history, t_shell *shell)
@@ -76,7 +88,7 @@ void	append_history_mem_to_arg(t_shell *shell)
 		O_RDWR, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	if (i > 0)
 	{
-		while (history->next != NULL)
+		while (history && history->next != NULL)
 			history = history->next;
 		while (history != NULL)
 		{

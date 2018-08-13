@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:27:44 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/12 16:34:27 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/13 05:33:38 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,5 +81,8 @@ void			redir_error(t_shell *shell, char *filename, int new_fd);
 void			shell_args_from_redirs(t_shell *shell, t_ast *cmd);
 void			free_ast(t_ast *head);
 void		    free_redirs(t_redirs *list);
+int				t2s_init(t_t2s **t2s);
+int				t2s_realloc(t_t2s *t2s, char buffer);
+int				t2s_init_b(t_t2s *t2s);
 
 #endif
