@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+         #
+#    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/13 05:52:31 by tcanaud          ###   ########.fr        #
+#    Updated: 2018/08/13 14:41:47 by arohani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,6 @@ SRC_FILES = main.c \
 			parser/ast_free.c \
 			\
 			builtins/add_to_mod.c \
-			builtins/ash_exec.c \
 			builtins/bin.c \
 			builtins/cd.c \
 			builtins/cd_canon.c \
