@@ -6,7 +6,7 @@
 #    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/13 14:41:47 by arohani          ###   ########.fr        #
+#    Updated: 2018/08/13 14:50:58 by arohani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,8 +61,8 @@ SRC_FILES = main.c \
 			builtins/path.c \
 			builtins/pwd.c \
 			builtins/setenv.c \
-			builtins/shell.c \
 			builtins/unsetenv.c \
+			builtins/history.c \
 			builtins/history_builtins_0.c \
 			builtins/history_builtins_1.c \
 			builtins/history_builtins_2.c \
