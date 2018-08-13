@@ -6,7 +6,7 @@
 /*   By: tcanaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/13 03:30:31 by tcanaud           #+#    #+#             */
-/*   Updated: 2018/08/13 05:47:36 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/13 06:07:14 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int			check_history_token(int *token, char **line)
 	return (h);
 }
 
-int		precheck_history_token(int *tk_arr, char **line)
+int			precheck_history_token(int *tk_arr, char **line)
 {
 	int	r;
 
