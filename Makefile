@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
+#    By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/12 15:22:31 by arohani          ###   ########.fr        #
+#    Updated: 2018/08/13 05:52:31 by tcanaud          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,7 @@ SRC_FILES = main.c \
 			parser/is_fd.c \
 			parser/pipes.c \
 			parser/token2str.c \
+			parser/token2str_init.c \
 			parser/ast_evaluate.c \
 			parser/ast_construct.c \
 			parser/ast_free.c \
@@ -70,6 +71,7 @@ SRC_FILES = main.c \
 			builtins/history_builtins_4.c \
 			builtins/history_builtins_5.c \
 			builtins/history_options.c \
+			builtins/history_flags.c \
 			\
 			line_edit/line_edit_main_loop.c \
 			line_edit/termanip.c \
@@ -91,7 +93,11 @@ SRC_FILES = main.c \
 			line_edit/prompt_utils.c \
 			line_edit/sig_ignore.c \
 			\
-			heredoc/heredoc.c
+			heredoc/heredoc.c \
+			\
+			lexer/check_history_token.c \
+			lexer/history_token.c \
+			lexer/get_tokens_loop.c
 
 INC_FILES = lexer.h \
 			parser.h \
