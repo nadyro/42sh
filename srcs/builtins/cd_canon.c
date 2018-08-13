@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/09 15:16:39 by pbie              #+#    #+#             */
-/*   Updated: 2018/08/13 16:43:38 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/13 19:18:01 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,35 +55,65 @@ int			cd_get_last(t_shell *shell, char ***split)
 	return (i);
 }
 
-static void	process_canon(char **tabs, char **str, int i)
+/*static char	*process_canon(t_shell *shell, char ***tab_address)
 {
 	char	*clean;
 	char	*tmp;
+	char	**tabs;
+	int		i;
 
-	clean = *str;
+	i = 0;
+	tabs = *tab_address;
 	tmp = NULL;
-	if (tabs[i] && ft_strcmp(tabs[i], "."))
+	clean = NULL;
+	if (ARG[0] != '/')
+		grab_pwd(shell, &clean);
+	else
+		clean = ft_strdup("/");	
+	while (tabs && tabs[i])
 	{
-		if (!clean)
-			clean = ft_strjoin(tabs[i], "/");
-		else if (clean && tabs[i])
+		if (tabs[i] && ft_strcmp(tabs[i], "."))
 		{
-			tmp = ft_strjoin(clean, tabs[i]);
-			free(clean);
-			*str = (tabs[i + 1]) ? ft_strjoin(tmp, "/") : ft_strdup(tmp);
-			ft_strdel(&tmp);
+			if (!clean)
+				clean = ft_strjoin(tabs[i], "/");
+			else if (clean && tabs[i])
+			{
+				tmp = ft_strjoin(clean, tabs[i]);
+				ft_strdel(&clean);
+				clean = (tabs[i + 1]) ? ft_strjoin(tmp, "/") : ft_strdup(tmp);
+				ft_strdel(&tmp);
+			}
 		}
+		i++;
 	}
+	return (clean);
 }
 
 void		cd_canon(t_shell *shell)
 {
 	char	*clean;
-	int		i;
 	char	**tabs;
 
-	clean = NULL;
-	i = 0;
+	#include <stdio.h>
+	tabs = (shell->st > -1) ? ft_strsplit(ARG, '/') : NULL;
+	clean = process_canon(shell, &tabs);
+	fprintf(stderr, "after process_canon, clean = %s\n", clean);
+	free_table(tabs);
+	ft_strdel(&(ARG));
+	ARG = ft_strdup(clean);
+	ft_strdel(&clean);
+	if (ft_strstr(ARG, ".."))
+		handle_dot_dots(shell);
+}
+*/
+
+void	    cd_canon(t_shell *shell)
+{
+	char	*clean = NULL;
+	char	*tmp = NULL;
+	int		i = 0;
+	char	**tabs;
+
 	tabs = (shell->st > -1) ? ft_strsplit(ARG, '/') : NULL;
 	if (ARG[0] != '/')
 		grab_pwd(shell, &clean);
@@ -91,7 +121,18 @@ void		cd_canon(t_shell *shell)
 		clean = ft_strdup("/");
 	while (tabs && tabs[i])
 	{
-		process_canon(tabs, &clean, i);
+		if (tabs[i] && ft_strcmp(tabs[i], "."))
+		{
+			if (!clean)
+				clean = ft_strjoin(tabs[i], "/");
+			else if (clean && tabs[i])
+			{
+				tmp = ft_strjoin(clean, tabs[i]);
+				ft_strdel(&clean);
+				clean = (tabs[i+1]) ? ft_strjoin(tmp, "/") : ft_strdup(tmp);
+				ft_strdel(&tmp);
+			}
+		}
 		i++;
 	}
 	free_table(tabs);

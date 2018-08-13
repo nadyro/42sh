@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/12 16:36:17 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/13 18:26:43 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "lexer.h"
 #include "libft.h"
 #include "builtins.h"
-#include <stdio.h>
 
 void		restore_std_fds(t_shell *shell, t_ast *cmd, t_redirs *rd)
 {
@@ -46,7 +45,15 @@ static void	launch_exec(t_shell *shell, char *full_path, t_ast *cmd)
 {
 	struct stat		tmp;
 
-	if (execve(shell->args[0], shell->args, shell->envv) == -1)
+	if (access(shell->args[0], F_OK) && access(full_path, F_OK))
+	{
+		ft_putstr_fd(shell->args[0], 2);
+		(shell->args[0][0] == '/') ?
+			ft_putstr_fd(": No such file or directory\n", 2) :
+			ft_putstr_fd(": Command not found.\n", 2);
+		cmd->cmd_ret = -1;
+	}
+	else if (execve(shell->args[0], shell->args, shell->envv) == -1)
 	{
 		if (execve(full_path, shell->args, shell->envv) == -1)
 		{
@@ -101,18 +108,18 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 {
 	if (shell && shell->args && shell->args[0] && shell->redir_error != 1)
 	{
-		shell->full_path = (shell->args[0][0] != '/' &&
-				has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
-		if (ft_strcmp(shell->args[0], ".") == 0 ||
-				ft_strcmp(shell->args[0], "..") == 0)
-			handle_dotdot_error(shell, cmd);
-		else if (builtin_check(shell) != -1)
+		if ((shell->bin_ret = builtin_check(shell)) != -1)
 			cmd->cmd_ret = 0;
-		else if (ft_strlen(shell->args[0]) != 0 &&
+		shell->full_path = (shell->bin_ret == -1 && shell->args[0][0] != '/' &&
+				has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
+		if ((shell->bin_ret == -1) && (ft_strcmp(shell->args[0], ".") == 0 ||
+				ft_strcmp(shell->args[0], "..") == 0))
+			handle_dotdot_error(shell, cmd);
+		else if (shell->bin_ret == -1 && ft_strlen(shell->args[0]) != 0 &&
 				(shell->full_path || !(access(shell->args[0], F_OK))))
 			ast_launch(shell, cmd);
-		else if (ft_strlen(shell->args[0]) == 0 ||
-				(shell->args[0][0] != '\0' && access(shell->args[0], F_OK)))
+		else if (shell->bin_ret == -1 && (ft_strlen(shell->args[0]) == 0 ||
+				(shell->args[0][0] != '\0' && access(shell->args[0], F_OK))))
 		{
 			ft_putstr_fd(shell->args[0], 2);
 			(shell->args[0][0] == '/') ?
@@ -123,5 +130,6 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 	}
 	else if (shell->redir_error == 1)
 		shell->redir_error = 0;
+	shell->bin_ret = 0;
 	return (cmd->cmd_ret);
 }

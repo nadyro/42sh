@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/13 17:23:28 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/13 18:00:53 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ typedef struct	s_shell
 	int						new_fd;
 	int						redir_error;
 	int						last_hd;
+	int						bin_ret;
 	int						i;
 	int						p;
 	int						l;
