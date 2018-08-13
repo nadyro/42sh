@@ -6,7 +6,7 @@
 #    By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/13 05:33:31 by tcanaud          ###   ########.fr        #
+#    Updated: 2018/08/13 05:52:31 by tcanaud          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -96,7 +96,8 @@ SRC_FILES = main.c \
 			heredoc/heredoc.c \
 			\
 			lexer/check_history_token.c \
-			lexer/history_token.c
+			lexer/history_token.c \
+			lexer/get_tokens_loop.c
 
 INC_FILES = lexer.h \
 			parser.h \

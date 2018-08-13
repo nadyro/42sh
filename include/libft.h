@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/14 11:26:13 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/13 04:31:57 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/13 06:01:17 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ void			ft_fusion_sort(int *tab, int max);
 char			*ft_strnstr2(const char *big, const char *little, size_t len);
 int				ft_natoi(char *s, int len);
 void			ft_putbyte(void *s, size_t len);
+int				ft_ptrclear(void **ptr);
 
 typedef struct	s_list
 {
