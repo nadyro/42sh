@@ -6,12 +6,11 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 11:50:10 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/08 16:55:03 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/13 17:24:13 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
-#include <stdio.h>
 #define ARG shell->args[shell->st]
 
 static char	**fetch_paths(t_shell *shell)
@@ -32,11 +31,12 @@ static char	**fetch_paths(t_shell *shell)
 	return (NULL);
 }
 
-static char	**fetch_cd_paths(t_shell *shell)
+char		**fetch_cd_paths(t_shell *shell)
 {
-	char	**path = NULL;
+	char	**path;
 	t_env	*tmp;
 
+	path = NULL;
 	tmp = shell->list;
 	while (tmp)
 	{
@@ -59,57 +59,43 @@ char		*arg_full_path(t_shell *shell)
 	char		**paths;
 
 	i = 0;
+	full_path = NULL;
 	paths = fetch_paths(shell);
 	while (paths && paths[i])
 	{
 		str = (paths[i][ft_strlen(paths[i]) - 1] != '/')
-		? ft_strjoin(paths[i++], "/") : ft_strdup(paths[i++]);
+			? ft_strjoin(paths[i++], "/") : ft_strdup(paths[i++]);
 		full_path = ft_strjoin(str, shell->args[0]);
 		if (str && str[0])
 			ft_strdel(&str);
 		if (!(ret = access(full_path, F_OK)))
-		{
-			free_table(paths);
-			return (full_path);
-		}
-		if (full_path && full_path[0])
+			break ;
+		else if (full_path && full_path[0])
 			ft_strdel(&full_path);
 	}
 	if (paths)
 		free_table(paths);
-	return (NULL);
+	return (full_path);
 }
 
-int		cd_path(t_shell *shell)
+int			cd_path(t_shell *shell, int i, char **paths)
 {
-	// not accounting for cd path in modified environment. should verify if env -i can call builtins?
 	char		*str;
 	char		*full_path;
-	char		**paths;
-	int			i;
-	int			ret;
 
-	i = 0;
-	paths = fetch_cd_paths(shell);
-	//printf("about to print path after fetching from fetch_cd_paths\n");
-	//ft_print_table(paths);
 	while (paths && paths[i])
 	{
 		str = (paths[i][ft_strlen(paths[i]) - 1] != '/')
-		? ft_strjoin(paths[i++], "/") : ft_strdup(paths[i++]);
-	//	printf("about to join %s to %s\n", ARG, str);
+			? ft_strjoin(paths[i++], "/") : ft_strdup(paths[i++]);
 		full_path = ft_strjoin(str, ARG);
 		if (str && str[0])
-			ft_strdel(&str);	
-	//	printf("about to test full_path using access: full_path = %s\n", full_path);
-		if (!(ret = access(full_path, F_OK)))
+			ft_strdel(&str);
+		if (!(access(full_path, F_OK)))
 		{
 			free_table(paths);
 			ft_strdel(&(ARG));
 			ARG = ft_strdup(full_path);
 			ft_strdel(&full_path);
-			//printf("cd_path located, ARG now = %s\n", ARG);
-			//regular_cd(shell);
 			return (1);
 		}
 		else if (full_path && full_path[0])
@@ -129,7 +115,7 @@ int			has_paths(t_shell *shell, int cdpath)
 	tmp = shell->list;
 	while (tmp)
 	{
-		if (cdpath == 0 && ft_strcmp(tmp->var, "PATH") == 0)	
+		if (cdpath == 0 && ft_strcmp(tmp->var, "PATH") == 0)
 			return (1);
 		if (cdpath == 1 && ft_strcmp(tmp->var, "CDPATH") == 0)
 			return (2);

@@ -6,12 +6,11 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/15 19:32:14 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/11 13:16:43 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/08/13 16:59:52 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
-#include <stdio.h>
 
 static void		finish_pwd_switch(t_shell *shell, t_env *tmp, char *old_pwd)
 {
@@ -28,7 +27,6 @@ static char		*get_old_pwd(t_shell *shell, t_env **tmp, char *new_pwd)
 {
 	char	*old_pwd;
 
-	//printf("at top of get_old_pwd, var/val is : %s=%s\n", (*tmp)->var, (*tmp)->val);
 	old_pwd = ((*tmp)->val) ? ft_strdup((*tmp)->val) : NULL;
 	if ((*tmp)->val && (*tmp)->val[0])
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
+/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/12 21:19:56 by kernel_pani      ###   ########.fr       */
+/*   Updated: 2018/08/13 17:23:28 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,8 @@ t_env			*mod_init(t_shell *shell);
 int				ft_exec(t_shell *shell, char **env);
 char			**env_to_tab(t_env *list);
 char			*arg_full_path(t_shell *shell);
-int				cd_path(t_shell *shell);
+int				cd_path(t_shell *shell, int i, char **paths);
+char			**fetch_cd_paths(t_shell *shell);
 void			free_table(char **tabs);
 int				builtin_check(t_shell *shell);
 void			free_env(t_env *list);
@@ -126,6 +127,8 @@ t_env			*env_init(void);
 void			update_old_pwd(t_shell *shell, char *new_pwd);
 int				cd_opt_check(t_shell *shell);
 void			cd_canon(t_shell *shell);
+int				cd_get_last(t_shell *shell, char ***split);
+void	    	handle_dot_dots(t_shell *shell);
 int				ash_history(t_shell *shell);
 int				check_warn(t_shell *shell, t_history *hist_args, int y);
 int				check_warn_w(t_history *hist_args, t_shell *shell, int y);

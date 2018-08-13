@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
+/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/02/15 13:50:00 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/28 17:19:03 by kernel_pani      ###   ########.fr       */
+/*   Created: 2018/08/13 16:57:24 by arohani           #+#    #+#             */
+/*   Updated: 2018/08/13 16:58:03 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
-#include <stdio.h>
 
 void		free_table(char **tabs)
 {
@@ -19,24 +18,15 @@ void		free_table(char **tabs)
 
 	i = 0;
 	if (tabs && !(tabs[0]))
-	{
-		//printf("about to free tab in free_table, address = %p\n", tab);
 		free(tabs);
-	}
 	else
 	{
-		//printf("going to print all elements of the following table : \n");
-		//ft_print_table(tab);
 		while (tabs && tabs[i] != 0)
 		{
-		//	printf("about to free : %s, address = %p\n", tab[i], tab[i]);
 			ft_strdel(&(tabs[i++]));
 		}
 		if (tabs != NULL)
-		{
-		//	printf("about to free tab after deleting all string elements, tab address = %p\n", tab);
 			free(tabs);
-		}
 		tabs = NULL;
 	}
 }

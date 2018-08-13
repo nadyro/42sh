@@ -6,16 +6,15 @@
 /*   By: pbie <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 15:16:39 by pbie              #+#    #+#             */
-/*   Updated: 2018/06/11 13:15:58 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/08/13 14:46:18 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
-#include <stdio.h>
 
-void      cd_not_dir(char *str)
+void	cd_not_dir(char *str)
 {
-    ft_putstr_fd("cd: ", 2);
-    ft_putstr_fd(str, 2);
-    ft_putstr_fd(": Not a directory\n", 2);
+	ft_putstr_fd("cd: ", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd(": Not a directory\n", 2);
 }
