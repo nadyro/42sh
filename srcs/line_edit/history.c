@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:20:53 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/10 16:50:35 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/13 16:13:19 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,9 @@ t_node		*add_to_history(char *cmd, t_node *history)
 	if (history)
 		history->prev = new;
 	history = new;
-	if (*(ft_strrchr(history->cmd, '\n') + 1) == '\0')
-		*(ft_strrchr(history->cmd, '\n')) = '\0';
+	if (ft_strchr(history->cmd, '\n'))
+		if (*(ft_strrchr(history->cmd, '\n') + 1) == '\0')
+			*(ft_strrchr(history->cmd, '\n')) = '\0';
 	return (history);
 }
 
