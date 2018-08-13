@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   history_token.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tcanaud <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/08/13 05:23:50 by tcanaud           #+#    #+#             */
+/*   Updated: 2018/08/13 05:27:05 by tcanaud          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "lexer.h"
 #include "sh_line_edit.h"
 
-static unsigned int	g_grp[256] = {
+static unsigned int		g_grp[256] = {
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 5, 1, 0, 0, 0,
@@ -31,31 +43,38 @@ static unsigned char	g_otm[8][6][2] = {
 	{
 		{0, 1}, {1, 1},
 		{0, 1}, {0, 1}, {0, 1}, {0, 1}
-	},{
+	},
+	{
 		{3, 1}, {6, 1},
 		{4, 1}, {7, 1}, {5, 1}, {2, 0}
-	},{
+	},
+	{
 		{2, 0}, {2, 0},
 		{2, 0}, {2, 0}, {2, 0}, {2, 0}
-	},{
+	},
+	{
 		{3, 1}, {3, 1},
 		{3, 1}, {3, 1}, {3, 1}, {2, 0}
-	},{
+	},
+	{
 		{4, 1}, {4, 1},
 		{4, 1}, {4, 1}, {4, 1}, {2, 0}
-	},{
+	},
+	{
 		{2, 0}, {2, 0},
 		{2, 0}, {2, 0}, {5, 1}, {2, 0}
-	},{
+	},
+	{
 		{2, 0}, {2, 0},
 		{2, 0}, {2, 0}, {2, 0}, {2, 0}
-	},{
+	},
+	{
 		{3, 1}, {3, 1},
-			{3, 1}, {3, 1}, {5, 1}, {2, 0}
+		{3, 1}, {3, 1}, {5, 1}, {2, 0}
 	}
 };
 
-void	*history_m(int cmd, void *ptr)
+void		*history_m(int cmd, void *ptr)
 {
 	static t_node	*history;
 	static int		use;
@@ -73,11 +92,11 @@ void	*history_m(int cmd, void *ptr)
 }
 
 /*
- **	otm[0] => stat
- **	otm[0] => cursor
- */
+**	otm[0] => stat
+**	otm[0] => cursor
+*/
 
-void	history_get(int	*tko, char *str, int len)
+void		history_get(int *tko, char *str, int len)
 {
 	int		otm[2];
 	int		old;
@@ -96,7 +115,7 @@ void	history_get(int	*tko, char *str, int len)
 	tko[2] = otm[1] - start;
 }
 
-static char *history_iresearch(int *tk, char *str, t_node *hist)
+static char	*history_iresearch(int *tk, char *str, t_node *hist)
 {
 	int	i;
 
@@ -120,19 +139,19 @@ static char *history_iresearch(int *tk, char *str, t_node *hist)
 	return (NULL);
 }
 
-char	*history_research(int *tk, char *str, t_node *hist)
+char		*history_research(int *tk, char *str, t_node *hist)
 {
-	int	shift;
+	int	sht;
 
-	shift = tk[0] == 4 ? 2 : 1;
+	sht = tk[0] == 4 ? 2 : 1;
 	if (tk[0] == 3 || tk[0] == 4 || tk[0] == 7)
 		while (hist)
 		{
-			if (tk[0] == 3 && (int)ft_strlen(hist->cmd) >= (tk[2] - shift)
-					&& !ft_memcmp(str + tk[1] + shift, hist->cmd, tk[2] - shift))
+			if (tk[0] == 3 && (int)ft_strlen(hist->cmd) >= (tk[2] - sht)
+					&& !ft_memcmp(str + tk[1] + sht, hist->cmd, tk[2] - sht))
 				return (hist->cmd);
-			else if (tk[0] == 4 && (int)ft_strlen(hist->cmd) >= (tk[2] - shift)
-					&& ft_strnstr2(hist->cmd, str + tk[1] + shift, tk[2] - shift))
+			else if (tk[0] == 4 && (int)ft_strlen(hist->cmd) >= (tk[2] - sht)
+					&& ft_strnstr2(hist->cmd, str + tk[1] + sht, tk[2] - sht))
 				return (hist->cmd);
 			hist = hist->next;
 		}

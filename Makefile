@@ -6,7 +6,7 @@
 #    By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/13 04:49:29 by tcanaud          ###   ########.fr        #
+#    Updated: 2018/08/13 05:33:31 by tcanaud          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,7 @@ SRC_FILES = main.c \
 			parser/is_fd.c \
 			parser/pipes.c \
 			parser/token2str.c \
+			parser/token2str_init.c \
 			parser/ast_evaluate.c \
 			parser/ast_construct.c \
 			parser/ast_free.c \
