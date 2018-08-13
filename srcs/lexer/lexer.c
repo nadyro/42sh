@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/04 13:13:10 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/08 18:15:20 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/08/13 04:52:15 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,6 +231,7 @@ int				*get_tokens(char **line)
 	int		arr_size;
 	int		*tk_arr;
 	int		i;
+	int		r;
 
 	i = 0;
 	arr_size = 1024;
@@ -245,16 +246,23 @@ int				*get_tokens(char **line)
 			tk_arr[i] = g_state_to_token[tk_arr[i]];
 			if (i > 2 && tk_arr[i] == TK_WORD && tk_arr[i - 3] == TK_DLESS)
 				heredoc_add(&tk_arr[i], *line);
-			if (tk_arr[i] == TK_HISTORY)
-			{
-				*line = history_by_nadir(&tk_arr[i], *line);
-				free(tk_arr);
-				return (get_tokens(line));
-			}
 			i += 3;
 		}
 		tk_arr = check_filename_token(tk_arr);
 		tk_arr = check_cmd_token(tk_arr);
+	}
+	if ((r = check_history_token(tk_arr, line)) > 0)
+	{
+		free(tk_arr);
+		ft_putstr(*line);
+		return (get_tokens(line));
+	}
+	else if (r == -1)
+	{
+		free(*line);
+		*line = NULL;
+		free(tk_arr);
+		return (NULL);
 	}
 	(heredoc_manager(1)) ? heredoc_fill() : 0;
 	return (tk_arr);
