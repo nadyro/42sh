@@ -6,7 +6,7 @@
 #    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/13 14:50:58 by arohani          ###   ########.fr        #
+#    Updated: 2018/08/13 16:37:49 by arohani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,6 +51,7 @@ SRC_FILES = main.c \
 			builtins/bin.c \
 			builtins/cd.c \
 			builtins/cd_canon.c \
+			builtins/cd_canon_dotdot.c \
 			builtins/cd_options.c \
 			builtins/env.c \
 			builtins/env_exec.c \

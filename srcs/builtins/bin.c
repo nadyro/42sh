@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 12:01:43 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/13 14:49:13 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/13 16:56:21 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,6 @@ int			ash_exit(t_shell *shell)
 {
 	write_history_file(shell, 0);
 	if (shell)
-		exit (0);
+		exit(0);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 11:05:03 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/13 14:44:44 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/13 17:22:55 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,10 @@ static int	cd_relative(t_shell *shell)
 		if (getcwd(cwd, sizeof(cwd)) == NULL)
 			ft_putstr_fd("error retrieving cwd\n", 2);
 		else
+		{
 			(shell->p == 1 && shell->l == 0) ?
 				update_old_pwd(shell, cwd) : update_old_pwd(shell, ARG);
+		}
 	}
 	return (1);
 }
@@ -125,7 +127,7 @@ int			ash_cd(t_shell *shell)
 		if (ARG[0] != '/')
 		{
 			if (has_paths(shell, 1) == 2)
-				cd_path(shell);
+				cd_path(shell, 0, fetch_cd_paths(shell));
 			cd_canon(shell);
 		}
 		regular_cd(shell);
