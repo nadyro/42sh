@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 12:01:43 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/13 17:57:48 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/14 18:13:14 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int			builtin_check(t_shell *shell)
 		else if (ft_strcmp(shell->args[0], "history") == 0)
 			return (ash_history(shell));
 	}
-	return (-1);
+	return (-10);
 }
 
 int			if_opt_n(t_shell *shell)
@@ -60,14 +60,14 @@ int			ash_echo(t_shell *shell)
 			{
 				(!(ft_strcmp(shell->args[1], "-n"))) ?
 					ft_putstr(shell->args[i]) : ft_putendl(shell->args[i]);
-				return (1);
+				return (0);
 			}
 			ft_putstr(shell->args[i++]);
 			(shell->args[i]) ? ft_putchar(' ') : ft_putchar('\n');
 		}
-		return (1);
+		return (0);
 	}
-	return (1);
+	return (0);
 }
 
 int			ash_exit(t_shell *shell)
@@ -75,5 +75,5 @@ int			ash_exit(t_shell *shell)
 	write_history_file(shell, 0);
 	if (shell)
 		exit(0);
-	return (1);
+	return (-1);
 }
