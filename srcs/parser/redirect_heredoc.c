@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/12 13:40:15 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/14 15:34:05 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/14 15:44:05 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include "libft.h"
 #include "heredoc.h"
 #include "builtins.h"
-#include <stdio.h>
 
 void	implement_heredoc(t_ast *cmd, int id)
 {
@@ -25,7 +24,6 @@ void	implement_heredoc(t_ast *cmd, int id)
 	if (cmd && id >= 0)
 	{
 		heredoc = heredoc_get(id);
-		fprintf(stderr, "id = %d, heredoc = %s\n", id, heredoc);
 		if (heredoc)
 		{
 			pipe(cmd->hfd);
