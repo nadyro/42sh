@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/09 15:16:39 by pbie              #+#    #+#             */
-/*   Updated: 2018/08/13 16:43:38 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/14 13:56:50 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@
 static void	grab_pwd(t_shell *shell, char **clean)
 {
 	t_env	*tmp;
+	int		i;
 
+	i = 0;
 	tmp = shell->list;
 	while (tmp)
 	{
