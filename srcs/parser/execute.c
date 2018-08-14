@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/14 16:16:53 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/14 18:19:32 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,13 @@ static void	launch_exec(t_shell *shell, char *full_path)
 {
 	if (execve(ARG, shell->args, shell->envv) == -1)
 	{
-		if (execve(full_path, shell->args, shell->envv) == -1)
+		if (full_path && execve(full_path, shell->args, shell->envv) == -1)
 		{
 			ft_putstr_fd(ARG, 2);
 			ft_putstr_fd(": Permission denied\n", 2);
-			exit(1);
 		}
 	}
+	exit(1);
 }
 
 static void	ast_launch(t_shell *shell, t_ast *cmd)
@@ -118,14 +118,13 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 
 	if (shell && shell->args && ARG && shell->redir_error != 1)
 	{
-		if (builtin_check(shell) == -1)
+		if (((cmd->cmd_ret = builtin_check(shell)) == -10))
 		{
 			shell->full_path = (ARG[0] != '/' &&
 					has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
 			if (handle_arg_errors(shell, cmd) == 0)
 			{
-				stat(ARG, &tmp);
-				if (S_ISDIR(tmp.st_mode))
+				if (stat(ARG, &tmp) == 0 && S_ISDIR(tmp.st_mode))
 				{
 					executing_directory(shell);
 					cmd->cmd_ret = -1;

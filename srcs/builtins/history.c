@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/13 14:47:51 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/13 14:49:19 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/14 17:49:57 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ int			ash_history(t_shell *shell)
 		i = hist_args->vide;
 		history_errors(hist_args);
 		free(hist_args);
-		return (i);
+		return (-1);
 	}
 	free(hist_args);
-	return (1);
+	return (0);
 }
