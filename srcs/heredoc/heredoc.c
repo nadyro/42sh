@@ -6,7 +6,7 @@
 /*   By: tcanaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/13 05:41:54 by tcanaud           #+#    #+#             */
-/*   Updated: 2018/08/13 05:42:03 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/14 16:25:11 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ int					heredoc_fill(void)
 {
 	char	*line;
 	t_doc	*doc_current;
+	char	*tmp;
 
 	while (g_dir.i_doc != g_dir.n_doc)
 	{
@@ -125,7 +126,11 @@ int					heredoc_fill(void)
 			if (doc_current->doc == NULL)
 				doc_current->doc = ft_strdup(line);
 			else
+			{
+				tmp = doc_current->doc;
 				doc_current->doc = ft_strjoin(doc_current->doc, line);
+				free(tmp);
+			}
 			doc_current->len_doc = ft_strlen(doc_current->doc);
 		}
 		free(line);

@@ -3,6 +3,7 @@
 #include "libft.h"
 #include "builtins.h"
 #include "sh_line_edit.h"
+#include "heredoc.h"
 #include <stdio.h>
 
 char  *get_cwd_prompt(t_shell shell)
@@ -80,10 +81,13 @@ void		main_loop(char *line, t_shell shell)
 	history = fill_history_file(history, &shell);
 	shell.history = history;
 	//End of Nadir's part.	
+	
+	heredoc_manager(0);
 	while (1)
 	{
 		line = line_mgmt(line, shell.history, shell);
 		history_m(0, shell.history);
+		heredoc_manager(2);
 		if (line && (shell.tok = get_tokens(&line)) != NULL)
 		{
 			if ((parser_ret = parser_validation(shell.tok, line)) == 1)
@@ -103,6 +107,7 @@ void		main_loop(char *line, t_shell shell)
 				//printf("TREE COMPILED, SENDING TO printLeafNodes\n\n\n");
 				ast_evaluate(head, &shell);
 				free_ast(head);
+				shell.last_hd = -1;
 				ft_strdel(&line);
 				ft_strdel(&(shell.line));
 			}
