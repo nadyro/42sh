@@ -5,13 +5,14 @@
 #include "sh_line_edit.h"
 #include <stdio.h>
 
-char  *get_pwd(void)
+char  *get_cwd_prompt(t_shell shell)
 {
 	int    i;
 	char  pwd[1024];
 	char  *ptr;
 	char  *ptr2;
 
+	(void)shell;
 	if (getcwd(pwd, 1024) == NULL)
 	{
 		ft_putendl_fd("pwd error", 2);
@@ -26,7 +27,7 @@ char  *get_pwd(void)
 	return (ptr2);
 }
 
-static char	*line_mgmt(char *line, t_node *history)
+static char	*line_mgmt(char *line, t_node *history, t_shell shell)
 {
 	char *prompt;
 	char *ret;
@@ -35,7 +36,7 @@ static char	*line_mgmt(char *line, t_node *history)
 	ret = NULL;
 	if (line == NULL)
 	{
-		prompt = get_pwd();
+		prompt = get_cwd_prompt(shell);
 		ret = line_edit_main_loop(prompt, history);
 		free(prompt);
 	}
@@ -70,7 +71,7 @@ void		main_loop(char *line, t_shell shell)
 	//End of Nadir's part.	
 	while (1)
 	{
-		line = line_mgmt(line, shell.history);
+		line = line_mgmt(line, shell.history, shell);
 		history_m(0, shell.history);
 		if (line && (shell.tok = get_tokens(&line)) != NULL)
 		{
