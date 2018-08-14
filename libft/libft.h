@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/14 11:26:13 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/14 15:54:20 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/13 06:01:17 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,17 +94,6 @@ typedef struct	s_list
 	size_t			content_size;
 	struct s_list	*next;
 }				t_list;
-
-typedef struct					s_gnl
-{
-	int							fd;
-	char						*buff;
-	size_t						len;
-	int							stat;
-	struct s_gnl				*next;
-}								t_gnl;
-
-typedef int						t_bool;
 
 t_list			*ft_lstnew(const void *content, size_t content_size);
 void			ft_lstdelone(t_list **alst, void (*del)(void*, size_t));
