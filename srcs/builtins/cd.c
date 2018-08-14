@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 11:05:03 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/13 17:22:55 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/14 13:44:40 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ int			ash_cd(t_shell *shell)
 				cd_path(shell, 0, fetch_cd_paths(shell));
 			cd_canon(shell);
 		}
+		cd_canon(shell);
 		regular_cd(shell);
 	}
 	return (1);
