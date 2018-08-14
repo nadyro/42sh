@@ -103,6 +103,7 @@ void		main_loop(char *line, t_shell shell)
 				//printf("TREE COMPILED, SENDING TO printLeafNodes\n\n\n");
 				ast_evaluate(head, &shell);
 				free_ast(head);
+				shell.last_hd = -1;
 				ft_strdel(&line);
 				ft_strdel(&(shell.line));
 			}
