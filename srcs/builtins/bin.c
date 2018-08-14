@@ -6,30 +6,30 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 12:01:43 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/14 18:06:20 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/14 18:13:14 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int			builtin_check(t_shell *shell, t_ast *cmd)
+int			builtin_check(t_shell *shell)
 {
 	if (shell && shell->args && shell->args[0])
 	{
 		if (ft_strcmp(shell->args[0], "echo") == 0)
-			return (cmd->cmd_ret = ash_echo(shell));
+			return (ash_echo(shell));
 		else if (ft_strcmp(shell->args[0], "cd") == 0)
-			return (cmd->cmd_ret = ash_cd(shell));
+			return (ash_cd(shell));
 		else if (ft_strcmp(shell->args[0], "setenv") == 0)
-			return (cmd->cmd_ret = ash_setenv(shell));
+			return (ash_setenv(shell));
 		else if (ft_strcmp(shell->args[0], "unsetenv") == 0)
-			return (cmd->cmd_ret = ash_unsetenv(shell));
+			return (ash_unsetenv(shell));
 		else if (ft_strcmp(shell->args[0], "env") == 0)
-			return (cmd->cmd_ret = ash_env(shell));
+			return (ash_env(shell));
 		else if (ft_strcmp(shell->args[0], "exit") == 0)
-			return (cmd->cmd_ret = ash_exit(shell));
+			return (ash_exit(shell));
 		else if (ft_strcmp(shell->args[0], "history") == 0)
-			return (cmd->cmd_ret = ash_history(shell));
+			return (ash_history(shell));
 	}
 	return (-10);
 }

@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/15 14:17:29 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/14 18:01:45 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/14 18:24:54 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int	display_setenv(t_shell *shell)
 		while (shell->args && shell->args[1][i])
 			if (ft_isalnum(shell->args[1][i++]) == 0)
 			{
-				ft_putstr_fd("setenv: must use alphanumeric characters.\n", 2);
+				ft_putstr_fd("setenv: Must use alphanumeric characters.\n", 2);
 				return (-1);
 			}
 	}
@@ -94,9 +94,7 @@ int			ash_setenv(t_shell *shell)
 	int		ret;
 
 	tmp = shell->list;
-	if ((ret = display_setenv(shell) == 1))
-		return (ret);
-	else
+	if ((ret = display_setenv(shell)) == 1)
 		return (setenv_parse(shell, tmp));
-	return (-1);
+	return (ret);
 }
