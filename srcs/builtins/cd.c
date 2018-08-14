@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 11:05:03 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/14 13:44:40 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/14 17:55:18 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ static int	cd_no_arg(t_shell *shell)
 			{
 				chdir(tmp->val);
 				update_old_pwd(shell, tmp->val);
-				return (1);
+				return (0);
 			}
 		}
 		tmp = tmp->next;
 	}
 	ft_putstr_fd("cd: No home directory.\n", 2);
-	return (0);
+	return (-1);
 }
 
 static int	cd_dash(t_shell *shell)
@@ -48,18 +48,19 @@ static int	cd_dash(t_shell *shell)
 			{
 				ft_putstr_fd("cd: not a directory: ", 2);
 				ft_putendl_fd(tmp->val, 2);
+				return (-1);
 			}
 			else
 			{
 				ft_putendl(tmp->val);
 				update_old_pwd(shell, tmp->val);
-				return (1);
+				return (0);
 			}
 		}
 		tmp = tmp->next;
 	}
 	ft_putstr_fd("cd: OLDPWD not set\n", 2);
-	return (1);
+	return (-1);
 }
 
 static int	cd_relative(t_shell *shell)
@@ -77,14 +78,15 @@ static int	cd_relative(t_shell *shell)
 	else
 	{
 		if (getcwd(cwd, sizeof(cwd)) == NULL)
-			ft_putstr_fd("error retrieving cwd\n", 2);
+			ft_putstr_fd("Error retrieving cwd\n", 2);
 		else
 		{
 			(shell->p == 1 && shell->l == 0) ?
 				update_old_pwd(shell, cwd) : update_old_pwd(shell, ARG);
+			return (0);
 		}
 	}
-	return (1);
+	return (-1);
 }
 
 int			regular_cd(t_shell *shell)
@@ -100,12 +102,15 @@ int			regular_cd(t_shell *shell)
 	else
 	{
 		if (getcwd(cwd, sizeof(cwd)) == NULL)
-			ft_putstr_fd("error retrieving cwd\n", 2);
+			ft_putstr_fd("Error retrieving cwd\n", 2);
 		else
+		{	
 			(shell->p == 1 && shell->l == 0) ?
 				update_old_pwd(shell, cwd) : update_old_pwd(shell, ARG);
+			return (0);
+		}
 	}
-	return (1);
+	return (-1);
 }
 
 int			ash_cd(t_shell *shell)
@@ -114,13 +119,13 @@ int			ash_cd(t_shell *shell)
 	if (shell->st == -1)
 		return (1);
 	if (ARG == NULL && ft_strcmp(shell->args[shell->st - 1], "-") != 0)
-		cd_no_arg(shell);
+		return (cd_no_arg(shell));
 	else if (shell->args && (ft_strcmp(shell->args[shell->st - 1], "-") == 0))
-		cd_dash(shell);
+		return (cd_dash(shell));
 	else if (shell->args && ARG[0] == '.')
 	{
 		cd_canon(shell);
-		cd_relative(shell);
+		return (cd_relative(shell));
 	}
 	else
 	{
@@ -128,10 +133,9 @@ int			ash_cd(t_shell *shell)
 		{
 			if (has_paths(shell, 1) == 2)
 				cd_path(shell, 0, fetch_cd_paths(shell));
-			cd_canon(shell);
 		}
 		cd_canon(shell);
-		regular_cd(shell);
+		return (regular_cd(shell));
 	}
-	return (1);
+	return (-1);
 }

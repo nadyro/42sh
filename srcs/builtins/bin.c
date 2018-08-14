@@ -6,32 +6,32 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 12:01:43 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/13 17:57:48 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/14 18:06:20 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int			builtin_check(t_shell *shell)
+int			builtin_check(t_shell *shell, t_ast *cmd)
 {
 	if (shell && shell->args && shell->args[0])
 	{
 		if (ft_strcmp(shell->args[0], "echo") == 0)
-			return (ash_echo(shell));
+			return (cmd->cmd_ret = ash_echo(shell));
 		else if (ft_strcmp(shell->args[0], "cd") == 0)
-			return (ash_cd(shell));
+			return (cmd->cmd_ret = ash_cd(shell));
 		else if (ft_strcmp(shell->args[0], "setenv") == 0)
-			return (ash_setenv(shell));
+			return (cmd->cmd_ret = ash_setenv(shell));
 		else if (ft_strcmp(shell->args[0], "unsetenv") == 0)
-			return (ash_unsetenv(shell));
+			return (cmd->cmd_ret = ash_unsetenv(shell));
 		else if (ft_strcmp(shell->args[0], "env") == 0)
-			return (ash_env(shell));
+			return (cmd->cmd_ret = ash_env(shell));
 		else if (ft_strcmp(shell->args[0], "exit") == 0)
-			return (ash_exit(shell));
+			return (cmd->cmd_ret = ash_exit(shell));
 		else if (ft_strcmp(shell->args[0], "history") == 0)
-			return (ash_history(shell));
+			return (cmd->cmd_ret = ash_history(shell));
 	}
-	return (-1);
+	return (-10);
 }
 
 int			if_opt_n(t_shell *shell)
@@ -60,14 +60,14 @@ int			ash_echo(t_shell *shell)
 			{
 				(!(ft_strcmp(shell->args[1], "-n"))) ?
 					ft_putstr(shell->args[i]) : ft_putendl(shell->args[i]);
-				return (1);
+				return (0);
 			}
 			ft_putstr(shell->args[i++]);
 			(shell->args[i]) ? ft_putchar(' ') : ft_putchar('\n');
 		}
-		return (1);
+		return (0);
 	}
-	return (1);
+	return (0);
 }
 
 int			ash_exit(t_shell *shell)
@@ -75,5 +75,5 @@ int			ash_exit(t_shell *shell)
 	write_history_file(shell, 0);
 	if (shell)
 		exit(0);
-	return (1);
+	return (-1);
 }

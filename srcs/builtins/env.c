@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 15:36:41 by arohani           #+#    #+#             */
-/*   Updated: 2018/07/26 18:05:03 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/14 18:05:58 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,12 +99,13 @@ int				ash_env(t_shell *shell)
 		ft_putstr_fd("env: illegal option -- ", 2);
 		ft_putchar_fd(shell->args[1][1], 2);
 		ft_putstr_fd(USGERROR, 2);
+		return (-1);
 	}
 	else if (shell->args && shell->args[1])
 		process_env_args(shell);
 	else if (shell->args[1] == 0)
 		ft_print_table(shell->envv);
-	return (1);
+	return (0);
 }
 
 char			**env_to_tab(t_env *list)

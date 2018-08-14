@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/17 14:00:45 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/11 13:15:12 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/08/14 17:33:24 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,6 @@ int			ft_exec(t_shell *shell, char **env)
 	if (shell->args[0] != NULL)
 	{
 		shell->args = get_new_args(shell);
-		printf("in ft_exec, new arguments table is : \n");
-		ft_print_table(shell->args);
 		return (env_launch(shell, env));
 	}
 	return (0);

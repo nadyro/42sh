@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/14 15:55:26 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/14 17:37:30 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,19 @@
 # include <time.h>
 # include <errno.h>
 
+typedef struct	s_ast
+{
+	int 					beg;	//relevant start token in token table for ast node
+	int 					end;	//relevant end token in token table for ast node
+	int 					split;	//relevant position where split operator token was found in token table
+	int						cmd_ret;
+	int						hfd[2];
+	int						hd_check;
+	struct s_ast			*parent;
+	struct s_ast			*left;
+	t_redirs				*redirs;
+	struct s_ast			*right;
+}				t_ast;
 typedef struct	s_env
 {
 	char					*var;

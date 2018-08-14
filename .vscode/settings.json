@@ -7,6 +7,7 @@
         "iterator": "c",
         "parser.h": "c",
         "builtins.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "uuid.h": "c"
     }
 }
