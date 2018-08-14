@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/29 16:17:24 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/14 17:56:43 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/14 18:29:08 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ t_node		*init_nonvoid_history(char *cmd, t_node *history)
 		exit(1);
 	new->next = history;
 	new->prev = NULL;
-	//free(cmd);
-	//cmd = NULL;
+	free(cmd);
+	cmd = NULL;
 	if (history)
 		history->prev = new;
 	history = new;
@@ -72,8 +72,6 @@ t_node		*fill_history_file(t_node *history, t_shell *shell)
 		{
 			shell->history_length++;
 			history = init_nonvoid_history(c, history);
-			free(c);
-			c = NULL;
 		}
 		shell->o_history = shell->history_length;
 		close(i);
