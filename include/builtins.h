@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/13 18:00:53 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/14 15:55:26 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ int				builtin_check(t_shell *shell);
 void			free_env(t_env *list);
 int				has_paths(t_shell *shell, int cdpath);
 t_env			*env_init(void);
+void			executing_directory(t_shell *shell);
 void			update_old_pwd(t_shell *shell, char *new_pwd);
 int				cd_opt_check(t_shell *shell);
 void			cd_canon(t_shell *shell);
