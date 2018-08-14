@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/05 16:46:34 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/10 16:56:05 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/14 15:21:06 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,10 +108,12 @@ t_node	*fetch_names(char *user_entry)
 	t_node	*binaries_1;
 	t_node	*matches;
 
+	user_entry = ft_strtrim(user_entry);
 	p = fetch_from_env_o();
 	k = fetch_from_env_a(p);
 	binaries = NULL;
 	binaries_1 = NULL;
+	matches = NULL;
 	if (k)
 	{
 		binaries_1 = fetch_binaries(k);
@@ -119,12 +121,9 @@ t_node	*fetch_names(char *user_entry)
 		clean_tabs(k, 1);
 		clean_tabs(p, 0);
 	}
-	if (user_entry && (ft_strncmp(user_entry, " ", 1) == 0
-				|| ft_strcmp(user_entry, "") == 0))
-		matches = cmp_space_entry(user_entry, 0);
-	else
-		matches = cmp_user_entry(binaries, user_entry);
+	matches = lighten_fetch_names(user_entry, binaries, matches);
 	matches = (matches ? matches : cmp_space_entry(user_entry, 0));
 	free_lists(binaries_1);
+	free(user_entry);
 	return (matches);
 }

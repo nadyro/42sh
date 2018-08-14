@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/12 10:04:15 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/10 17:03:42 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/14 15:02:34 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,9 @@ t_node			*cmp_space_entry(char *a_name, int is_null)
 	{
 		entry = (entry ? entry : path);
 		while ((elements = readdir(directory)) != NULL)
-			if ((ft_strncmp(elements->d_name, entry,
-							ft_strlen(entry))) == 0)
+			if (ft_strcmp(elements->d_name, ".") != 0 
+			&& ft_strcmp(elements->d_name, "..") != 0 
+			&& (ft_strncmp(elements->d_name, entry, ft_strlen(entry))) == 0)
 				matches = add_elements(matches, elements->d_name);
 		closedir(directory);
 	}

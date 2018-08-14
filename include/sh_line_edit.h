@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/10 16:48:37 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/14 15:21:46 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ char			**fetch_from_env_o(void);
 char			**fetch_from_env_a(char **all_paths);
 t_node			*fetch_binaries(char **all_paths);
 t_node			*fetch_names(char *user_entry);
+t_node			*lighten_fetch_names(char *ue, t_node *bin, t_node *mat);
 int				fetch_names_dirent(char *user_entry);
 
 t_node			*add_to_history(char *cmd, t_node *node);
