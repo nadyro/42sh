@@ -11,9 +11,20 @@ char  *get_cwd_prompt(t_shell shell)
 	char  pwd[1024];
 	char  *ptr;
 	char  *ptr2;
+	t_env *tmp;
 
-	(void)shell;
-	if (getcwd(pwd, 1024) == NULL)
+	ft_bzero(pwd, 1024);
+	tmp = (shell.list->mod) ? shell.list->mod : shell.list;
+	while (tmp)
+	{
+		if (!(ft_strcmp(tmp->var, "PWD")))
+		{
+			ft_strcpy(pwd, tmp->val);
+			break;
+		}
+		tmp = tmp->next;
+	}
+	if (pwd[0] == '\0' && getcwd(pwd, 1024) == NULL)
 	{
 		ft_putendl_fd("pwd error", 2);
 		return (ft_strcpy(ft_strnew(2), "> "));

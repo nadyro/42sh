@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/14 14:01:17 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/14 15:09:45 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,20 +46,12 @@ static void	launch_exec(t_shell *shell, char *full_path, t_ast *cmd)
 {
 	struct stat		tmp;
 
-	if (access(shell->args[0], F_OK) && access(full_path, F_OK))
-	{
-		ft_putstr_fd(shell->args[0], 2);
-		(shell->args[0][0] == '/') ?
-			ft_putstr_fd(": No such file or directory\n", 2) :
-			ft_putstr_fd(": Command not found.\n", 2);
-		cmd->cmd_ret = -1;
-	}
-	else if (execve(shell->args[0], shell->args, shell->envv) == -1)
+	if (execve(ARG, shell->args, shell->envv) == -1)
 	{
 		if (execve(full_path, shell->args, shell->envv) == -1)
 		{
-			ft_putstr_fd(shell->args[0], 2);
-			(full_path) ? stat(full_path, &tmp) : stat(shell->args[0], &tmp);
+			ft_putstr_fd(ARG, 2);
+			(full_path) ? stat(full_path, &tmp) : stat(ARG, &tmp);
 			(S_ISDIR(tmp.st_mode)) ? ft_putstr_fd(": is a directory\n", 2) :
 				ft_putstr_fd(": Permission denied\n", 2);
 			cmd->cmd_ret = -1;
@@ -96,38 +88,48 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 		ft_strdel(&(shell->full_path));
 }
 
-static void	handle_dotdot_error(t_shell *shell, t_ast *cmd)
+static int	handle_arg_errors(t_shell *shell, t_ast *cmd)
 {
-	ft_putstr_fd(shell->args[0], 2);
-	ft_putstr_fd(": Command not found.\n", 2);
-	ft_bzero((void *)(shell->args[0]), ft_strlen(shell->args[0]));
-	ft_strdel(&(shell->full_path));
-	cmd->cmd_ret = -1;
+	if ((ft_strcmp(ARG, ".") == 0 || ft_strcmp(ARG, "..") == 0))
+	{
+		ft_putstr_fd(ARG, 2);
+		ft_putstr_fd(": Command not found.\n", 2);
+		ft_bzero((void *)(ARG), ft_strlen(ARG));
+		ft_strdel(&(shell->full_path));
+		return (cmd->cmd_ret = -1);
+	}
+	else if (ft_strlen(ARG) && (ARG[0] == '/' ||
+				(ARG[0] == '.' && ARG[1] == '/')) && access(ARG, F_OK))
+	{
+		ft_putstr_fd(ARG, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+		return (cmd->cmd_ret = -1);
+	}
+	else if (!(ft_strlen(ARG)) ||
+			(access(ARG, F_OK) && access(shell->full_path, F_OK)))
+	{
+		ft_putstr_fd(ARG, 2);
+		(ARG[0] == '/' || (ARG[0] == '.' && ARG[1] == '/')) ?
+			ft_putstr_fd(": No such file or directory\n", 2) :
+			ft_putstr_fd(": Command not found.\n", 2);
+		return (cmd->cmd_ret = -1);
+	}
+	return (0);
 }
 
 int			ast_execute(t_shell *shell, t_ast *cmd)
 {
-	if (shell && shell->args && shell->args[0] && shell->redir_error != 1)
+	if (shell && shell->args && ARG && shell->redir_error != 1)
 	{
 		if ((shell->bin_ret = builtin_check(shell)) != -1)
 			cmd->cmd_ret = 0;
-		shell->full_path = (shell->bin_ret == -1 && ARG[0] != '/' &&
-				has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
-		if ((shell->bin_ret == -1) && (ft_strcmp(ARG, ".") == 0 ||
-				ft_strcmp(ARG, "..") == 0))
-			handle_dotdot_error(shell, cmd);
-		else if (shell->bin_ret == -1 && (ft_strlen(ARG) == 0 ||
-				(access(ARG, F_OK))))
+		else
 		{
-			ft_putstr_fd(shell->args[0], 2);
-			(ARG[0] == '/' || (ARG[0] == '.' && ARG[1] == '/')) ?
-				ft_putstr_fd(": No such file or directory\n", 2) :
-				ft_putstr_fd(": Command not found.\n", 2);
-			cmd->cmd_ret = -1;
+			shell->full_path = (ARG[0] != '/' &&
+					has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
+			if (handle_arg_errors(shell, cmd) == 0)
+				ast_launch(shell, cmd);
 		}
-		else if (shell->bin_ret == -1 && ft_strlen(ARG) != 0 &&
-				(shell->full_path || !(access(ARG, F_OK))))
-			ast_launch(shell, cmd);
 	}
 	shell->redir_error = 0;
 	shell->bin_ret = 0;
