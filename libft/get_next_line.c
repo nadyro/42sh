@@ -5,59 +5,139 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/12 14:09:24 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/07 05:09:10 by nsehnoun         ###   ########.fr       */
+/*   Created: 2017/05/27 11:29:15 by tcanaud           #+#    #+#             */
+/*   Updated: 2018/08/14 15:52:44 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <unistd.h>
 
-int		get_all_stuff(char **static_tmp, char **line, char **a)
+static t_gnl	*get_gnl(t_gnl **begin, const int fd)
 {
-	int i;
+	t_gnl	*tmp;
 
-	i = 0;
-	if (a == NULL)
+	tmp = *begin;
+	while (tmp)
 	{
-		*line = ft_strdup(*static_tmp);
-		free(*static_tmp);
-		*static_tmp = NULL;
+		if (tmp->fd == fd)
+			return (tmp);
+		tmp = tmp->next;
 	}
-	else
-	{
-		i = ft_strchr((const char*)*static_tmp, '\n') - *static_tmp;
-		*line = ft_strsub(*static_tmp, 0, i);
-		*a = *static_tmp;
-		*static_tmp = ft_strdup(*a + (i + 1));
-		free(*a);
-	}
-	return (1);
+	if ((tmp = (t_gnl*)malloc(sizeof(t_gnl))) == NULL)
+		return (NULL);
+	tmp->fd = fd;
+	tmp->next = *begin;
+	tmp->len = 0;
+	if ((tmp->buff = ft_memalloc(1)) == NULL)
+		return (NULL);
+	tmp->stat = 1;
+	*begin = tmp;
+	return (tmp);
 }
 
-int		get_next_line(const int fd, char **line)
+static t_bool	get_line(t_gnl *cur)
 {
-	int				x;
-	char			*a;
-	char			*chr;
-	static char		*static_tmp;
-	char			buffer[BUFF_SIZE + 1];
+	char	buff_fix[BUFF_SIZE];
+	int		lenread;
+	char	*new_buff;
 
-	if ((x = -2) && (fd < 0 || !line))
-		return (-1);
-	if (!static_tmp && (!(static_tmp = ft_strnew(0))))
-		return (-1);
-	while (!(chr = ft_strchr((const char *)static_tmp, '\n')) && (x = read(fd, buffer, BUFF_SIZE)) > 0)
+	if (ft_memchr(cur->buff, '\n', cur->len) != NULL)
+		return (1);
+	if ((lenread = read(cur->fd, buff_fix, BUFF_SIZE)) < 1)
 	{
-		buffer[x] = '\0';
-		a = static_tmp;
-		static_tmp = ft_strjoin((char const*)a, (char const*)buffer);
-		free(a);
+		cur->stat = lenread;
+		return (1);
 	}
-	if (x == -1)
-		return (-1);
-	if (chr)
-		return (get_all_stuff(&static_tmp, line, &a));
-	if (x == 0 && ft_strlen(static_tmp) > 0)
-		return (get_all_stuff(&static_tmp, line, NULL));
+	new_buff = ft_memalloc(cur->len + lenread);
+	ft_memcpy(new_buff, cur->buff, cur->len);
+	ft_memcpy(new_buff + cur->len, buff_fix, lenread);
+	cur->len += lenread;
+	free(cur->buff);
+	cur->buff = new_buff;
+	if (ft_memchr(cur->buff, '\n', cur->len) != NULL)
+		return (1);
 	return (0);
+}
+
+static char		*get_line_buff(t_gnl *cur)
+{
+	char	*ret;
+	char	*mmchr;
+	char	*new_buff;
+
+	if ((mmchr = ft_memchr(cur->buff, '\n', cur->len)) == NULL)
+	{
+		if ((ret = ft_memalloc(cur->len + 1)) == NULL)
+			return (NULL);
+		ft_memcpy(ret, cur->buff, cur->len);
+		cur->len = 0;
+		free(cur->buff);
+		cur->buff = ft_memalloc(1);
+		return (ret);
+	}
+	if ((ret = ft_memalloc(mmchr - cur->buff + 1)) == NULL)
+		return (NULL);
+	ft_memcpy(ret, cur->buff, mmchr - cur->buff);
+	if ((new_buff = ft_memalloc(cur->len - (mmchr - cur->buff))) == NULL)
+		return (NULL);
+	ft_memcpy(new_buff, cur->buff + (mmchr - cur->buff) + 1, cur->len -
+			(mmchr - cur->buff));
+	cur->len -= mmchr - cur->buff + 1;
+	free(cur->buff);
+	cur->buff = new_buff;
+	return (ret);
+}
+
+static void		free_current_gnl(t_gnl **begin, t_gnl *current)
+{
+	t_gnl	*tmp;
+	t_gnl	*tmp2;
+
+	tmp = *begin;
+	if (tmp == current)
+	{
+		*begin = tmp->next;
+		free(tmp);
+		tmp = NULL;
+		return ;
+	}
+	while (tmp)
+	{
+		if (tmp->next == current)
+		{
+			tmp2 = tmp->next;
+			tmp->next = tmp->next->next;
+			free(tmp2);
+			tmp2 = NULL;
+			return ;
+		}
+		tmp = tmp->next;
+	}
+}
+
+int				get_next_line(const int fd, char **line)
+{
+	static t_gnl	*begin = NULL;
+	t_gnl			*current;
+	char			*ret;
+
+	if (fd < 0 || line == NULL)
+		return (-1);
+	if ((current = get_gnl(&begin, fd)) == NULL)
+		return (-1);
+	while (!get_line(current))
+		;
+	if (current->stat == -1 || current->len == 0)
+	{
+		free_current_gnl(&begin, current);
+		return (current->stat == -1 ? -1 : 0);
+	}
+	if ((ret = get_line_buff(current)) == NULL)
+	{
+		free_current_gnl(&begin, current);
+		return (-1);
+	}
+	*line = ret;
+	return (1);
 }
