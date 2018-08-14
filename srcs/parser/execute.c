@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/14 15:44:12 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/14 15:59:34 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,28 @@ void		restore_std_fds(t_shell *shell, t_ast *cmd, t_redirs *rd)
 	close(shell->s_err);
 }
 
-static void	launch_exec(t_shell *shell, char *full_path, t_ast *cmd)
+static void	launch_exec(t_shell *shell, char *full_path)
 {
 	struct stat		tmp;
 
-	if (execve(ARG, shell->args, shell->envv) == -1)
+	stat(ARG, &tmp);
+	if (S_ISDIR(tmp.st_mode))
 	{
-		if (execve(full_path, shell->args, shell->envv) == -1)
+		executing_directory(shell);
+		exit(1);
+	}
+	else if (execve(ARG, shell->args, shell->envv) == -1)
+	{
+		stat(full_path, &tmp);
+		if (S_ISDIR(tmp.st_mode))
+		{
+			executing_directory(shell);
+			exit(1);
+		}
+		else if (execve(full_path, shell->args, shell->envv) == -1)
 		{
 			ft_putstr_fd(ARG, 2);
-			(full_path) ? stat(full_path, &tmp) : stat(ARG, &tmp);
-			(S_ISDIR(tmp.st_mode)) ? ft_putstr_fd(": is a directory\n", 2) :
-				ft_putstr_fd(": Permission denied\n", 2);
-			cmd->cmd_ret = -1;
+			ft_putstr_fd(": Permission denied\n", 2);
 			exit(1);
 		}
 	}
@@ -69,7 +78,7 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 	status = 0;
 	pid = fork();
 	if (pid == 0)
-		launch_exec(shell, shell->full_path, cmd);
+		launch_exec(shell, shell->full_path);
 	else if (pid < 0)
 	{
 		cmd->cmd_ret = -1;
