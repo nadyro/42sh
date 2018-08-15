@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/15 15:31:50 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/15 16:07:10 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ char		*line_edit_main_loop(char *d_g_prpt, t_node *history, int sig)
 	to_return = NULL;
 	to_return = line_edit_main_loop_aux(g_prpt, stat_data, to_return);
 	stat_data->overage = (g_prpt->buf ? ft_strdup(g_prpt->buf) : NULL);
-	reverse_handle();
+	(sig == 1) ? reverse_handle() : 0;
 	termanip(35);
 	free_g_prpt(g_prpt);
 	return (to_return);
