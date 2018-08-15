@@ -6,7 +6,7 @@
 /*   By: tcanaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/13 05:41:54 by tcanaud           #+#    #+#             */
-/*   Updated: 2018/08/14 16:25:11 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/15 15:56:58 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,23 +89,10 @@ char				*heredoc_get(int id)
 	return (tmp->doc);
 }
 
-static t_doc		*heredoc_get_doc(int id)
+void				heredoc_signal(int sig)
 {
-	int		i;
-	t_doc	*tmp;
-
-	if (id >= g_dir.n_doc)
-		return (NULL);
-	i = 0;
-	tmp = g_dir.first;
-	while (tmp && i < id)
-	{
-		tmp = tmp->next;
-		i++;
-	}
-	if (i != id)
-		return (NULL);
-	return (tmp);
+	g_dir.signal = 1;
+	handle_int(sig);
 }
 
 int					heredoc_fill(void)
@@ -114,26 +101,15 @@ int					heredoc_fill(void)
 	t_doc	*doc_current;
 	char	*tmp;
 
-	while (g_dir.i_doc != g_dir.n_doc)
+	line = NULL;
+	doc_current = NULL;
+	tmp = NULL;
+	handle_sig();
+	signal(SIGINT, heredoc_signal);
+	while (g_dir.signal == 0 && g_dir.i_doc != g_dir.n_doc)
 	{
-		doc_current = heredoc_get_doc(g_dir.i_doc);
-		line = line_edit_main_loop("> ", NULL);
-		if (ft_strlen(line) - 1 == doc_current->len_end
-				&& !ft_memcmp(line, doc_current->end, doc_current->len_end))
-			g_dir.i_doc += 1;
-		else
-		{
-			if (doc_current->doc == NULL)
-				doc_current->doc = ft_strdup(line);
-			else
-			{
-				tmp = doc_current->doc;
-				doc_current->doc = ft_strjoin(doc_current->doc, line);
-				free(tmp);
-			}
-			doc_current->len_doc = ft_strlen(doc_current->doc);
-		}
-		free(line);
+		heredoc_fill_loop(&g_dir, doc_current, line, tmp);
 	}
-	return (0);
+	reverse_handle();
+	return (g_dir.signal);
 }

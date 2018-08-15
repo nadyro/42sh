@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/04 13:13:10 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/13 06:05:31 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/15 15:57:24 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,6 +186,12 @@ int				*get_tokens(char **line)
 		return (get_tokens(line));
 	else if (r == 2)
 		return (NULL);
-	(heredoc_manager(1)) ? heredoc_fill() : 0;
+	if (heredoc_manager(1) && heredoc_fill() != 0)
+	{
+		free(tk_arr);
+		tk_arr = NULL;
+		free(*line);
+		*line = NULL;
+	}
 	return (tk_arr);
 }

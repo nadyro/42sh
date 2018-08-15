@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/14 15:21:46 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/15 15:16:16 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void			history_prev(t_g_prpt *g_prpt, t_stat_data *stat_data);
 
 void			auto_complete(t_g_prpt *g_prpt);
 
-char			*line_edit_main_loop(char *d_g_prpt, t_node *history);
+char			*line_edit_main_loop(char *d_g_prpt, t_node *history, int sig);
 
 void			g_prpt_delete(t_g_prpt *g_prpt);
 void			g_prpt_backdel(t_g_prpt *g_prpt);

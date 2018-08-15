@@ -49,12 +49,12 @@ static char	*line_mgmt(char *line, t_node *history, t_shell shell)
 	if (line == NULL)
 	{
 		prompt = get_cwd_prompt(shell);
-		ret = line_edit_main_loop(prompt, history);
+		ret = line_edit_main_loop(prompt, history, 1);
 		free(prompt);
 	}
 	else
 	{
-		tmp = line_edit_main_loop("> ", history);
+		tmp = line_edit_main_loop("> ", history, 1);
 		if (tmp != NULL)
 			ret = ft_strjoin(line, tmp);
 		free(tmp);
@@ -124,11 +124,14 @@ void		main_loop(char *line, t_shell shell)
 
 int			main(int argc, char **argv, char **env)
 {
-	t_shell	shell;
-	char	*name_term;
+	t_shell			shell;
+	char			*name_term;
+	struct winsize	term;
 
 	(void)argc;
 	(void)argv;
+	if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &term) == -1)
+		exit(1);
 	///////////////////////////////////
 	shell.list = (env && env[0]) ? env_setup(env) : env_init();
 	shell.envv = (shell.list) ? env_to_tab(shell.list) : NULL;

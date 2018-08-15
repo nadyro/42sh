@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/30 07:30:34 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/10 16:50:35 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/15 15:48:06 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	ft_flush(t_g_prpt *g_prpt)
 	char	user_entry[4096];
 	char	*to_free;
 
-	ignore_handle();
 	termanip(33);
 	ft_bzero(user_entry, 4096);
 	while (read(0, user_entry, 4095) > 0 && !(g_prpt->end))
@@ -37,7 +36,6 @@ void	ft_flush(t_g_prpt *g_prpt)
 		}
 	}
 	termanip(33);
-	handle_sig();
 }
 
 void	g_prpt_clean(void)
