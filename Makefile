@@ -6,11 +6,7 @@
 #    By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-<<<<<<< HEAD
-#    Updated: 2018/08/14 21:51:36 by kernel_pani      ###   ########.fr        #
-=======
-#    Updated: 2018/08/15 14:57:10 by tcanaud          ###   ########.fr        #
->>>>>>> 52dc8ebc56f7abc37cdac703ac771d88447c0f5e
+#    Updated: 2018/08/15 18:28:35 by kernel_pani      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
