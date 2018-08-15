@@ -6,7 +6,7 @@
 /*   By: antoipom <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/07 14:13:58 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/13 05:51:30 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/15 13:32:06 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,7 @@ char					*history_research(int *tk, char *str, t_node *hist);
 int						precheck_history_token(int *tk_arr, char **line);
 void					get_tokens_loop(int *tk_arr, int i, char **line,
 		int *state_to_token);
+void					heredoc_fill_loop(t_dirdoc *doc,
+		t_doc *doc_current, char *line, char *tmp)
 
 #endif
