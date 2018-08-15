@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_canon.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/09 15:16:39 by pbie              #+#    #+#             */
-/*   Updated: 2018/08/14 13:56:50 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/15 18:29:27 by kernel_pani      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,11 @@ void		cd_canon(t_shell *shell)
 	}
 	free_table(tabs);
 	ft_strdel(&(ARG));
-	ARG = ft_strdup(clean);
-	ft_strdel(&clean);
-	if (ft_strstr(ARG, ".."))
-		handle_dot_dots(shell);
+	if (clean)
+	{
+		ARG = ft_strdup(clean);
+		ft_strdel(&clean);
+		if (ft_strstr(ARG, ".."))
+			handle_dot_dots(shell);
+	}
 }
