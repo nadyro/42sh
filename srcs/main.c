@@ -124,11 +124,14 @@ void		main_loop(char *line, t_shell shell)
 
 int			main(int argc, char **argv, char **env)
 {
-	t_shell	shell;
-	char	*name_term;
+	t_shell			shell;
+	char			*name_term;
+	struct winsize	term;
 
 	(void)argc;
 	(void)argv;
+	if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &term) == -1)
+		exit(1);
 	///////////////////////////////////
 	shell.list = (env && env[0]) ? env_setup(env) : env_init();
 	shell.envv = (shell.list) ? env_to_tab(shell.list) : NULL;
