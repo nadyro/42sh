@@ -48,14 +48,16 @@ int			if_opt_n(t_shell *shell)
 int			ash_echo(t_shell *shell)
 {
 	int		i;
+	int 	n;
 
 	i = if_opt_n(shell);
+	n = (i == 2) ? 1 : 0;
 	if (shell->args && shell->args[i])
 	{
 		while (shell->args && shell->args[i])
 		{
-			if (i == 1 && shell->args[i][0] == '-')
-				i++;
+			//if (i == 1 && shell->args[i][0] == '-')
+			//	i++;
 			if (!(shell->args[i + 1]))
 			{
 				(!(ft_strcmp(shell->args[1], "-n"))) ?
