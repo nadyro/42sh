@@ -6,7 +6,7 @@
 /*   By: tcanaud <tcanaud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/15 13:22:15 by tcanaud           #+#    #+#             */
-/*   Updated: 2018/08/15 13:31:17 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/15 15:19:24 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	heredoc_fill_loop(t_dirdoc *doc,
 		t_doc *doc_current, char *line, char *tmp)
 {
 	doc_current = heredoc_get_doc(doc, doc->i_doc);
-	line = line_edit_main_loop("> ", NULL);
+	line = line_edit_main_loop("> ", NULL, 0);
 	if (ft_strlen(line) - 1 == doc_current->len_end
 			&& !ft_memcmp(line, doc_current->end, doc_current->len_end))
 		doc->i_doc += 1;

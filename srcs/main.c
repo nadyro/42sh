@@ -49,12 +49,12 @@ static char	*line_mgmt(char *line, t_node *history, t_shell shell)
 	if (line == NULL)
 	{
 		prompt = get_cwd_prompt(shell);
-		ret = line_edit_main_loop(prompt, history);
+		ret = line_edit_main_loop(prompt, history, 1);
 		free(prompt);
 	}
 	else
 	{
-		tmp = line_edit_main_loop("> ", history);
+		tmp = line_edit_main_loop("> ", history, 1);
 		if (tmp != NULL)
 			ret = ft_strjoin(line, tmp);
 		free(tmp);

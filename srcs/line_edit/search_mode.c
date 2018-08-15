@@ -6,7 +6,7 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/08 06:09:10 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/10 16:50:35 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/15 15:49:29 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,6 @@ static void		search_mode_aux(t_g_prpt *g_prpt, t_stat_data *stat_data)
 
 void			search_mode(t_g_prpt *g_prpt, t_stat_data *stat_data)
 {
-	ignore_handle();
 	if (stat_data->old_line)
 	{
 		free(stat_data->old_line);
@@ -136,6 +135,5 @@ void			search_mode(t_g_prpt *g_prpt, t_stat_data *stat_data)
 	ft_strdel(&stat_data->old_line);
 	tputs(tgetstr("cd", NULL), 1, ft_putshit);
 	(g_prpt->end ? termanip(33) : 0);
-	handle_sig();
 	g_prpt->end = 0;
 }

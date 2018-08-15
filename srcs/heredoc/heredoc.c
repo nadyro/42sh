@@ -6,7 +6,7 @@
 /*   By: tcanaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/13 05:41:54 by tcanaud           #+#    #+#             */
-/*   Updated: 2018/08/15 13:34:08 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/15 15:56:58 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,11 @@ char				*heredoc_get(int id)
 	return (tmp->doc);
 }
 
+void				heredoc_signal(int sig)
+{
+	g_dir.signal = 1;
+	handle_int(sig);
+}
 
 int					heredoc_fill(void)
 {
@@ -99,9 +104,12 @@ int					heredoc_fill(void)
 	line = NULL;
 	doc_current = NULL;
 	tmp = NULL;
-	while (g_dir.i_doc != g_dir.n_doc)
+	handle_sig();
+	signal(SIGINT, heredoc_signal);
+	while (g_dir.signal == 0 && g_dir.i_doc != g_dir.n_doc)
 	{
 		heredoc_fill_loop(&g_dir, doc_current, line, tmp);
 	}
-	return (0);
+	reverse_handle();
+	return (g_dir.signal);
 }

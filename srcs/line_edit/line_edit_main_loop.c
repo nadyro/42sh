@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/10 16:50:35 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/15 15:31:50 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static char	*line_edit_main_loop_aux(t_g_prpt *g_prpt, t_stat_data *stat_data,
 	return (to_return);
 }
 
-char		*line_edit_main_loop(char *d_g_prpt, t_node *history)
+char		*line_edit_main_loop(char *d_g_prpt, t_node *history, int sig)
 {
 	char				*to_return;
 	static t_stat_data	*stat_data = NULL;
@@ -65,7 +65,7 @@ char		*line_edit_main_loop(char *d_g_prpt, t_node *history)
 	g_prpt = malloc_g_prpt(g_prpt, stat_data, d_g_prpt);
 	write(1, d_g_prpt, ft_strlen(d_g_prpt));
 	g_prpt->history = history;
-	handle_sig();
+	(sig == 1) ? handle_sig() : 0;
 	g_prpt->origin->x = (ft_strlen(g_prpt->disp) > 10 ?
 		ft_strlen(g_prpt->disp) - 9 : ft_strlen(g_prpt->disp));
 	g_prpt->buf = stat_data->overage;

@@ -6,7 +6,7 @@
 #    By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/14 18:33:56 by nsehnoun         ###   ########.fr        #
+#    Updated: 2018/08/15 14:57:10 by tcanaud          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -95,6 +95,7 @@ SRC_FILES = main.c \
 			line_edit/sig_ignore.c \
 			\
 			heredoc/heredoc.c \
+			heredoc/heredoc_fill.c \
 			\
 			lexer/check_history_token.c \
 			lexer/history_token.c \
