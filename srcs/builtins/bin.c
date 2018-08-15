@@ -60,8 +60,8 @@ int			ash_echo(t_shell *shell)
 			//	i++;
 			if (!(shell->args[i + 1]))
 			{
-				(!(ft_strcmp(shell->args[1], "-n"))) ?
-					ft_putstr(shell->args[i]) : ft_putendl(shell->args[i]);
+				(n == 1) ?	ft_putstr(shell->args[i]) :
+					ft_putendl(shell->args[i]);
 				return (0);
 			}
 			ft_putstr(shell->args[i++]);
