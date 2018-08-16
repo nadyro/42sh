@@ -4,8 +4,9 @@
 #include "builtins.h"
 #include "sh_line_edit.h"
 #include "heredoc.h"
+#include <stdio.h>
 
-char		*get_cwd_prompt(t_shell shell)
+char  *get_cwd_prompt(t_shell shell)
 {
 	int    i;
 	char  pwd[1024];
@@ -125,11 +126,15 @@ int			main(int argc, char **argv, char **env)
 {
 	t_shell			shell;
 	char			*name_term;
+	struct stat		buf;
 	struct winsize	term;
 
 	(void)argc;
 	(void)argv;
 	if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &term) == -1)
+		exit(1);
+	fstat(0, &buf);
+	if (buf.st_size > 0)
 		exit(1);
 	///////////////////////////////////
 	shell.list = (env && env[0]) ? env_setup(env) : env_init();
