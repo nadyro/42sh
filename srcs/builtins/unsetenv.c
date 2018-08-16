@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/15 14:17:43 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/16 10:14:36 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/16 19:44:45 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ static void	unsetenv_swap(t_shell *shell, t_env **tmp, int *swap)
 		shell->list = next;
 		(*tmp) = shell->list;
 	}
+	else if (!prev && !next)
+		shell->list = NULL;
 	*swap = 1;
 }
 
