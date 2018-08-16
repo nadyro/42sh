@@ -18,10 +18,10 @@ static void		start_secure(void)
 	struct winsize	term;
 
 	if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &term) == -1)
-		exit(1);
+		sh_close(1, "");
 	fstat(0, &buf);
 	if (buf.st_size > 0)
-		exit(1);
+		sh_close(1, "");
 }
 
 int				main(int argc, char **argv, char **env)

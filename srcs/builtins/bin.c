@@ -77,6 +77,6 @@ int			ash_exit(t_shell *shell)
 {
 	write_history_file(shell, 0);
 	if (shell)
-		exit(0);
+		sh_close(0, "");
 	return (-1);
 }

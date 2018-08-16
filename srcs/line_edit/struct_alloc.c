@@ -6,11 +6,12 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/07 01:45:43 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/10 16:50:35 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/16 18:42:08 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
+#include "builtins.h"
 
 void		free_g_prpt(t_g_prpt *g_prpt)
 {
@@ -52,16 +53,16 @@ t_g_prpt	*malloc_g_prpt(t_g_prpt *g_prpt, t_stat_data *stat_data,
 	struct winsize	w;
 
 	if (!(g_prpt = malloc(sizeof(*g_prpt))))
-		exit(1);
+		sh_close(1, "");
 	if (!(g_prpt->origin = malloc(sizeof(t_coord))))
-		exit(1);
+		sh_close(1, "");
 	if (!(g_prpt->size = malloc(sizeof(t_coord))))
-		exit(1);
+		sh_close(1, "");
 	ioctl(0, TIOCGWINSZ, &w);
 	if (!(g_prpt->line = ft_strdup("\0")))
-		exit(1);
+		sh_close(1, "");
 	if (!(g_prpt->disp = ft_strdup(d_g_prpt)))
-		exit(1);
+		sh_close(1, "");
 	g_prpt->buf = NULL;
 	g_prpt->pos = 0;
 	g_prpt->total = 0;
@@ -78,7 +79,7 @@ t_stat_data	*malloc_stat(void)
 	t_stat_data *stat_data;
 
 	if (!(stat_data = malloc(sizeof(*stat_data))))
-		exit(1);
+		sh_close(1, "");
 	stat_data->overage = NULL;
 	stat_data->old_line = NULL;
 	stat_data->copied = NULL;

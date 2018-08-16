@@ -22,10 +22,10 @@ static void	evaluate_pipe_left(t_shell *shell, t_ast *cmd, pid_t pid, int fd[2])
 		close(fd[0]);
 		close(fd[1]);
 		ast_evaluate(cmd->left, shell);
-		(cmd->left->cmd_ret == 0) ? exit(0) : exit(1);
+		(cmd->left->cmd_ret == 0) ? sh_close(0, "") : sh_close(1, "");
 	}
 	else if (pid < 0)
-		exit(1);
+		sh_close(1, "");
 }
 
 static void	evaluate_pipe_right(t_shell *shell, t_ast *cmd, int fd[2])

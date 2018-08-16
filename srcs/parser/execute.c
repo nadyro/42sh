@@ -51,7 +51,7 @@ static void	launch_exec(t_shell *shell, char *full_path)
 			ft_putstr_fd(": Permission denied\n", 2);
 		}
 	}
-	exit(1);
+	sh_close(1, "");
 }
 
 static void	ast_launch(t_shell *shell, t_ast *cmd)

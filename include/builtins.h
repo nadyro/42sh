@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/16 16:36:47 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/16 18:39:49 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,5 +175,6 @@ t_history		*check_if_flag_2(t_shell *shell, t_history *hist_args);
 t_history		*check_d_arg(int y, t_shell *shell, t_history *hist_args);
 t_history		*fill_hist_args(t_shell *shell, t_history *hist_args, int *i);
 t_history		*handle_args(t_history *hist_args, t_shell *shell, int *i);
+void			sh_close(int n, char *msg);
 
 #endif

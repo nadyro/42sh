@@ -6,11 +6,12 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/08 06:09:10 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/15 15:49:29 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/16 18:47:10 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
+#include "builtins.h"
 
 static t_node	*find_in_history(char *cmd, t_node *history, int *depth)
 {
@@ -85,7 +86,7 @@ static int		search_react(t_g_prpt *g_prpt)
 		g_prpt_delete(g_prpt);
 	else
 	{
-		((g_prpt->buf = ft_strdup(user_entry)) != NULL ? 0 : exit(1));
+		((g_prpt->buf = ft_strdup(user_entry)) != NULL ? 0 : sh_close(1, ""));
 		if (nb_user_entry == 6)
 			ft_flush(g_prpt);
 		return (data_react(g_prpt) ? 1 : 0);
@@ -130,7 +131,7 @@ void			search_mode(t_g_prpt *g_prpt, t_stat_data *stat_data)
 		stat_data->old_line = NULL;
 	}
 	stat_data->old_line = g_prpt->line;
-	((g_prpt->line = ft_strdup("\0")) ? 0 : exit(1));
+	((g_prpt->line = ft_strdup("\0")) ? 0 : sh_close(1, ""));
 	search_mode_aux(g_prpt, stat_data);
 	ft_strdel(&stat_data->old_line);
 	tputs(tgetstr("cd", NULL), 1, ft_putshit);

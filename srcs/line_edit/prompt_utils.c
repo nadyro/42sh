@@ -6,11 +6,12 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/30 07:30:34 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/15 15:48:06 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/16 18:42:26 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
+#include "builtins.h"
 
 void	ft_flush(t_g_prpt *g_prpt)
 {
@@ -42,7 +43,7 @@ void	g_prpt_clean(void)
 {
 	free(g_prpt->line);
 	if (!(g_prpt->line = ft_strdup("\0")))
-		exit(1);
+		sh_close(1, "");
 	g_prpt->pos = 0;
 	g_prpt->total = 0;
 	g_prpt->current = NULL;

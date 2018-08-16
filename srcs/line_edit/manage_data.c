@@ -6,11 +6,12 @@
 /*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 23:36:42 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/10 16:50:35 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/16 18:41:40 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
+#include "builtins.h"
 
 void		g_prpt_backdel(t_g_prpt *g_prpt)
 {
@@ -47,7 +48,7 @@ char		*g_prpt_stock(t_g_prpt *g_prpt, char *user_entry)
 	{
 		if (!(line = ft_memalloc(sizeof(char) *
 						(g_prpt->total + BUFFER + 1))))
-			exit(1);
+			sh_close(1, "");
 		if (g_prpt->line != NULL)
 		{
 			ft_strcpy(line, g_prpt->line);
