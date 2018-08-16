@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/14 18:20:04 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/16 12:07:03 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ int				ft_exec(t_shell *shell, char **env);
 char			**env_to_tab(t_env *list);
 char			*arg_full_path(t_shell *shell);
 int				cd_path(t_shell *shell, int i, char **paths);
+int				cd_error_mgmt(char *operand);
 char			**fetch_cd_paths(t_shell *shell);
 void			free_table(char **tabs);
 int				builtin_check(t_shell *shell);
