@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+         #
+#    By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/15 18:28:35 by kernel_pani      ###   ########.fr        #
+#    Updated: 2018/08/16 14:37:26 by nsehnoun         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
