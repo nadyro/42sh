@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
+#    By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/16 16:05:33 by arohani          ###   ########.fr        #
+#    Updated: 2018/08/16 16:34:22 by arohani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ COLOR_WHITE		= \033[1;37m
 ################################################################################
 
 SRC_FILES = main.c \
+			main_loop.c \
 			\
 			lexer/lexer.c \
 			\
@@ -99,7 +100,7 @@ SRC_FILES = main.c \
 			\
 			lexer/check_history_token.c \
 			lexer/history_token.c \
-			lexer/get_tokens_loop.c \
+			lexer/get_tokens_loop.c
 
 INC_FILES = lexer.h \
 			parser.h \

@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/19 12:59:04 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/12 15:08:47 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/16 16:46:35 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,5 +80,5 @@ void		implement_redirs(t_shell *shell, t_ast *cmd)
 		implement_heredoc(cmd, shell->last_hd);
 	if (shell->redir_error == 1)
 		cmd->cmd_ret = -1;
-	ast_execute(shell, cmd);
+	ast_execute(shell, cmd, 0);
 }

@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/16 15:46:14 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/16 16:47:08 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,13 +111,13 @@ static int	handle_arg_errors(t_shell *shell, t_ast *cmd)
 	return (0);
 }
 
-int			ast_execute(t_shell *shell, t_ast *cmd)
+int			ast_execute(t_shell *shell, t_ast *cmd, int env_exec)
 {
 	struct stat	tmp;
 
 	if (shell && shell->args && ARG && shell->redir_error != 1)
 	{
-		if (((cmd->cmd_ret = builtin_check(shell, cmd)) == -10))
+		if (env_exec == 1 || ((cmd->cmd_ret = builtin_check(shell, cmd)) == -10))
 		{
 			shell->full_path = (ARG[0] != '/' &&
 					has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
