@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/12 13:42:15 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/12 15:02:29 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/16 19:14:48 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,34 @@
 #include "libft.h"
 #include "heredoc.h"
 #include "builtins.h"
+
+static void	args_from_redirs(t_shell *shell, int beg)
+{
+	int		count;
+
+	count = 0;
+	while (shell->tok[beg] != TK_END)
+	{
+		if (shell->tok[beg] == TK_CMD || shell->tok[beg] == TK_WORD)
+			count++;
+		beg += 3;
+	}
+	if (count > 0)
+	{
+		if (!(shell->args = (char **)malloc(sizeof(char *) * (count + 1))))
+			return ;
+		shell->args[count--] = 0;
+		while (beg >= 0)
+		{
+			if (shell->tok[beg] == TK_CMD || shell->tok[beg] == TK_WORD)
+			{
+				shell->args[count--] =
+					token2str(&shell->tok[beg], shell->line, shell->envv);
+			}
+			beg -= 3;
+		}
+	}
+}
 
 static void	handle_prefix_syntax(t_shell *shell, t_ast *cmd)
 {
@@ -26,7 +54,7 @@ static void	handle_prefix_syntax(t_shell *shell, t_ast *cmd)
 		tmp->beg = tmp->next->beg + 3;
 		tmp->end = tmp->next->end;
 		tmp->next->end = tmp->next->beg;
-		create_arg_table(shell, tmp->beg, tmp->end);
+		args_from_redirs(shell, cmd->beg);
 	}
 	else
 		shell->args = NULL;
@@ -49,12 +77,12 @@ void		shell_args_from_redirs(t_shell *shell, t_ast *cmd)
 		if (shell->tok[beg] == TK_IO_NUMBER)
 		{
 			tmp->ionum = beg;
-			create_arg_table(shell, tmp->beg, tmp->ionum - 3);
+			args_from_redirs(shell, cmd->beg);
 			return ;
 		}
 		beg += 3;
 	}
-	create_arg_table(shell, tmp->beg, tmp->end);
+	args_from_redirs(shell, cmd->beg);
 }
 
 static void	fill_arg_table(t_shell *shell, int last, int beg, int end)
