@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:07:51 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/15 15:16:16 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/16 15:00:48 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,9 @@ t_node			*cmp_space_entry(char *a_name, int is_null);
 char			**lst_to_array(t_node *matches);
 
 void			clean_tabs(char **t, int j);
-void			send_nudes(t_node **my_phone);
+void			send_matches(t_node **my_phone);
 void			free_lists(t_node *lst);
-void			print_nudes(t_node *matches);
+void			print_matches(t_node *matches);
 int				is_pre_binary(char c);
 
 void			get_cursor_pos(t_coord *actualize, t_g_prpt *g_prpt);
