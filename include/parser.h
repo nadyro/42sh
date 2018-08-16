@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:27:44 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/13 05:33:38 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/16 16:06:39 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 # define T2S_BLOCK 0xFF
 # define T2S_CUR 0
 # define T2S_OLD 1
-# include <builtins.h>
+# include "builtins.h"
+# include "shell_structs.h"
 
 typedef struct	s_t2s
 {
@@ -26,7 +27,7 @@ typedef struct	s_t2s
 	int		cursor[2];
 	int		stat[2];
 }				t_t2s;
-typedef struct	s_redirs
+/*typedef struct	s_redirs
 {
 	int						beg;
 	int						end;
@@ -48,7 +49,7 @@ typedef struct	s_ast
 	struct s_ast			*left;
 	t_redirs				*redirs;
 	struct s_ast			*right;
-}				t_ast;
+}				t_ast;*/
 
 char			*token2str(int *token, char *str, char **env);
 int				parser_validation(int *tk_arr, char *ine);

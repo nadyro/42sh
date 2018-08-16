@@ -6,56 +6,13 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/17 14:00:45 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/14 17:33:24 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/16 16:17:34 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
+#include "parser.h"
 #include <stdio.h>
-
-static int	env_launch_exec(t_shell *shell, char **mod)
-{
-	char	*full_path;
-
-	full_path = arg_full_path(shell);
-	if (execve(shell->args[0], shell->args, mod) == -1)
-	{
-		if (execve(full_path, shell->args, mod) == -1)
-		{
-			ft_putstr_fd("env: ", 2);
-			(!full_path) ? ft_putstr_fd(shell->args[0], 2) :
-				ft_putstr_fd(full_path, 2);
-			ft_putstr_fd(": Command not found.\n", 2);
-			if (full_path && full_path[0])
-				ft_strdel(&full_path);
-			exit(EXIT_FAILURE);
-		}
-	}
-	if (full_path && full_path[0])
-		ft_strdel(&full_path);
-	return (1);
-}
-
-static int	env_launch(t_shell *shell, char **mod)
-{
-	pid_t	pid;
-	pid_t	wpid;
-	int		status;
-
-	status = 0;
-	pid = fork();
-	if (pid == 0)
-		env_launch_exec(shell, mod);
-	else if (pid < 0)
-		ft_putstr_fd("error pid less than 0 in lsh launch", 2);
-	else
-	{
-		wpid = waitpid(pid, &status, WUNTRACED);
-		while (!WIFEXITED(status) && !WIFSIGNALED(status))
-			wpid = waitpid(pid, &status, WUNTRACED);
-	}
-	return (1);
-}
 
 static char	**get_new_args(t_shell *shell)
 {
@@ -63,11 +20,14 @@ static char	**get_new_args(t_shell *shell)
 	int		start;
 	char	**args;
 
+	fprintf(stderr, "DEBUG 1, shell->list->last = %d\n", shell->list->last);
 	args = NULL;
 	start = shell->list->last;
 	count = 0;
+	fprintf(stderr, "DEBUG 2\n");
 	while (shell->args && shell->args[start++])
 		count++;
+	fprintf(stderr, "DEBUG 3, count = %d\n", count);
 	if (count)
 	{
 		if (!(args = (char **)malloc(sizeof(char *) * (count + 1))))
@@ -75,9 +35,12 @@ static char	**get_new_args(t_shell *shell)
 	}
 	count = 0;
 	start = shell->list->last;
+	fprintf(stderr, "DEBUG 4\n");
 	while (shell->args && shell->args[start])
 	{
+		fprintf(stderr, "DEBUG 5, storing %s into new_args\n", shell->args[start]);
 		args[count++] = ft_strdup(shell->args[start++]);
+		fprintf(stderr, "DEBUG 5b, after attempt, args = %s\n", args[count - 1]);
 	}
 	if (count)
 		args[count] = 0;
@@ -86,14 +49,24 @@ static char	**get_new_args(t_shell *shell)
 	return (args);
 }
 
-int			ft_exec(t_shell *shell, char **env)
+int			ft_exec(t_shell *shell, t_ast *cmd, char **mod)
 {
+	char	**tmp;
+
+	tmp = shell->envv;
 	if (shell->list->last == 0 && shell->args[1])
 		shell->list->last = 1;
 	if (shell->args[0] != NULL)
 	{
+		fprintf(stderr, "before env exec, arg table is : \n");
+		ft_print_table(shell->args);
 		shell->args = get_new_args(shell);
-		return (env_launch(shell, env));
+		fprintf(stderr, "now the arg table is : \n");
+		ft_print_table(shell->args);
+		shell->envv = mod;
+		ast_execute(shell, cmd);
+		shell->envv = tmp;
+		return (cmd->cmd_ret);
 	}
 	return (0);
 }

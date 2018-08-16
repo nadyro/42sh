@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+         #
+#    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/16 10:35:37 by arohani          ###   ########.fr        #
+#    Updated: 2018/08/16 16:05:33 by arohani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -105,6 +105,7 @@ INC_FILES = lexer.h \
 			parser.h \
 			builtins.h \
 			sh_line_edit.h \
+			shell_structs.h \
 			heredoc.h
 
 NAME ?= 42sh

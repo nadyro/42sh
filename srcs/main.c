@@ -1,9 +1,8 @@
 #include "lexer.h"
-#include "parser.h"
 #include "libft.h"
-#include "builtins.h"
 #include "sh_line_edit.h"
 #include "heredoc.h"
+#include "parser.h"
 #include <stdio.h>
 
 char  *get_cwd_prompt(t_shell shell)

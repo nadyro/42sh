@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/16 13:05:23 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/16 16:11:32 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 
 # include "../libft/libft.h"
 # include "sh_line_edit.h"
+# include "shell_structs.h"
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/dir.h>
@@ -83,6 +84,7 @@ typedef struct	s_shell
 	int						redir_error;
 	int						last_hd;
 	int						bin_ret;
+	int						mod;
 	int						i;
 	int						p;
 	int						l;
@@ -105,7 +107,7 @@ typedef struct	s_shell
 t_env			*env_setup(char **env);
 void			ash_loop(t_shell *shell);
 int				ash_execute(t_shell *shell);
-int				ash_env(t_shell *shell);
+int				ash_env(t_shell *shell, t_ast *cmd);
 int				ash_exit(t_shell *shell);
 int				ash_cd(t_shell *shell);
 int				regular_cd(t_shell *shell);
@@ -115,7 +117,7 @@ int				ash_unsetenv(t_shell *shell);
 int				ash_env_mod(t_shell *shell);
 void			add_to_mod(t_shell *shell);
 t_env			*mod_init(t_shell *shell);
-int				ft_exec(t_shell *shell, char **env);
+int				ft_exec(t_shell *shell, t_ast *cmd, char **mod);
 char			**env_to_tab(t_env *list);
 char			*arg_full_path(t_shell *shell);
 int				cd_path(t_shell *shell, int i, char **paths);
@@ -123,7 +125,7 @@ int				cd_error_mgmt(char *operand);
 void			permission_denied(t_shell *shell);
 char			**fetch_cd_paths(t_shell *shell);
 void			free_table(char **tabs);
-int				builtin_check(t_shell *shell);
+int				builtin_check(t_shell *shell, t_ast *cmd);
 void			free_env(t_env *list);
 int				has_paths(t_shell *shell, int cdpath);
 t_env			*env_init(void);
