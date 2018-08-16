@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/15 14:17:29 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/14 18:24:54 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/16 10:14:12 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static int	add_to_env(t_shell *shell, t_env **tmp)
 		return (0);
 	}
 	ft_putstr_fd("Error adding to list of environment variables.\n", 2);
-	return (-1);;
+	return (-1);
 }
 
 static int	setenv_parse(t_shell *shell, t_env *tmp)

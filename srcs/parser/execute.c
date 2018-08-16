@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/14 18:35:10 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/16 13:45:28 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 	else if (pid < 0)
 	{
 		cmd->cmd_ret = -1;
-		ft_putstr_fd("error pid less than 0 in lsh launch", 2);
+		ft_putstr_fd("error pid less than 0 in ast launch", 2);
 	}
 	else
 	{
@@ -124,13 +124,17 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 					has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
 			if (handle_arg_errors(shell, cmd) == 0)
 			{
-				if (stat(ARG, &tmp) == 0 && S_ISDIR(tmp.st_mode))
+				if (stat(ARG, &tmp) == 0 && (S_ISDIR(tmp.st_mode) ||
+				!(tmp.st_mode & (S_IXUSR))))
 				{
-					executing_directory(shell);
+					(S_ISDIR(tmp.st_mode)) ? executing_directory(shell) :
+					permission_denied(shell);
 					cmd->cmd_ret = -1;
 				}
 				else
+				{
 					ast_launch(shell, cmd);
+				}
 			}
 		}
 	}
