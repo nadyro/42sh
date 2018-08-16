@@ -6,14 +6,13 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/16 13:45:28 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/16 17:03:05 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "lexer.h"
 #include "libft.h"
-#include "builtins.h"
 #define ARG shell->args[0]
 
 void		restore_std_fds(t_shell *shell, t_ast *cmd, t_redirs *rd)
@@ -52,7 +51,7 @@ static void	launch_exec(t_shell *shell, char *full_path)
 			ft_putstr_fd(": Permission denied\n", 2);
 		}
 	}
-	exit(1);
+	sh_close(1, "");
 }
 
 static void	ast_launch(t_shell *shell, t_ast *cmd)
@@ -112,13 +111,13 @@ static int	handle_arg_errors(t_shell *shell, t_ast *cmd)
 	return (0);
 }
 
-int			ast_execute(t_shell *shell, t_ast *cmd)
+int			ast_execute(t_shell *shell, t_ast *cmd, int env_ex)
 {
 	struct stat	tmp;
 
 	if (shell && shell->args && ARG && shell->redir_error != 1)
 	{
-		if (((cmd->cmd_ret = builtin_check(shell)) == -10))
+		if (env_ex == 1 || ((cmd->cmd_ret = builtin_check(shell, cmd)) == -10))
 		{
 			shell->full_path = (ARG[0] != '/' &&
 					has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
@@ -132,9 +131,7 @@ int			ast_execute(t_shell *shell, t_ast *cmd)
 					cmd->cmd_ret = -1;
 				}
 				else
-				{
 					ast_launch(shell, cmd);
-				}
 			}
 		}
 	}

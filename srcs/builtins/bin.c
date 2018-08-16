@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   bin.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 12:01:43 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/16 14:38:59 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/16 16:59:09 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int			builtin_check(t_shell *shell)
+int			builtin_check(t_shell *shell, t_ast *cmd)
 {
 	if (shell && shell->args && shell->args[0])
 	{
@@ -25,7 +25,10 @@ int			builtin_check(t_shell *shell)
 		else if (ft_strcmp(shell->args[0], "unsetenv") == 0)
 			return (ash_unsetenv(shell));
 		else if (ft_strcmp(shell->args[0], "env") == 0)
-			return (ash_env(shell));
+		{
+			ash_env(shell, cmd);
+			return (cmd->cmd_ret);
+		}
 		else if (ft_strcmp(shell->args[0], "exit") == 0)
 			return (ash_exit(shell));
 		else if (ft_strcmp(shell->args[0], "history") == 0)
@@ -74,6 +77,6 @@ int			ash_exit(t_shell *shell)
 {
 	write_history_file(shell, 0);
 	if (shell)
-		exit(0);
+		sh_close(0, "");
 	return (-1);
 }

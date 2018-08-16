@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/09 15:16:39 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/16 10:13:12 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/16 17:58:38 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,10 @@ static void	grab_pwd(t_shell *shell, char **clean)
 {
 	t_env	*tmp;
 	int		i;
+	char	cwd[4096];
 
 	i = 0;
+	ft_bzero(cwd, 4096);
 	tmp = shell->list;
 	while (tmp)
 	{
@@ -29,6 +31,13 @@ static void	grab_pwd(t_shell *shell, char **clean)
 			return ;
 		}
 		tmp = tmp->next;
+	}
+	if (getcwd(cwd, sizeof(cwd)) == NULL)
+		ft_putstr_fd("Error retrieving cwd\n", 2);
+	else
+	{
+		*clean = (cwd[ft_strlen(cwd) - 1] == '/') ?
+			ft_strdup(cwd) : ft_strjoin(cwd, "/");
 	}
 }
 

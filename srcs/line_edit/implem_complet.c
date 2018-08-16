@@ -6,11 +6,12 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/27 03:07:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/14 15:18:45 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/16 18:42:15 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
+#include "builtins.h"
 
 static void	final_display(t_g_prpt *g_prpt, char *to_display)
 {
@@ -38,7 +39,7 @@ static void	completion_display_aux(t_g_prpt *g_prpt,
 
 	if (!(to_display =
 				ft_memalloc(sizeof(char) * nb * max + 1 + g_prpt->total + 1)))
-		exit(1);
+		sh_close(1, "");
 	ft_strcat(to_display, g_prpt->line);
 	ft_strcat(to_display, "\n");
 	count = 0;

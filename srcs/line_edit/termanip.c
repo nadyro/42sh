@@ -6,11 +6,12 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/14 22:21:10 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/16 16:41:44 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/16 18:59:17 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
+#include "builtins.h"
 
 static void	termanip_aux(int sig, struct termios shell, struct termios old)
 {
@@ -52,7 +53,7 @@ void		termanip(int sig)
 	else if (sig == -1)
 	{
 		tcsetattr(0, TCSANOW, &old);
-		exit(0);
+		sh_close(0, "");
 	}
 	else
 	{

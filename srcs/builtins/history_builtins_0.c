@@ -46,9 +46,9 @@ t_node		*init_nonvoid_history(char *cmd, t_node *history)
 	t_node	*new;
 
 	if (!(new = malloc(sizeof(*new))))
-		exit(1);
+		sh_close(1, "");
 	if (!(new->cmd = ft_strdup(cmd)))
-		exit(1);
+		sh_close(1, "");
 	new->next = history;
 	new->prev = NULL;
 	free(cmd);

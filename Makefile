@@ -6,7 +6,7 @@
 #    By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/16 18:58:02 by nsehnoun         ###   ########.fr        #
+#    Updated: 2018/08/16 19:31:48 by nsehnoun         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ COLOR_WHITE		= \033[1;37m
 ################################################################################
 
 SRC_FILES = main.c \
+			main_loop.c \
 			\
 			lexer/lexer.c \
 			\
@@ -72,6 +73,7 @@ SRC_FILES = main.c \
 			builtins/history_builtins_5.c \
 			builtins/history_options.c \
 			builtins/history_flags.c \
+			builtins/sh_close.c \
 			\
 			line_edit/line_edit_main_loop.c \
 			line_edit/termanip.c \
@@ -105,6 +107,7 @@ INC_FILES = lexer.h \
 			parser.h \
 			builtins.h \
 			sh_line_edit.h \
+			shell_structs.h \
 			heredoc.h
 
 NAME ?= 42sh
@@ -122,7 +125,7 @@ LIB_INC = -I$(LIB_DIR)/include
 
 OPTIMIZATION ?= -O0
 CC ?= gcc
-CCFLAGS ?= -g -Wall -Wextra -Werror -g3 -fsanitize=address -fno-omit-frame-pointer
+CCFLAGS ?= -g -Wall -Wextra -Werror -g3 #-fsanitize=address -fno-omit-frame-pointer
 LDFLAGS = -L$(LIB_DIR) -lft -ltermcap
 INCLUDES = $(LOCAL_INC) $(LIB_INC)
 

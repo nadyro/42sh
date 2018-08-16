@@ -6,13 +6,14 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/04 13:13:10 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/15 15:57:24 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/16 18:54:38 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "lexer.h"
 #include "heredoc.h"
+#include "builtins.h"
 #include <stdlib.h>
 
 int				g_tk_states[2][39][16] = {
@@ -129,7 +130,7 @@ static int		*lexer_alloc(int *tk_arr, int *arr_size)
 	i = 0;
 	*arr_size = *arr_size * 2;
 	new = (int*)malloc(sizeof(int) * (*arr_size));
-	(new == NULL) ? exit(1) : 0;
+	(new == NULL) ? sh_close(1, "") : 0;
 	ft_memset(new, -1, *arr_size * sizeof(int));
 	while (tk_arr[i] != -1)
 	{
@@ -140,7 +141,23 @@ static int		*lexer_alloc(int *tk_arr, int *arr_size)
 	return (new);
 }
 
-static int		*token_loop(int *tk_arr, char *line, int arr_size, int i)
+static void		*free_arr_and_line(int **tk_arr, char **line)
+{
+	free(*tk_arr);
+	*tk_arr = NULL;
+	free(*line);
+	*line = NULL;
+	return (NULL);
+}
+
+static void		token_adj(int *tk_arr, int *tk_i, int i, int prev)
+{
+	tk_arr[*tk_i] = prev;
+	tk_arr[(*tk_i) + 2] = i - tk_arr[(*tk_i) + 1];
+	(*tk_i) += 3;
+}
+
+static int		*token_loop(int *tk_arr, char **line, int arr_size, int i)
 {
 	int prev;
 	int tk_i;
@@ -149,19 +166,18 @@ static int		*token_loop(int *tk_arr, char *line, int arr_size, int i)
 	tk_i = 0;
 	while (prev != 2 && tk_arr[tk_i] != 0)
 	{
+		if ((*line)[i] < 0 || (*line)[i] > 127)
+			return (free_arr_and_line(&tk_arr, line));
 		while (tk_i >= arr_size - 3)
 			tk_arr = lexer_alloc(tk_arr, &arr_size);
 		(tk_arr[tk_i] == -1) ? tk_arr[tk_i] = 1 : 0;
 		(tk_arr[tk_i] == 1) ? tk_arr[tk_i + 1] = i : 0;
 		prev = tk_arr[tk_i];
-		tk_arr[tk_i] = g_tk_states[0][tk_arr[tk_i] - 1][g_ascii[(int)line[i]]];
-		i += (g_tk_states[1][prev - 1][g_ascii[(int)line[i]]]);
+		tk_arr[tk_i] = g_tk_states[0][tk_arr[tk_i] - 1]
+			[g_ascii[(int)(*line)[i]]];
+		i += (g_tk_states[1][prev - 1][g_ascii[(int)(*line)[i]]]);
 		if (tk_arr[tk_i] == 1 && prev != 22 && prev != 23)
-		{
-			tk_arr[tk_i] = prev;
-			tk_arr[tk_i + 2] = i - tk_arr[tk_i + 1];
-			tk_i += 3;
-		}
+			token_adj(tk_arr, &tk_i, i, prev);
 	}
 	tk_arr[tk_i] == 0 ? ft_ptrclear((void*)&tk_arr) : 0;
 	return (tk_arr);
@@ -177,21 +193,18 @@ int				*get_tokens(char **line)
 	i = 0;
 	arr_size = 1024;
 	tk_arr = (int*)malloc(sizeof(int) * arr_size);
-	(tk_arr == NULL || !line || !(*line)) ? exit(1) : heredoc_manager(0);
+	(tk_arr == NULL || !line || !(*line)) ? sh_close(1, "") : heredoc_manager(0);
 	memset(tk_arr, -1, arr_size * sizeof(int));
-	tk_arr = token_loop(tk_arr, *line, arr_size, 0);
+	tk_arr = token_loop(tk_arr, line, arr_size, 0);
 	if (tk_arr != NULL)
 		get_tokens_loop(tk_arr, i, line, g_state_to_token);
+	else
+		return (NULL);
 	if ((r = precheck_history_token(tk_arr, line)) == 1)
 		return (get_tokens(line));
 	else if (r == 2)
 		return (NULL);
 	if (heredoc_manager(1) && heredoc_fill() != 0)
-	{
-		free(tk_arr);
-		tk_arr = NULL;
-		free(*line);
-		*line = NULL;
-	}
+		return (free_arr_and_line(&tk_arr, line));
 	return (tk_arr);
 }
