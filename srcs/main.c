@@ -126,11 +126,15 @@ int			main(int argc, char **argv, char **env)
 {
 	t_shell			shell;
 	char			*name_term;
+	struct stat		buf;
 	struct winsize	term;
 
 	(void)argc;
 	(void)argv;
 	if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &term) == -1)
+		exit(1);
+	fstat(0, &buf);
+	if (buf.st_size > 0)
 		exit(1);
 	///////////////////////////////////
 	shell.list = (env && env[0]) ? env_setup(env) : env_init();
