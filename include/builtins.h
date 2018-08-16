@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/16 18:39:49 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/16 19:35:54 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ void			update_old_pwd(t_shell *shell, char *new_pwd);
 int				cd_opt_check(t_shell *shell);
 void			cd_canon(t_shell *shell);
 int				cd_get_last(t_shell *shell, char ***split);
-void	    	handle_dot_dots(t_shell *shell);
+void			handle_dot_dots(t_shell *shell);
 int				ash_history(t_shell *shell);
 int				check_warn(t_shell *shell, t_history *hist_args, int y);
 int				check_warn_w(t_history *hist_args, t_shell *shell, int y);
@@ -167,7 +167,8 @@ t_node			*get_last_cmds(t_node *history, int nbr);
 t_node			*fill_history_file(t_node *history, t_shell *shell);
 t_node			*fill_arg_file(t_node *history, t_shell *shell);
 t_node			*write_history_to_mem(t_node *history, t_shell *shell);
-t_node			*lighten_append_hst(int *index, int fd, t_shell *shell, t_node *history);
+t_node			*lighten_append_hst(int *index, int fd,
+		t_shell *shell, t_node *history);
 t_history		*init_hist_args(void);
 t_history		*check_history_args(t_shell *shell);
 t_history		*check_if_flag(t_shell *shell, t_history *hist_args);
@@ -175,6 +176,5 @@ t_history		*check_if_flag_2(t_shell *shell, t_history *hist_args);
 t_history		*check_d_arg(int y, t_shell *shell, t_history *hist_args);
 t_history		*fill_hist_args(t_shell *shell, t_history *hist_args, int *i);
 t_history		*handle_args(t_history *hist_args, t_shell *shell, int *i);
-void			sh_close(int n, char *msg);
 
 #endif
