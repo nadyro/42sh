@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/15 19:32:14 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/13 16:59:52 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/16 18:00:12 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,15 +93,23 @@ void			update_old_pwd(t_shell *shell, char *new_pwd)
 
 	ret = 0;
 	tmp = shell->list;
-	while (tmp)
+	while (tmp && ret != 1)
 	{
 		if (ft_strcmp(tmp->var, "PWD") == 0)
-		{
 			ret = switch_existing_pwd(shell, &tmp, new_pwd);
-			if (ret == 1)
-				return ;
-		}
-		else
+		else if (tmp->next)
 			tmp = tmp->next;
+		if (ret != 1 && !(tmp->next))
+		{
+			if (!(tmp->next = (t_env *)malloc(sizeof(t_env))))
+				return ;
+			tmp->next->prev = tmp;
+			tmp->next->var = ft_strdup("PWD");
+			tmp->next->val = ft_strdup(new_pwd);
+			tmp->next->next = NULL;
+			free_table(shell->envv);
+			shell->envv = env_to_tab(shell->list);
+			return ;
+		}
 	}
 }
