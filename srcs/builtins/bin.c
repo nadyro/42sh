@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 12:01:43 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/16 16:06:57 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/16 16:59:09 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@ int			builtin_check(t_shell *shell, t_ast *cmd)
 		else if (ft_strcmp(shell->args[0], "unsetenv") == 0)
 			return (ash_unsetenv(shell));
 		else if (ft_strcmp(shell->args[0], "env") == 0)
-			return (ash_env(shell, cmd));
+		{
+			ash_env(shell, cmd);
+			return (cmd->cmd_ret);
+		}
 		else if (ft_strcmp(shell->args[0], "exit") == 0)
 			return (ash_exit(shell));
 		else if (ft_strcmp(shell->args[0], "history") == 0)

@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 15:36:41 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/16 16:28:02 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/16 17:01:15 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ static void		process_env_args(t_shell *shell, t_ast *cmd)
 			ash_env_mod(shell);
 			envs = env_to_tab(shell->list->mod);
 			if (shell->args[shell->list->last])
-				//(envs) ? ft_exec(shell, envs) : ft_exec(shell, shell->envv);
 				ft_exec(shell, cmd, envs);
 			else
 				ft_print_table(envs);
@@ -84,7 +83,6 @@ static void		process_env_args(t_shell *shell, t_ast *cmd)
 		else if (!(shell->args[shell->list->last]))
 			ft_print_table(envs);
 		else
-		//	ft_exec(shell, shell->envv);
 			ft_exec(shell, cmd, shell->envv);
 	}
 	if (envs && envs[0])
@@ -95,7 +93,7 @@ int				ash_env(t_shell *shell, t_ast *cmd)
 {
 	if (shell->args && shell->args[1] && ft_strcmp(shell->args[1], "-i") == 0)
 		ash_env_i(shell, cmd);
-	else if (shell->args && shell->args[1] && 
+	else if (shell->args && shell->args[1] &&
 		shell->args[1][0] == '-' && shell->args[1][1])
 	{
 		ft_putstr_fd("env: illegal option -- ", 2);
