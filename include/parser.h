@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:27:44 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/16 16:45:59 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/16 17:03:33 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int				ast_evaluate(t_ast *ast, t_shell *shell);
 t_ast			*fill_leftast(t_ast *parent);
 t_ast			*fill_rightast(t_ast *parent);
 t_ast			*init_ast(t_shell *shell);
-int				ast_execute(t_shell *shell, t_ast *cmd, int env_exec);
+int				ast_execute(t_shell *shell, t_ast *cmd, int env_ex);
 int				*redirect_check(t_shell *shell);
 int				is_redirect(t_shell *shell, t_ast *ast, int beg, int end);
 int				is_fd(char *str, int len);
