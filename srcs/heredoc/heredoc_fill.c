@@ -6,7 +6,7 @@
 /*   By: tcanaud <tcanaud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/15 13:22:15 by tcanaud           #+#    #+#             */
-/*   Updated: 2018/08/15 15:19:24 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/16 10:15:48 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ static t_doc		*heredoc_get_doc(t_dirdoc *doc, int id)
 	return (tmp);
 }
 
-void	heredoc_fill_loop(t_dirdoc *doc,
-		t_doc *doc_current, char *line, char *tmp)
+void				heredoc_fill_loop(t_dirdoc *doc,
+					t_doc *doc_current, char *line, char *tmp)
 {
 	doc_current = heredoc_get_doc(doc, doc->i_doc);
 	line = line_edit_main_loop("> ", NULL, 0);

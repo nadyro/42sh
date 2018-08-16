@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 12:01:43 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/14 18:13:14 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/16 10:11:30 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int			if_opt_n(t_shell *shell)
 int			ash_echo(t_shell *shell)
 {
 	int		i;
-	int 	n;
+	int		n;
 
 	i = if_opt_n(shell);
 	n = (i == 2) ? 1 : 0;
@@ -56,11 +56,9 @@ int			ash_echo(t_shell *shell)
 	{
 		while (shell->args && shell->args[i])
 		{
-			//if (i == 1 && shell->args[i][0] == '-')
-			//	i++;
 			if (!(shell->args[i + 1]))
 			{
-				(n == 1) ?	ft_putstr(shell->args[i]) :
+				(n == 1) ? ft_putstr(shell->args[i]) :
 					ft_putendl(shell->args[i]);
 				return (0);
 			}
