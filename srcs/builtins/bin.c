@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bin.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 12:01:43 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/16 19:16:08 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/16 21:25:22 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int			ash_exit(t_shell *shell)
 
 	i = 0;
 	n = 0;
-	if (shell && shell->args && shell->args[1] && shell->args[2] )
+	if (shell && shell->args && shell->args[1] && shell->args[2])
 	{
 		ft_putstr_fd("42sh: exit: too many arguments\n", 2);
 		return (-1);

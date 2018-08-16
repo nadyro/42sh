@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/04 13:13:10 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/16 18:54:38 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/16 21:27:06 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,8 @@ int				*get_tokens(char **line)
 	i = 0;
 	arr_size = 1024;
 	tk_arr = (int*)malloc(sizeof(int) * arr_size);
-	(tk_arr == NULL || !line || !(*line)) ? sh_close(1, "") : heredoc_manager(0);
+	(tk_arr == NULL || !line || !(*line))
+		? sh_close(1, "") : heredoc_manager(0);
 	memset(tk_arr, -1, arr_size * sizeof(int));
 	tk_arr = token_loop(tk_arr, line, arr_size, 0);
 	if (tk_arr != NULL)

@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 02:11:12 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/13 16:23:45 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/16 20:13:14 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,6 @@ t_node	*fill_arg_file(t_node *history, t_shell *shell)
 		shell->o_history = shell->history_length;
 		close(i);
 	}
-	else
-		ft_putendl("Couldn't open file. Check your rights.");
 	return (history);
 }
 

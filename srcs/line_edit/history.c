@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:20:53 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/16 18:42:00 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/16 21:29:08 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static void	ft_norme(t_g_prpt *g_prpt)
 	tputs(tgetstr("cd", NULL), 1, ft_putshit);
 }
 
-void		history_next(t_g_prpt *g_prpt, t_stat_data *stat_data)
+void		history_next(t_g_prpt *g_prpt, t_stat_data *s_d)
 {
 	if (g_prpt->history == NULL)
 		return ;
@@ -58,16 +58,16 @@ void		history_next(t_g_prpt *g_prpt, t_stat_data *stat_data)
 		g_prpt->current = g_prpt->history;
 		if (g_prpt->line && ft_strlen(g_prpt->line))
 		{
-			free(stat_data->old_line);
-			((stat_data->old_line = ft_strdup(g_prpt->line)) ? 0 : sh_close(0, ""));
+			free(s_d->old_line);
+			((s_d->old_line = ft_strdup(g_prpt->line)) ? 0 : sh_close(0, ""));
 		}
 	}
 	else if (g_prpt->current->next != NULL)
 	{
 		if (ft_strcmp(g_prpt->line, g_prpt->current->cmd))
 		{
-			free(stat_data->old_line);
-			((stat_data->old_line = ft_strdup(g_prpt->line)) ? 0 : sh_close(0, ""));
+			free(s_d->old_line);
+			((s_d->old_line = ft_strdup(g_prpt->line)) ? 0 : sh_close(0, ""));
 		}
 		g_prpt->current = g_prpt->current->next;
 	}

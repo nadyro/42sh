@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/24 13:39:16 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/16 18:41:50 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/16 22:16:11 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,10 @@ void		secure_stock(t_g_prpt *g_prpt, char *to_stock)
 void		sig_react(t_g_prpt *g_prpt, char c)
 {
 	if (c == 4 && g_prpt->total == 0)
-		termanip(-1);
+	{
+		if (ft_strcmp(g_prpt->disp, "> ") != 0)
+			termanip(-1);
+	}
 	else if (c == 12)
 		term_clear();
 }

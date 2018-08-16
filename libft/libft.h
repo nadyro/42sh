@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/14 11:26:13 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/13 06:01:17 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/16 22:53:52 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,19 +102,19 @@ void			ft_lstadd(t_list **alst, t_list *new);
 void			ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list			*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
 
-typedef struct  s_gnl_node
+typedef struct	s_gnl_node
 {
-	int                 fd;
-	int                 to_read;
-	int                 ended;
-	char                *next_line;
-	struct s_gnl_node   *next;
-}               t_gnl_node;
+	int					fd;
+	int					to_read;
+	int					ended;
+	char				*next_line;
+	struct s_gnl_node	*next;
+}				t_gnl_node;
 
-typedef struct  s_gnl_list
+typedef struct	s_gnl_list
 {
-	struct s_gnl_node   *first;
-}               t_gnl_list;
+	struct s_gnl_node	*first;
+}				t_gnl_list;
 
 int				get_next_line(const int fd, char **line);
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/13 14:47:51 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/14 17:49:57 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/16 20:19:20 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,24 @@ void		history_errors(t_history *hist_args)
 {
 	if (hist_args->vide == 1)
 	{
-		ft_putstr("Error : history: d : ");
-		ft_putnbr(hist_args->d_arg);
-		ft_putendl("out of range.");
+		ft_putstr_fd("Error : history: d : ", 2);
+		ft_putnbr_fd(hist_args->d_arg, 2);
+		ft_putendl_fd(" out of range.", 2);
 	}
 	if (hist_args->vide == 2)
-		ft_putendl("Error : history: d : Undefined offset");
+		ft_putendl_fd("Error : history: d : Undefined offset", 2);
 	if (hist_args->vide == 3)
 	{
-		ft_putstr("history : usage: ");
-		ft_putstr("history [-c] [-d offset] [n] or history -awrn");
-		ft_putendl(" or history -ps arg [arg...]");
+		ft_putstr_fd("history : usage: ", 2);
+		ft_putstr_fd("history [-c] [-d offset] [n] or history -awrn", 2);
+		ft_putendl_fd(" or history -ps arg [arg...]", 2);
 	}
 	if (hist_args->vide == 4)
-		ft_putendl("Error : history: Use only one of -warn.");
+		ft_putendl_fd("Error : history: Use only one of -warn.", 2);
 	if (hist_args->vide == 5)
 	{
-		ft_putstr("Error : history: flag or ");
-		ft_putendl("numeric argument required.");
+		ft_putstr_fd("Error : history: flag or ", 2);
+		ft_putendl_fd("numeric argument required.", 2);
 	}
 }
 

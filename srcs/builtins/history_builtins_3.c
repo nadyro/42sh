@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 02:11:49 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/08 01:46:13 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/16 20:14:11 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,15 @@ void	dispatch_history_d(t_shell *shell, t_history *hist_args)
 		}
 		else
 		{
-			ft_putstr("history: ");
-			ft_putnbr(hist_args->d_arg);
-			ft_putendl(": history position out of range.");
+			ft_putstr_fd("history: ", 2);
+			ft_putnbr_fd(hist_args->d_arg, 2);
+			ft_putendl_fd(": history position out of range.", 2);
 			hist_args->vide = 1;
 		}
 	}
 	else
 	{
-		ft_putendl("Undefined offset.");
+		ft_putendl_fd("Undefined offset.", 2);
 		hist_args->vide = 2;
 	}
 }
