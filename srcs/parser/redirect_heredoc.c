@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/12 13:40:15 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/14 15:44:05 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/16 17:21:11 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,12 @@ void	implement_heredoc(t_ast *cmd, int id)
 	if (cmd && id >= 0)
 	{
 		heredoc = heredoc_get(id);
+		pipe(cmd->hfd);
 		if (heredoc)
-		{
-			pipe(cmd->hfd);
 			write(cmd->hfd[1], heredoc, ft_strlen(heredoc));
-			close(cmd->hfd[1]);
-			dup2(cmd->hfd[0], 0);
-			close(cmd->hfd[0]);
-		}
+		close(cmd->hfd[1]);
+		dup2(cmd->hfd[0], 0);
+		close(cmd->hfd[0]);
 	}
 }
 
