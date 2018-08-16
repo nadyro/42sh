@@ -3,6 +3,7 @@
 #include "libft.h"
 #include "builtins.h"
 #include "sh_line_edit.h"
+#include "heredoc.h"
 #include <stdio.h>
 
 char  *get_cwd_prompt(t_shell shell)
@@ -48,12 +49,12 @@ static char	*line_mgmt(char *line, t_node *history, t_shell shell)
 	if (line == NULL)
 	{
 		prompt = get_cwd_prompt(shell);
-		ret = line_edit_main_loop(prompt, history);
+		ret = line_edit_main_loop(prompt, history, 1);
 		free(prompt);
 	}
 	else
 	{
-		tmp = line_edit_main_loop("> ", history);
+		tmp = line_edit_main_loop("> ", history, 1);
 		if (tmp != NULL)
 			ret = ft_strjoin(line, tmp);
 		free(tmp);
@@ -80,10 +81,13 @@ void		main_loop(char *line, t_shell shell)
 	history = fill_history_file(history, &shell);
 	shell.history = history;
 	//End of Nadir's part.	
+	
+	heredoc_manager(0);
 	while (1)
 	{
 		line = line_mgmt(line, shell.history, shell);
 		history_m(0, shell.history);
+		heredoc_manager(2);
 		if (line && (shell.tok = get_tokens(&line)) != NULL)
 		{
 			if ((parser_ret = parser_validation(shell.tok, line)) == 1)
@@ -120,11 +124,14 @@ void		main_loop(char *line, t_shell shell)
 
 int			main(int argc, char **argv, char **env)
 {
-	t_shell	shell;
-	char	*name_term;
+	t_shell			shell;
+	char			*name_term;
+	struct winsize	term;
 
 	(void)argc;
 	(void)argv;
+	if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &term) == -1)
+		exit(1);
 	///////////////////////////////////
 	shell.list = (env && env[0]) ? env_setup(env) : env_init();
 	shell.envv = (shell.list) ? env_to_tab(shell.list) : NULL;

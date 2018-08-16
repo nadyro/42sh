@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/12 14:09:24 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/07 05:09:10 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/14 17:57:53 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ int		get_next_line(const int fd, char **line)
 		return (-1);
 	if (!static_tmp && (!(static_tmp = ft_strnew(0))))
 		return (-1);
-	while (!(chr = ft_strchr((const char *)static_tmp, '\n')) && (x = read(fd, buffer, BUFF_SIZE)) > 0)
+	while (!(chr = ft_strchr((const char *)static_tmp, '\n'))
+			&& (x = read(fd, buffer, BUFF_SIZE)) > 0)
 	{
 		buffer[x] = '\0';
 		a = static_tmp;

@@ -6,7 +6,7 @@
 /*   By: tcanaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/02 18:57:57 by tcanaud           #+#    #+#             */
-/*   Updated: 2018/08/06 13:40:16 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/15 15:56:35 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct			s_doc {
 */
 
 typedef struct			s_dirdoc {
+	int		signal;
 	int		n_doc;
 	int		i_doc;
 	t_doc	*first;
@@ -57,5 +58,8 @@ int						heredoc_manager(int opt);
 int						heredoc_add(int *token, char *str);
 int						heredoc_fill(void);
 char					*heredoc_get(int id);
+void					heredoc_fill_loop(t_dirdoc *doc,
+		t_doc *doc_current, char *line, char *tmp);
+void					heredoc_signal(int sig);
 
 #endif

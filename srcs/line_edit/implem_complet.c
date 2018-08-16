@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   implem_complet.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/27 03:07:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/10 16:51:57 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/14 15:18:45 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ static void	completion_display_aux(t_g_prpt *g_prpt,
 	{
 		ft_strcat(to_display, complete->cmd);
 		spn = ft_strchr(to_display, '\0');
-		if (++count % (g_prpt->size->x / max) == 0)
+		if ((g_prpt->size->x / max) > 0
+			&& ++count % (g_prpt->size->x / max) == 0)
 			ft_strcat(to_display, "\n");
 		else
 			ft_memset(spn, ' ', max - ft_strlen(complete->cmd));
@@ -88,6 +89,7 @@ static void	auto_complete_aux(t_g_prpt *g_prpt, t_node *complete)
 	secure_stock(g_prpt, complete->cmd);
 	free(complete->cmd);
 	free(complete);
+	tputs(tgetstr("cd", NULL), 0, ft_putshit);
 }
 
 void		auto_complete(t_g_prpt *g_prpt)
