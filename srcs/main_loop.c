@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/16 14:38:42 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/16 16:40:35 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/16 17:17:07 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,24 @@
 #include "parser.h"
 #include "heredoc.h"
 
-static char		*get_cwd_prompt(t_shell shell)
+static void		*get_cwd_prompt_next(char *pwd)
 {
 	int		i;
-	char	pwd[1024];
 	char	*ptr;
 	char	*ptr2;
+
+	i = ft_strlen(pwd) - 1;
+	while (i > 0 && pwd[i - 1] != '/')
+		i--;
+	ptr = ft_strjoin("\x1b[36m[", pwd + i);
+	ptr2 = ft_strjoin(ptr, "]\x1b[0m ");
+	free(ptr);
+	return (ptr2);
+}
+
+static char		*get_cwd_prompt(t_shell shell)
+{
+	char	pwd[1024];
 	t_env	*tmp;
 
 	ft_bzero(pwd, 1024);
@@ -38,13 +50,7 @@ static char		*get_cwd_prompt(t_shell shell)
 		ft_putendl_fd("pwd error", 2);
 		return (ft_strcpy(ft_strnew(2), "> "));
 	}
-	i = ft_strlen(pwd) - 1;
-	while (i > 0 && pwd[i - 1] != '/')
-		i--;
-	ptr = ft_strjoin("\x1b[36m[", pwd + i);
-	ptr2 = ft_strjoin(ptr, "]\x1b[0m ");
-	free(ptr);
-	return (ptr2);
+	return (get_cwd_prompt_next(pwd));
 }
 
 static char		*line_mgmt(char *line, t_node *history, t_shell shell)
