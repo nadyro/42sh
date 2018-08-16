@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 12:01:43 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/16 16:59:09 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/16 19:16:08 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,20 @@ int			ash_echo(t_shell *shell)
 
 int			ash_exit(t_shell *shell)
 {
+	int		i;
+	int		n;
+
+	i = 0;
+	n = 0;
+	if (shell && shell->args && shell->args[1] && shell->args[2] )
+	{
+		ft_putstr_fd("42sh: exit: too many arguments\n", 2);
+		return (-1);
+	}
+	else if (shell && shell->args && shell->args[1])
+		n = ft_atoi(shell->args[1]);
 	write_history_file(shell, 0);
 	if (shell)
-		sh_close(0, "");
+		sh_close(n, "");
 	return (-1);
 }
