@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 15:16:39 by pbie              #+#    #+#             */
-/*   Updated: 2018/08/16 12:56:45 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/16 13:45:38 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,14 @@ void	cd_not_dir(char *str)
 void	executing_directory(t_shell *shell)
 {
 	ft_putstr_fd(shell->args[0], 2);
-	ft_putstr_fd(": is a directory\n", 2);
+	ft_putendl_fd(": is a directory.", 2);
 }
 
+void	permission_denied(t_shell *shell)
+{
+	ft_putstr_fd(shell->args[0], 2);
+	ft_putendl_fd(": Permission denied.", 2);
+}
 int		cd_error_mgmt(char *operand)
 {
 	struct stat		tmp;
