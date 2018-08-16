@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 11:05:03 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/14 17:55:18 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/16 10:11:55 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int			regular_cd(t_shell *shell)
 		if (getcwd(cwd, sizeof(cwd)) == NULL)
 			ft_putstr_fd("Error retrieving cwd\n", 2);
 		else
-		{	
+		{
 			(shell->p == 1 && shell->l == 0) ?
 				update_old_pwd(shell, cwd) : update_old_pwd(shell, ARG);
 			return (0);

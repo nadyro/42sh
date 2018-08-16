@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/15 14:17:43 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/14 18:04:40 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/16 10:14:36 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int			ash_unsetenv(t_shell *shell)
 	swap = 0;
 	tmp = shell->list;
 	if (!(shell->args && shell->args[1]))
-	{	
+	{
 		ft_putstr_fd("unsetenv: Too few arguments.\n", 2);
 		return (-1);
 	}
