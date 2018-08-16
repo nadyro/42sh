@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/18 13:45:18 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/10 16:38:07 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/16 15:01:36 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,15 @@ void	clean_tabs(char **t, int j)
 		free(t);
 }
 
-void	send_nudes(t_node **my_phone)
+void	send_matches(t_node **list)
 {
-	t_node	*nudes;
+	t_node	*matches;
 
-	nudes = *my_phone;
-	while (nudes)
+	matches = *list;
+	while (matches)
 	{
-		ft_putendl(nudes->cmd);
-		nudes = nudes->next;
+		ft_putendl(matches->cmd);
+		matches = matches->next;
 	}
 }
 
@@ -55,13 +55,13 @@ void	free_lists(t_node *lst)
 	lst = NULL;
 }
 
-void	print_nudes(t_node *matches)
+void	print_matches(t_node *matches)
 {
 	if (matches)
 	{
 		while (matches->prev != NULL)
 			matches = matches->prev;
-		send_nudes(&matches);
+		send_matches(&matches);
 		while (matches->prev != NULL)
 			matches = matches->prev;
 		free_lists(matches);
