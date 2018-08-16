@@ -6,7 +6,7 @@
 #    By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/16 15:53:40 by antoipom         ###   ########.fr        #
+#    Updated: 2018/08/16 16:34:22 by arohani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -106,6 +106,7 @@ INC_FILES = lexer.h \
 			parser.h \
 			builtins.h \
 			sh_line_edit.h \
+			shell_structs.h \
 			heredoc.h
 
 NAME ?= 42sh

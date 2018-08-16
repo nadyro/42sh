@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/12 16:52:32 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/16 16:46:21 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	evaluate_leaf_node(t_ast *ast, t_shell *shell)
 	else
 	{
 		create_arg_table(shell, ast->beg, ast->end);
-		ast_execute(shell, ast);
+		ast_execute(shell, ast, 0);
 	}
 	if (shell->args)
 		free_table(shell->args);

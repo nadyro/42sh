@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antoipom <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/16 14:38:42 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/16 15:13:18 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/08/16 16:40:35 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static char		*get_cwd_prompt(t_shell shell)
 	t_env	*tmp;
 
 	ft_bzero(pwd, 1024);
-	tmp = (shell.list->mod) ? shell.list->mod : shell.list;
+	tmp = shell.list;
 	while (tmp)
 	{
 		if (!(ft_strcmp(tmp->var, "PWD")))
