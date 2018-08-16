@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:27:44 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/13 05:33:38 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/16 15:05:33 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,6 @@ void		    free_redirs(t_redirs *list);
 int				t2s_init(t_t2s **t2s);
 int				t2s_realloc(t_t2s *t2s, char buffer);
 int				t2s_init_b(t_t2s *t2s);
+void			main_loop(char *line, t_shell shell);
 
 #endif
