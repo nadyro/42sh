@@ -12,14 +12,14 @@
 
 #include "builtins.h"
 
-int			builtin_check(t_shell *shell, t_ast *cmd)
+int			builtin_check(t_shell *shell, t_ast *cmd, int env)
 {
 	if (shell && shell->args && shell->args[0])
 	{
 		if (ft_strcmp(shell->args[0], "echo") == 0)
 			return (ash_echo(shell));
 		else if (ft_strcmp(shell->args[0], "cd") == 0)
-			return (ash_cd(shell));
+			return (ash_cd(shell, env));
 		else if (ft_strcmp(shell->args[0], "setenv") == 0)
 			return (ash_setenv(shell));
 		else if (ft_strcmp(shell->args[0], "unsetenv") == 0)
