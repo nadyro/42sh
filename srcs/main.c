@@ -6,7 +6,7 @@
 /*   By: antoipom <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/16 14:40:11 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/16 15:11:37 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/08/17 15:30:07 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ static void		start_secure(void)
 	struct stat		buf;
 	struct winsize	term;
 
-	if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &term) == -1)
+	if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &term) == -1 || \
+			(ioctl(STDERR_FILENO, TIOCGWINSZ, &term) == -1))
 		sh_close(1, "");
 	fstat(0, &buf);
 	if (buf.st_size > 0)
