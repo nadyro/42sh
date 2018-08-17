@@ -19,7 +19,9 @@
 static void	args_from_redirs(t_shell *shell, int beg)
 {
 	int		count;
+	int		start;
 
+	start = beg;
 	count = 0;
 	while (shell->tok[beg] != TK_END)
 	{
@@ -32,7 +34,7 @@ static void	args_from_redirs(t_shell *shell, int beg)
 		if (!(shell->args = (char **)malloc(sizeof(char *) * (count + 1))))
 			return ;
 		shell->args[count--] = 0;
-		while (beg >= 0)
+		while (beg >= start)
 		{
 			if (shell->tok[beg] == TK_CMD || shell->tok[beg] == TK_WORD)
 			{
