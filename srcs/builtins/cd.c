@@ -79,7 +79,7 @@ int			ash_cd(t_shell *shell, int env)
 {
 	shell->st = cd_opt_check(shell);
 	if (shell->st == -1)
-		return (1);
+		return (-1);
 	if (ARG == NULL && ft_strcmp(shell->args[shell->st - 1], "-") != 0)
 		return (cd_no_arg(shell));
 	else if (shell->args && (ft_strcmp(shell->args[shell->st - 1], "-") == 0))
