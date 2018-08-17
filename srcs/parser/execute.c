@@ -43,8 +43,6 @@ void		restore_std_fds(t_shell *shell, t_ast *cmd, t_redirs *rd)
 
 static void	launch_exec(t_shell *shell, char *full_path)
 {
-	#include <stdio.h>
-	fprintf(stderr, "entered launch_exec with full_path = %s, ARG = %s\n", full_path, ARG);
 	if (full_path && (execve(full_path, shell->args, shell->envv) == -1))
 		(execve(ARG, shell->args, shell->envv));
 	else if (!(full_path))
@@ -114,10 +112,15 @@ int			ast_execute(t_shell *shell, t_ast *cmd, int env_ex)
 
 	if (shell && shell->args && ARG && shell->redir_error != 1)
 	{
-		if (env_ex == 1 || ((cmd->cmd_ret = builtin_check(shell, cmd)) == -10))
+		if (env_ex == 1 || ((cmd->cmd_ret = builtin_check(shell, cmd, env_ex)) == -10))
 		{
 			shell->full_path = (ARG[0] != '/' &&
-					has_paths(shell, 0) == 1) ? arg_full_path(shell) : NULL;
+					has_paths(shell, 0, env_ex) == 1) ? arg_full_path(shell) : NULL;
+			if (env_ex == 1)
+			{
+				#include <stdio.h>
+				fprintf(stderr, "full_path = %s, ARG = %s\n", shell->full_path, ARG);
+			}
 			if (handle_arg_errors(shell, cmd) == 0)
 			{
 				if (stat(ARG, &tmp) == 0 && (S_ISDIR(tmp.st_mode) ||
