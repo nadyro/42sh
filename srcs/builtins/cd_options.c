@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "builtins.h"
-#include <stdio.h>
 
 static int	cd_fill_flags(t_shell *shell, int i)
 {
@@ -25,7 +24,13 @@ static int	cd_fill_flags(t_shell *shell, int i)
 		else if (shell->args[i][j] == 'L')
 			shell->l = 1;
 		else
-			return (i);
+		{
+			ft_putstr_fd("cd: -", 2);
+			ft_putchar_fd(shell->args[i][j], 2);
+			ft_putstr_fd(": invalid option\n", 2);
+			ft_putendl_fd("cd: usage: cd [-LP] [dir]", 2);
+			return (-1);
+		}
 		j++;
 	}
 	return (0);
@@ -46,8 +51,8 @@ int			cd_opt_check(t_shell *shell)
 			return (i + 1);
 		else if (shell->args[i][0] == '-')
 		{
-			if (cd_fill_flags(shell, i) != 0)
-				return (i);
+			if (cd_fill_flags(shell, i) == -1)
+				return (-1);
 		}
 		else
 			return (i);
