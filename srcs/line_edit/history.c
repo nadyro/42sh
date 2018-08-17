@@ -6,11 +6,12 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:20:53 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/13 16:13:19 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/16 21:29:08 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
+#include "builtins.h"
 
 t_node		*add_to_history(char *cmd, t_node *history)
 {
@@ -25,9 +26,9 @@ t_node		*add_to_history(char *cmd, t_node *history)
 	}
 	free(check);
 	if (!(new = malloc(sizeof(*new))))
-		exit(1);
+		sh_close(1, "");
 	if (!(new->cmd = ft_strdup(cmd)))
-		exit(1);
+		sh_close(1, "");
 	new->next = history;
 	new->prev = NULL;
 	if (history)
@@ -48,7 +49,7 @@ static void	ft_norme(t_g_prpt *g_prpt)
 	tputs(tgetstr("cd", NULL), 1, ft_putshit);
 }
 
-void		history_next(t_g_prpt *g_prpt, t_stat_data *stat_data)
+void		history_next(t_g_prpt *g_prpt, t_stat_data *s_d)
 {
 	if (g_prpt->history == NULL)
 		return ;
@@ -57,16 +58,16 @@ void		history_next(t_g_prpt *g_prpt, t_stat_data *stat_data)
 		g_prpt->current = g_prpt->history;
 		if (g_prpt->line && ft_strlen(g_prpt->line))
 		{
-			free(stat_data->old_line);
-			((stat_data->old_line = ft_strdup(g_prpt->line)) ? 0 : exit(0));
+			free(s_d->old_line);
+			((s_d->old_line = ft_strdup(g_prpt->line)) ? 0 : sh_close(0, ""));
 		}
 	}
 	else if (g_prpt->current->next != NULL)
 	{
 		if (ft_strcmp(g_prpt->line, g_prpt->current->cmd))
 		{
-			free(stat_data->old_line);
-			((stat_data->old_line = ft_strdup(g_prpt->line)) ? 0 : exit(0));
+			free(s_d->old_line);
+			((s_d->old_line = ft_strdup(g_prpt->line)) ? 0 : sh_close(0, ""));
 		}
 		g_prpt->current = g_prpt->current->next;
 	}
@@ -83,7 +84,7 @@ void		history_prev(t_g_prpt *g_prpt, t_stat_data *stat_data)
 	if (ft_strcmp(g_prpt->line, g_prpt->current->cmd))
 	{
 		free(stat_data->old_line);
-		((stat_data->old_line = ft_strdup(g_prpt->line)) ? 0 : exit(0));
+		((stat_data->old_line = ft_strdup(g_prpt->line)) ? 0 : sh_close(0, ""));
 	}
 	g_prpt->current = g_prpt->current->prev;
 	ft_norme(g_prpt);

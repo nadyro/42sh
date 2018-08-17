@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/16 19:35:54 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/16 20:05:47 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,7 @@ void			write_arg_p(t_shell *shell);
 void			write_arg_s(t_shell *shell);
 void			history_helper(void);
 void			history_errors(t_history *hist_args);
+void			sh_close(int x, char *msg);
 void			free_after_del(t_node *to_free, t_shell *shell);
 char			*filter_args_2(char **args);
 t_node			*append_history_to_mem(t_node *hstry, t_shell *shell, int to_f);

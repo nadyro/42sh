@@ -6,7 +6,7 @@
 #    By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/16 16:34:22 by arohani          ###   ########.fr        #
+#    Updated: 2018/08/16 20:06:12 by nsehnoun         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -73,6 +73,7 @@ SRC_FILES = main.c \
 			builtins/history_builtins_5.c \
 			builtins/history_options.c \
 			builtins/history_flags.c \
+			builtins/sh_close.c \
 			\
 			line_edit/line_edit_main_loop.c \
 			line_edit/termanip.c \

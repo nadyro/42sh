@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   term.c                                             :+:      :+:    :+:   */
+/*   termanip.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/14 22:21:10 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/07 13:14:41 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/16 18:59:17 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
+#include "builtins.h"
 
 static void	termanip_aux(int sig, struct termios shell, struct termios old)
 {
@@ -24,7 +25,7 @@ static void	termanip_aux(int sig, struct termios shell, struct termios old)
 	else if (sig == 34)
 	{
 		tcgetattr(0, &shell);
-		shell.c_cc[VTIME] += (shell.c_cc[VTIME] == 24 ? 0 : 24);
+		shell.c_cc[VTIME] += (shell.c_cc[VTIME] == 24 ? 0 : 2);
 		tcsetattr(0, TCSANOW, &shell);
 	}
 	else if (sig == 35)
@@ -52,7 +53,7 @@ void		termanip(int sig)
 	else if (sig == -1)
 	{
 		tcsetattr(0, TCSANOW, &old);
-		exit(0);
+		sh_close(0, "");
 	}
 	else
 	{

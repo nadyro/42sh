@@ -6,11 +6,12 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/24 13:39:16 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/13 17:04:59 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/16 22:16:11 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
+#include "builtins.h"
 
 void		secure_stock(t_g_prpt *g_prpt, char *to_stock)
 {
@@ -18,7 +19,7 @@ void		secure_stock(t_g_prpt *g_prpt, char *to_stock)
 
 	if (g_prpt->line == NULL)
 		if (!(g_prpt->line = ft_strdup("\0")))
-			exit(1);
+			sh_close(1, "");
 	if (to_stock == NULL || to_stock[0] == '\0')
 		return ;
 	mem = 0;
@@ -29,7 +30,10 @@ void		secure_stock(t_g_prpt *g_prpt, char *to_stock)
 void		sig_react(t_g_prpt *g_prpt, char c)
 {
 	if (c == 4 && g_prpt->total == 0)
-		termanip(-1);
+	{
+		if (ft_strcmp(g_prpt->disp, "> ") != 0)
+			termanip(-1);
+	}
 	else if (c == 12)
 		term_clear();
 }
@@ -48,7 +52,7 @@ int			data_react(t_g_prpt *g_prpt)
 		g_prpt_stock(g_prpt, &g_prpt->buf[mem]);
 		to_free = g_prpt->buf;
 		if (!(g_prpt->buf = ft_strdup(&g_prpt->buf[mem + 1])))
-			exit(1);
+			sh_close(1, "");
 		free(to_free);
 		tputs(tgetstr("ce", NULL), 1, ft_putshit);
 		return (1);

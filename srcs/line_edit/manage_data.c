@@ -1,23 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_g_prpt_stock.c                                  :+:      :+:    :+:   */
+/*   manage_data.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azybert <azybert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 23:36:42 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/10 16:50:35 by azybert          ###   ########.fr       */
+/*   Updated: 2018/08/16 21:53:37 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
+#include "builtins.h"
 
 void		g_prpt_backdel(t_g_prpt *g_prpt)
 {
 	ft_memmove(&(g_prpt->line[g_prpt->pos]),
 			&(g_prpt->line[g_prpt->pos + 1]),
 			ft_strlen(&(g_prpt->line[g_prpt->pos])));
-	strcat(g_prpt->line, " ");
+	ft_strcat(g_prpt->line, " ");
 	write_data(g_prpt, &(g_prpt->line[g_prpt->pos]),
 			ft_strlen(&(g_prpt->line[g_prpt->pos])));
 	*(ft_strrchr(g_prpt->line, 32)) = '\0';
@@ -31,7 +32,7 @@ void		g_prpt_delete(t_g_prpt *g_prpt)
 			&(g_prpt->line[g_prpt->pos]),
 			ft_strlen(&(g_prpt->line[g_prpt->pos])) + 1);
 	move_cursor(g_prpt, g_prpt->pos - 1, true);
-	strcat(g_prpt->line, " ");
+	ft_strcat(g_prpt->line, " ");
 	write_data(g_prpt, &(g_prpt->line[g_prpt->pos]),
 			ft_strlen(&(g_prpt->line[g_prpt->pos])));
 	*(ft_strrchr(g_prpt->line, ' ')) = '\0';
@@ -47,7 +48,7 @@ char		*g_prpt_stock(t_g_prpt *g_prpt, char *user_entry)
 	{
 		if (!(line = ft_memalloc(sizeof(char) *
 						(g_prpt->total + BUFFER + 1))))
-			exit(1);
+			sh_close(1, "");
 		if (g_prpt->line != NULL)
 		{
 			ft_strcpy(line, g_prpt->line);

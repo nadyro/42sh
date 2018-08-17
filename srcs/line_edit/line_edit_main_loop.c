@@ -6,11 +6,12 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/04 14:28:12 by azybert           #+#    #+#             */
-/*   Updated: 2018/08/15 16:07:10 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/16 18:41:15 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_line_edit.h"
+#include "builtins.h"
 
 t_g_prpt	*g_prpt;
 
@@ -19,12 +20,12 @@ static char	*overbuf(t_g_prpt *g_prpt, int nb_user_entry, char *user_entry)
 	char	*to_return;
 
 	to_return = NULL;
-	((g_prpt->buf = ft_strdup(user_entry)) != NULL ? 0 : exit(1));
+	((g_prpt->buf = ft_strdup(user_entry)) != NULL ? 0 : sh_close(1, ""));
 	if (nb_user_entry == 6)
 		ft_flush(g_prpt);
 	if (data_react(g_prpt))
 		if (!(to_return = ft_strdup(g_prpt->line)))
-			exit(0);
+			sh_close(0, "");
 	return (to_return);
 }
 
@@ -36,7 +37,7 @@ static char	*line_edit_main_loop_aux(t_g_prpt *g_prpt, t_stat_data *stat_data,
 
 	while (to_return == NULL)
 		if (g_prpt->buf != NULL && data_react(g_prpt))
-			((to_return = ft_strdup(g_prpt->line)) ? 0 : exit(0));
+			((to_return = ft_strdup(g_prpt->line)) ? 0 : sh_close(0, ""));
 		else
 		{
 			(g_prpt->origin->y == 0xffffffffffffffff ? g_prpt_clean() : 0);

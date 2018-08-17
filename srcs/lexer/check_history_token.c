@@ -6,7 +6,7 @@
 /*   By: tcanaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/13 03:30:31 by tcanaud           #+#    #+#             */
-/*   Updated: 2018/08/13 06:07:14 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/16 18:54:39 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ int			precheck_history_token(int *tk_arr, char **line)
 	if ((r = check_history_token(tk_arr, line)) > 0)
 	{
 		free(tk_arr);
+		tk_arr = NULL;
 		ft_putstr(*line);
 		return (1);
 	}
