@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/16 19:31:25 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/17 16:53:44 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,12 @@ void		restore_std_fds(t_shell *shell, t_ast *cmd, t_redirs *rd)
 
 static void	launch_exec(t_shell *shell, char *full_path)
 {
-	if (execve(ARG, shell->args, shell->envv) == -1)
-	{
-		if (full_path && execve(full_path, shell->args, shell->envv) == -1)
-		{
-			ft_putstr_fd(ARG, 2);
-			ft_putstr_fd(": Permission denied\n", 2);
-		}
-	}
+	#include <stdio.h>
+	fprintf(stderr, "entered launch_exec with full_path = %s, ARG = %s\n", full_path, ARG);
+	if (full_path && (execve(full_path, shell->args, shell->envv) == -1))
+		(execve(ARG, shell->args, shell->envv));
+	else if (!(full_path))
+		(execve(ARG, shell->args, shell->envv));
 	exit(1);
 }
 
@@ -125,9 +123,22 @@ int			ast_execute(t_shell *shell, t_ast *cmd, int env_ex)
 				if (stat(ARG, &tmp) == 0 && (S_ISDIR(tmp.st_mode) ||
 				!(tmp.st_mode & (S_IXUSR))))
 				{
-					(S_ISDIR(tmp.st_mode)) ? executing_directory(shell) :
-					permission_denied(shell);
-					cmd->cmd_ret = -1;
+					if (!(tmp.st_mode & (S_IXUSR)))
+					{
+						if (!(shell->full_path) ||
+						(shell->full_path && stat(shell->full_path, &tmp) == 0 && !(tmp.st_mode & (S_IXUSR))))
+						{	
+							permission_denied(shell);
+							cmd->cmd_ret = -1;
+						}
+						else
+							ast_launch(shell, cmd);
+					}
+					else
+					{
+						executing_directory(shell);
+						cmd->cmd_ret = -1;
+					}
 				}
 				else
 					ast_launch(shell, cmd);
