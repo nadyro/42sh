@@ -75,7 +75,7 @@ int			regular_cd(t_shell *shell)
 	return (-1);
 }
 
-int			ash_cd(t_shell *shell)
+int			ash_cd(t_shell *shell, int env)
 {
 	shell->st = cd_opt_check(shell);
 	if (shell->st == -1)
@@ -88,7 +88,7 @@ int			ash_cd(t_shell *shell)
 	{
 		if (ARG[0] != '/' && ARG[0] != '.')
 		{
-			if (has_paths(shell, 1) == 2)
+			if (has_paths(shell, 1, env) == 2)
 				cd_path(shell, 0, fetch_cd_paths(shell));
 		}
 		if (chdir(ARG) != 0)
