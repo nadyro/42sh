@@ -105,7 +105,7 @@ int			cd_path(t_shell *shell, int i, char **paths)
 		free_table(paths);
 	return (0);
 }
-#include <stdio.h>
+
 int			has_paths(t_shell *shell, int cdpath, int env)
 {
 	t_env		*tmp;
@@ -116,17 +116,10 @@ int			has_paths(t_shell *shell, int cdpath, int env)
 	while (tmp)
 	{
 		if (cdpath == 0 && ft_strcmp(tmp->var, "PATH") == 0)
-		{
-			fprintf(stderr, "returning 1 from has_paths\n");
 			return (1);
-		}
 		if (cdpath == 1 && ft_strcmp(tmp->var, "CDPATH") == 0)
-		{
-			fprintf(stderr, "returning 2 from has_paths\n");
 			return (2);
-		}
 		tmp = tmp->next;
 	}
-	fprintf(stderr, "returning 0 from hast_paths\n");
 	return (0);
 }
