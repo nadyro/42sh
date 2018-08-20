@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/20 13:58:28 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/20 14:19:56 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 16:23:33 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,15 @@ int			handle_arg_errors(t_shell *shell, t_ast *cmd)
 		ft_strdel(&(shell->full_path));
 		return (cmd->cmd_ret = -1);
 	}
-	else if (ft_strlen(ARG) && (ARG[0] == '/' ||
+	else if (ARG && ft_strlen(ARG) && (ARG[0] == '/' ||
 				(ARG[0] == '.' && ARG[1] == '/')) && access(ARG, F_OK))
 	{
 		ft_putstr_fd(ARG, 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
 		return (cmd->cmd_ret = -1);
 	}
-	else if (!(ft_strlen(ARG)) ||
-			(access(ARG, F_OK) && access(shell->full_path, F_OK)))
+	else if (!(ft_strlen(ARG)) || (ARG && access(ARG, F_OK) &&
+			(shell->full_path == NULL || access(shell->full_path, F_OK))))
 	{
 		ft_putstr_fd(ARG, 2);
 		(ARG[0] == '/' || (ARG[0] == '.' && ARG[1] == '/')) ?
