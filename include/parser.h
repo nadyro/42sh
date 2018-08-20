@@ -43,7 +43,7 @@ t_ast			*init_ast(t_shell *shell);
 int				ast_execute(t_shell *shell, t_ast *cmd, int env_ex);
 int				*redirect_check(t_shell *shell);
 int				is_redirect(t_shell *shell, t_ast *ast, int beg, int end);
-int				is_fd(char *str, int len);
+int				is_fd(char *str, int len, t_shell *shell);
 void			fill_redirs(t_shell *shell, t_ast *ast, int beg, int redir);
 void			implement_redirs(t_shell *shell, t_ast *cmd);
 void			restore_std_fds(t_shell *shell, t_ast *cmd, t_redirs *rd);
