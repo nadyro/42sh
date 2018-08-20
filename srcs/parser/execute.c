@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/20 14:02:20 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 14:21:40 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static void	execute_non_builtin(t_shell *shell, t_ast *cmd)
 			if (!(shell->full_path) ||
 			(shell->full_path && stat(shell->full_path, &tmp) == 0
 			&& !(tmp.st_mode & (S_IXUSR))))
-			{	
+			{
 				permission_denied(shell);
 				cmd->cmd_ret = -1;
 			}
@@ -110,10 +110,12 @@ int			ast_execute(t_shell *shell, t_ast *cmd, int env_ex)
 {
 	if (shell && shell->args && ARG && shell->redir_error != 1)
 	{
-		if (env_ex == 1 || ((cmd->cmd_ret = builtin_check(shell, cmd, env_ex)) == -10))
+		if (env_ex == 1 ||
+				((cmd->cmd_ret = builtin_check(shell, cmd, env_ex)) == -10))
 		{
 			shell->full_path = (ARG[0] != '/' &&
-					has_paths(shell, 0, env_ex) == 1) ? arg_full_path(shell) : NULL;
+					has_paths(shell, 0, env_ex) == 1) ?
+					arg_full_path(shell) : NULL;
 			if (handle_arg_errors(shell, cmd) == 0)
 				execute_non_builtin(shell, cmd);
 		}
