@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/20 21:15:11 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 21:28:41 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@ static void	launch_exec(t_shell *shell, char *full_path, t_ast *cmd)
 	if (cmd && cmd->redirs)
 	{
 		implement_redirs(shell, cmd);
+		if (shell->redir_error == 1)
+		{
+			shell->redir_error = 0;
+			exit(1);
+		}
 		if (handle_arg_errors(shell, cmd) != 0)
 			exit(1);
 	}
