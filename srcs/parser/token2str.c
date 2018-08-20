@@ -6,7 +6,7 @@
 /*   By: tcanaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/13 05:28:42 by tcanaud           #+#    #+#             */
-/*   Updated: 2018/08/20 16:20:29 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/08/20 17:47:11 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,54 +14,62 @@
 #include "lexer.h"
 #include "libft.h"
 
-static unsigned char	g_otm[12][7][3] = {
+static unsigned char	g_otm[14][8][3] = {
 	{
 		{0, 1, 'A'}, {1, 1, 0}, {4, 1, 0}, {7, 1, 0}, {8, 1, 0},
-		{0, 1, 'A'}, {0, 1, 'A'}
+		{0, 1, 'A'}, {0, 1, 'A'}, {12, 1, 0}
 	},
 	{
 		{1, 1, 'A'}, {0, 1, 0}, {1, 1, 'A'}, {2, 1, 0}, {10, 1, 0},
-		{1, 1, 'A'}, {1, 1, 'A'}
+		{1, 1, 'A'}, {1, 1, 'A'}, {1, 1, 'A'}
 	},
 	{
 		{3, -1, 0}, {1, 1, 'A'}, {3, -1, 0}, {3, -1, 0}, {1, 1, 'A'},
-		{3, -1, 0}, {3, 1, 0}
+		{3, -1, 0}, {3, 1, 0}, {3, -1, 0}
 	},
 	{
 		{1, 1, 'A'}, {1, 1, 'A'}, {1, 1, 'A'}, {1, 1, 'A'}, {1, 1, 'A'},
-		{1, 1, 'A'}, {1, 1, 'A'}
+		{1, 1, 'A'}, {1, 1, 'A'}, {1, 1, 'A'}
 	},
 	{
 		{4, 1, 'A'}, {4, 1, 'A'}, {0, 1, 0}, {5, 1, 0}, {4, 1, 'A'},
-		{4, 1, 'A'}, {4, 1, 'A'}
+		{4, 1, 'A'}, {4, 1, 'A'}, {4, 1, 'A'}
 	},
 	{
 		{6, -1, 0}, {6, -1, 0}, {4, 1, 'A'}, {6, -1, 0}, {6, -1, 0},
-		{6, -1, 0}, {6, -1, 0}
+		{6, -1, 0}, {6, -1, 0}, {6, -1, 0}
 	},
 	{
 		{4, 1, 'A'}, {4, 1, 'A'}, {4, 1, 'A'}, {4, 1, 'A'}, {4, 1, 'A'},
-		{4, 1, 'A'}, {4, 1, 'A'}
+		{4, 1, 'A'}, {4, 1, 'A'}, {4, 1, 'A'}
 	},
 	{
 		{0, 1, 'A'}, {0, 1, 'A'}, {0, 1, 'A'}, {0, 1, 'A'}, {0, 1, 'A'},
-		{0, 1, 'A'}, {0, 1, 0}
+		{0, 1, 'A'}, {0, 1, 0}, {0, 1, 'A'}
 	},
 	{
 		{8, 1, 'B'}, {9, 0, 0}, {9, 0, 0}, {9, 0, 0}, {9, 0, 0},
-		{9, 0, 0}, {8, 1, 'B'}
+		{9, 0, 0}, {8, 1, 'B'}, {8, 1, 'B'}
 	},
 	{
 		{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0},
-		{0, 0, 0}, {0, 0, 0}
+		{0, 0, 0}, {0, 0, 0}, {0, 0, 0}
 	},
 	{
 		{10, 1, 'B'}, {11, 0, 0}, {11, 0, 0}, {11, 0, 0}, {11, 0, 0},
-		{11, 0, 0}, {10, 1, 'B'}
+		{11, 0, 0}, {10, 1, 'B'}, {10, 1, 'B'}
 	},
 	{
 		{1, 0, 0}, {1, 0, 0}, {1, 0, 0}, {1, 0, 0}, {1, 0, 0},
-		{1, 0, 0}, {1, 0, 0}
+		{1, 0, 0}, {1, 0, 0}, {1, 0, 0}
+	},
+	{
+		{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0},
+		{0, 0, 0}, {0, 0, 0}, {13, -1, 0}
+	},
+	{
+		{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0},
+		{0, 0, 0}, {0, 0, 0}, {13, 1, 'A'}
 	}
 };
 
@@ -70,13 +78,13 @@ static unsigned int	g_grp[256] = {
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 5, 0, 1, 0, 4,
 	0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -89,16 +97,6 @@ static unsigned int	g_grp[256] = {
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0
 };
-
-static int		t2s_add(t_t2s *t2s, char *str, int cursor, char buffer)
-{
-	if (t2s->i[buffer - 'A'] + 1 > t2s->m[buffer - 'A'])
-		if (t2s_realloc(t2s, buffer))
-			return (1);
-	t2s->buffer[buffer - 'A'][t2s->i[buffer - 'A']] = str[cursor];
-	t2s->i[buffer - 'A'] += 1;
-	return (0);
-}
 
 static void		t2s_free(t_t2s *t2s)
 {
@@ -144,6 +142,16 @@ static char		*buffa2str(t_t2s *t2s)
 	return (str);
 }
 
+static void		one_round(t_t2s *t2s, int *token, char *str)
+{
+	t2s->stat[T2S_OLD] = t2s->stat[T2S_CUR];
+	t2s->cursor[T2S_OLD] = t2s->cursor[T2S_CUR];
+	t2s->stat[T2S_CUR] = g_otm[t2s->stat[T2S_OLD]]
+		[g_grp[(int)*(str + token[1] + t2s->cursor[T2S_OLD])]][0];
+	t2s->cursor[T2S_CUR] += (char)g_otm[t2s->stat[T2S_OLD]]
+		[g_grp[(int)*(str + token[1] + t2s->cursor[T2S_OLD])]][1];
+}
+
 char			*token2str(int *token, char *str, char **env)
 {
 	char	*ret;
@@ -152,12 +160,7 @@ char			*token2str(int *token, char *str, char **env)
 	t2s_init(&t2s);
 	while (t2s != NULL && t2s->cursor[T2S_CUR] < token[2])
 	{
-		t2s->stat[T2S_OLD] = t2s->stat[T2S_CUR];
-		t2s->cursor[T2S_OLD] = t2s->cursor[T2S_CUR];
-		t2s->stat[T2S_CUR] = g_otm[t2s->stat[T2S_OLD]]
-			[g_grp[(int)*(str + token[1] + t2s->cursor[T2S_OLD])]][0];
-		t2s->cursor[T2S_CUR] += (char)g_otm[t2s->stat[T2S_OLD]]
-			[g_grp[(int)*(str + token[1] + t2s->cursor[T2S_OLD])]][1];
+		one_round(t2s, token, str);
 		if (g_otm[t2s->stat[T2S_OLD]]
 				[g_grp[(int)*(str + token[1] + t2s->cursor[T2S_OLD])]][2] != 0)
 			t2s_add(t2s, str + token[1], t2s->cursor[T2S_OLD],
@@ -165,9 +168,13 @@ char			*token2str(int *token, char *str, char **env)
 					[g_grp[(int)*(str + token[1] + t2s->cursor[T2S_OLD])]][2]);
 		if (t2s->stat[T2S_CUR] == 9 || t2s->stat[T2S_CUR] == 11)
 			check_variable(t2s, env);
+		if (t2s->stat[T2S_OLD] == 12 && t2s->stat[T2S_CUR] == 0)
+			add_pwd(t2s, env);
 	}
 	if (t2s->stat[T2S_CUR] == 8)
 		check_variable(t2s, env);
+	if (t2s->stat[T2S_CUR] == 12)
+		add_pwd(t2s, env);
 	ret = buffa2str(t2s);
 	t2s_free(t2s);
 	return (ret);
