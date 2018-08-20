@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/25 17:13:07 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/12 13:24:37 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 20:58:32 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int				is_fd(char *str, int len, t_shell *shell)
 
 	i = 0;
 	if (is_alldigit(str, len) == 0)
-		return (0);
+		return (-2);
 	buffer = (char*)malloc(sizeof(char) * (ft_strlen(str) + 1));
 	ft_bzero(buffer, ft_strlen(str) + 1);
 	ft_strncpy(buffer, str, len);

@@ -6,18 +6,18 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 12:01:43 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/20 16:02:25 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 21:08:22 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int			builtin_check(t_shell *shell, t_ast *cmd)
+int			builtin_check(t_shell *shell, t_ast *cmd, int exec_bin)
 {
 	if (shell && shell->args && shell->args[0])
 	{
 		if (ft_strcmp(shell->args[0], "echo") == 0)
-			return (ash_echo(shell));
+			return ((exec_bin == 0) ? 2 : ash_echo(shell));
 		else if (ft_strcmp(shell->args[0], "cd") == 0)
 			return (ash_cd(shell));
 		else if (ft_strcmp(shell->args[0], "setenv") == 0)
