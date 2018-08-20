@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/09 15:16:39 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/16 17:58:38 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 17:23:00 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int			cd_get_last(t_shell *shell, char ***split)
 			dotdots++;
 		i++;
 	}
-	if (dotdots >= ((i - 1) / 2))
+	if ((i - dotdots) < dotdots)
 	{
 		ft_bzero(ARG, ft_strlen(ARG));
 		ft_strcpy(ARG, "/");
