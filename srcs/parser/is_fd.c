@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "parser.h"
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdlib.h>
@@ -29,7 +30,7 @@ static int		is_alldigit(char *str, int len)
 	return (1);
 }
 
-int				is_fd(char *str, int len)
+int				is_fd(char *str, int len, t_shell *shell)
 {
 	int		i;
 	char	*buffer;
@@ -41,10 +42,13 @@ int				is_fd(char *str, int len)
 	buffer = (char*)malloc(sizeof(char) * (ft_strlen(str) + 1));
 	ft_bzero(buffer, ft_strlen(str) + 1);
 	ft_strncpy(buffer, str, len);
-	if (fcntl(ft_atoi(buffer), F_GETFD) == -1)
+	fd = ft_atoi(buffer);
+	if (fcntl(fd, F_GETFD) == -1)
 	{
 		free(buffer);
-		ft_putendl_fd("Bad file descriptor", 2);
+		ft_putnbr_fd(fd, 2);
+		ft_putendl_fd(": Bad file descriptor", 2);
+		shell->redir_error = 1;
 		return (-1);
 	}
 	fd = ft_atoi(buffer);

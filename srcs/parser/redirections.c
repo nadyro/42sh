@@ -36,7 +36,7 @@ static int	get_fd(t_shell *shell, t_redirs *node)
 	if (tmp->next_re >= 3 && shell->tok[tmp->next_re - 3] == TK_IO_NUMBER)
 	{
 		str = shell->line + shell->tok[tmp->next_re - 3 + 1];
-		fd = is_fd(str, shell->tok[tmp->next_re - 3 + 2]);
+		fd = is_fd(str, shell->tok[tmp->next_re - 3 + 2], shell);
 	}
 	else
 		fd = (shell->tok[tmp->next_re] == TK_LESS ||
@@ -73,8 +73,11 @@ void		implement_redirs(t_shell *shell, t_ast *cmd)
 	while (tmp->next && shell->redir_error != 1)
 	{
 		fd = get_fd(shell, tmp);
-		analyze_redir_node(shell, tmp, fd);
-		tmp = tmp->next;
+		if (shell->redir_error == 0)
+		{
+			analyze_redir_node(shell, tmp, fd);
+			tmp = tmp->next;
+		}
 	}
 	if (last_id >= 0)
 		implement_heredoc(cmd, shell->last_hd);

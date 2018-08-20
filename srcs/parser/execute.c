@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/17 16:53:44 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 14:21:40 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,75 +77,47 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 		ft_strdel(&(shell->full_path));
 }
 
-static int	handle_arg_errors(t_shell *shell, t_ast *cmd)
+static void	execute_non_builtin(t_shell *shell, t_ast *cmd)
 {
-	if ((ft_strcmp(ARG, ".") == 0 || ft_strcmp(ARG, "..") == 0))
+	struct stat	tmp;
+
+	if (stat(ARG, &tmp) == 0 && (S_ISDIR(tmp.st_mode) ||
+	!(tmp.st_mode & (S_IXUSR))))
 	{
-		ft_putstr_fd(ARG, 2);
-		ft_putstr_fd(": Command not found.\n", 2);
-		ft_bzero((void *)(ARG), ft_strlen(ARG));
-		ft_strdel(&(shell->full_path));
-		return (cmd->cmd_ret = -1);
+		if (!(tmp.st_mode & (S_IXUSR)))
+		{
+			if (!(shell->full_path) ||
+			(shell->full_path && stat(shell->full_path, &tmp) == 0
+			&& !(tmp.st_mode & (S_IXUSR))))
+			{
+				permission_denied(shell);
+				cmd->cmd_ret = -1;
+			}
+			else
+				ast_launch(shell, cmd);
+		}
+		else
+		{
+			executing_directory(shell);
+			cmd->cmd_ret = -1;
+		}
 	}
-	else if (ft_strlen(ARG) && (ARG[0] == '/' ||
-				(ARG[0] == '.' && ARG[1] == '/')) && access(ARG, F_OK))
-	{
-		ft_putstr_fd(ARG, 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
-		return (cmd->cmd_ret = -1);
-	}
-	else if (!(ft_strlen(ARG)) ||
-			(access(ARG, F_OK) && access(shell->full_path, F_OK)))
-	{
-		ft_putstr_fd(ARG, 2);
-		(ARG[0] == '/' || (ARG[0] == '.' && ARG[1] == '/')) ?
-			ft_putstr_fd(": No such file or directory\n", 2) :
-			ft_putstr_fd(": Command not found.\n", 2);
-		return (cmd->cmd_ret = -1);
-	}
-	return (0);
+	else
+		ast_launch(shell, cmd);
 }
 
 int			ast_execute(t_shell *shell, t_ast *cmd, int env_ex)
 {
-	struct stat	tmp;
-
 	if (shell && shell->args && ARG && shell->redir_error != 1)
 	{
-		if (env_ex == 1 || ((cmd->cmd_ret = builtin_check(shell, cmd, env_ex)) == -10))
+		if (env_ex == 1 ||
+				((cmd->cmd_ret = builtin_check(shell, cmd, env_ex)) == -10))
 		{
 			shell->full_path = (ARG[0] != '/' &&
-					has_paths(shell, 0, env_ex) == 1) ? arg_full_path(shell) : NULL;
-			if (env_ex == 1)
-			{
-				#include <stdio.h>
-				fprintf(stderr, "full_path = %s, ARG = %s\n", shell->full_path, ARG);
-			}
+					has_paths(shell, 0, env_ex) == 1) ?
+					arg_full_path(shell) : NULL;
 			if (handle_arg_errors(shell, cmd) == 0)
-			{
-				if (stat(ARG, &tmp) == 0 && (S_ISDIR(tmp.st_mode) ||
-				!(tmp.st_mode & (S_IXUSR))))
-				{
-					if (!(tmp.st_mode & (S_IXUSR)))
-					{
-						if (!(shell->full_path) ||
-						(shell->full_path && stat(shell->full_path, &tmp) == 0 && !(tmp.st_mode & (S_IXUSR))))
-						{	
-							permission_denied(shell);
-							cmd->cmd_ret = -1;
-						}
-						else
-							ast_launch(shell, cmd);
-					}
-					else
-					{
-						executing_directory(shell);
-						cmd->cmd_ret = -1;
-					}
-				}
-				else
-					ast_launch(shell, cmd);
-			}
+				execute_non_builtin(shell, cmd);
 		}
 	}
 	shell->redir_error = 0;
