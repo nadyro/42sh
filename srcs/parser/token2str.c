@@ -6,7 +6,7 @@
 /*   By: tcanaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/13 05:28:42 by tcanaud           #+#    #+#             */
-/*   Updated: 2018/08/13 05:36:27 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/20 16:20:29 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ static int		check_variable(t_t2s *t2s, char **env)
 	void		*ptr;
 	size_t		x;
 
-	while (*env != NULL)
+	while (env && *env != NULL)
 	{
 		if ((ptr = ft_memchr(*env, '=', ft_strlen(*env))) == NULL && env++)
 			continue ;

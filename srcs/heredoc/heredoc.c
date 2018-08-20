@@ -6,12 +6,13 @@
 /*   By: tcanaud <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/13 05:41:54 by tcanaud           #+#    #+#             */
-/*   Updated: 2018/08/15 15:56:58 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/20 16:19:26 by antoipom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "heredoc.h"
 #include "sh_line_edit.h"
+#include "parser.h"
 #include "libft.h"
 
 static t_dirdoc		g_dir;
@@ -54,12 +55,12 @@ int					heredoc_add(int *token, char *str)
 
 	if ((new = (t_doc*)malloc(sizeof(t_doc))) == NULL)
 		return (1);
-	if ((new->end = ft_strndup(str + token[1], token[2])) == NULL)
+	if ((new->end = token2str(token, str, NULL)) == NULL)
 	{
 		free(new);
 		return (1);
 	}
-	new->len_end = token[2];
+	new->len_end = ft_strlen(new->end);
 	new->doc = NULL;
 	new->len_doc = 0;
 	new->next = NULL;
