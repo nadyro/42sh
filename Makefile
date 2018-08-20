@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+         #
+#    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/16 20:06:12 by nsehnoun         ###   ########.fr        #
+#    Updated: 2018/08/20 14:19:05 by arohani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ SRC_FILES = main.c \
 			\
 			parser/parser.c \
 			parser/execute.c \
+			parser/error.c \
 			parser/parser_validation.c \
 			parser/redirections.c \
 			parser/redirect_implementation.c \
