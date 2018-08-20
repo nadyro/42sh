@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/13 14:47:51 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/16 20:19:20 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/20 22:11:29 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,21 @@ void		history_errors(t_history *hist_args)
 		ft_putstr_fd("Error : history: flag or ", 2);
 		ft_putendl_fd("numeric argument required.", 2);
 	}
+}
+
+int			signal_history_static(int x)
+{
+	static int		sign = 1;
+
+	if (x >= 0)
+		sign = x;
+	return (sign);
+}
+
+void		sign_history(int sig)
+{
+	signal_history_static(0);
+	signal(sig, sign_history);
 }
 
 int			ash_history(t_shell *shell)

@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/20 21:38:22 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/20 22:10:54 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ typedef struct	s_shell
 	char					*line;
 	int						*tok;
 	int						new_fd;
+	int						last_id;
 	int						redir_error;
 	int						last_hd;
 	int						bin_ret;
@@ -125,7 +126,7 @@ int				cd_error_mgmt(char *operand);
 void			permission_denied(t_shell *shell);
 char			**fetch_cd_paths(t_shell *shell);
 void			free_table(char **tabs);
-int				builtin_check(t_shell *shell, t_ast *cmd);
+int				builtin_check(t_shell *shell, t_ast *cmd, int exec_bin);
 void			free_env(t_env *list);
 int				has_paths(t_shell *shell, int cdpath);
 t_env			*env_init(void);

@@ -6,26 +6,11 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/29 16:17:24 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/20 21:40:14 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/20 22:11:03 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
-
-int			signal_history_static(int x)
-{
-	static int		sign = 1;
-
-	if (x >= 0)
-		sign = x;
-	return (sign);
-}
-
-void		sign_history(int sig)
-{
-	signal_history_static(0);
-	signal(sig, sign_history);
-}
 
 void		write_history_file(t_shell *shell, int to_f)
 {
