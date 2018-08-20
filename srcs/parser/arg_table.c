@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/12 13:42:15 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/16 19:14:48 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 13:54:33 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,8 @@ static void	args_from_redirs(t_shell *shell, int beg, int end)
 		while (beg >= start)
 		{
 			if (shell->tok[beg] == TK_CMD || shell->tok[beg] == TK_WORD)
-			{
 				shell->args[count--] =
 					token2str(&shell->tok[beg], shell->line, shell->envv);
-			}
 			beg -= 3;
 		}
 	}
