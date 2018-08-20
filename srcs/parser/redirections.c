@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/19 12:59:04 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/20 15:45:27 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 16:44:10 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ static void	analyze_redir_node(t_shell *shell, t_redirs *tmp, int fd)
 		implement_greatand(shell, tmp, fd);
 	else if (shell->tok[tmp->next_re] == TK_DGREAT)
 		implement_dgreat(shell, tmp, fd);
+	else if (shell->tok[tmp->next_re] == TK_DLESS)
+		tmp->new_fd = -1;
 }
 
 void		implement_redirs(t_shell *shell, t_ast *cmd)
