@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 02:11:12 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/16 20:13:14 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/20 21:40:13 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_node	*get_last_cmds(t_node *history, int nbr)
 			break ;
 	}
 	i = 0;
-	while (i < y)
+	while (signal_history_static(-1) && i < y)
 	{
 		ft_putnbr(i + 1);
 		ft_putchar(' ');

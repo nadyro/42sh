@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 02:11:49 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/16 20:14:11 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/20 21:48:42 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ void	dispatch_history_print(t_shell *shell)
 {
 	int		conv;
 
+	signal_history_static(1);
+	signal(SIGINT, sign_history);
 	conv = 0;
 	if (shell->args && shell->args[1])
 	{
@@ -51,6 +53,7 @@ void	dispatch_history_print(t_shell *shell)
 	}
 	else if (shell->args)
 		read_history(shell->history, 0);
+	reverse_handle();
 }
 
 void	append_history_mem_to_file(t_shell *shell)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/20 15:38:06 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 21:38:22 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ int				check_warn_w(t_history *hist_args, t_shell *shell, int y);
 int				check_warn_a(t_history *hist_args, t_shell *shell, int y);
 int				check_warn_r(t_history *hist_args, t_shell *shell, int y);
 int				check_warn_n(t_history *hist_args, t_shell *shell, int y);
+int				signal_history_static(int x);
 void			print_hist_args(t_history *hist_args);
 void			write_history_mem_to_file(t_shell *shell);
 void			write_history_file(t_shell *shell, int to_f);
@@ -158,6 +159,7 @@ void			history_helper(void);
 void			history_errors(t_history *hist_args);
 void			sh_close(int x, char *msg);
 void			free_after_del(t_node *to_free, t_shell *shell);
+void			sign_history(int sig);
 char			*filter_args_2(char **args);
 t_node			*append_history_to_mem(t_node *hstry, t_shell *shell, int to_f);
 t_node			*init_nonvoid_history(char *cmd, t_node *history);
@@ -177,5 +179,6 @@ t_history		*check_if_flag_2(t_shell *shell, t_history *hist_args);
 t_history		*check_d_arg(int y, t_shell *shell, t_history *hist_args);
 t_history		*fill_hist_args(t_shell *shell, t_history *hist_args, int *i);
 t_history		*handle_args(t_history *hist_args, t_shell *shell, int *i);
+
 
 #endif
