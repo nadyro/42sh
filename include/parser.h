@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:27:44 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/20 15:42:15 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 17:44:53 by tcanaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ typedef struct	s_t2s
 }				t_t2s;
 
 char			*token2str(int *token, char *str, char **env);
+int				t2s_add(t_t2s *t2s, char *str, int cursor, char buffer);
+void			add_pwd(t_t2s *t2s, char **env);
 int				parser_validation(int *tk_arr, char *ine);
 void			ast_loop_semi(t_ast *head, t_shell *shell, int i);
 void			ast_loop_and_or(t_ast *head, t_shell *shell, int i);
