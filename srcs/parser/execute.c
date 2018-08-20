@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/20 15:42:37 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 16:35:08 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void		restore_std_fds(t_shell *shell, t_ast *cmd, t_redirs *rd)
 	t_redirs *tmp;
 
 	tmp = rd;
-	if (cmd->hd_check)
+	if (cmd->hd_check == 1)
 	{
 		if (fcntl(cmd->hfd[0], F_GETFD) != -1)
 			close(cmd->hfd[0]);
@@ -29,7 +29,7 @@ void		restore_std_fds(t_shell *shell, t_ast *cmd, t_redirs *rd)
 	}
 	while (tmp)
 	{
-		if (fcntl(tmp->new_fd, F_GETFD) != -1)
+		if (tmp->new_fd >= 0 && fcntl(tmp->new_fd, F_GETFD) != -1)
 			close(tmp->new_fd);
 		tmp = tmp->next;
 	}
