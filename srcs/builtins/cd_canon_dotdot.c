@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/13 16:36:38 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/20 17:24:11 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 18:13:15 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void		handle_dot_dots(t_shell *shell)
 		i++;
 	}
 	free(tabs);
-	if (clean[ft_strlen(clean) - 1] == '/')
+	if (ft_strcmp(clean, "/") && clean[ft_strlen(clean) - 1] == '/')
 		clean[ft_strlen(clean) - 1] = '\0';
 	ft_strdel(&ARG);
 	ARG = ft_strdup(clean);
