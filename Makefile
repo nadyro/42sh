@@ -6,7 +6,7 @@
 #    By: arohani <arohani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/20 17:54:06 by nsehnoun         ###   ########.fr        #
+#    Updated: 2018/08/20 17:54:31 by nsehnoun         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,6 +45,7 @@ SRC_FILES = main.c \
 			parser/pipes.c \
 			parser/token2str.c \
 			parser/token2str_init.c \
+			parser/token2str2.c \
 			parser/ast_evaluate.c \
 			parser/ast_construct.c \
 			parser/ast_free.c \
