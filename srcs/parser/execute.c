@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/20 21:15:11 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 22:27:54 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,12 @@ static void	launch_exec(t_shell *shell, char *full_path, t_ast *cmd)
 	if (cmd && cmd->redirs)
 	{
 		implement_redirs(shell, cmd);
-		if (handle_arg_errors(shell, cmd) != 0)
+		if (shell->redir_error == 1)
+		{
+			shell->redir_error = 0;
+			exit(1);
+		}
+		if (cmd->cmd_ret != 2 && handle_arg_errors(shell, cmd) != 0)
 			exit(1);
 	}
 	if (cmd->cmd_ret == 2)
@@ -56,8 +61,6 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 				&& !WIFSTOPPED(status))
 			wpid = waitpid(pid, &status, WUNTRACED);
 	}
-	if (shell->full_path)
-		ft_strdel(&(shell->full_path));
 }
 
 static void	execute_non_builtin(t_shell *shell, t_ast *cmd)
@@ -93,9 +96,6 @@ int			ast_execute(t_shell *shell, t_ast *cmd, int env_ex)
 {
 	if (shell && shell->args && ARG && shell->redir_error != 1)
 	{
-		shell->full_path = (ARG[0] != '/' &&
-				has_paths(shell, 0) == 1) ?
-				arg_full_path(shell) : NULL;
 		if (env_ex == 1 ||
 						(cmd->cmd_ret = builtin_check(shell, cmd, 0)) == -10 ||
 						cmd->cmd_ret == 2)
@@ -107,12 +107,13 @@ int			ast_execute(t_shell *shell, t_ast *cmd, int env_ex)
 				shell->full_path = (ARG[0] != '/' &&
 						has_paths(shell, 0) == 1) ?
 						arg_full_path(shell) : NULL;
-				if (cmd->cmd_ret != 2 && handle_arg_errors(shell, cmd) == 0)
+				if (handle_arg_errors(shell, cmd) == 0)
 					execute_non_builtin(shell, cmd);
+				if (shell->full_path)
+					ft_strdel(&(shell->full_path));
 			}
 		}
 	}
 	shell->redir_error = 0;
-	shell->bin_ret = 0;
 	return (cmd->cmd_ret);
 }
