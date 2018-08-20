@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/16 14:40:11 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/20 20:20:00 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 21:09:44 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ int				main(int argc, char **argv, char **env)
 	start_secure();
 	shell.list = (env && env[0]) ? env_setup(env) : env_init();
 	shell.envv = (shell.list) ? env_to_tab(shell.list) : NULL;
-	shell.redir_error = 0;
 	shell.last_hd = -1;
 	shell.last_id = -1;
 	shell.history_length = 0;

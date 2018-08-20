@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/20 20:47:39 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 21:15:11 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,14 @@
 static void	launch_exec(t_shell *shell, char *full_path, t_ast *cmd)
 {
 	if (cmd && cmd->redirs)
-	{	
+	{
 		implement_redirs(shell, cmd);
 		if (handle_arg_errors(shell, cmd) != 0)
 			exit(1);
 	}
 	if (cmd->cmd_ret == 2)
-	{	
-		((cmd->cmd_ret = builtin_check(shell, cmd, 1) == -1)) ? exit(1) : exit(0);
-	}
+		((cmd->cmd_ret = builtin_check(shell, cmd, 1) == -1)) ?
+			exit(1) : exit(0);
 	else if (full_path && (execve(full_path, shell->args, shell->envv) == -1))
 		(execve(ARG, shell->args, shell->envv));
 	else if (!(full_path))
@@ -107,7 +106,7 @@ int			ast_execute(t_shell *shell, t_ast *cmd, int env_ex)
 			{
 				shell->full_path = (ARG[0] != '/' &&
 						has_paths(shell, 0) == 1) ?
-						arg_full_path(shell) : NULL;		
+						arg_full_path(shell) : NULL;
 				if (cmd->cmd_ret != 2 && handle_arg_errors(shell, cmd) == 0)
 					execute_non_builtin(shell, cmd);
 			}
