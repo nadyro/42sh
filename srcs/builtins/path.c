@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 11:50:10 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/20 14:47:14 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 18:25:47 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ char		*arg_full_path(t_shell *shell)
 	i = 0;
 	full_path = NULL;
 	paths = fetch_paths(shell);
+	str = NULL;
 	while (paths && paths[i])
 	{
 		str = (paths[i][ft_strlen(paths[i]) - 1] != '/')
