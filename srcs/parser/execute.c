@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/20 22:23:17 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 22:27:54 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 		cmd->cmd_ret = (status) ? -1 : 0;
 		while (!WIFEXITED(status) && !WIFSIGNALED(status)
 				&& !WIFSTOPPED(status))
-			wpid = waitpid(pid, &status, WUNTRACED);			
+			wpid = waitpid(pid, &status, WUNTRACED);
 	}
 }
 
@@ -110,7 +110,7 @@ int			ast_execute(t_shell *shell, t_ast *cmd, int env_ex)
 				if (handle_arg_errors(shell, cmd) == 0)
 					execute_non_builtin(shell, cmd);
 				if (shell->full_path)
-					ft_strdel(&(shell->full_path));	
+					ft_strdel(&(shell->full_path));
 			}
 		}
 	}
