@@ -16,14 +16,14 @@
 #include "heredoc.h"
 #include "builtins.h"
 
-static void	args_from_redirs(t_shell *shell, int beg)
+static void	args_from_redirs(t_shell *shell, int beg, int end)
 {
 	int		count;
 	int		start;
 
 	start = beg;
 	count = 0;
-	while (shell->tok[beg] != TK_END)
+	while (beg <= end)
 	{
 		if (shell->tok[beg] == TK_CMD || shell->tok[beg] == TK_WORD)
 			count++;
@@ -56,7 +56,7 @@ static void	handle_prefix_syntax(t_shell *shell, t_ast *cmd)
 		tmp->beg = tmp->next->beg + 3;
 		tmp->end = tmp->next->end;
 		tmp->next->end = tmp->next->beg;
-		args_from_redirs(shell, cmd->beg);
+		args_from_redirs(shell, cmd->beg, cmd->end);
 	}
 	else
 		shell->args = NULL;
@@ -79,12 +79,12 @@ void		shell_args_from_redirs(t_shell *shell, t_ast *cmd)
 		if (shell->tok[beg] == TK_IO_NUMBER)
 		{
 			tmp->ionum = beg;
-			args_from_redirs(shell, cmd->beg);
+			args_from_redirs(shell, cmd->beg, cmd->end);
 			return ;
 		}
 		beg += 3;
 	}
-	args_from_redirs(shell, cmd->beg);
+	args_from_redirs(shell, cmd->beg, cmd->end);
 }
 
 static void	fill_arg_table(t_shell *shell, int last, int beg, int end)
