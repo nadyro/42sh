@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/12 13:31:39 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/20 20:57:28 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 21:46:08 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	implement_great(t_shell *shell, t_redirs *node, int fd)
 {
 	char		*str;
 
-	str = shell->line + shell->tok[node->next_re + 3 + 1];
+	str = token2str(&shell->tok[node->next_re + 3], shell->line, shell->envv);
 	if ((node->new_fd = is_fd(str, shell->tok[node->next_re + 5], shell)) >= 0)
 		dup2(node->new_fd, fd);
 	else if (node->new_fd == -2)
@@ -41,7 +41,7 @@ void	implement_dgreat(t_shell *shell, t_redirs *node, int fd)
 {
 	char		*str;
 
-	str = shell->line + shell->tok[node->next_re + 3 + 1];
+	str = token2str(&shell->tok[node->next_re + 3], shell->line, shell->envv);
 	if ((node->new_fd = is_fd(str, shell->tok[node->next_re + 5], shell)) >= 0)
 		dup2(node->new_fd, fd);
 	else if (node->new_fd == -2)
@@ -62,7 +62,7 @@ void	implement_greatand(t_shell *shell, t_redirs *node, int fd)
 {
 	char		*str;
 
-	str = shell->line + shell->tok[node->next_re + 3 + 1];
+	str = token2str(&shell->tok[node->next_re + 3], shell->line, shell->envv);
 	if (shell->line[shell->tok[node->next_re + 3 + 1]] == '-')
 	{
 		close(fd);
@@ -88,7 +88,7 @@ void	implement_less(t_shell *shell, t_redirs *node, int fd)
 {
 	char		*str;
 
-	str = shell->line + shell->tok[node->next_re + 3 + 1];
+	str = token2str(&shell->tok[node->next_re + 3], shell->line, shell->envv);
 	if ((node->new_fd = is_fd(str, shell->tok[node->next_re + 5], shell)) >= 0)
 		dup2(node->new_fd, fd);
 	else if (node->new_fd == -2)
@@ -109,7 +109,7 @@ void	implement_lessand(t_shell *shell, t_redirs *node, int fd)
 {
 	char		*str;
 
-	str = shell->line + shell->tok[node->next_re + 3 + 1];
+	str = token2str(&shell->tok[node->next_re + 3], shell->line, shell->envv);
 	if (shell->line[shell->tok[node->next_re + 3 + 1]] == '-')
 	{
 		close(fd);
