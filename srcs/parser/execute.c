@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/20 14:21:40 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 15:42:37 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,10 +111,10 @@ int			ast_execute(t_shell *shell, t_ast *cmd, int env_ex)
 	if (shell && shell->args && ARG && shell->redir_error != 1)
 	{
 		if (env_ex == 1 ||
-				((cmd->cmd_ret = builtin_check(shell, cmd, env_ex)) == -10))
+						(cmd->cmd_ret = builtin_check(shell, cmd)) == -10)
 		{
 			shell->full_path = (ARG[0] != '/' &&
-					has_paths(shell, 0, env_ex) == 1) ?
+					has_paths(shell, 0) == 1) ?
 					arg_full_path(shell) : NULL;
 			if (handle_arg_errors(shell, cmd) == 0)
 				execute_non_builtin(shell, cmd);

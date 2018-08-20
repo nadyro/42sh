@@ -6,12 +6,13 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 15:36:41 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/16 17:01:15 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 16:04:20 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 #define USGERROR "\nusage: env [-i] [name=value ...] [utility [argument ...]]\n"
+#include <stdio.h>
 
 static void		add_to_env_i(t_shell *shell, int *k, t_ast *cmd)
 {

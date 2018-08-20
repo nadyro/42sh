@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 11:50:10 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/16 12:54:25 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 14:47:14 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,13 +106,13 @@ int			cd_path(t_shell *shell, int i, char **paths)
 	return (0);
 }
 
-int			has_paths(t_shell *shell, int cdpath, int env)
+int			has_paths(t_shell *shell, int cdpath)
 {
 	t_env		*tmp;
 
 	if (!(shell->list) || (shell->list && !(shell->list->var)))
 		return (0);
-	tmp = (env) ? shell->list->mod : shell->list;
+	tmp = shell->list;
 	while (tmp)
 	{
 		if (cdpath == 0 && ft_strcmp(tmp->var, "PATH") == 0)

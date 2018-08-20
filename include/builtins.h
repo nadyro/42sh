@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/16 20:05:47 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/20 15:38:06 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void			ash_loop(t_shell *shell);
 int				ash_execute(t_shell *shell);
 int				ash_env(t_shell *shell, t_ast *cmd);
 int				ash_exit(t_shell *shell);
-int				ash_cd(t_shell *shell, int env);
+int				ash_cd(t_shell *shell);
 int				regular_cd(t_shell *shell);
 int				ash_echo(t_shell *shell);
 int				ash_setenv(t_shell *shell);
@@ -125,9 +125,9 @@ int				cd_error_mgmt(char *operand);
 void			permission_denied(t_shell *shell);
 char			**fetch_cd_paths(t_shell *shell);
 void			free_table(char **tabs);
-int				builtin_check(t_shell *shell, t_ast *cmd, int env);
+int				builtin_check(t_shell *shell, t_ast *cmd);
 void			free_env(t_env *list);
-int				has_paths(t_shell *shell, int cdpath, int env);
+int				has_paths(t_shell *shell, int cdpath);
 t_env			*env_init(void);
 void			executing_directory(t_shell *shell);
 void			update_old_pwd(t_shell *shell, char *new_pwd);
