@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antoipom <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/16 14:40:11 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/17 15:51:55 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/08/20 20:20:00 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int				main(int argc, char **argv, char **env)
 	shell.envv = (shell.list) ? env_to_tab(shell.list) : NULL;
 	shell.redir_error = 0;
 	shell.last_hd = -1;
+	shell.last_id = -1;
 	shell.history_length = 0;
 	shell.o_history = 0;
 	shell.to_add = 0;

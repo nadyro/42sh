@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/07 15:24:20 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/20 15:41:46 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 20:47:21 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,17 @@
 #include "lexer.h"
 #include "libft.h"
 
-static void	evaluate_redirs(t_shell *shell, t_ast *ast, int ret)
+static void	evaluate_redirs(t_shell *shell, t_ast *cmd, int ret)
 {
 	shell->redir_error = 0;
-	fill_redirs(shell, ast, ast->beg, ret);
-	shell->s_in = dup(0);
-	shell->s_out = dup(1);
-	shell->s_err = dup(2);
-	implement_redirs(shell, ast);
-	if (ast && ast->redirs)
-		restore_std_fds(shell, ast, ast->redirs);
-	free_redirs(ast->redirs);
+	fill_redirs(shell, cmd, cmd->beg, ret);
+	shell->last_id = (ft_strstr(shell->line, "<<")) ?
+		last_heredoc_id(shell, cmd->redirs) : -1;
+	cmd->hd_check = (shell->last_id >= 0) ? 1 : 0;
+	shell_args_from_redirs(shell, cmd);
+	ast_execute(shell, cmd, 0);
+	shell->last_id = -1;
+	free_redirs(cmd->redirs);
 }
 
 static int	evaluate_leaf_node(t_ast *ast, t_shell *shell)

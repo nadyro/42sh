@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/19 12:59:04 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/20 16:44:10 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 20:47:07 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,9 @@ static void	analyze_redir_node(t_shell *shell, t_redirs *tmp, int fd)
 
 void		implement_redirs(t_shell *shell, t_ast *cmd)
 {
-	t_redirs	*tmp;
+	t_redirs	*tmp = NULL;;
 	int			fd;
-	int			last_id;
 
-	last_id = (ft_strstr(shell->line, "<<")) ?
-		last_heredoc_id(shell, cmd->redirs) : -1;
-	cmd->hd_check = (last_id >= 0) ? 1 : 0;
-	shell_args_from_redirs(shell, cmd);
 	tmp = cmd->redirs;
 	while (tmp->next && shell->redir_error != 1)
 	{
@@ -81,9 +76,8 @@ void		implement_redirs(t_shell *shell, t_ast *cmd)
 			tmp = tmp->next;
 		}
 	}
-	if (last_id >= 0)
+	if (shell->last_id >= 0)
 		implement_heredoc(cmd, shell->last_hd);
 	if (shell->redir_error == 1)
 		cmd->cmd_ret = -1;
-	ast_execute(shell, cmd, 0);
 }
