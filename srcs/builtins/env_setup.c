@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/15 15:20:24 by arohani           #+#    #+#             */
-/*   Updated: 2018/06/11 13:15:42 by antoipom         ###   ########.fr       */
+/*   Updated: 2018/08/21 12:44:16 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,17 @@ t_env			*env_init(void)
 	if (!(head->next = (t_env *)malloc(sizeof(t_env))))
 		return (NULL);
 	head->next->var = ft_strdup("PWD");
-	if (getcwd(cwd, sizeof(cwd)) == NULL)
-		ft_putstr_fd("error retrieving cwd\n", 2);
+	getcwd(cwd, sizeof(cwd));
 	head->next->val = (cwd[0]) ? ft_strdup(cwd) : NULL;
 	head->next->prev = head;
-	head->next->next = NULL;
 	head->next->mod = NULL;
+	if (!(head->next->next = (t_env *)malloc(sizeof(t_env))))
+		return (NULL);
+	head->next->next->var = ft_strdup("TERM");
+	head->next->next->val = ft_strdup("xterm-256color");
+	head->next->next->prev = head->next;
+	head->next->next->next = NULL;
+	head->next->next->mod = NULL;
 	return (head);
 }
 

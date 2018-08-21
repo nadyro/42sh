@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/20 20:19:33 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/21 12:39:17 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ int				ash_unsetenv(t_shell *shell);
 int				ash_env_mod(t_shell *shell);
 void			add_to_mod(t_shell *shell);
 t_env			*mod_init(t_shell *shell);
+char			*ft_getenv(char *var, t_env *env);
 int				ft_exec(t_shell *shell, t_ast *cmd, char **mod);
 char			**env_to_tab(t_env *list);
 char			*arg_full_path(t_shell *shell);
