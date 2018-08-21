@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/16 14:40:11 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/20 21:09:44 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/21 12:43:40 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,22 @@ static void		start_secure(void)
 	fstat(0, &buf);
 	if (buf.st_size > 0)
 		sh_close(1, "");
+}
+
+char			*ft_getenv(char *var, t_env *env)
+{
+	t_env	*tmp;
+
+	tmp = env;
+	if (!tmp)
+		return (NULL);
+	while (tmp)
+	{
+		if (tmp->var && var && ft_strcmp(tmp->var, var) == 0)
+			return (tmp->val);
+		tmp = tmp->next;
+	}
+	return (NULL);
 }
 
 int				main(int argc, char **argv, char **env)
@@ -44,7 +60,7 @@ int				main(int argc, char **argv, char **env)
 	shell.last_added = 0;
 	shell.is_a = 0;
 	shell.appnd_hst = NULL;
-	if ((name_term = getenv("TERM")) == NULL)
+	if (!(name_term = ft_getenv("TERM", shell.list)))
 	{
 		write(2, "Please set the environment variable TERM\n", 41);
 		return (-1);
