@@ -6,13 +6,13 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/04 22:41:58 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/08 00:36:39 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/21 13:57:55 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int			check_req_args(t_history *hist_args, t_shell *shell, int y, int i)
+static int			checkarg(t_history *hist_args, t_shell *shell, int y, int i)
 {
 	if (shell->args[y][0] == '-')
 	{
@@ -29,7 +29,7 @@ int			check_req_args(t_history *hist_args, t_shell *shell, int y, int i)
 	return (hist_args->vide);
 }
 
-t_history	*check_if_flag_2(t_shell *shell, t_history *hist_args)
+static t_history	*check_flag_2(t_shell *shell, t_history *hist_args)
 {
 	int		i;
 	int		y;
@@ -45,7 +45,7 @@ t_history	*check_if_flag_2(t_shell *shell, t_history *hist_args)
 			hist_args = check_d_arg(y, shell, hist_args);
 			if (hist_args->vide >= 1)
 				return (hist_args);
-			if ((x = check_req_args(hist_args, shell, y, i)) >= 1)
+			if ((x = checkarg(hist_args, shell, y, i)) >= 1)
 				return (hist_args);
 			if (check_warn(shell, hist_args, y) >= 1)
 				return (hist_args);
@@ -56,29 +56,7 @@ t_history	*check_if_flag_2(t_shell *shell, t_history *hist_args)
 	return (hist_args);
 }
 
-t_history	*check_if_flag(t_shell *shell, t_history *hist_args)
-{
-	int			i;
-	int			y;
-
-	i = 0;
-	y = 1;
-	if (shell->args[y])
-	{
-		if (shell->args[y][i] == '-' && shell->args[y][i + 1] == '\0')
-			hist_args->vide = 5;
-		else if (shell->args[y][i] != '-')
-		{
-			if (ft_atoi(shell->args[y]) == 0)
-				hist_args->vide = 5;
-		}
-		else
-			hist_args = check_if_flag_2(shell, hist_args);
-	}
-	return (hist_args);
-}
-
-t_history	*handle_args(t_history *hist_args, t_shell *shell, int *i)
+static t_history	*h_args(t_history *hist_args, t_shell *shell, int *i)
 {
 	if (ft_strchr(shell->args[*i], 'a') != NULL)
 	{
@@ -107,7 +85,29 @@ t_history	*handle_args(t_history *hist_args, t_shell *shell, int *i)
 	return (hist_args);
 }
 
-t_history	*fill_hist_args(t_shell *shell, t_history *hist_args, int *i)
+t_history			*check_if_flag(t_shell *shell, t_history *hist_args)
+{
+	int			i;
+	int			y;
+
+	i = 0;
+	y = 1;
+	if (shell->args[y])
+	{
+		if (shell->args[y][i] == '-' && shell->args[y][i + 1] == '\0')
+			hist_args->vide = 5;
+		else if (shell->args[y][i] != '-')
+		{
+			if (ft_atoi(shell->args[y]) == 0)
+				hist_args->vide = 5;
+		}
+		else
+			hist_args = check_flag_2(shell, hist_args);
+	}
+	return (hist_args);
+}
+
+t_history			*fill_args(t_shell *shell, t_history *hist_args, int *i)
 {
 	char	*arg_d;
 
@@ -121,7 +121,7 @@ t_history	*fill_hist_args(t_shell *shell, t_history *hist_args, int *i)
 		else if (shell->args[*i + 1])
 			hist_args->d_arg = ft_atoi(shell->args[*i + 1]);
 	}
-	hist_args = handle_args(hist_args, shell, i);
+	hist_args = h_args(hist_args, shell, i);
 	hist_args->c = (ft_strchr(shell->args[*i], 'c') != NULL) ? 1 : 0;
 	hist_args->p = (ft_strchr(shell->args[*i], 'p') != NULL) ? 1 : 0;
 	if (hist_args->p == 1)

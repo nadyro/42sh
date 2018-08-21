@@ -6,13 +6,30 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 02:11:49 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/20 21:48:42 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/21 13:58:23 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-void	dispatch_history_d(t_shell *shell, t_history *hist_args)
+static t_node	*l_a_hst(int *index, int fd, t_shell *shell, t_node *history)
+{
+	char	*tmp;
+	int		y;
+
+	y = *index;
+	tmp = NULL;
+	if (y++ >= shell->o_history)
+	{
+		ft_putendl_fd(history->cmd, fd);
+		tmp = ft_strdup(history->cmd);
+		shell->appnd_hst = init_nonvoid_history(tmp, shell->appnd_hst);
+	}
+	*index = y;
+	return (shell->appnd_hst);
+}
+
+void			dispatch_history_d(t_shell *shell, t_history *hist_args)
 {
 	if (hist_args->d_arg > 0)
 	{
@@ -36,7 +53,7 @@ void	dispatch_history_d(t_shell *shell, t_history *hist_args)
 	}
 }
 
-void	dispatch_history_print(t_shell *shell)
+void			dispatch_history_print(t_shell *shell)
 {
 	int		conv;
 
@@ -56,7 +73,7 @@ void	dispatch_history_print(t_shell *shell)
 	reverse_handle();
 }
 
-void	append_history_mem_to_file(t_shell *shell)
+void			append_history_mem_to_file(t_shell *shell)
 {
 	int		i;
 	int		y;
@@ -71,7 +88,7 @@ void	append_history_mem_to_file(t_shell *shell)
 			history = history->next;
 		while (history != NULL)
 		{
-			shell->appnd_hst = lighten_append_hst(&y, i, shell, history);
+			shell->appnd_hst = l_a_hst(&y, i, shell, history);
 			history = history->prev;
 		}
 		shell->o_history += shell->to_add;
@@ -81,24 +98,7 @@ void	append_history_mem_to_file(t_shell *shell)
 	}
 }
 
-t_node	*lighten_append_hst(int *index, int fd, t_shell *shell, t_node *history)
-{
-	char	*tmp;
-	int		y;
-
-	y = *index;
-	tmp = NULL;
-	if (y++ >= shell->o_history)
-	{
-		ft_putendl_fd(history->cmd, fd);
-		tmp = ft_strdup(history->cmd);
-		shell->appnd_hst = init_nonvoid_history(tmp, shell->appnd_hst);
-	}
-	*index = y;
-	return (shell->appnd_hst);
-}
-
-t_node	*append_history_to_mem(t_node *history, t_shell *shell, int to_f)
+t_node			*append_h_to_mem(t_node *history, t_shell *shell, int to_f)
 {
 	t_node	*tmp;
 	t_node	*tmp_1;
