@@ -6,7 +6,7 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:05:30 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/20 22:10:54 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/21 12:50:16 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ int				ash_unsetenv(t_shell *shell);
 int				ash_env_mod(t_shell *shell);
 void			add_to_mod(t_shell *shell);
 t_env			*mod_init(t_shell *shell);
+char			*ft_getenv(char *var, t_env *env);
 int				ft_exec(t_shell *shell, t_ast *cmd, char **mod);
 char			**env_to_tab(t_env *list);
 char			*arg_full_path(t_shell *shell);
@@ -180,6 +181,5 @@ t_history		*check_if_flag_2(t_shell *shell, t_history *hist_args);
 t_history		*check_d_arg(int y, t_shell *shell, t_history *hist_args);
 t_history		*fill_hist_args(t_shell *shell, t_history *hist_args, int *i);
 t_history		*handle_args(t_history *hist_args, t_shell *shell, int *i);
-
 
 #endif
