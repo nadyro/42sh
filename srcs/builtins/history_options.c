@@ -6,13 +6,13 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/03 02:13:00 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/16 20:14:40 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/21 14:01:21 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-t_node	*clear_history_mem(t_shell *shell)
+t_node			*clear_history_mem(t_shell *shell)
 {
 	t_node		*tmp;
 	t_node		*tmp_1;
@@ -36,7 +36,7 @@ t_node	*clear_history_mem(t_shell *shell)
 	return (history);
 }
 
-t_node	*switch_history_cmds(t_node *history)
+static t_node	*switch_history_cmds(t_node *history)
 {
 	t_node	*tmp_next;
 	t_node	*tmp_prev;
@@ -54,7 +54,7 @@ t_node	*switch_history_cmds(t_node *history)
 	return (history);
 }
 
-t_node	*delete_history_line(t_shell *shell, int to_del)
+t_node			*delete_history_line(t_shell *shell, int to_del)
 {
 	t_node	*history;
 	t_node	*to_free;
@@ -82,7 +82,7 @@ t_node	*delete_history_line(t_shell *shell, int to_del)
 	return (history);
 }
 
-void	write_history_mem_to_file(t_shell *shell)
+void			write_history_mem_to_file(t_shell *shell)
 {
 	int		i;
 
@@ -96,7 +96,7 @@ void	write_history_mem_to_file(t_shell *shell)
 		write_history_file(shell, 0);
 }
 
-int		check_warn(t_shell *shell, t_history *hist_args, int y)
+int				check_warn(t_shell *shell, t_history *hist_args, int y)
 {
 	int		x;
 

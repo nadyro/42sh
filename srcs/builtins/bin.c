@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   bin.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 12:01:43 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/16 21:25:22 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/21 14:01:09 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int			builtin_check(t_shell *shell, t_ast *cmd, int env)
+int			builtin_check(t_shell *shell, t_ast *cmd, int exec_bin)
 {
 	if (shell && shell->args && shell->args[0])
 	{
 		if (ft_strcmp(shell->args[0], "echo") == 0)
-			return (ash_echo(shell));
+			return ((exec_bin == 0) ? 2 : ash_echo(shell));
 		else if (ft_strcmp(shell->args[0], "cd") == 0)
-			return (ash_cd(shell, env));
+			return (ash_cd(shell));
 		else if (ft_strcmp(shell->args[0], "setenv") == 0)
 			return (ash_setenv(shell));
 		else if (ft_strcmp(shell->args[0], "unsetenv") == 0)
@@ -27,6 +27,8 @@ int			builtin_check(t_shell *shell, t_ast *cmd, int env)
 		else if (ft_strcmp(shell->args[0], "env") == 0)
 		{
 			ash_env(shell, cmd);
+			if (shell->list)
+				shell->list->last = 0;
 			return (cmd->cmd_ret);
 		}
 		else if (ft_strcmp(shell->args[0], "exit") == 0)

@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/16 14:38:42 by antoipom          #+#    #+#             */
-/*   Updated: 2018/08/16 18:54:45 by tcanaud          ###   ########.fr       */
+/*   Updated: 2018/08/21 12:42:36 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void			main_loop(char *line, t_shell shell)
 	char	*tmp;
 
 	history = NULL;
-	tmp = getenv("HOME");
+	tmp = ft_getenv("HOME", shell.list);
 	if (tmp != NULL)
 		shell.home_env = ft_strjoin(tmp, "/.42sh_history");
 	history = fill_history_file(history, &shell);

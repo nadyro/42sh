@@ -6,13 +6,13 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/31 14:53:44 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/07 02:19:14 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/21 13:58:42 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-t_history	*init_hist_args(void)
+static t_history	*init_hist_args(void)
 {
 	t_history	*hist_args;
 
@@ -37,23 +37,22 @@ t_history	*init_hist_args(void)
 	return (hist_args);
 }
 
-t_history	*check_history_args(t_shell *shell)
+static void			history_helper(void)
 {
-	int			i;
-	t_history	*hist_args;
-
-	i = 0;
-	hist_args = init_hist_args();
-	hist_args = check_if_flag(shell, hist_args);
-	if (hist_args->vide >= 1)
-		return (hist_args);
-	while (shell->args && shell->args[++i])
-		if (shell->args[i][0] == '-')
-			hist_args = fill_hist_args(shell, hist_args, &i);
-	return (hist_args);
+	ft_putendl("usage : history\n");
+	ft_putendl("n : Writes the last 'n' lines written to history session.\n");
+	ft_putendl("-w : Writes the history session to history file.\n");
+	ft_putendl("-a : Appends the history session to history file.\n");
+	ft_putendl("-r : Overwrite the history session with the history file.\n");
+	ft_putendl("-c : Flushes history session.\n");
+	ft_putendl("-d offset : Deletes offset line from history session.\n");
+	ft_putendl("-n : Appends the last appended lines to the history file.\n");
+	ft_putstr("-p : Prints history arguments to stdout ");
+	ft_putendl("without storing it to history file.\n");
+	ft_putendl("-s : Saves the history args to the history session.");
 }
 
-void		lighten_dispatching(t_history *hist_args, t_shell *shell)
+static void			lighten_dispatching(t_history *hist_args, t_shell *shell)
 {
 	if (hist_args->a == 1 && hist_args->a_to_f != 1)
 		append_history_mem_to_file(shell);
@@ -73,7 +72,23 @@ void		lighten_dispatching(t_history *hist_args, t_shell *shell)
 		dispatch_history_print(shell);
 }
 
-t_node		*dispatch_history_queries(t_history *hist_args, t_shell *shell)
+t_history			*check_history_args(t_shell *shell)
+{
+	int			i;
+	t_history	*hist_args;
+
+	i = 0;
+	hist_args = init_hist_args();
+	hist_args = check_if_flag(shell, hist_args);
+	if (hist_args->vide >= 1)
+		return (hist_args);
+	while (shell->args && shell->args[++i])
+		if (shell->args[i][0] == '-')
+			hist_args = fill_args(shell, hist_args, &i);
+	return (hist_args);
+}
+
+t_node				*dispatch_h_q(t_history *hist_args, t_shell *shell)
 {
 	int		i;
 	int		conv;
@@ -85,26 +100,11 @@ t_node		*dispatch_history_queries(t_history *hist_args, t_shell *shell)
 	if (hist_args->d == 1)
 		dispatch_history_d(shell, hist_args);
 	if (hist_args->r == 1 && hist_args->r_to_f != 1)
-		shell->history = append_history_to_mem(shell->history, shell, 0);
+		shell->history = append_h_to_mem(shell->history, shell, 0);
 	else if (hist_args->r == 1 && hist_args->r_to_f == 1)
-		shell->history = append_history_to_mem(shell->history, shell, 1);
+		shell->history = append_h_to_mem(shell->history, shell, 1);
 	else if (hist_args->n == 1 && shell->is_a == 1)
 		shell->history = write_history_to_mem(shell->history, shell);
 	lighten_dispatching(hist_args, shell);
 	return (shell->history);
-}
-
-void		history_helper(void)
-{
-	ft_putendl("usage : history\n");
-	ft_putendl("n : Writes the last 'n' lines written to history session.\n");
-	ft_putendl("-w : Writes the history session to history file.\n");
-	ft_putendl("-a : Appends the history session to history file.\n");
-	ft_putendl("-r : Overwrite the history session with the history file.\n");
-	ft_putendl("-c : Flushes history session.\n");
-	ft_putendl("-d offset : Deletes offset line from history session.\n");
-	ft_putendl("-n : Appends the last appended lines to the history file.\n");
-	ft_putstr("-p : Prints history arguments to stdout ");
-	ft_putendl("without storing it to history file.\n");
-	ft_putendl("-s : Saves the history args to the history session.");
 }

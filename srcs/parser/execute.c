@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:01:35 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/17 16:53:44 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 23:01:11 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,35 +15,23 @@
 #include "libft.h"
 #define ARG shell->args[0]
 
-void		restore_std_fds(t_shell *shell, t_ast *cmd, t_redirs *rd)
+static void	launch_exec(t_shell *shell, char *full_path, t_ast *cmd)
 {
-	t_redirs *tmp;
-
-	tmp = rd;
-	if (cmd->hd_check)
+	if (cmd && cmd->redirs)
 	{
-		if (fcntl(cmd->hfd[0], F_GETFD) != -1)
-			close(cmd->hfd[0]);
-		if (fcntl(cmd->hfd[1], F_GETFD) != -1)
-			close(cmd->hfd[1]);
+		implement_redirs(shell, cmd);
+		if (shell->redir_error == 1)
+		{
+			shell->redir_error = 0;
+			exit(1);
+		}
+		if (cmd->cmd_ret != 2 && handle_arg_errors(shell, cmd) != 0)
+			exit(1);
 	}
-	while (tmp)
-	{
-		if (fcntl(tmp->new_fd, F_GETFD) != -1)
-			close(tmp->new_fd);
-		tmp = tmp->next;
-	}
-	dup2(shell->s_in, 0);
-	close(shell->s_in);
-	dup2(shell->s_out, 1);
-	close(shell->s_out);
-	dup2(shell->s_err, 2);
-	close(shell->s_err);
-}
-
-static void	launch_exec(t_shell *shell, char *full_path)
-{
-	if (full_path && (execve(full_path, shell->args, shell->envv) == -1))
+	if (cmd->cmd_ret == 2)
+		((cmd->cmd_ret = builtin_check(shell, cmd, 1) == -1)) ?
+			exit(1) : exit(0);
+	else if (full_path && (execve(full_path, shell->args, shell->envv) == -1))
 		(execve(ARG, shell->args, shell->envv));
 	else if (!(full_path))
 		(execve(ARG, shell->args, shell->envv));
@@ -59,7 +47,7 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 	status = 0;
 	pid = fork();
 	if (pid == 0)
-		launch_exec(shell, shell->full_path);
+		launch_exec(shell, shell->full_path, cmd);
 	else if (pid < 0)
 	{
 		cmd->cmd_ret = -1;
@@ -73,82 +61,59 @@ static void	ast_launch(t_shell *shell, t_ast *cmd)
 				&& !WIFSTOPPED(status))
 			wpid = waitpid(pid, &status, WUNTRACED);
 	}
-	if (shell->full_path)
-		ft_strdel(&(shell->full_path));
 }
 
-static int	handle_arg_errors(t_shell *shell, t_ast *cmd)
+static void	execute_non_builtin(t_shell *shell, t_ast *cmd)
 {
-	if ((ft_strcmp(ARG, ".") == 0 || ft_strcmp(ARG, "..") == 0))
+	struct stat	tmp;
+
+	if (stat(ARG, &tmp) == 0 && (S_ISDIR(tmp.st_mode) ||
+	!(tmp.st_mode & (S_IXUSR))))
 	{
-		ft_putstr_fd(ARG, 2);
-		ft_putstr_fd(": Command not found.\n", 2);
-		ft_bzero((void *)(ARG), ft_strlen(ARG));
-		ft_strdel(&(shell->full_path));
-		return (cmd->cmd_ret = -1);
+		if (!(tmp.st_mode & (S_IXUSR)))
+		{
+			if (!(shell->full_path) ||
+			(shell->full_path && stat(shell->full_path, &tmp) == 0
+			&& !(tmp.st_mode & (S_IXUSR))))
+			{
+				permission_denied(shell);
+				cmd->cmd_ret = -1;
+			}
+			else
+				ast_launch(shell, cmd);
+		}
+		else
+		{
+			executing_directory(shell);
+			cmd->cmd_ret = -1;
+		}
 	}
-	else if (ft_strlen(ARG) && (ARG[0] == '/' ||
-				(ARG[0] == '.' && ARG[1] == '/')) && access(ARG, F_OK))
-	{
-		ft_putstr_fd(ARG, 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
-		return (cmd->cmd_ret = -1);
-	}
-	else if (!(ft_strlen(ARG)) ||
-			(access(ARG, F_OK) && access(shell->full_path, F_OK)))
-	{
-		ft_putstr_fd(ARG, 2);
-		(ARG[0] == '/' || (ARG[0] == '.' && ARG[1] == '/')) ?
-			ft_putstr_fd(": No such file or directory\n", 2) :
-			ft_putstr_fd(": Command not found.\n", 2);
-		return (cmd->cmd_ret = -1);
-	}
-	return (0);
+	else
+		ast_launch(shell, cmd);
 }
 
 int			ast_execute(t_shell *shell, t_ast *cmd, int env_ex)
 {
-	struct stat	tmp;
-
 	if (shell && shell->args && ARG && shell->redir_error != 1)
 	{
-		if (env_ex == 1 || ((cmd->cmd_ret = builtin_check(shell, cmd, env_ex)) == -10))
+		if (env_ex == 1 ||
+						(cmd->cmd_ret = builtin_check(shell, cmd, 0)) == -10 ||
+						cmd->cmd_ret == 2)
 		{
-			shell->full_path = (ARG[0] != '/' &&
-					has_paths(shell, 0, env_ex) == 1) ? arg_full_path(shell) : NULL;
-			if (env_ex == 1)
+			if (cmd->cmd_ret == 2)
+				ast_launch(shell, cmd);
+			else
 			{
-				#include <stdio.h>
-				fprintf(stderr, "full_path = %s, ARG = %s\n", shell->full_path, ARG);
-			}
-			if (handle_arg_errors(shell, cmd) == 0)
-			{
-				if (stat(ARG, &tmp) == 0 && (S_ISDIR(tmp.st_mode) ||
-				!(tmp.st_mode & (S_IXUSR))))
-				{
-					if (!(tmp.st_mode & (S_IXUSR)))
-					{
-						if (!(shell->full_path) ||
-						(shell->full_path && stat(shell->full_path, &tmp) == 0 && !(tmp.st_mode & (S_IXUSR))))
-						{	
-							permission_denied(shell);
-							cmd->cmd_ret = -1;
-						}
-						else
-							ast_launch(shell, cmd);
-					}
-					else
-					{
-						executing_directory(shell);
-						cmd->cmd_ret = -1;
-					}
-				}
-				else
-					ast_launch(shell, cmd);
+				shell->full_path = (ARG[0] != '/' &&
+						has_paths(shell, 0) == 1) ?
+						arg_full_path(shell) : NULL;
+				if (handle_arg_errors(shell, cmd) == 0)
+					execute_non_builtin(shell, cmd);
+				if (shell->full_path)
+					ft_strdel(&(shell->full_path));
 			}
 		}
 	}
 	shell->redir_error = 0;
-	shell->bin_ret = 0;
 	return (cmd->cmd_ret);
 }

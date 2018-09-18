@@ -6,13 +6,13 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/13 14:47:51 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/16 20:19:20 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/21 14:02:17 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-void		history_errors(t_history *hist_args)
+static void	history_errors(t_history *hist_args)
 {
 	if (hist_args->vide == 1)
 	{
@@ -37,6 +37,21 @@ void		history_errors(t_history *hist_args)
 	}
 }
 
+int			signal_history_static(int x)
+{
+	static int		sign = 1;
+
+	if (x >= 0)
+		sign = x;
+	return (sign);
+}
+
+void		sign_history(int sig)
+{
+	signal_history_static(0);
+	signal(sig, sign_history);
+}
+
 int			ash_history(t_shell *shell)
 {
 	int			i;
@@ -45,7 +60,7 @@ int			ash_history(t_shell *shell)
 	i = 0;
 	hist_args = check_history_args(shell);
 	if (hist_args->vide == 0)
-		shell->history = dispatch_history_queries(hist_args, shell);
+		shell->history = dispatch_h_q(hist_args, shell);
 	else
 	{
 		i = hist_args->vide;

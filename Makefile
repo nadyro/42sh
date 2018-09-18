@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kernel_panic <kernel_panic@student.42.f    +#+  +:+       +#+         #
+#    By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/07 14:24:02 by antoipom          #+#    #+#              #
-#    Updated: 2018/08/19 11:13:31 by kernel_pa        ###   ########.fr        #
+#    Updated: 2018/09/18 22:41:34 by kernel_pa        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ SRC_FILES = main.c \
 			\
 			parser/parser.c \
 			parser/execute.c \
+			parser/error.c \
 			parser/parser_validation.c \
 			parser/redirections.c \
 			parser/redirect_implementation.c \
@@ -44,6 +45,7 @@ SRC_FILES = main.c \
 			parser/pipes.c \
 			parser/token2str.c \
 			parser/token2str_init.c \
+			parser/token2str2.c \
 			parser/ast_evaluate.c \
 			parser/ast_construct.c \
 			parser/ast_free.c \
@@ -125,7 +127,11 @@ LIB_INC = -I$(LIB_DIR)/include
 
 OPTIMIZATION ?= -O0
 CC ?= gcc
+<<<<<<< HEAD
 CCFLAGS ?= -g -Wall -Wextra -Werror -g3 -fsanitize=address -fno-omit-frame-pointer
+=======
+CCFLAGS ?= -Wall -Wextra -Werror
+>>>>>>> d7496586ac36334ed1d53080f2a0148ca805c0ef
 LDFLAGS = -L$(LIB_DIR) -lft -ltermcap
 INCLUDES = $(LOCAL_INC) $(LIB_INC)
 

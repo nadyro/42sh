@@ -6,11 +6,28 @@
 /*   By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/29 16:17:24 by nsehnoun          #+#    #+#             */
-/*   Updated: 2018/08/16 21:43:37 by nsehnoun         ###   ########.fr       */
+/*   Updated: 2018/08/21 14:03:41 by nsehnoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
+
+static void	print_history(int *x, char **cmd, int to_free)
+{
+	int		i;
+
+	i = *x;
+	i = i + 1;
+	*x = i;
+	ft_putnbr(*x);
+	ft_putchar(' ');
+	ft_putendl(*cmd);
+	if (to_free == 0)
+	{
+		free(*cmd);
+		*cmd = NULL;
+	}
+}
 
 void		write_history_file(t_shell *shell, int to_f)
 {
@@ -94,28 +111,11 @@ void		read_history(t_node *history, int nbr)
 		{
 			while (history && history->next != NULL)
 				history = history->next;
-			while (history)
+			while (signal_history_static(-1) && history)
 			{
 				print_history(&x, &history->cmd, 1);
 				history = history->prev;
 			}
 		}
-	}
-}
-
-void		print_history(int *x, char **cmd, int to_free)
-{
-	int		i;
-
-	i = *x;
-	i = i + 1;
-	*x = i;
-	ft_putnbr(*x);
-	ft_putchar(' ');
-	ft_putendl(*cmd);
-	if (to_free == 0)
-	{
-		free(*cmd);
-		*cmd = NULL;
 	}
 }

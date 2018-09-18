@@ -6,7 +6,7 @@
 #    By: nsehnoun <nsehnoun@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/08 19:33:52 by azybert           #+#    #+#              #
-#    Updated: 2018/08/13 06:01:32 by tcanaud          ###   ########.fr        #
+#    Updated: 2018/08/21 14:13:05 by nsehnoun         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -90,7 +90,6 @@ FILES = ft_memset.c \
 OBJ = $(FILES:.c=.o)
 
 FLAG = -g3 -Wall -Wextra -Werror
-
 all: $(NAME)
 
 $(NAME):

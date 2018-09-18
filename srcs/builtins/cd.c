@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 11:05:03 by arohani           #+#    #+#             */
-/*   Updated: 2018/08/16 17:58:59 by arohani          ###   ########.fr       */
+/*   Updated: 2018/08/20 18:17:26 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,16 @@ int			regular_cd(t_shell *shell)
 	return (-1);
 }
 
-int			ash_cd(t_shell *shell, int env)
+static void	fill_pre_canon(char pre_can[], char *arg)
 {
+	ft_bzero(pre_can, 4028);
+	ft_strcpy(pre_can, arg);
+}
+
+int			ash_cd(t_shell *shell)
+{
+	char		pre_canon[4028];
+
 	shell->st = cd_opt_check(shell);
 	if (shell->st == -1)
 		return (-1);
@@ -88,12 +96,13 @@ int			ash_cd(t_shell *shell, int env)
 	{
 		if (ARG[0] != '/' && ARG[0] != '.')
 		{
-			if (has_paths(shell, 1, env) == 2)
+			if (has_paths(shell, 1) == 2)
 				cd_path(shell, 0, fetch_cd_paths(shell));
 		}
-		if (chdir(ARG) != 0)
-			return (cd_error_mgmt(ARG));
+		fill_pre_canon(pre_canon, ARG);
 		cd_canon(shell);
+		if (chdir(ARG) != 0)
+			return (cd_error_mgmt(pre_canon));
 		return (regular_cd(shell));
 	}
 	return (-1);
